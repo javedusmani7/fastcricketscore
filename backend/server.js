@@ -6,6 +6,7 @@ const Season = require('../backend/models/Season');
 const Competetion = require('../backend/models/Competetion');
 const connectDB = require('./config/db');
 const cors = require('cors');
+const apiRoutes = require('./routes/api');
 
 const app = express();
 const PORT = 3000;
@@ -16,24 +17,9 @@ app.use(express.json());
 
 // MongoDB connection
 connectDB();
-// mongoose.connect('mongodb://localhost:27017/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true });
 
-// // Define a simple model
-// const Item = mongoose.model('Item', new mongoose.Schema({
-//   name: String
-// }));
-
-// // API routes
-// app.get('/api/items', async (req, res) => {
-//   const items = await Item.find();
-//   res.send(items);
-// });
-
-// app.post('/api/items', async (req, res) => {
-//   const newItem = new Item(req.body);
-//   await newItem.save();
-//   res.status(201).send(newItem);
-// });
+// Routes
+app.use('/api', apiRoutes);
 
 // Start the server
 app.listen(PORT, () => {

@@ -1,0 +1,3 @@
+ENTITYSPORT_API_KEY=token-key-from-entitysport
+MONGODB_URI=mongodb-url-of-your-machine
+ENTITYSPORT_API_URL=https://rest.entitysport.com/v2/
