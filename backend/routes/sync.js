@@ -1,11 +1,12 @@
 const express = require('express');
-const {syncSeason, syncCompetetion} = require('../controllers/sync.controller');
+const {syncSeason, syncCompetetionList , syncCompetetion} = require('../controllers/sync.controller');
 
 
 const router = express.Router();
 
 
 router.get('/seasons', syncSeason);
-router.get('/competetions', syncCompetetion);
+router.get('/competetions', syncCompetetionList);
+router.get('/competetionDetail', syncCompetetion);
 
 module.exports = router;
