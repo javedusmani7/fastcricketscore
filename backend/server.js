@@ -15,6 +15,12 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+
+// Use the verifyTokenMiddleware for all routes;
+// which will check weather token query parameter is present or not
+const verifyTokenMiddleware = require('./middleware/verifyTokenMiddleware');
+app.use(verifyTokenMiddleware);
+
 // MongoDB connection
 connectDB();
 
