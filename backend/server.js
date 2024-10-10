@@ -7,6 +7,7 @@ const Competetion = require('../backend/models/Competetion');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const apiRoutes = require('./routes/api');
+const syncRoutes = require('./routes/sync');
 
 const app = express();
 const PORT = 3000;
@@ -25,6 +26,7 @@ app.use(verifyTokenMiddleware);
 connectDB();
 
 // Routes
+app.use('/sync', syncRoutes);
 app.use('/api', apiRoutes);
 
 // Start the server
