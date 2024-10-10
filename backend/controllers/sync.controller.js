@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Season = require('../models/Season');
 require('dotenv').config();
 
 // predefine constant values
@@ -9,9 +10,24 @@ const ENTITYSPORT_API_URL = process.env.ENTITYSPORT_API_URL;
 // once we get it, it will store to the database
 exports.syncSeason = async (req, res) => {
     try {
-      console.log("step2");
         const token = req.query.token;
         const response = await fetchSeasonDataFromEntitySport(token);
+
+         // Prepare bulk operations
+        const items = response.response.items;
+        const bulkOps = items.map(item => ({
+            updateOne: {
+                filter: { sid: item.sid }, 
+                update: { $set: item }, 
+                upsert: true // Insert if not found
+            }
+        }));
+
+        // Execute bulk operations
+        const result = await Season.bulkWrite(bulkOps);
+
+        // Insert each user into the MongoDB collection
+        // await Season.insertMany(response.response.items);
         res.json(response);
     } 
     catch (error) {
