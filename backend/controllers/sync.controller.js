@@ -173,6 +173,34 @@ exports.syncCompetetionMatches = async (req, res) => {
 
 
 exports.syncCompetetionList = async (req, res) => {
+
+    let sport_primary_key = false;
+    let source_primary_key = false;
+    
+    // first; we will get the primaryID details for the sport, source and competetion table 
+    // so that we can pass these references to the match tables
+    try {
+
+        // check if the sports exists or not
+        const sportRow = await Sport.findOne({sport_id: sport_id});
+        if (!sportRow) {
+            return res.status(404).json({status: 404, message: 'Sport not found' });
+        }
+        sport_primary_key = sportRow._id;
+
+        // check if the source exists or not
+        const sourceRow = await Source.findOne({source_id: source_id});
+        if (!sourceRow) {
+            return res.status(404).json({status: 404, message: 'Source not found' });
+        }
+        source_primary_key = sourceRow._id;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
+    }
+
+
     try {
         const token = req.query.token;
         const season = "2023";
@@ -185,7 +213,18 @@ exports.syncCompetetionList = async (req, res) => {
 
 
             const items = response.response.items;
-            const bulkOps = items.map(item => ({
+
+
+            const updatedItems = items.map(item => {
+                return {
+                    ...item,         // Spread existing properties
+                    sport_id: sport_primary_key,  // Add a new property
+                    source_id: source_primary_key // Add a new property
+                };
+            });
+
+
+            const bulkOps = updatedItems.map(item => ({
                 updateOne: {
                     filter: { cid: item.cid }, 
                     update: { $set: item }, 
