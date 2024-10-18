@@ -24,9 +24,13 @@ export class SeriesComponent implements OnInit{
     return url.startsWith('/') ? url.slice(1) : url;
   }
   ngOnInit(): void {
-    this.apiservice.getCricketSeries().subscribe((res:any)=>{
-      this.serieslist=res.data
+
+    this.apiservice.getCompetitionData().subscribe((res:any)=>{
+       this.serieslist=res.data
     })
+    // this.apiservice.getCricketSeries().subscribe((res:any)=>{
+    //   this.serieslist=res.data
+    // })
   }
   getkeysdata(obj:any){
     return Object.keys(obj)

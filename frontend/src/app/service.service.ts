@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceService {
+  CompetitionUrl="http://localhost:3000/api/competetions?token=ad3749cfdb0cceb518412cf46"
+  sportUrl= "http://localhost:3000/api/seasons?token=ad3749cfdb0cceb518412cf46ef9e44a";
   baseUrl = "http://192.46.214.33:3000/api/data";
   sendLoggedData: BehaviorSubject<any> = new BehaviorSubject('abc')
   sendLoggedData1 = new Subject<any>()
@@ -32,6 +34,20 @@ export class ServiceService {
 
   }
 
+  getCompetitionData() : Observable<any>{
+
+    let competition = this.http.get(this.CompetitionUrl);
+    return competition
+  }
+
+  getSportData_OLD(): Observable<any>{
+    let resultTest=  this.http.get(this.sportUrl);
+    return resultTest
+  }
+
+  getSportData() {
+    return this.http.get(`${this.sportUrl}`)
+  }
 
   getCricketMenus() {
     return this.http.get(`${this.baseUrl}/getCricketMenu/`)

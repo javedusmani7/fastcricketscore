@@ -8,6 +8,8 @@ import { ActivatedRoute, NavigationEnd, ParamMap, Router } from '@angular/router
   styleUrls: ['./top-header.component.css']
 })
 export class TopHeaderComponent  implements OnInit{
+
+  sports:any[] =[]
   cricketMenuList:any
   selected=true
   activeIndex: number = 0;
@@ -77,6 +79,63 @@ export class TopHeaderComponent  implements OnInit{
     this.evenSlug=parts[2];
   }
   ngOnInit(): void {
+    // this.apiservice.getSportData().subscribe(
+
+    //   (data:any)=>{this.sports=data.data
+    //   console.log("data fetched" , this.sports) },
+    //   (error)=>{
+
+    //     console.log("error while fetching data")
+    //   }
+    // )
+
+    // this.sports= [
+    //   {
+    //     "_id": "67122604628192344486b01d",
+    //     "sport_id": 4,
+    //     "name": "Cricket",
+    //     "description": "This sport is use to handle all available options in the Cricket.",
+    //     "status": true,
+    //     "create_date": "2024-10-18T09:10:28.442Z",
+    //     "update_date": "2024-10-18T09:10:28.442Z"
+    //   },
+    //   {
+    //     "_id": "67122604628192344486b01e",
+    //     "sport_id": 1,
+    //     "name": "Soccer",
+    //     "description": "This sport is use to handle all available options in the Soccer.",
+    //     "status": true,
+    //     "create_date": "2024-10-18T09:10:28.442Z",
+    //     "update_date": "2024-10-18T09:10:28.442Z"
+    //   },
+    //   {
+    //     "_id": "67122604628192344486b01f",
+    //     "sport_id": 2,
+    //     "name": "Tennis",
+    //     "description": "This sport is use to handle all available options in the Tennis.",
+    //     "status": true,
+    //     "create_date": "2024-10-18T09:10:28.442Z",
+    //     "update_date": "2024-10-18T09:10:28.442Z"
+    //   },
+    //   {
+    //     "_id": "67122604628192344486b020",
+    //     "sport_id": 3,
+    //     "name": "Football",
+    //     "description": "This sport is use to handle all available options in the Football.",
+    //     "status": true,
+    //     "create_date": "2024-10-18T09:10:28.442Z",
+    //     "update_date": "2024-10-18T09:10:28.442Z"
+    //   }
+    // ];
+    this.apiservice.getSportData().subscribe((res:any)=>{
+      this.sports=res.data;
+      console.log("step1");
+      console.log(this.sports[0]);
+      console.log("step2");
+    })
+
+
+
     this.getCricketMenu()
   }
   getRoute(url: string): any {
