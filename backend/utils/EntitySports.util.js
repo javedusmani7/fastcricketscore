@@ -14,8 +14,8 @@ const fetchEntitySportData = async (token, url) => {
           url: url,
           params: {
             token: token,
-            per_page:1,
-            paged:1
+            // per_page:1,
+            // paged:1
           },
         });
         return response.data;
