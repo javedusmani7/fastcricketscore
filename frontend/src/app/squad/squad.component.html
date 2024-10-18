@@ -1,0 +1,350 @@
+<div class="wrapper-container editor-width-100-pc">
+
+  <div class="fragments-container">
+    <div class="cricket-top-section-v2" id="cricket-top-section-v2">
+      <div class="top-score-section-v2">
+        <div class="top-score-title">
+          <div class="cricket-match-card-header-secondary-text">
+            <span class="cricket-match-card--match-type">{{scorelist?.description}}</span>
+            <span>•</span>
+            <span class="cricket-match-card--match-venue">{{scorelist?.venue_stadium}}</span>
+            <span>•</span>
+            <span class="cricket-match-card--match-venue">{{scorelist?.venue_location}}</span>
+          </div>
+        </div>
+        <div class="score-primary-partition " [ngClass]="scorelist?.match_status=='pre'?' unset-box-shadow':''">
+          <div class="match-teams">
+            <div class="team-1-score-strip-baseline"></div>
+            <div class="score-strip team1-score-strip" *ngFor="let el of liveScoreList">
+              <div class="flag-country "  [class]="el.status=='post'?'flag-countrys':''">
+                <img  [src]="el.team_flag" (error)="el.team_flag = teamDefaultImg" width="48" height="38" alt="team-logo" class="flag bind"
+                  data="data.score_strip.0.team_flag" data-img-params="?w=192">
+                <span class="country bind" data="data.score_strip.0.name">
+                  <a routerLink="/team/{{el.slug}}" aria-label="team-redirect" > {{el.name}} </a>
+                </span>
+              </div>
+              <div class="score-over ">
+                <div class="powerplay-tooltip">
+                  <div class="bottom powerplay-tooltip-1"> </div>
+                  <i></i>
+                  <span class="power-play-label team1 hidden"></span>
+                </div>
+                <span class="score bind" data="data.score_strip.0.score_wickets_info">{{el.score}}</span>
+                <!-- <span class="overs-info bind" data="data.score_strip.0.overs_info">(78.3)</span> -->
+              </div>
+            </div>
+
+          </div>
+          <div class="match-scorecard-time " id="match-scorecard-time">
+            <span class="match-date" *ngIf="scorelist?.match_status=='pre'">{{formattedDate2}} </span>
+            <span class="match-time" *ngIf="scorelist?.match_status=='pre'">{{formattedTime}} </span>
+          </div>
+        </div>
+        <div class="score-secondary-partition" >
+          <div class="match_info cricket-block">
+            <div>
+              <span class="bind match-info match-result " [class]="scorelist?.match_status=='post'?'win':''">
+                {{scorelist?.info}}<span class="win-margin"></span>
+              </span>
+            </div>
+          </div>
+          <div class="vertical-partition" *ngIf="scorelist?.match_status=='live'">
+            <div class="run-rate-div current-run-rate-div p-l-0" >
+              <span class="run-rate-label">CRR:</span>
+              <span class="run-rate-value current-run-rate">{{liveScoreList[0]?.run_rate_numeric || liveScoreList[1]?.run_rate_numeric}}</span>
+            </div>
+            <div class="run-rate-div required-run-rate-div hidden">
+              <span class="run-rate-label">RRR:</span>
+              <span class="run-rate-value required-run-rate">
+              </span>
+            </div>
+            <div class="run-rate-div overs-left-today-div hidden">
+              <span class="run-rate-label overs-left">Overs left today:</span>
+              <span class="run-rate-value overs-left-today">
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="cricket-block score-strip-holder">
+      <div class="row fl tabs-container font-common preview-fantasy-header-row">
+        <div class="cmc-inside-tabs">
+          <div class="preview-header cmc-scrollable-tab" routerLink="/livecricket-score/{{matchId}}">
+            <div class="cmc-section-tab preview-tab">
+              Info</div>
+          </div>
+          <!-- <div class="fantasy-header cmc-scrollable-tab" routerLink="/livecricket-score/{{matchId}}">
+            <div class="cmc-section-tab fantasy-tab">Fantasy</div>
+          </div> -->
+          <div class="commentary-tab-header cmc-scrollable-tab" routerLink="/live/{{matchId}}">
+            <div class="cmc-section-tab commentary-tab">Live</div>
+          </div>
+          <div class="scorecard-header cmc-scrollable-tab" routerLink="/scorecard/{{matchId}}">
+            <div class="cmc-section-tab scorecard-tab">
+              Scorecard</div>
+          </div>
+          <div class="scorecard-header cmc-scrollable-tab" *ngIf="hide==false" routerLink="/squad/{{matchId}}">
+            <div class="cmc-section-tab scorecard-tab header-hovered">
+              Squad</div>
+          </div>
+
+          <div class="match-squad-header cmc-scrollable-tab " *ngIf="hide==true">
+            <div class="cmc-section-tab squad-tab header-hovered">
+              <span id="squad-tab-title">Playing XI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div id="squad-data" class="squad-data squad-cmc">
+      <div class="playing-xi-sections" id="playing-xi-players">
+        <div id="squad-team-card-holder" class="players-data preview-card-holder playing-content playing-content-open">
+          <div class="preview-card-content team-card">
+            <div class="team-holder" *ngIf="scorelist?.match_status!=='live'">
+              <span>
+                <a class="team-flag-anchor" routerLink="/team/india-national-cricket-team">
+                  <img width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-IND"
+                    src="{{liveScoreList[0]?.team_flag}}"
+                    >
+                  {{squadData[0]?.team_shortname}}
+                </a>
+              </span>
+              <span>vs</span>
+              <span>
+                <a class="team-flag-anchor" routerLink="/team/england-cricket">
+                  {{squadData[1]?.team_shortname}}
+                  <img width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-ENG" src="{{liveScoreList[1]?.team_flag}}"
+                    >
+                </a>
+              </span>
+            </div>
+            <div class="team-holder" *ngIf="scorelist?.match_status=='live'">
+              <span>
+                <a class="team-flag-anchor" routerLink="/team/{{squadData[0]?.slug}}">
+                  <img width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-IND"[src]="liveScoreList[0]?.team_flag || teamDefaultImg"
+
+                   >
+                  {{squadData[0]?.team_shortname}}
+                </a>
+              </span>
+              <span>vs</span>
+              <span>
+                <a class="team-flag-anchor" routerLink="/team/{{squadData[1]?.slug}}">
+                  {{squadData[1]?.team_shortname}}
+                  <img width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-ENG"[src]="liveScoreList[1]?.team_flag || teamDefaultImg"
+                   >
+                </a>
+              </span>
+            </div>
+            <div class="squads-holder"  *ngIf="scorelist?.match_status!=='pre'">
+              <div class="impact-players " id="impact-players" *ngIf="squadData[0].impact_players && squadData[0].impact_players.length > 0">
+                <div class="impact-title">Impact Player</div>
+                <div class="impact-section">
+                  <div class="team-squad team-squad-left" id="team-impact-RCB">
+                    <ng-container *ngFor="let impPlayer of squadData[0].impact_players;let i=index,trackBy:userByName">
+                      <div class="player-role-info" >
+                        <div class="player-img-anchor"><img class="player-img " [class]="impPlayer.in=='true'?'impact-in':'impact-out'"
+                          [src]="getPlayerImage(impPlayer.sk_slug)  || '../../assets/team-default.png'" alt="player-img"
+                            height="40" width="40"></div>
+                        <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{impPlayer.sk_slug}}"><span
+                              class="player-name">{{impPlayer.name}}</span></a>
+                          <p class="player-role">
+                            <!-- <span>{{impPlayer.role}}</span> -->
+                            <span>{{ impPlayer.role === 'wicket-keeper' ? 'Bat & WK' : impPlayer.role === 'all-rounder' ? 'All' : impPlayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                            <span class="impact-role impact-player-div role-left">
+                            <img *ngIf="impPlayer.in=='true'"
+                                class="impact-player-role-icon" alt="impact-role-icon" title="Impact Player"
+                                src="/assets/cmc-impact-player.png">
+                                <img *ngIf="impPlayer.out=='true'" class="impact-player-role-icon" alt="impact-role-icon" title="Substitute"
+                                src="../../assets/cmc-substitute-player.png">
+                                <span class="impact-tooltip">Impact Player</span>
+                                </span></p>
+                        </div>
+                      </div>
+                      <div class="impact-image">
+                        <img class="impact-player-icon"
+                          src="/assets/impact-players-arrow.png" alt="impact-player">
+                      </div>
+                    </ng-container>
+                  </div>
+                  <div class="team-squad team-squad-border">
+                    <hr>
+                  </div>
+                  <div class="team-squad team-squad-right" id="team-impact-KKR">
+                    <div class="player-role-info" *ngFor="let impPlayer of squadData[1].impact_players;let i=index,trackBy:userByName">
+                      <div class="squad-player right-info"><a class="player-cta" routerLink="/player/angkrish-raghuvanshi"><span
+                            class="player-name">{{impPlayer.name}}</span></a>
+                        <p class="player-role"><span class="impact-role impact-player-div role-right"><img *ngIf="impPlayer.in=='true'"
+                          class="impact-player-role-icon" alt="impact-role-icon" title="Impact Player"
+                          src="/assets/cmc-impact-player.png">
+                          <img *ngIf="impPlayer.out=='true'" class="impact-player-role-icon" alt="impact-role-icon" title="Substitute"
+                          src="/assets/cmc-substitute-player.png"><span class="impact-tooltip">Impact
+                              Player</span></span>
+                              <!-- <span>{{impPlayer.role}}</span> -->
+                              <span>{{ impPlayer.role === 'wicket-keeper' ? 'Bat & WK' : impPlayer.role === 'all-rounder' ? 'All' : impPlayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                            </p>
+                      </div>
+                      <div class="player-img-anchor"><img class="player-img"  [class]="impPlayer.in=='true'?'impact-in':'impact-out'"
+                        [src]="getPlayerImage(impPlayer.sk_slug)  || '../../assets/team-default.png'" alt="player-img"
+                          height="40" width="40"></div>
+                    </div>
+                    <div class="impact-image"><img class="impact-player-icon"
+                        src="/assets/impact-players-arrow.png" alt="impact-player"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="substitute-title playing-xi-title " *ngIf="squadData[0].impact_players && squadData[0].impact_players.length > 0">Playing XI</div>
+              <div class="team-squad team-squad-left" id="team-IND">
+                <div class="player-role-info " *ngFor="let player of squadData[0].players;let i=index,trackBy:userByName">
+                  <div class="player-img-anchor">
+                    <img class="player-img" [src]="getPlayerImage(player.sk_slug) || '../../assets/team-default.png'" width="54" height="38" alt="team-flag"
+                      alt="player-img" height="40" width="40">
+
+                  </div>
+                  <div class="squad-player left-info">
+                    <a class="player-cta" routerLink="/player/{{player.sk_slug}}">
+                      <span [class]="player.sk_slug==''?'blck':''"
+                        class="player-name" >{{player.name}}</span><span class="role-icon" *ngIf="player.position=='captain'">(C)</span><span class="player-delta-in left" *ngIf="player.delta==1"><span></span></span>
+                      </a>
+                    <p class="player-role">
+                      <!-- <span>{{player.role}}</span> -->
+                      <span>{{ player.role === 'wicket-keeper' ? 'Bat & WK' : player.role === 'all-rounder' ? 'All' : player.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+              <div class="team-squad team-squad-border">
+                <hr>
+              </div>
+              <div class="team-squad team-squad-right" id="team-ENG">
+                <div class="player-role-info " *ngFor="let player of squadData[1].players;let i=index,trackBy:userByName">
+                  <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{player.sk_slug}}" [class]="player.sk_slug==''?'blck':''"><span class="role-icon" *ngIf="player.position=='captain'">(C)</span><span class="player-delta-in right" *ngIf="player.delta==1"><span></span></span><span
+                        class="player-name">{{player.name}}</span></a>
+                    <p class="player-role">
+                      <!-- <span>{{player.role}}</span> -->
+                      <span>{{ player.role === 'wicket-keeper' ? 'Bat & WK' : player.role === 'all-rounder' ? 'All' : player.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                    </p>
+                  </div>
+                  <div class="player-img-anchor"><img class="player-img"
+                      [src]=" getPlayerImage(player.sk_slug) ||  ' ../../assets/team-default.png'" alt="player-img"
+                      height="40" width="40"></div>
+                </div>
+
+              </div>
+              <div class="substitute-players hidden" id="substitute-players">
+                <div class="substitute-title">Substitute</div>
+                <div class="team-squad team-squad-left" id="team-substitute-IND"></div>
+                <div class="team-squad team-squad-border">
+                  <hr>
+                </div>
+                <div class="team-squad team-squad-right" id="team-substitute-ENG"></div>
+              </div>
+              <div class="bench-players " id="bench-players">
+                <div class="bench-title">Bench</div>
+                <div class="team-squad team-squad-left" id="team-bench-IND">
+                  <div class="player-role-info" *ngFor="let benchPL of squadData[0].bench_players">
+                    <div class="player-img-anchor"><img class="player-img"
+                        [src]="getPlayerImage(benchPL.sk_slug) ||  '../../assets/team-default.png'" alt="player-img"
+                        height="40" width="40"></div>
+                    <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{benchPL.sk_slug}}" [class]="benchPL.sk_slug==''?'blck':''"><span class="player-name">
+                          {{benchPL.name}}</span><span class="role-icon" *ngIf="benchPL.position=='captain'">(C)</span><span class="player-delta-out left" *ngIf="benchPL.delta==-1"><span></span></span></a>
+                      <p class="player-role">
+                        <!-- <span>{{benchPL.role}}</span> -->
+                        <span>{{ benchPL.role === 'wicket-keeper' ? 'Bat & WK' : benchPL.role === 'all-rounder' ? 'All' : benchPL.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="team-squad team-squad-border">
+                  <hr>
+                </div>
+                <div class="team-squad team-squad-right" id="team-bench-ENG">
+                  <div class="player-role-info" *ngFor="let benchPL of squadData[1].bench_players">
+                    <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{benchPL.sk_slug}}" [class]="benchPL.sk_slug==''?'blck':''"><span class="player-delta-out right" *ngIf="benchPL.delta==-1"><span></span></span><span
+                          class="player-name">{{benchPL.name}}</span><span class="role-icon" *ngIf="benchPL.position=='captain'">(C)</span></a>
+                      <p class="player-role">
+                        <!-- <span>{{benchPL.role}}</span> -->
+                        <span>{{ benchPL.role === 'wicket-keeper' ? 'Bat & WK' : benchPL.role === 'all-rounder' ? 'All' : benchPL.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                      </p>
+                    </div>
+                    <div class="player-img-anchor"><img class="player-img"
+                        [src]="getPlayerImage(benchPL.sk_slug) || '../../assets/team-default.png'" alt="player-img"
+                        height="40" width="40"></div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="squads-holder"  *ngIf="scorelist?.match_status=='pre'">
+
+              <div class="substitute-title playing-xi-title hidden">Playing XI</div>
+              <div class="substitute-players hidden" id="substitute-players">
+                <div class="substitute-title">Substitute</div>
+                <div class="team-squad team-squad-left" id="team-substitute-IND"></div>
+                <div class="team-squad team-squad-border">
+                  <hr>
+                </div>
+                <div class="team-squad team-squad-right" id="team-substitute-ENG"></div>
+              </div>
+              <div class="bench-players " id="bench-players">
+                <div class="team-squad team-squad-left" id="team-bench-IND">
+                  <div class="player-role-info" *ngFor="let benchPL of squadData[0].bench_players">
+                    <div class="player-img-anchor"><img class="player-img"
+                        [src]="getPlayerImage(benchPL.sk_slug) || '../../assets/team-default.png'" alt="player-img"
+                        height="40" width="40"></div>
+                    <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{benchPL.sk_slug}}" [class]="benchPL.sk_slug==''?'blck':''"><span class="player-name">
+                          {{benchPL.name}}</span><span class="role-icon" *ngIf="benchPL.position=='captain'">(C)</span><span class="player-delta-out left" *ngIf="benchPL.delta==-1"><span></span></span></a>
+                      <p class="player-role">
+                        <!-- <span>{{benchPL.role}}</span> -->
+                        <span>{{ benchPL.role === 'wicket-keeper' ? 'Bat & WK' : benchPL.role === 'all-rounder' ? 'All' : benchPL.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="team-squad team-squad-border">
+                  <hr>
+                </div>
+                <div class="team-squad team-squad-right" id="team-bench-ENG">
+                  <div class="player-role-info" *ngFor="let benchPL of squadData[1].bench_players">
+                    <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{benchPL.sk_slug}}" [class]="benchPL.sk_slug==''?'blck':''"><span class="player-delta-out right" *ngIf="benchPL.delta==-1"><span></span></span><span
+                          class="player-name">{{benchPL.name}}</span><span class="role-icon" *ngIf="benchPL.position=='captain'">(C)</span></a>
+                      <p class="player-role">
+                        <!-- <span>{{benchPL.role}}</span> -->
+                        <span>{{ benchPL.role === 'wicket-keeper' ? 'Bat & WK' : benchPL.role === 'all-rounder' ? 'All' : benchPL.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                      </p>
+                    </div>
+                    <div class="player-img-anchor"><img class="player-img"
+                        [src]="getPlayerImage(benchPL.sk_slug) || '../../assets/team-default.png'" alt="player-img"
+                        height="40" width="40"></div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="preview-card-holder no-squad-announce playing-content playing-content-close hidden">
+          <div class="preview-card-content team-card">
+            <span class="announced">Not available for this match</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

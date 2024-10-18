@@ -1,0 +1,1113 @@
+<section class="breadcrumb-section">
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/">Cricket </a>
+        </li>
+        <li>
+          <span>{{playerName}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="hero-section" id="desktop">
+
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+    <div class="wrapper-container">
+
+
+      <div class="layers">
+        <div class="layer layer1"></div>
+        <div class="layer layer2"></div>
+        <div class="layer layer3"></div>
+      </div>
+
+      <div class="hero-content">
+
+
+        <div class="left">
+          <div class="player-details" >
+            <div class="player-img">
+              <img [src]="playerList?.img || '../../assets/team-default.png'" width="134" height="134" alt="Paul Stirling" class=""
+                data-img-params="?w=268">
+            </div>
+            <div class="player-info">
+              <div class="row1">
+                <h1 class="player-name">{{playerList?.name}}</h1>
+                <div class="taxonomy-share">
+
+
+                  <div class="share-top share-container">
+                    <button type="button" class="share-text-holder share-btn"
+                    >
+                      <img src="/assets/ic-share-gray.svg" width="21" height="16"
+                        class="forward-share lazy-img-bg" alt="Share icon">
+                      <span class="action-text">Share</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="row1 meta cricket">
+                <span>{{playerList?.meta}}</span>
+                <!-- <span>•</span> -->
+                <!-- <span>
+                  Right Handed Bat
+                </span> -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="keeda_widget_loader" style="display: block;margin-right: 45%;" *ngIf="loader">
+          <img class="spin cricket-ball" src="../../assets/cricket_ball (1).svg"
+            alt="loader" style="transform: rotate(7500deg);">
+        </div>
+
+        <div class="right">
+          <div class="tournament-info" *ngIf="playerList?.worldcup.Mat">
+            <div class="tournament-heading">WORLD CUP ALL TIME STATS</div>
+            <div class="tournament-stats">
+              <div class="single-stats ">
+                <span class="value">{{playerList?.worldcup.Mat}}</span>
+                <span class=" text">Mat</span>
+              </div>
+              <div class="single-stats ">
+                <span class="value">{{playerList?.worldcup.Runs}}</span>
+                <span class=" text">Runs</span>
+              </div>
+              <div class="single-stats ">
+                <span class="value">{{playerList?.worldcup['S/R']}}</span>
+                <span class=" text">S/R</span>
+              </div>
+              <div class="single-stats ">
+                <span class="value">{{playerList?.worldcup.Avg}}</span>
+                <span class=" text">Avg</span>
+              </div>
+              <div class="single-stats ">
+                <span class="value">{{playerList?.worldcup['H/S']}}</span>
+                <span class=" text">H/S</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<section class="hero-section" id="mobileview">
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+  <div class="wrapper-container">
+
+  <div class="layers">
+  <div class="layer layer1"></div>
+  <div class="layer layer2"></div>
+  <div class="layer layer3"></div>
+  </div>
+  <div class="hero-content">
+  <div class="left">
+
+
+
+
+
+
+  <div class="player-details">
+  <div class="player-img">
+  <img src="{{playerList?.img || '../../../../assets/team-default.png'}}" width="134" height="134" alt="Colin Munro" class="" data-img-params="?w=268">
+  </div>
+  <div class="player-info">
+  <div class="row1">
+  <h1 class="player-name">{{playerList?.name}}</h1>
+  <div class="taxonomy-share">
+
+
+  <div class="share-top share-container">
+  <button type="button" class="share-text-holder share-btn" data-title="Colin Munro" onclick="shareContent(this, 'top', 'ShareTaxonomyClick', 'ShareTaxonomy')">
+  <img src="/assets/ic-share-gray.svg" width="21" height="16" class="forward-share lazy-img-bg" alt="Share icon">
+  <span class="action-text">Share</span>
+  </button>
+  </div>
+  </div>
+  </div>
+  <div class="row1 meta cricket">
+  <span>{{playerList?.meta}}</span>
+  <!-- <span>•</span>
+  <span>
+  Left Handed Bat
+  </span> -->
+  </div>
+  </div>
+  </div>
+  </div>
+  <div class="right">
+  </div>
+  </div>
+  </div>
+  </div>
+
+  </section>
+
+
+
+<section class="player-page-tabs-section">
+  <div class="tabs-container">
+    <div class="player-page-tabs wrapper-container">
+      <div class="tab-header selected">
+        <a class="page-tab " (click)="overviewdata()" [class]="playerStatsTab!=='stats' && playerStatsTab!=='news'?'hovered':''"
+          data-tab="">Overview</a>
+      </div>
+      <div class="tab-header ">
+        <a class="page-tab " (click)="playerStata('stats')" [class]="playerStatsTab==='stats'?'hovered':''">Stats</a>
+      </div>
+      <div class="tab-header " >
+        <a  class="page-tab "(click)="playerNews('news')" [class]="playerStatsTab==='news'?'hovered':''" data-tab="news">News</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="wrapper-container" *ngIf="playerStatsTab!=='stats'">
+
+  <div class="fragment-container">
+
+    <main class="player-home">
+      <section class="layout-wrapper">
+        <div class="content-container">
+
+          <div class="right">
+            <div class="sidebar-container">
+
+              <aside class="sidebar">
+                <div class="sidebar-content">
+                  <div class="ad-container " id="" style="
+  min-height: 80px;
+  width: 100%; text-align: center;clear:both;
+  ">
+                    <div class="ad-declare-explicit"></div>
+
+                    <div id="div-gpt-ad-1653457590899-0" class="">
+
+                    </div>
+                  </div>
+
+                </div>
+              </aside>
+            </div>
+          </div>
+          <div class="left">
+
+
+            <section class="pinned-stories" *ngIf="playerStatsTab==='news'">
+              <div class="panel">
+              <header class="panel-header">
+              <h1 class="panel-heading">{{playerList?.name}} News</h1>
+              </header>
+
+              <div class="panel-body no-padding">
+                <div class="keeda_widget_loader2" style="display: block;margin-right: 45%;" *ngIf="loader2">
+                  <img class="spin cricket-ball" src="../../assets/cricket_ball.svg"
+                    alt="loader" style="transform: rotate(7500deg);">
+                </div>
+              <div class="feed-items">
+                <ng-container *ngFor="let item of playerews; let i=index;">
+                  <div class="sport-feed-item-primary" *ngIf="item.type=='primary'">
+                    <div class="sports-feed-item-primary-element">
+                      <a class="feed-item-cta"
+                        routerLink="/cricket-news/{{item.link}}"
+                        >{{item.title}}</a>
+                      <img width="334" height="200"
+                        alt="&quot;Can't wait to get my hands on him in this squad&quot; - Daren Sammy on Shamar Joseph playing white-ball cricket for West Indies"
+                        src="{{item.img}}"
+                        class="lazy-img-bg">
+                      <div class="sports-feed-item-element-meta">
+                        <div class="sports-primary-title">{{item.title}}</div>
+                        <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="feed-item-secondary" *ngIf="item.type=='secondary'" >
+                    <div class="sports-feed-item-secondary-element">
+                      <a class="feed-item-cta"
+                        routerLink="/cricket-news/{{item.link}}"
+                        data-sequence="2" data-section="">{{item.link}}</a>
+                      <img class="feed-element-img" width="82" height="83"
+                        alt="“Koi tension nahi hai, 4-1 karenge” – Chetan Sharma backs India to win five-match Test series against England ahead of Vizag Test"
+                        src="{{item.img}}">
+                      <div class="sports-feed-item-secondary-meta">
+                        <div class="sports-item-title">{{item.title}}</div>
+                        <div class="sports-feed-item-secondary-modified-time">{{item.time}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              </div>
+              </div>
+              </section>
+
+            <ng-container *ngIf="playerStatsTab!=='news'">
+              <div class="tournament-info" id="mobile"  *ngIf="playerList?.worldcup.Mat">
+                <div class="tournament-heading">IPL ALL TIME STATS</div>
+                <div class="tournament-stats">
+                  <div class="single-stats ">
+                    <span class="value">{{playerList?.worldcup.Mat}}</span>
+                    <span class=" text">Mat</span>
+                  </div>
+                  <div class="single-stats ">
+                    <span class="value">{{playerList?.worldcup.Runs}}</span>
+                    <span class=" text">Runs</span>
+                  </div>
+                  <div class="single-stats ">
+                    <span class="value">{{playerList?.worldcup['S/R']}}</span>
+                    <span class=" text">S/R</span>
+                  </div>
+                  <div class="single-stats ">
+                    <span class="value">{{playerList?.worldcup.Avg}}</span>
+                    <span class=" text">Avg</span>
+                  </div>
+                  <div class="single-stats ">
+                    <span class="value">{{playerList?.worldcup['H/S']}}</span>
+                    <span class=" text">H/S</span>
+                  </div>
+                </div>
+                </div>
+              <section class="player-bio"  *ngIf="playerList?.personalInfo && personalKeys(playerList?.personalInfo).length > 0">
+                <div class="panel" *ngIf="!loader">
+                  <header class="panel-header" >
+                    <h2 class="panel-heading">Personal Information</h2>
+                  </header>
+                  <div class="panel-body no-padding-d">
+
+                    <div class="personal-info-container">
+                      <table class="personal-info-table team-personal-info-table">
+
+                          <tbody class="team-personal-info-items main-info-items">
+                            <tr class="row item-details" *ngFor="let keyValuePair of playerList?.personalInfo | keyvalue">
+                              <td class="column left">{{ keyValuePair.key }}</td>
+                              <td class="column right">{{ keyValuePair.value }}</td>
+                            </tr>
+
+                          </tbody>
+
+                        <!-- </tbody> -->
+                      </table>
+
+                    </div>
+
+                  </div>
+                </div>
+              </section>
+              <div class="section-separator"></div>
+              <!-- <section class="sk-widget ">
+
+                <div class="vidazoo-player-container">
+                  <div id="video-player-container--"></div>
+
+                </div>
+              </section> -->
+              <div class="section-separator "></div>
+              <section class="stats-table-section">
+                <div class="panel" *ngIf="!loader">
+                  <header class="panel-header">
+                    <h2 class="panel-heading">{{mostRecentMatches[0]?.heading}}</h2>
+                  </header>
+                  <div class="panel-body no-padding-d">
+
+                    <table class="stats-table">
+                      <tbody>
+                        <tr>
+                          <th title="Match" class="headcol">Match</th>
+                          <th title="Runs" class="secondcol">R</th>
+                          <th title="Balls Faced">BF</th>
+                          <th title="Fours">4s</th>
+                          <th title="Sixes">6s</th>
+                          <th title="Strike Rate">S/R</th>
+                          <th title="Overs Bowled" class="batting-bowling-separator-over">O</th>
+                          <th title="Runs Conceded">R</th>
+                          <th title="Wickets Taken">W</th>
+                          <th title="Economy">E/R</th>
+                        </tr>
+                        <tr *ngFor="let item of mostRecentMatches[0]?.data">
+                          <td class="headcol">
+                            <a >{{item.Match}}</a>
+                          </td>
+                          <td class="secondcol">
+                            8</td>
+                          <td>{{item.BF}}</td>
+                          <td>{{item['4s']}}</td>
+                          <td>{{item['6s']}}</td>
+                          <td>{{item['S/R']}}</td>
+                          <td class="batting-bowling-separator-over">
+                            {{item.O}}</td>
+                          <td>{{item.R}} </td>
+                          <td>{{item.W}}</td>
+                          <td>{{item['E/R']}}</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+              <div class="section-separator"></div>
+              <section class="stats-table-section">
+                <div class="panel" *ngIf="!loader">
+                  <header class="panel-header">
+                    <h2 class="panel-heading">{{mostRecentMatches[1]?.heading}}</h2>
+                    <a class="view-all" (click)="playerStata('stats')" >
+                      <span>View All</span><span style="font-size:20px"> ></span>
+
+                    </a>
+                  </header>
+                  <div class="panel-body no-padding-d">
+                    <table class="stats-table">
+                      <tbody>
+                        <tr>
+                          <th title="Game Type" class="headcol">Game Type</th>
+                          <th title="Matches" class="secondcol">Mat</th>
+                          <th title="Innings">Inn</th>
+                          <th class="highlight-column" title="Runs">R</th>
+                          <th title="Balls Faced">BF</th>
+                          <th title="Not outs">NO</th>
+                          <th title="Average">Avg</th>
+                          <th title="Strike Rate">S/R</th>
+                          <th title="Hundreds">100s</th>
+                          <th title="Fifties">50s</th>
+                          <th title="High Score">H</th>
+                          <th title="Fours">4s</th>
+                          <th title="Sixes">6s</th>
+                          <th title="Caught">Ct</th>
+                          <th title="Stumped">St</th>
+                        </tr>
+                        <tr *ngFor="let battingItem of mostRecentMatches[1]?.data">
+                          <td class="headcol">{{battingItem['Game Type']}}</td>
+                          <td class="secondcol">{{battingItem.Mat}}</td>
+                          <td>{{battingItem.Inn}}</td>
+                          <td class="highlight-column">{{battingItem.R}}</td>
+                          <td>{{battingItem.BF}}</td>
+                          <td>{{battingItem.NO}}</td>
+                          <td>{{battingItem.Avg}}</td>
+                          <td>{{battingItem['S/R']}}</td>
+                          <td>{{battingItem['100s']}}</td>
+                          <td>{{battingItem['50s']}}</td>
+                          <td>{{battingItem.H}}</td>
+                          <td>{{battingItem['4s']}}</td>
+                          <td>{{battingItem['6s']}}</td>
+                          <td>{{battingItem.Ct}}</td>
+                          <td>{{battingItem.St}}</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+              <div class="section-separator"></div>
+              <section class="stats-table-section">
+                <div class="panel" *ngIf="!loader">
+                  <header class="panel-header">
+                    <h2 class="panel-heading">{{mostRecentMatches[2]?.heading}}</h2>
+                    <a class="view-all" (click)="playerStata('stats')" >
+                      <span>View All</span> <span style="font-size:20px"> ></span>
+
+                    </a>
+                  </header>
+                  <div class="panel-body no-padding-d">
+                    <table class="stats-table">
+                      <tbody>
+                        <tr>
+                          <th title="Game Type" class="headcol">Game Type</th>
+                          <th title="Matches" class="secondcol">Mat</th>
+                          <th title="Innings">Inn</th>
+                          <th title="Overs">O</th>
+                          <th title="Runs">R</th>
+                          <th class="highlight-column" title="Wickets">W</th>
+                          <th title="Average">Avg</th>
+                          <th title="Economy">E/R</th>
+                          <th title="Best">Best</th>
+                          <th title="Five-Wicket Hauls">5w</th>
+                          <th title="Ten-Wicket Hauls">10w</th>
+                        </tr>
+                        <tr *ngFor="let bowlingItem of mostRecentMatches[2]?.data">
+                          <td class="headcol">{{bowlingItem['Game Type']}}</td>
+                          <td class="secondcol">{{bowlingItem.Mat}}</td>
+                          <td>{{bowlingItem.Inn}}</td>
+                          <td>{{bowlingItem.O}}</td>
+                          <td>{{bowlingItem.R}}</td>
+                          <td class="highlight-column">{{bowlingItem.W}}</td>
+                          <td>{{bowlingItem.Avg}}</td>
+                          <td>{{bowlingItem['E/R']}}</td>
+                          <td>{{bowlingItem.Best}}</td>
+                          <td>{{bowlingItem['5s']}}</td>
+                          <td>{{bowlingItem['10w']}}</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+              <div class="section-separator"></div>
+              <section class="popular-players-panel">
+                <div class="panel">
+                  <header class="panel-header">
+                    <div class="panel-heading">
+                      <h2>Popular Players</h2>
+                      <div class="team-dropdown-container">
+                        <select class="team-dropdown" (change)="filterplayer($event)">
+
+                          <option [value]="item.teamId" [selected]="item.teamName=='India'" *ngFor="let item of popularPlayers?.teamOptions">
+                            {{item.teamName}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <a class="popular-players-full-team" routerLink="/team/{{teamOptionsId}}">
+                      <span>Full Team </span> <span style="font-size:20px"> ></span>
+
+                    </a>
+                  </header>
+                  <div class="panel-body">
+
+                    <div class="team-container " data-team="india-national-cricket-team">
+                      <div class="popular-players-container">
+                        <div class="slider-container ">
+                          <div class="slider-control slider-control--left hidden-view">
+                            <button class="slider-control-btn">
+                              <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                                src="/assets/ic-cheveron-right--2d2d2d.svg">
+                            </button>
+                          </div>
+                          <div class="slider-items">
+                            <div class="slider-item" *ngFor="let item of popularPlayerFilter?.data">
+                              <div class="popular-player-card" data-team="team-india-national-cricket-team">
+                                <a class="popular-player-cta" routerLink="/player/{{item.id}}">{{item.name}}</a>
+                                <div class="popular-player-container">
+                                  <div class="popular-player-image">
+                                    <img width="90" height="90" alt="Virat Kohli Image"
+                                      src="{{item.img || '../../assets/team-default.png'}}" class="lazy-img-bg">
+                                  </div>
+                                  <div class="popular-player-info">
+                                    <div class="popular-player-name">{{item.name}}</div>
+                                    <div class="popular-player-playing-role">{{item.role}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="slider-control slider-control--right hidden-view">
+                            <button class="slider-control-btn">
+                              <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                                src="/assets/ic-cheveron-right--2d2d2d.svg">
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </section>
+              <div class="section-separator"></div>
+            </ng-container>
+
+
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="sk-ads-taboola-container sk-ads-taboola-playerpage">
+
+
+      <div id="taboola-below-article-thumbnails"></div>
+
+    </div>
+
+  </div>
+</section>
+
+
+
+
+<!-- for stats page ============================================================= -->
+<section class="wrapper-container" *ngIf="playerStatsTab=='stats'">
+  <div class="fragment-container">
+    <h1 class="player-stats-main-heading">{{playerList?.name}} Stats</h1>
+    <div class="player-stats-detail-holder">
+      <div class="player-stats-section-holder" *ngIf="playerStatsList?.['VS Team Stats']?.length > 0">
+        <div class="player-stats-menu-holder">
+          <div class="player-section-main-heading-holder">
+            <h2 class="player-section-main-heading">VS Team Stats</h2>
+          </div>
+          <div class="player-stats-menu">
+            <div class="player-stats-menu-items">
+              <div class="player-match-type-items" [class]="oditabs=='odi'?'active':''"
+                (click)="switchMatchMenus('odi')">
+                ODI </div>
+              <div class="player-match-type-items" [class]="oditabs=='test'?'active':''"
+                (click)="switchMatchMenus('test')">
+                test </div>
+              <div class="player-match-type-items" [class]="oditabs=='t20i'?'active':''"
+                (click)="switchMatchMenus('t20i')">
+                T20I </div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-stats-container" *ngIf="playerStatsList['VS Team Stats']?.[0]">
+          <div class="detail-stats-heading-holder">
+            <h3 class="detail-stats-heading">{{playerStatsList['VS Team Stats']?.[0]?.title}}</h3>
+          </div>
+          <table class="batting-team-stats team-stats-table" data-type="odi">
+            <thead class="batting-team-stats-head">
+              <tr class="batting-team-stats-head-items">
+                <th title="Game against" class="headcol cric-headcol"></th>
+                <th class="secondcol cric-secondcol" title="Innings">Inn</th>
+                <th title="Notout">NO</th>
+                <th class="highlight-column" title="Runs">R</th>
+                <th title="Balls Faced">BF</th>
+                <th title="Hundreds">100s</th>
+                <th title="Fiftys">50s</th>
+                <th title="Fours">4s</th>
+                <th title="Sixes">6s</th>
+                <th title="Strike rate">S/R</th>
+                <th title="Average">Avg</th>
+                <th title="Highest">H</th>
+              </tr>
+            </thead>
+            <ng-container *ngIf="oditabs=='odi'">
+
+              <tbody>
+                <span class="d-none">{{listadata(playerStatsList['VS Team Stats']?.[0].tables[1]?.data)}}</span>
+
+                <tr class="total-team-stats" data-type="odi">
+                  <td class="headcol cric-headcol">Total</td>
+                  <td class="secondcol cric-secondcol">
+                    {{ getTotal('Inn') }}</td>
+                  <td>{{ getTotal('NO') }}</td>
+                  <td class="highlight-column">{{ getTotal('R') }}</td>
+                  <td>{{ getTotal('BF') }}</td>
+                  <td>{{ getTotal('100s') }}</td>
+                  <td>{{ getTotal('50s') }}</td>
+                  <td>{{ getTotal('4s') }}</td>
+                  <td>{{ getTotal('6s') }}</td>
+                  <td>{{ getTotal('S/R') }}</td>
+                  <td>{{ getTotal('Avg') }}</td>
+                  <td>{{ getTotal('H') }}</td>
+                </tr>
+                <tr class="detailed-team-stats" *ngFor="let item of playerStatsList['VS Team Stats']?.[0].tables[1]?.data">
+                  <td class="headcol cric-headcol">
+
+                    <span class="team-stats-flag-text">vs</span>
+                    <img [src]="item[''].img || '../../assets/team-default.png'" class="team-image battting" data-img-params="?w=200"
+                      alt="Pakistan flag" width="100" height="100">
+                    <a target="_blank" routerLink="/team/{{item[''].slug}}"
+                     >{{item[''].name}}</a>
+                  </td>
+                  <td class="secondcol cric-secondcol">{{item.Inn}} </td>
+                  <!-- <td>1</td> -->
+                  <td>{{item.NO}}</td>
+                  <td class="highlight-column">{{item.R}}</td>
+                  <td>{{item.BF}}</td>
+                  <td>{{item['100s']}}</td>
+                  <td>{{item['50s']}}</td>
+                  <td>{{item['4s']}}</td>
+                  <td>{{item['6s']}}</td>
+                  <td>{{item['S/R']}}</td>
+                  <td>{{item.Avg}}</td>
+                  <td>{{item.H}}</td>
+
+                </tr>
+              </tbody>
+            </ng-container>
+            <ng-container *ngIf="oditabs=='test'">
+              <tbody>
+                <span class="d-none">{{listadata(playerStatsList['VS Team Stats']?.[0].tables[2]?.data)}}</span>
+
+                <tr class="total-team-stats" data-type="odi">
+                  <td class="headcol cric-headcol">Total</td>
+                  <td class="secondcol cric-secondcol">
+                    {{ getTotal('Inn') }}</td>
+                  <td>{{ getTotal('NO') }}</td>
+                  <td class="highlight-column">{{ getTotal('R') }}</td>
+                  <td>{{ getTotal('BF') }}</td>
+                  <td>{{ getTotal('100s') }}</td>
+                  <td>{{ getTotal('50s') }}</td>
+                  <td>{{ getTotal('4s') }}</td>
+                  <td>{{ getTotal('6s') }}</td>
+                  <td>{{ getTotal('S/R') }}</td>
+                  <td>{{ getTotal('Avg') }}</td>
+                  <td>{{ getTotal('H') }}</td>
+                </tr>
+                <tr class="detailed-team-stats" *ngFor="let item of playerStatsList['VS Team Stats']?.[0].tables[2]?.data">
+                  <td class="headcol cric-headcol">
+
+                    <span class="team-stats-flag-text">vs</span>
+                    <img [src]="item[''].img || '../../assets/team-default.png'" class="team-image battting" data-img-params="?w=200"
+                      alt="Pakistan flag" width="100" height="100">
+                    <a target="_blank" routerLink="/team/{{item[''].slug}}"
+                    >{{item[''].name}}</a>
+                  </td>
+                  <td class="secondcol cric-secondcol">{{item.Inn}} </td>
+                  <!-- <td>1</td> -->
+                  <td>{{item.NO}}</td>
+                  <td class="highlight-column">{{item.R}}</td>
+                  <td>{{item.BF}}</td>
+                  <td>{{item['100s']}}</td>
+                  <td>{{item['50s']}}</td>
+                  <td>{{item['4s']}}</td>
+                  <td>{{item['6s']}}</td>
+                  <td>{{item['S/R']}}</td>
+                  <td>{{item.Avg}}</td>
+                  <td>{{item.H}}</td>
+
+                </tr>
+              </tbody>
+            </ng-container>
+
+            <ng-container *ngIf="oditabs=='t20i'">
+              <tbody>
+                <span class="d-none">{{listadata(playerStatsList['VS Team Stats']?.[0].tables[0]?.data)}}</span>
+
+
+                <tr class="total-team-stats" data-type="odi">
+                  <td class="headcol cric-headcol">Total</td>
+                  <td class="secondcol cric-secondcol">
+                    {{ getTotal('Inn') }}</td>
+                  <td>{{ getTotal('NO') }}</td>
+                  <td class="highlight-column">{{ getTotal('R') }}</td>
+                  <td>{{ getTotal('BF') }}</td>
+                  <td>{{ getTotal('100s') }}</td>
+                  <td>{{ getTotal('50s') }}</td>
+                  <td>{{ getTotal('4s') }}</td>
+                  <td>{{ getTotal('6s') }}</td>
+                  <td>{{ getTotal('S/R') }}</td>
+                  <td>{{ getTotal('Avg') }}</td>
+                  <td>{{ getTotal('H') }}</td>
+                </tr>
+
+                <tr class="detailed-team-stats" *ngFor="let item of playerStatsList['VS Team Stats']?.[0].tables[0]?.data">
+                  <td class="headcol cric-headcol">
+                    <span class="d-none">{{listadata(item)}}</span>
+
+
+                    <span class="team-stats-flag-text">vs</span>
+                    <img [src]="item[''].img || '../../assets/team-default.png'" class="team-image battting" data-img-params="?w=200"
+                      alt="Pakistan flag" width="100" height="100">
+                    <a target="_blank" routerLink="/team/{{item[''].slug}}"
+                     >{{item[''].name}}</a>
+                  </td>
+                  <td class="secondcol cric-secondcol">{{item.Inn}} </td>
+                  <!-- <td>1</td> -->
+                  <td>{{item.NO}}</td>
+                  <td class="highlight-column">{{item.R}}</td>
+                  <td>{{item.BF}}</td>
+                  <td>{{item['100s']}}</td>
+                  <td>{{item['50s']}}</td>
+                  <td>{{item['4s']}}</td>
+                  <td>{{item['6s']}}</td>
+                  <td>{{item['S/R']}}</td>
+                  <td>{{item.Avg}}</td>
+                  <td>{{item.H}}</td>
+
+                </tr>
+              </tbody>
+            </ng-container>
+          </table>
+
+        </div>
+        <div class="detail-stats-container" *ngIf="playerStatsList['VS Team Stats']?.[1]">
+          <div class="detail-stats-heading-holder">
+            <h3 class="detail-stats-heading" >Bowling Performance
+            </h3>
+          </div>
+          <table class="bowling-team-stats team-stats-table " data-type="t20i" *ngIf="oditabs=='t20i'">
+            <thead class="bowling-team-stats-head">
+              <tr class="bowling-team-stats-head-items">
+                <th title="Game against" class="headcol cric-headcol"></th>
+                <th title="Innings" class="secondcol cric-secondcol">Inn</th>
+                <th title="Balls">B</th>
+                <th title="Runs">R</th>
+                <th class="highlight-column" title="Wickets">W</th>
+                <th title="Economy">E/R</th>
+                <th title="Dots">Dots</th>
+                <th title="Maidens">Mdns</th>
+                <th title="4-wickets">4w</th>
+                <th title="5-wickets">5w</th>
+                <th title="10-wickets">10w</th>
+                <th title="Average">Avg</th>
+              </tr>
+            </thead>
+            <tbody>
+              <span class="d-none">{{listadata1(playerStatsList['VS Team Stats']?.[1].tables[0]?.data)}}</span>
+
+
+              <tr class="total-team-stats" data-type="odi">
+                <td class="headcol cric-headcol">Total</td>
+                <td class="secondcol cric-secondcol">{{ getTotal('Inn') }} </td>
+                <td>{{ getTotal('B') }}</td>
+                <td>{{ getTotal('R') }}</td>
+                <td>{{ getTotal('W') }}</td>
+
+                <td class="highlight-column">{{ getTotal('E/R') }}</td>
+                <td>{{ getTotal('Dots') }}</td>
+                <td>{{ getTotal('Mdns') }}</td>
+                <td>{{ getTotal('4w') }}</td>
+                <td>{{ getTotal('5w') }}</td>
+                <td>{{ getTotal('10w') }}</td>
+                <td>{{ getTotal('Avg') }}</td>
+                <!-- <td>{{ getTotal('W') }}</td> -->
+              </tr>
+
+              <tr class="detailed-team-stats" *ngFor="let item of playerStatsList['VS Team Stats']?.[1].tables[0]?.data">
+                <td class="headcol cric-headcol">
+                  <!-- <span class="d-none">{{listadata1(item)}}</span> -->
+
+                  <span class="team-stats-flag-text">vs</span>
+                  <img class="team-image battting img-with-fallbacks"
+                  [src]="item[''].img || '../../assets/team-default.png'" alt="Pakistan flag" width="100" height="100">
+                  <a  routerLink="/team/{{item[''].slug}}" >{{item[''].name}}</a>
+                </td>
+                <td class="secondcol cric-secondcol">{{item.Inn}} </td>
+                <td>{{item.B}}</td>
+                <td>{{item.R}}</td>
+                <td class="highlight-column">{{item.W}}</td>
+                <td>{{item['E/R']}}</td>
+                <td>{{item.Dots}}</td>
+                <td>{{item.Mdns}}</td>
+                <td>{{item['4w']}}</td>
+                <td>{{item['5w']}}</td>
+                <td>{{item['10w']}}</td>
+                <td>{{item.Avg}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+          <table class="bowling-team-stats team-stats-table " data-type="t20i" *ngIf="oditabs=='odi'">
+            <thead class="bowling-team-stats-head">
+              <tr class="bowling-team-stats-head-items">
+                <th title="Game against" class="headcol cric-headcol"></th>
+                <th title="Innings" class="secondcol cric-secondcol">Inn</th>
+                <th title="Balls">B</th>
+                <th title="Runs">R</th>
+                <th class="highlight-column" title="Wickets">W</th>
+                <th title="Economy">E/R</th>
+                <th title="Dots">Dots</th>
+                <th title="Maidens">Mdns</th>
+                <th title="4-wickets">4w</th>
+                <th title="5-wickets">5w</th>
+                <th title="10-wickets">10w</th>
+                <th title="Average">Avg</th>
+              </tr>
+            </thead>
+            <tbody>
+              <span class="d-none">{{listadata1(playerStatsList['VS Team Stats']?.[1].tables[1]?.data)}}</span>
+
+
+              <tr class="total-team-stats" data-type="odi" >
+                <td class="headcol cric-headcol">Total</td>
+                <td class="secondcol cric-secondcol">{{ getTotal('Inn') }} </td>
+                <td>{{ getTotal('B') }}</td>
+                <td>{{ getTotal('R') }}</td>
+                <td>{{ getTotal('W') }}</td>
+
+                <td class="highlight-column">{{ getTotal('E/R') }}</td>
+                <td>{{ getTotal('Dots') }}</td>
+                <td>{{ getTotal('Mdns') }}</td>
+                <td>{{ getTotal('4w') }}</td>
+                <td>{{ getTotal('5w') }}</td>
+                <td>{{ getTotal('10w') }}</td>
+                <td>{{ getTotal('Avg') }}</td>
+                <!-- <td>{{ getTotal('W') }}</td> -->
+              </tr>
+
+
+              <tr class="detailed-team-stats" *ngFor="let item of playerStatsList['VS Team Stats']?.[1].tables[1]?.data">
+                <td class="headcol cric-headcol">
+
+                  <span class="team-stats-flag-text">vs</span>
+                  <img class="team-image battting img-with-fallbacks"
+                  [src]="item[''].img || '../../assets/team-default.png'" alt="Pakistan flag" width="100" height="100">
+                  <a routerLink="/team/{{item[''].slug}}" >{{item[''].name}}</a>
+                </td>
+                <td class="secondcol cric-secondcol">{{item.Inn}} </td>
+                <td>{{item.B}}</td>
+                <td>{{item.R}}</td>
+                <td class="highlight-column">{{item.W}}</td>
+                <td>{{item['E/R']}}</td>
+                <td>{{item.Dots}}</td>
+                <td>{{item.Mdns}}</td>
+                <td>{{item['4w']}}</td>
+                <td>{{item['5w']}}</td>
+                <td>{{item['10w']}}</td>
+                <td>{{item.Avg}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+          <table class="bowling-team-stats team-stats-table " data-type="t20i" *ngIf="oditabs=='test'">
+            <thead class="bowling-team-stats-head">
+              <tr class="bowling-team-stats-head-items">
+                <th title="Game against" class="headcol cric-headcol"></th>
+                <th title="Innings" class="secondcol cric-secondcol">Inn</th>
+                <th title="Balls">B</th>
+                <th title="Runs">R</th>
+                <th class="highlight-column" title="Wickets">W</th>
+                <th title="Economy">E/R</th>
+                <th title="Dots">Dots</th>
+                <th title="Maidens">Mdns</th>
+                <th title="4-wickets">4w</th>
+                <th title="5-wickets">5w</th>
+                <th title="10-wickets">10w</th>
+                <th title="Average">Avg</th>
+              </tr>
+            </thead>
+            <tbody>
+              <span class="d-none">{{listadata1(playerStatsList['VS Team Stats']?.[1].tables[2]?.data)}}</span>
+
+
+              <tr class="total-team-stats" data-type="odi" >
+                <td class="headcol cric-headcol">Total</td>
+                <td class="secondcol cric-secondcol">{{ getTotal('Inn') }} </td>
+                <td>{{ getTotal('B') }}</td>
+                <td>{{ getTotal('R') }}</td>
+                <td>{{ getTotal('W') }}</td>
+
+                <td class="highlight-column">{{ getTotal('E/R') }}</td>
+                <td>{{ getTotal('Dots') }}</td>
+                <td>{{ getTotal('Mdns') }}</td>
+                <td>{{ getTotal('4w') }}</td>
+                <td>{{ getTotal('5w') }}</td>
+                <td>{{ getTotal('10w') }}</td>
+                <td>{{ getTotal('Avg') }}</td>
+                <!-- <td>{{ getTotal('W') }}</td> -->
+              </tr>
+
+
+              <tr class="detailed-team-stats" *ngFor="let item of playerStatsList['VS Team Stats']?.[1].tables[2]?.data">
+                <td class="headcol cric-headcol">
+                  <!-- <span class="d-none">{{listadata1(item)}}</span> -->
+
+                  <span class="team-stats-flag-text">vs</span>
+                  <img class="team-image battting img-with-fallbacks"
+                  [src]="item[''].img || '../../assets/team-default.png'" alt="Pakistan flag" width="100" height="100">
+                  <a  routtarget="_blank">{{item[''].name}}</a>
+                </td>
+                <td class="secondcol cric-secondcol">{{item.Inn}} </td>
+                <td>{{item.B}}</td>
+                <td>{{item.R}}</td>
+                <td class="highlight-column">{{item.W}}</td>
+                <td>{{item['E/R']}}</td>
+                <td>{{item.Dots}}</td>
+                <td>{{item.Mdns}}</td>
+                <td>{{item['4w']}}</td>
+                <td>{{item['5w']}}</td>
+                <td>{{item['10w']}}</td>
+                <td>{{item.Avg}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+
+      <div class="player-stats-section-holder">
+        <div class="player-stats-menu-holder tournament-stats">
+          <div class="player-section-main-heading-holder">
+            <h2 class="player-section-main-heading">Tournament Stats</h2>
+          </div>
+        </div>
+        <div class="detail-stats-container ">
+          <div class="detail-stats-heading-holder">
+            <h3 class="detail-stats-heading">
+              {{tournamentStatsData?.[0]?.title}}</h3>
+          </div>
+          <table class="tournament-stats-table" *ngIf="tournamentStatsData?.[0]?.tables">
+            <thead>
+              <tr>
+                <th title="Tournament" class="headcol cric-headcol">Tournament</th>
+                <th title="Matches" class="secondcol cric-secondcol">Mat</th>
+                <th title="Innings">Inn</th>
+                <th title="Notout">No</th>
+                <th class="highlight-column" title="Runs">R</th>
+                <th title="Balls Faced">BF</th>
+                <th title="Hundreds">100s</th>
+                <th title="Fiftys">50s</th>
+                <th title="Fours">4s</th>
+                <th title="Sixes">6s</th>
+                <th title="Strike rate">S/R</th>
+                <th title="Average">Avg</th>
+                <th title="Highest">H</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of tournamentStatsData?.[0]?.tables">
+                <td class="headcol cric-headcol">{{item.Tournament}}</td>
+                <td class="secondcol cric-secondcol">
+                  {{item.Mat}} </td>
+                <td>{{item.Inn}} </td>
+                <td>{{item.No}} </td>
+                <td class="highlight-column">
+                  {{item.R}}</td>
+                <td>{{item.BF}} </td>
+                <td>{{item['100s']}} </td>
+                <td>{{item['50s']}} </td>
+                <td>{{item['4s']}}</td>
+                <td>{{item['6s']}}</td>
+                <td>{{item['S/R']}} </td>
+                <td>{{item.Avg}} </td>
+                <td>{{item.H}} </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="detail-stats-container">
+          <div class="detail-stats-heading-holder">
+            <h3 class="detail-stats-heading" data-gtm-vis-first-on-screen11995632_98="453">
+              {{tournamentStatsData?.[1]?.title}}</h3>
+          </div>
+          <table class="tournament-stats-table" *ngIf="tournamentStatsData?.[1]?.tables">
+            <thead>
+              <tr>
+                <th title="Tournament" class="headcol cric-headcol">Tournament</th>
+                <th title="Matches" class="secondcol cric-secondcol">Mat</th>
+                <th title="Innings">Inn</th>
+                <th title="Overs">Ov</th>
+                <th title="Balls">B</th>
+                <th title="Runs">R</th>
+                <th class="highlight-column" title="Wickets">W</th>
+                <th title="Economy">E/R</th>
+                <th title="Dots">Dots</th>
+                <th title="Maidens">Mdns</th>
+                <th title="Average">Avg</th>
+                <th title="Strike">S/R</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of tournamentStatsData?.[1]?.tables">
+                <td class="headcol cric-headcol">{{item.Tournament}}</td>
+                <td class="secondcol cric-secondcol">
+                  {{item.Mat}} </td>
+                <td>{{item.Inn}} </td>
+                <td>{{item.Ov}} </td>
+                <td class="highlight-column">
+                  {{item.B}}</td>
+                <td>{{item.R}} </td>
+                <td>{{item.W}} </td>
+                <td>{{item['E/R']}} </td>
+                <td>{{item.Dots}}</td>
+                <td>{{item.Mdns}}</td>
+                <td>{{item.Avg}} </td>
+
+                <td>{{item['S/R']}} </td>
+                <!-- <td>{{item.Avg}} </td>
+                <td>{{item.H}} </td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="player-stats-section-holder">
+        <div class="player-stats-menu-holder last-five-match">
+          <div class="player-section-main-heading-holder">
+            <h2 class="player-section-main-heading">Most Recent Matches</h2>
+          </div>
+        </div>
+        <div class="detail-stats-container">
+          <table class="last-five-match-table">
+            <thead>
+              <tr>
+                <th title="Match" class="headcol cric-headcol">Match</th>
+                <th title="Runs" class="secondcol cric-secondcol">RUNS</th>
+                <th title="Balls Faced">BF</th>
+                <th title="Fours">4s</th>
+                <th title="Sixes">6s</th>
+                <th title="Strike Rate">S/R</th>
+                <th title="Overs Bowled" class="batting-bowling-separator-row">O</th>
+                <th title="Runs Conceded">R</th>
+                <th title="Wickets Taken">W</th>
+                <th title="Economy">E/R</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of playerStatsList['Most Recent Matches'][0]?.tables">
+                <td class="headcol cric-headcol">
+                  <a
+                    >{{item.Match}}</a>
+                </td>
+                <td class="secondcol cric-secondcol">
+                  {{item.RUNS}}</td>
+                <td>{{item.BF}} </td>
+                <td>{{item['4s']}}</td>
+                <td>{{item['6s']}}</td>
+                <td>{{item['S/R']}}</td>
+                <td class="batting-bowling-separator-row">
+                  {{item.O}}</td>
+                <td>{{item.R}} </td>
+                <td>{{item.W}}</td>
+                <td>{{item['E/R']}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <section class="sports-about-section">
+      </section>
+      <div class="player-page-rating-section">
+        <div class="player-page-rating-container flex-box">
+          <div class="player-page-rating-box flex-box">
+            <div class="player-page-rating-success hidden">
+              <span class="rating-text">Thank you for your feedback!</span>
+
+            </div>
+            <div class="player-page-rating-content">
+              <span class="rating-text" id="rating-text">Rate this Content!</span>
+            </div>
+            <div class="rate">
+              <input type="radio" id="star5" name="rate" value="5" onclick="submitFeedback(true)">
+              <label for="star5" title="5 star"></label>
+              <input type="radio" id="star4" name="rate" value="4" onclick="showOverlay(value)">
+              <label for="star4" title="4 star"></label>
+              <input type="radio" id="star3" name="rate" value="3" onclick="showOverlay(value)">
+              <label for="star3" title="3 star"></label>
+              <input type="radio" id="star2" name="rate" value="2" onclick="showOverlay(value)">
+              <label for="star2" title="2 star"></label>
+              <input type="radio" id="star1" name="rate" value="1" onclick="showOverlay(value)">
+              <label for="star1" title="1 star"></label>
+            </div>
+          </div>
+        </div>
+        <div id="player-page-rating-edit-box" class="flex-box hidden">
+          <div class="player-page-rating-edit-box flex-box">
+            <div class="player-page-rating-success">
+              <span class="rating-text">Thank you for your feedback!</span>
+
+            </div>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    <div class="sk-ads-taboola-container sk-ads-taboola-playerpage">
+      <div id="taboola-below-article-thumbnails"></div>
+    </div>
+  </div>
+</section>
+

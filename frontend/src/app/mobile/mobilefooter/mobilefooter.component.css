@@ -1,0 +1,34 @@
+.mobile-footer{
+  background: #009270	!important;
+  width: 100%;
+  height: auto;
+  color: #fff;
+  padding: 25px;
+  text-align: center;
+  /* display: flex; */
+  /* justify-content: center; */
+}
+.termspolicy{
+  display: flex;
+  justify-content: space-around;
+}
+a{
+  color: #fff;
+}
+.languages
+{
+  margin-bottom: 80px;
+}
+#img1{
+  margin-top: 20px;
+  padding-top: 7px;
+  height: 20px;
+}
+
+
+@media (min-width: 260px) and (max-width: 476px){
+  .termspolicy a{
+    font-size: 0.7rem;
+  }
+
+}

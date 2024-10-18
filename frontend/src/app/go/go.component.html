@@ -1,0 +1,278 @@
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <span>Cricket </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/">Cricket </a>
+        </li>
+        <li>
+          <span>{{seriesInfo?.title}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+<section class="hero-section">
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+    <div class="wrapper-container">
+
+      <div class="hero-content ">
+        <div class="left">
+          <div class="hero-h1-container">
+            <h1 class="hero-h1">{{seriesInfo?.title}}</h1>
+          </div>
+          <div class="hash-tagline">{{seriesInfo?.dates}}</div>
+        </div>
+        <div class="right">
+          <div class="hero-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="wrapper-container">
+  <div class="fragment-container">
+
+    <main class="event-home">
+      <section class="score-carousel-container">
+
+        <div style="position: relative;clear:both">
+          <div class="scroll-button score-carousel-scroll-left" (click)="scrollLeft()"
+            [ngStyle]="{'display': rightScrollCount > 0 ? 'block': 'none'}">
+            <img src="/assets/arrow-icon-red.svg" height="15" width="10" alt="right-icon">
+          </div>
+          <div class="scroll-button score-carousel-scroll-right" style="display: block;" (click)="scrollRight()">
+            <img id="arrow" src="/assets/arrow-icon-red.svg" height="15" width="10"
+              alt="left-icon">
+          </div>
+          <div id="keeda_cricket_widget" data-imp-id="widget_sport_carousel">
+            <div class="keeda_widget_loader">
+              <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                alt="loader">
+            </div>
+            <div class="keeda_widget ">
+              <div class="keeda_widget_match_listing" #widgetsContent>
+                <div class="keeda_cricket_single_match" *ngFor="let item of matchList;"
+                  [ngClass]="item.is_next_match==true?'next-game':''">
+                  <div class="keeda_cricket_match_list post">
+                    <div class="keeda_widget_info cricket">
+                      <div class="cricket-match-card-header-secondary-text marquee-strip">
+                        <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}</span>
+                        <span>•</span>
+                        <span class="cricket-match-card--match-type">{{item.format | titlecase}}</span>
+                        <span *ngIf="item.venue_location">•</span>
+                        <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                        <span *ngIf="item.status==='post'">•</span>
+                        <span class="cricket-match-card--match-date" *ngIf="item.status==='post'">
+                          {{convertDate(item.datetime) }}</span>
+
+                      </div>
+                      <div class="keeda_widget_live_info" *ngIf="item.status==='live'">LIVE</div>
+
+                    </div>
+                    <div class="keeda_widget_match_detail">
+                      <div class="keeda_widget_team_group">
+                        <div class="keeda_widget_team ">
+                          <img width="54" height="38" alt="team-flag" loading="lazy" [src]="item.t1_flag"
+                            (error)="item.t1_flag = teamDefaultImg"
+                            class="keeda_widget_cricket_flag img-with-fallbacks">
+                          <span class="keeda_widget_team_name cricket">{{item.t1_key}}</span>
+                          <span class="keeda_widget_score cricket match-date"
+                            *ngIf="item.in_play !==true && item.status=='pre'"> {{convertDate(item.datetime) }}</span>
+                          <span class="keeda_widget_score cricket"></span>
+                          <span class="keeda_widget_score cricket">{{liveData[item.id]?.score_strip[0]?.score ||
+                            item.t1_score}}</span>
+                        </div>
+                        <div class="keeda_widget_team " data-team-name="IND">
+                          <img width="54" height="38" alt="team-flag" [src]="item.t2_flag"
+                            (error)="item.t2_flag = teamDefaultImg" class="keeda_widget_cricket_flag img-with-fallbacks"
+                            loading="lazy">
+                          <span class="keeda_widget_team_name cricket">{{item.t2_key}}</span>
+                          <span class="keeda_widget_score cricket match-time" id="time"
+                            *ngIf="item.in_play==false && item.status=='pre'">{{item.datetime | date:"hh:mm a"}}</span>
+                          <span class="keeda_widget_score cricket"></span>
+                          <span class="keeda_widget_score cricket">{{liveData[item.id]?.score_strip[1].score ||
+                            item.t2_score}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="keeda_widget_result_info post "
+                      [class]="liveData?.result?.length < 35? 'marquee-container':''">
+                      <div class="marquee-strip">{{liveData?.info || item.result}}<span class="win-margin"></span></div>
+                    </div>
+                  </div>
+                  <div class="keeda-cricket-widget--carousel-footer">
+                    <a class="hover-translucent" routerLink="/pointTable/{{item.event_slug}}"
+                      onclick="cricketWidgetObject.trackFooterClickEvents('Schedule')">
+                      <span>{{item.has_table==true?"Point Table":null}}</span>
+                      <img *ngIf="item.has_table==true" id="team"
+                        src="/assets/ic-chevron-right.svg" width="16" height="16"
+                        alt="ic-right">
+                    </a>
+
+                    <a class="hover-translucent" routerLink="/child-shedule/{{item.event_slug}}/upcoming"
+                      onclick="cricketWidgetObject.trackFooterClickEvents('Schedule')">
+                      <span>{{item.has_schedule==true?"Schedule":null}}</span>
+                      <img *ngIf="item.has_schedule==true" id="team"
+                        src="/assets/ic-chevron-right.svg" width="16" height="16"
+                        alt="ic-right">
+                    </a>
+                  </div>
+                  <a class="keeda_cricket_match_link"
+                    (click)="getrouteandCheckwidth('/live','/live-cricket-score',item.id)"
+                    title="England VS India live score">England vs India live score</a>
+                </div>
+
+                <div class="keeda_widget_all_fixtures"> <a routerLink="/child-shedule/{{turnament}}/upcoming"> Series
+                    Details
+                  </a> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <section class="layout-wrapper">
+        <div class="content-container">
+          <div class="right">
+            <section class="sk-widget ">
+
+              <div class="latest-popular-news-container"
+                data-component-id="latest_popular_news_widget__england-vs-india" data-section=""
+                data-imp-id="widget_latest_popular_news__latest_popular_news_widget__england-vs-india">
+                <div class="panel " *ngIf="latestNewsList?.length > 0 || popularNewsList?.length > 0">
+                  <header class="panel-header ">
+                    <h2 class="panel-heading" *ngIf="latestNewsList?.length > 0 && popularNewsList?.length <= 0">Latest
+                      News</h2>
+                    <h2 class="panel-heading" *ngIf="latestNewsList?.length < 0 && popularNewsList?.length > 0">popular
+                      News</h2>
+                  </header>
+                  <div class="panel-body ">
+                    <div class="controls-container" *ngIf="latestNewsList?.length > 0 && popularNewsList?.length > 0">
+                      <button class="news-switcher " (click)="getneswdata('latest')"
+                        [class]="selectedNewsTab=='latest'?'active':''">
+                        <h2>Latest News</h2>
+                      </button>
+                      <button class="news-switcher" (click)="popularNewsdata('popular')"
+                        [class]="selectedNewsTab=='popular'?'active':''">
+                        <h2>Most Popular</h2>
+                      </button>
+                    </div>
+                    <div class="content">
+                      <div class="news-items latest_popular_news_widget__england-vs-india__news_latest"
+                        *ngIf="selectedNewsTab=='latest'">
+                        <a routerLink="/cricket-news/{{item.link}}" *ngFor="let item of latestNewsList;let i=index"
+                          class="news-item" data-sequence="1" data-section="">
+                          <div class="news-sequence">{{i+1}}</div>
+                          <div class="news-content">
+                            <div class="news-title">{{item.title}}</div>
+                          </div>
+                        </a>
+
+                      </div>
+                      <div class="news-items latest_popular_news_widget__england-vs-india__news_popular"
+                        *ngIf="selectedNewsTab=='popular'">
+                        <a routerLink="/cricket-news/{{item.link}}" *ngFor="let item of popularNewsList;let i=index"
+                          class="news-item" data-sequence="1" data-section="">
+                          <div class="news-sequence">{{i+1}}</div>
+                          <div class="news-content">
+                            <div class="news-title">{{item.title}}</div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </section>
+            <div class="section-separator "></div>
+          </div>
+          <div class="left">
+
+            <div class="keeda_widget_loader" style="display: block;" *ngIf="loadernews==true">
+              <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                alt="loader" style="transform: rotate(7500deg);">
+            </div>
+            <section class="feed-stories">
+              <div class="panel">
+                <div class="panel-body no-padding-d">
+                  <div class="feed-items">
+                    <ng-container *ngFor="let item of newslist; let i=index;">
+                      <div class="sport-feed-item-primary" *ngIf="item.type=='primary'">
+                        <div class="sports-feed-item-primary-element">
+                          <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}">{{item.title}}</a>
+                          <img width="334" height="200" alt="" loading="lazy" src="{{item.img}}" class="lazy-img-bg">
+                          <div class="sports-feed-item-element-meta">
+                            <div class="sports-primary-title">{{item.title}}</div>
+                            <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="feed-item-secondary" *ngIf="item.type=='secondary'">
+                        <div class="sports-feed-item-secondary-element">
+                          <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="2"
+                            data-section="">{{item.link}}</a>
+                          <img class="feed-element-img" width="82" height="83" alt="" loading="lazy" src="{{item.img}}">
+                          <div class="sports-feed-item-secondary-meta">
+                            <div class="sports-item-title">{{item.title}}</div>
+                            <div class="sports-feed-item-secondary-modified-time">{{item.time}}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+
+
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div class="section-separator"></div>
+          </div>
+        </div>
+      </section>
+      <section class="division">
+        <div class="content-container">
+          <div class="left">
+            <div class="section-separator"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="sk-ads-taboola-container sk-ads-taboola-eventpage">
+
+      <div id="taboola-below-article-thumbnails"></div>
+
+    </div>
+
+  </div>
+</section>

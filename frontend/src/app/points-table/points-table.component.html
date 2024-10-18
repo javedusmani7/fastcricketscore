@@ -1,0 +1,220 @@
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <span>Cricket ></span>
+        </li>
+        <li>
+          <span routerLink="/go/{{eventgrupname}}">{{seriesInfo?.title}}</span>
+          </li>
+          <li>
+            <span>{{pageName}}</span>
+            </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="hero-section">
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+    <div class="wrapper-container">
+
+      <div class="hero-content ">
+        <div class="left">
+          <div class="hero-h1-container">
+            <h1 class="hero-h1">{{seriesInfo?.title}}  Points Table</h1>
+          </div>
+          <div class="hash-tagline">{{seriesInfo?.dates}}</div>
+        </div>
+        <div class="right">
+          <div class="hero-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<section class="wrapper-container">
+  <div class="fragment-container">
+
+    <main class="event-subpage">
+      <section class="layout-wrapper">
+        <div class="content-container">
+          <div class="right" *ngIf="latestNewsList?.length > 0 || popularNewsList?.length > 0">
+            <section class="sk-widget ">
+
+              <div class="latest-popular-news-container"
+              data-component-id="latest_popular_news_widget__england-vs-india" data-section=""
+              data-imp-id="widget_latest_popular_news__latest_popular_news_widget__england-vs-india">
+              <div class="panel " >
+                <header class="panel-header ">
+                  <h2 class="panel-heading"  *ngIf="latestNewsList?.length > 0 && popularNewsList?.length <= 0">Latest News</h2>
+                  <h2 class="panel-heading"  *ngIf="latestNewsList?.length < 0 && popularNewsList?.length > 0">popular News</h2>
+                  </header>
+                <div class="panel-body ">
+                  <div class="controls-container"*ngIf="latestNewsList?.length > 0 && popularNewsList?.length > 0" >
+                    <button class="news-switcher "
+                      (click)="getneswdata('latest')" [class]="selectedNewsTab=='latest'?'active':''">
+                      <h2>Latest News</h2>
+                    </button>
+                    <button class="news-switcher"
+                      (click)="popularNewsdata('popular')"[class]="selectedNewsTab=='popular'?'active':''">
+                      <h2>Most Popular</h2>
+                    </button>
+                  </div>
+                  <div class="content">
+                    <div class="news-items latest_popular_news_widget__england-vs-india__news_latest" *ngIf="selectedNewsTab=='latest'">
+                      <a routerLink="/cricket-news/{{item.link}}" *ngFor="let item of latestNewsList;let i=index"
+                        class="news-item" data-sequence="1" data-section="">
+                        <div class="news-sequence">{{i+1}}</div>
+                        <div class="news-content">
+                          <div class="news-title">{{item.title}}</div>
+                        </div>
+                      </a>
+
+                    </div>
+                    <div class="news-items latest_popular_news_widget__england-vs-india__news_popular" *ngIf="selectedNewsTab=='popular'">
+                      <a routerLink="/cricket-news/{{item.link}}" *ngFor="let item of popularNewsList;let i=index"
+                      class="news-item" data-sequence="1" data-section="">
+                      <div class="news-sequence">{{i+1}}</div>
+                      <div class="news-content">
+                        <div class="news-title">{{item.title}}</div>
+                      </div>
+                    </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </section>
+            <div class="section-separator "></div>
+            </div>
+          <div class="left">
+            <div class="subpage-container">
+
+              <section class="cricket-points-table-container">
+                <div class="panel" *ngIf="data.length <= 0">
+                  <div class="panel-body">
+                  <div class="page-empty-state">
+                  <img width="70" height="67" alt="speaker" src="../../assets/cmc-pre-live-icon.svg" class="lazy-img-bg">
+                  <div class="page-empty-state-message">Points table is not available</div>
+                  </div>
+                  </div>
+                  </div>
+                <div class="panel cricket-points-table-panel" *ngFor="let item of pointsRes">
+                  <div class="panel-header">
+                    <div class="panel-heading">{{item.group_name}}</div>
+                  </div>
+                  <div class="panel-body">
+
+                    <div class="cricket-points-table" data-group-title="Group A">
+                      <div class="keeda-data-table-wrapper">
+                        <div class="keeda-data-table-container">
+                          <table class="keeda-data-table">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <div class="ta-c">Pos</div>
+                                </th>
+                                <th class="column-team">
+                                  <div class="ta-l">Teams</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">P</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">W</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">L</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">D</div>
+                                </th>
+                                <th class="selected">
+                                  <div class="ta-c" >PTS</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">NRR</div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let el of item.group">
+                                <td>
+                                  <div class="ta-c">{{el.position}}</div>
+                                </td>
+                                <td>
+                                  <div class="points-table-team"><img width="24" height="24" alt="team-flag"
+                                       [src]="el.team_flag" (error)="el.team_flag = '../../assets/team-default.png'" class=""
+                                     >
+                                    <div class="points-table-team-name">{{el.team_name}}</div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.played}}</div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.won}}</div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.lost}}</div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.tied}}</div>
+                                </td>
+                                <td class="selected">
+                                  <div class="ta-c" id="boldselected" style="font-weight: 600;">{{el.points}}</div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.nrr}}</div>
+                                </td>
+                              </tr>
+                            </tbody>
+
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <div class="section-separator"></div>
+
+            </div>
+            <div class="content-ad-container">
+              <div class="ad-container" id="" style="
+      min-height: 31px;
+      width: 100%; text-align: center;clear:both;
+      ">
+                <div class="ad-declare-explicit"></div>
+
+                <div id="div-gpt-ad-1589376019464-0" class="">
+
+                </div>
+              </div>
+
+            </div>
+            <div class="section-separator"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="sk-ads-taboola-container sk-ads-taboola-eventpage">
+
+      <div id="taboola-below-article-thumbnails"></div>
+
+    </div>
+
+  </div>
+</section>

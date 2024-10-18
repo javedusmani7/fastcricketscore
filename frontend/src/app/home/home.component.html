@@ -1,0 +1,1518 @@
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <!-- <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <span>Cricket News > </span>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div style="background: #edf1f6" id="desktopview">
+  <div>
+  <div class="main-wrapper-container" style="margin: 0px auto;">
+    <section style="width:21%;margin-left: 20px;">
+      <div elevation=",2" class="sc-fqkvVR jeeaPw">
+        <section class="sk-widget icc-ranking">
+          <div class="panel ">
+            <header class="panel-header ">
+              <h2 class="panel-heading" routerLink="/iccRanking/icc-odi-ranking">ICC Rankings</h2>
+              <!-- <a class="view-more-cta" routerLink="/iccRanking/icc-odi-ranking" data-section="icc-ranking">
+                <span>View All</span>
+              </a> -->
+            </header>
+            <div class="panel-body p-b-0">
+              <div class="widget--icc-ranking">
+                <div class="icc-ranking-container">
+                  <div class="primary-control-tabs">
+                    <div class="primary-tab-switcher-wrapper" (click)="getIccRankingData('icc-t20-international-rankings')">
+                      <label class="primary-tab-switcher"
+                        [class]="selectedRanking==='icc-t20-international-rankings'?'selectranking':''">
+                        <span>T20 Ranking</span>
+                      </label>
+                    </div>
+                    <div class="primary-tab-switcher-wrapper" (click)="getIccRankingData('icc-odi-ranking')">
+                      <label class="primary-tab-switcher"
+                        [class]="selectedRanking==='icc-odi-ranking'?'selectranking':''">
+                        <span>ODI Ranking</span>
+                      </label>
+                    </div>
+                    <div class="primary-tab-switcher-wrapper" (click)="getIccRankingData('icc-test-ranking')">
+                      <label class="primary-tab-switcher"
+                        [class]="selectedRanking==='icc-test-ranking'?'selectranking':''">
+                        <span>Test Ranking</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="secondary-control-tabs">
+                    <div class="secondary-tab-switcher-wrapper" (click)="getDataByTbs('team')">
+                      <label class="secondary-tab-switcher" [class]="rankingByTabs==='team'?'activeTabs':''">
+                        <span>Team</span>
+                      </label>
+                    </div>
+                    <div class="secondary-tab-switcher-wrapper" (click)="getDataByTbs('batting')">
+                      <label class="secondary-tab-switcher" [class]="rankingByTabs==='batting'?'activeTabs':''">
+                        <span>Batting</span>
+                      </label>
+                    </div>
+                    <div class="secondary-tab-switcher-wrapper" (click)="getDataByTbs('Bowling')">
+                      <label class="secondary-tab-switcher" [class]="rankingByTabs==='Bowling'?'activeTabs':''">
+                        <span>Bowling</span>
+                      </label>
+                    </div>
+                    <div class="secondary-tab-switcher-wrapper" (click)="getDataByTbs('All-Rounde')">
+                      <label class="secondary-tab-switcher" [class]="rankingByTabs==='All-Rounde'?'activeTabs':''">
+                        <span>All-Rounder</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="ranking-content-wrapper">
+                    <div class="ranking-content" *ngIf="rankingByTabs==='team'">
+                      <div class="ranking-item-header">
+                        <div class="player-team-rank">Rank</div>
+                        <div class="player-team-kind">Team</div>
+                        <div class="player-team-rating">Rating</div>
+                      </div>
+                      <div class="ranking-item team" *ngFor="let item of rankingList[0]?.data;let i=index">
+                        <div class="player-team-rank">{{item.POS}}</div>
+                        <div class="player-team-info">
+                          <!-- <div class="player-team-thumb">
+                            <img src="{{item.img}}" class="" width="35" height="25" alt="India"
+                              data-img-params="?h=50">
+                          </div> -->
+                          <div class="">
+                            <div class="player-team-name">
+                              <a class="player-team-name-primary" routerLink="/team">{{item.TEAM}}</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="player-team-rating">{{item.RATING}}</div>
+                      </div>
+
+                    </div>
+                    <div class="ranking-content" *ngIf="rankingByTabs==='batting'">
+                      <div class="ranking-item-header">
+                        <div class="player-team-rank">Rank</div>
+                        <div class="player-team-kind">Player</div>
+                        <div class="player-team-rating">Rating</div>
+                      </div>
+                      <div class="ranking-item player" *ngFor="let item of rankingList[1]?.data;let i=index">
+                        <div class="player-team-rank">{{item.POS}}</div>
+                        <div class="player-team-info">
+                          <!-- <div class="player-team-thumb">
+                            <img class="img-with-fallbacks" width="35" height="35" alt="Suryakumar Yadav"
+                              src="{{item.img}}">
+                          </div> -->
+                          <div class="">
+                            <div class="player-team-name">
+                              <a class="player-team-name-primary" >{{item.PLAYER}}</a>
+                              <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="player-team-rating">{{item.RATING}}</div>
+                      </div>
+                    </div>
+                    <div class="ranking-content" *ngIf="rankingByTabs=='Bowling'">
+                      <div class="ranking-item-header">
+                        <div class="player-team-rank">Rank</div>
+                        <div class="player-team-kind">Player</div>
+                        <div class="player-team-rating">Rating</div>
+                      </div>
+                      <div class="ranking-item player" *ngFor="let item of rankingList[2]?.data;let i=index">
+                        <div class="player-team-rank">{{item.POS}}</div>
+                        <div class="player-team-info">
+                          <!-- <div class="player-team-thumb">
+                            <img class="img-with-fallbacks" width="35" height="35" alt="Adil Rashid"
+                              src="{{item.img}}">
+                          </div> -->
+                          <div class="">
+                            <div class="player-team-name">
+                              <a class="player-team-name-primary" routerLink="/player">{{item.PLAYER}}</a>
+                              <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="player-team-rating">{{item.RATING}}</div>
+                      </div>
+
+                    </div>
+                    <div class="ranking-content" *ngIf="rankingByTabs=='All-Rounde'">
+                      <div class="ranking-item-header">
+                        <div class="player-team-rank">Rank</div>
+                        <div class="player-team-kind">Player</div>
+                        <div class="player-team-rating">Rating</div>
+                      </div>
+                      <div class="ranking-item player"
+                        *ngFor="let item of rankingList[3]?.data;let i=index">
+                        <div class="player-team-rank">{{item.POS}}</div>
+                        <div class="player-team-info">
+                          <!-- <div class="player-team-thumb">
+                            <img class="img-with-fallbacks" width="35" height="35" alt="Shakib Al Hasan"
+                              src="{{item.img}}">
+                          </div> -->
+                          <div class="">
+                            <div class="player-team-name">
+                              <a class="player-team-name-primary" >{{item.PLAYER}}</a>
+                              <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="player-team-rating">{{item.RATING}}</div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+      <div class="sc-fqkvVR iGqHmj">
+        <div elevation=",2" class="sc-fqkvVR jeeaPw">
+          <div color="onSurface.nLv1" class="sc-gFqAkR jHSgcL">Tournaments</div>
+          <div class="sc-fqkvVR hBElRe">
+           <ng-container *ngFor="let item of uniqueTitlesMap;">
+             <a routerLink="/child-shedule/{{item.slug}}/upcoming" *ngIf="item.slug!==''">
+              <div display="flex" class="sc-fqkvVR sc-dcJsrY dLLBMg fFmCDf"><img src="../../assets/seriesimg.png"
+                  alt="Afghanistan" width="24" height="24" class="sc-feUZmu gkxErY">
+                <div class="sc-fqkvVR bTVzoW"><span class="sc-gFqAkR fmzmiI">{{item.title}}</span></div>
+
+              </div>
+            </a>
+
+           </ng-container>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="wrapper-container1" id="desktopview" style="width:50%">
+      <div class="fragment-container">
+
+        <main class="category-home">
+          <section class="score-carousel-container">
+
+            <div style="position: relative;clear:both">
+              <div class="scroll-button score-carousel-scroll-left" (click)="scrollLeft()"
+                [ngStyle]="{'display': rightScrollCount > 0 ? 'block': 'none'}">
+                <img src="/assets/arrow-icon-red.svg" height="15" width="10" alt="right-icon">
+              </div>
+              <div class="scroll-button score-carousel-scroll-right" style="display: block;" (click)="scrollRight()">
+                <img src="/assets/arrow-icon-red.svg" height="15" width="10" alt="left-icon"
+                  id="rightarrow">
+              </div>
+              <div id="keeda_cricket_widget" data-imp-id="widget_sport_carousel">
+                <div class="keeda_carousel_tab_menu">
+                  <div class="keeda_carousel_tab_container">
+                    <span class="keeda_carousel_tab_item active" [ngClass]="{ 'active': i === activeIndex }"
+                      *ngFor="let item of CricketMainTabs; let i=index" (click)="getCricketMatches(item,i)">
+                      {{item.name}}
+                    </span>
+                  </div>
+
+                </div>
+                <div class="keeda_widget_loader" style="display: block;" *ngIf="loader">
+                  <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                    alt="loader" style="transform: rotate(7500deg);">
+                </div>
+                <div class="keeda_widget keeda-widget-tab-carousel">
+                  <div class="keeda_widget_match_listing" #widgetsContent>
+                    <ng-container *ngIf="!loader">
+                      <div class="keeda_cricket_single_match " [ngClass]="item.is_next_match==true?'next-game':''"
+                        (click)="getCricketMatches(item,i)"
+                        id="namibia-under-19s-vs-scotland-under-19s-b4-vs-c4-super-six-01-february-2024"
+                        *ngFor="let item of matchList;let i=index ,trackBy:userByName">
+                        <div class="keeda_cricket_match_list live">
+                          <div class="keeda_widget_info cricket">
+                            <div class="cricket-match-card-header-secondary-text marquee-strip">
+                              <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}</span>
+                              <span>•</span>
+                              <span class="cricket-match-card--match-type">{{item.format | titlecase}}</span>
+                              <span>•</span>
+                              <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                              <span *ngIf="item.status==='post'">•</span>
+                              <span class="cricket-match-card--match-venue" *ngIf="item.status==='post'">
+                                {{convertDate(item.datetime) }}</span>
+
+                            </div>
+                            <div class="keeda_widget_live_info" *ngIf="item.status==='live'">LIVE</div>
+                          </div>
+                          <div class="keeda_widget_match_detail">
+                            <div class="keeda_widget_team_group">
+                              <div class="keeda_widget_team " data-team-name="SC-19">
+                                <img [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg" width="54" height="38"
+                                  alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
+                                <span class="keeda_widget_team_name cricket">{{item.t1_key}}</span>
+                                <ng-container *ngIf="item.in_play !==true && item.status=='pre'">
+                                  <span class="keeda_widget_score cricket">
+                                    {{convertDate(item.datetime) }}</span>
+                                </ng-container>
+                                <span class="keeda_widget_score cricket"
+                                  *ngIf="item.in_play !==true && item.status=='post'">{{item.t1_score}}</span>
+                                <span class="keeda_widget_score cricket"
+                                  *ngIf="item.in_play==true || item.status=='live'">{{liveData[item.id]?.score_strip?.[0]?.score
+                                  || item.t1_score}}</span>
+
+                              </div>
+                              <div class="keeda_widget_team " data-team-name="NAM-19">
+                                <img [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg" width="54" height="38"
+                                  alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
+                                <span class="keeda_widget_team_name cricket">{{item.t2_key}}</span>
+                                <ng-container *ngIf="item.in_play==false && item.status=='pre'">
+                                  <span class="keeda_widget_score cricket" id="time">{{item.datetime |
+                                    date:"shortTime"}}</span>
+                                </ng-container>
+                                <span class="keeda_widget_score cricket"
+                                  *ngIf="item.in_play !==true && item.status=='post'">{{item.t2_score}}</span>
+                                <span class="keeda_widget_score cricket"
+                                  *ngIf="item.in_play==true || item.status=='live'">{{liveData[item.id]?.score_strip?.[1].score
+                                  || item.t2_score}}</span>
+                              </div>
+                            </div>
+                            <ng-container *ngIf="item.in_play==false && item.status=='pre'" class="hidden">
+                              <div class="scorecard-countdown-timer  toss-info hidden" id="scorecard-countdown-timer"
+                                id="time" *ngIf="!showTimer">
+                                <div class="countdown-timer-title ">
+                                  Starts In
+                                </div>
+                                <div class="countdown-timer-section ">
+                                  <span>{{remainingTime}}</span>
+                                  <!-- <div class="min-timer">
+                            <div class="scorecard-timer-content"></div>
+                            <span class="timer-info">m</span>
+                          </div> -->
+                                  <!-- <span class="double-dot-wrapper">
+                            <span class="dot"></span><span class="dot"></span>
+                          </span> -->
+                                  <!-- <div class="sec-timer">
+                            <div class="scorecard-timer-content"></div>
+                            <span class="timer-info">s</span>
+                          </div> -->
+                                </div>
+                              </div>
+                            </ng-container>
+                          </div>
+                          <div class="keeda_widget_result_info " *ngIf="item.in_play !==true && item.status !=='live'"
+                            [class]="item.result.length > 35? 'marquee-container':''">
+                            <div class="marquee-strip">{{item.result}}</div>
+                          </div>
+                          <div class="keeda_widget_result_info live" *ngIf="item.in_play==true || item.status=='live'"
+                            [class]="liveData?.info?.length < 30? 'marquee-container':'' || item?.result?.length > 35? 'marquee-container':''">
+                            <div class="marquee-strip">{{liveData?.info || item.result}}</div>
+                          </div>
+                        </div>
+                        <div class="keeda-cricket-widget--carousel-footer">
+
+                          <a class="hover-translucent" routerLink="/pointTable/{{item.event_slug}}">
+                            <span>{{item.has_table==true?"Points Table":null}}</span>
+                            <img *ngIf="item.has_table==true"
+                              src="/assets/ic-chevron-right.svg" width="16" height="16"
+                              alt="ic-right">
+                          </a>
+                          <a class="hover-translucent" routerLink="/child-shedule/{{item.event_slug}}/upcoming">
+                            <span>{{item.has_schedule==true?"Schedule":null}}</span>
+                            <img src="/assets/ic-chevron-right.svg" width="16" height="16"
+                              alt="ic-right">
+                          </a>
+                        </div>
+                        <a class="keeda_cricket_match_link" (click)="getMatchStatus(item.id,item.status)"
+                          routerLink="/live/{{item.id}}" title="{{item.t1}} VS {{item.t2}} live score">
+                          </a>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </section>
+          <section class="page-info-divider">
+            <div class="divider-left"></div>
+            <div class="divider-heading-container">
+              <h1 class="divider-heading">Cricket</h1>
+            </div>
+            <div class="divider-right"></div>
+          </section>
+
+          <section class="layout-wrapper">
+            <div class="content-container">
+
+              <div class="left">
+                <section class="primary-feed-stories">
+                  <div class="panel">
+                    <div class="panel-body no-padding-d">
+                      <div class="feed-items">
+                        <ng-container *ngFor="let item of newsList; let i=index;">
+                          <div class="sport-feed-item-primary" *ngIf="item.type=='primary'">
+                            <div class="sports-feed-item-primary-element">
+                              <a class="feed-item-cta" *ngIf="item.isLiveNews==true"
+                                routerLink="/cricket-schedule">{{item.title}}</a>
+                              <a class="feed-item-cta" *ngIf="item.isLiveNews!==true"
+                                routerLink="/cricket-news/{{item.link}}">{{item.title}}</a>
+                              <img width="334" height="200"
+                                alt="&quot;Can't wait to get my hands on him in this squad&quot; - Daren Sammy on Shamar Joseph playing white-ball cricket for West Indies"
+                                src="{{item.img}}" class="lazy-img-bg">
+                              <div class="sports-feed-item-element-meta">
+                                <div class="live-indicator" *ngIf="item.isLiveNews==true">
+                                  <div class="blob white"></div>Live
+                                </div>
+                                <div class="sports-primary-title">{{item.title}}</div>
+                                <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="feed-item-secondary" *ngIf="item.type=='secondary'">
+                            <div class="sports-feed-item-secondary-element">
+                              <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="2"
+                                data-section="">{{item.link}}</a>
+                              <img class="feed-element-img" width="82" height="83"
+                                alt="“Koi tension nahi hai, 4-1 karenge” – Chetan Sharma backs India to win five-match Test series against England ahead of Vizag Test"
+                                src="{{item.img}}">
+                              <div class="sports-feed-item-secondary-meta">
+                                <div class="sports-item-title">{{item.title}}</div>
+                                <div class="sports-feed-item-secondary-modified-time">{{item.time}}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <div class="section-separator"></div>
+                <!-- <section class="sk-widget ">
+
+                  <div class="primis-player-container">
+                    <div id="video-player-container--"></div>
+
+                  </div>
+                </section> -->
+                <div class="section-separator "></div>
+
+
+              </div>
+            </div>
+          </section>
+
+          <section class="division">
+            <div class="content-container">
+              <div class="left">
+                <section class="page-info">
+                  <div class="panel">
+                    <header class="panel-header">
+                      <h2 class="panel-heading">About Cricket</h2>
+                    </header>
+                    <div class="panel-body">
+
+                      <div class="page-seo-content">
+                        <div id="removemobileCollapse" class="cms-content collapsed" data-imp-id="widget_page_seo_content">
+                          <h2 id="cricket-0">Live Cricket Score</h2>
+                          <p><br></p>
+                          <p>Cricket is not just a sport. It’s not a religion either. It’s a bundle of a billion emotions
+                            that change every second. And the best way to enjoy it is in real time! But with so much cricket
+                            happening, it gets difficult to keep track of who’s playing who and who’s hitting sixes against
+                            whom. </p>
+                          <p>So if you are someone who can’t help themselves but check the live score after every few
+                            minutes, you are at just the right place. We at Sportskeeda thrive to provide coverage of every
+                            cricket match with the fastest ball-by-ball commentary, the best tactical insights, fantasy tips
+                            and much more — all in a seamless, easy-to-enjoy experience!</p>
+                          <h2 id="cricket-1"><br>Today's Cricket Match Live Score</h2>
+                          <p><br>The good thing about cricket is, it’s always on! With so many countries now joining the
+                            bat-and-ball wagon, there’s some match or the other going on at some corner of the world, even
+                            when you are reading this!</p>
+                          <p>And where there’s cricket, there’s us! Don’t miss a single ball — scroll up or go to
+                            Sportskeeda’s home page to find live scores from not only the Indian sub-continent but Africa,
+                            the Middle East, Europe and Oceania. </p>
+                          <h2 id="cricket-2"><br>Women's Cricket Live Score</h2>
+                          <p><br></p>
+                          <p>After years of unfair struggle, women’s cricket is finally growing at a good pace. With the
+                            arrival of new T20 competitions, viewership and crowd attendance records being broken
+                            frequently, parity with men in prize money for ICC matches, and the emergence of a lot of
+                            superstars, it looks like in a league of its own.</p>
+                          <p>Sportskeeda is a proud supporter of this revolution. Here, we not only offer live score and
+                            updates but also give you unrivaled in-depth coverage of every match and event. And just like
+                            the <a title="Women’s Premier League" routerLink="/go/womens-premier-league"
+                              target="_blank">Women’s Premier League</a>, we are only getting started!</p>
+                          <h2 id="cricket-3"><br>International Cricket Live Score</h2>
+                          <p><br>We all love to see our favorite stars from different countries play together in colorful
+                            T20 leagues. However, after everything, is there any better sight than <a title="India"
+                              routerLink="/team/india-national-cricket-team" target="_blank">India</a> and <a
+                              title="Pakistan" routerLink="/team/pakistan-cricket-team" target="_blank">Pakistan</a> singing
+                            their national anthems before a World Cup match or <a title="England"
+                              routerLink="/team/england-cricket" target="_blank">England</a> and <a title="Australia"
+                              routerLink="/team/australian-cricket-team" target="_blank">Australia</a> going head-on in the
+                            Ashes, or the <a title="Netherlands" routerLink="/team/netherlands-cricket"
+                              target="_blank">Netherlands</a> defying the odds to beat <a title="West Indies"
+                              routerLink="/team/west-indies-cricket-team" target="_blank">West Indies</a>?</p>
+                          <p>Whether you bleed blue, green, red or orange, catch all the patriotic flavors of your favorite
+                            sport right here at Sportskeeda!</p>
+                          <h2 id="cricket-5">Test Match Live Score</h2>
+                          <p><br>The real ‘test’, as they call it, red-ball cricket has stood the test of time better than
+                            anything else in the sport (that was true even before Bazball came to the scene). That’s because
+                            it still is the biggest examination of batters’ technique and patience, for the bowlers’ guile
+                            and fitness and for the fielder’s attention and concentration. </p>
+                          <p>We love the whites at Sportskeeda! Our live scores and coverage won’t let you miss any field
+                            change, any dropped catch, any LBW call, any shattered record, or (wink wink) any controversy!
+                          </p>
+                          <h2 id="cricket-7">ODI Cricket Match Live Score</h2>
+                          <p><br></p>
+                          <p>Obituaries have already been written about ODI cricket but, as it did in the 2019 World Cup
+                            final, the format keeps on springing up brilliant matches every year to survive. And till
+                            there’s the World Cup, which still takes the bragging rights of making players into legends,
+                            it’ll go on.</p>
+                          <p>In a way, the format is even more unpredictably stirring than T20s and Tests. You don’t know
+                            what you will get when you give T20 or Test-oriented players 50 overs to showcase what they’ve
+                            got. It’s ever-evolving and thus always a great spectacle.</p>
+                          <p>Don’t want to miss it? You know where to come!</p>
+                          <h2 id="cricket-9">T20 Match Live Score</h2>
+                          <p><br>When the English and Wales Cricket Board started the Twenty20 competition in 2003, they
+                            wouldn’t have imagined the monstrosity of the change that they were bringing to the sport. For
+                            most of the young fans, T20 cricket is the only cricket. </p>
+                          <p>All the money, glamor and excitement aside, the format has played a major role in enhancing
+                            cricket’s popularity around the world. Now, it’s a hub of innovation and tactical mastery,
+                            where, no matter at what time you tune in and for how long, you will be entertained!</p>
+                          <p>So join us at Sportskeeda for an immersive T20 experience and catch every thrilling moment as
+                            it unfolds on the field!</p>
+                          <h2 id="cricket-10"><br>Domestic Cricket Match Live Score</h2>
+                          <p><br></p>
+                          <p>This is where stars are born. From Sachin Tendulkar to <a title="Virat Kohli"
+                              routerLink="/player/virat-kohli" target="_blank">Virat Kohli</a>, <a title="AB de Villiers"
+                              routerLink="/player/ab-de-villiers" target="_blank">AB de Villiers</a> to Baby AB, and Meg
+                            Lanning to Darcie Brown, domestic cricket is where it all starts. </p>
+                          <p>Before they become fan-favorite celebrities, all cricketers go through the hard grind of
+                            domestic cricket. Here, they are tested for composure under pressure and the ability to stand
+                            out from the crowd. They do all that just to catch the eye of that one selector who’d trust them
+                            to get that national call-up. Those who don’t make it, play for their states and families with
+                            passion and heart.</p>
+                          <p>If you want to know the next big thing in your country’s cricket before anyone else, catch the
+                            live scores of domestic matches at Sportskeeda and stay ahead of the curve!</p>
+                          <h2 id="cricket-12">Indian Cricket Team Live Score</h2>
+                          <p><br></p>
+                          <p>Maybe, you are just a Virat Kohli fan. Or maybe you only like to whistle for <a
+                              title="MS Dhoni" routerLink="/player/ms-dhoni" target="_blank">MS Dhoni</a>. Or you only
+                            worship Harmanpreet Kaur’s that knock against Australia. But at the end of the day your heart
+                            must surely beat a bit faster when you see India play together at the big stage, doesn’t it?</p>
+                          <p>Trophy or no trophy, the men and women in blue don’t fail their fans when it’s about giving
+                            them something to cherish about. Catch all the live scores and happenings here at Sportskeeda
+                            and offer your support, love, or even constructive criticism as loudly as you can. India, India!
+                          </p>
+                          <p><br></p>
+                          <p><br></p>
+                        </div>
+                        <div class="content-overlay-area">
+                          <div class="content-overlay "></div>
+                          <div class="view-toggle-container" id="addExpandedmobile">
+                            <button class="view-toggle-content-btn" (click)="collapseddatamobile()">
+                              <span>Read <span class="view-toggle-text">{{readmoreless ? 'Less' : 'More'}}</span></span>
+                              <img width="6" height="10" loading="lazy" alt="chevron-icon"
+                                src="/assets/arrow-icon.svg">
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </section>
+                <div class="section-separator"></div>
+                <!-- <section class="page-meta-info-section">
+
+                  <div class="page-meta-info">
+                    <div class="meta-author">By <a routerLink="/profile/sportskeeda" class="sk-red-color">SK Desk</a></div>
+                    <div class="meta-separator"> •</div>
+                    <div class="meta-modified-date">
+                      Last Modified Jul 20, 2018 00:52 IST
+                    </div>
+                  </div>
+                </section> -->
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <div class="sk-ads-taboola-container sk-ads-taboola-sportspage">
+
+          <div id="taboola-below-article-thumbnails"></div>
+
+        </div>
+
+      </div>
+    </section>
+    <section class="right-wrapper-container" style="width:23%">
+      <div elevation=",2" class="sc-fqkvVR jeeaPw">
+
+        <section class="sk-widget points-table">
+          <div class="panel ">
+            <header class="panel-header ">
+              <h2 class="panel-heading" routerLink="/pointTable/ipl">IPL 2024 Points Table</h2>
+              <!-- <h2 class="panel-heading" routerLink="/pointTable/ipl">IPL 2024</h2> -->
+              <!-- <a class="view-more-cta" routerLink="/pointTable/ipl" data-section="points-table">
+                <span></span>
+              </a> -->
+            </header>
+            <div class="panel-body no-padding">
+              <div class="widget--tournament-points-table">
+                <div class="tournament-points-table-container">
+                  <div class="tournament-points-table-groups hidden">
+                    <button class="points-table-group-switcher active"
+                      data-group-title="Indian Premier League">Indian Premier League</button>
+                  </div>
+                  <div class="tournament-points-table-group-table " data-group-title="Indian Premier League">
+                    <div class="keeda-data-table-wrapper">
+                      <div class="keeda-data-table-container">
+                        <table class="keeda-data-table">
+                          <thead>
+                            <tr>
+                              <!-- <th>
+                                <div class="ta-c">Pos</div>
+                              </th> -->
+                              <th class="column-team">
+                                <div class="ta-l">Teams</div>
+                              </th>
+                              <th>
+                                <div class="ta-c">P</div>
+                              </th>
+                              <th>
+                                <div class="ta-c">W</div>
+                              </th>
+                              <th>
+                                <div class="ta-c">L</div>
+                              </th>
+                              <th>
+                                <div class="ta-c">D</div>
+                              </th>
+                              <th class="selected">
+                                <div class="ta-c">PTS</div>
+                              </th>
+                              <th>
+                                <div class="ta-c">NRR</div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody *ngFor="let item of pionteTableData;">
+                            <tr *ngFor="let el of item.group?.slice(0,5)">
+                              <!-- <td>
+                                <div class="ta-c">{{el.position}}</div>
+                              </td> -->
+                              <td>
+                                <div class="points-table-team"><img width="24" height="24" alt="team-flag"
+                                    [src]="el.team_flag" (error)="el.team_flag = '../../assets/team-default.png'"
+                                    class="">
+                                  <div class="points-table-team-name">{{el.team_short_name}}</div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="ta-c">{{el.played}}</div>
+                              </td>
+                              <td>
+                                <div class="ta-c">{{el.won}}</div>
+                              </td>
+                              <td>
+                                <div class="ta-c">{{el.lost}}</div>
+                              </td>
+                              <td>
+                                <div class="ta-c">{{el.tied}}</div>
+                              </td>
+                              <td class="selected">
+                                <div class="ta-c">{{el.points}}</div>
+                              </td>
+                              <td>
+                                <div class="ta-c">{{el.nrr}}</div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+      <div elevation=",2" class="sc-fqkvVR jeeaPw" style="margin-top: 12px;">
+        <section class="sk-widget tournament-stats">
+          <div class="panel ">
+            <header class="panel-header ">
+              <h2 class="panel-heading" routerLink="/stats/ipl">IPL 2024 Leaders</h2>
+              <!-- <a class="view-more-cta" routerLink="/stats/ipl" data-section="tournament-stats">
+                <span>All Stats</span>
+              </a> -->
+            </header>
+            <div class="panel-body ">
+              <div class="widget--tournament-stats-condensed" data-imp-id="widget_tournament_stats_condensed__0">
+                <div class="tournament-stats-container">
+                  <div class="tournament-stats-item" *ngFor="let item of statLeaders;let i=index">
+                    <a class="tournament-stats-item-cta" routerLink="/goo/ipl/{{item.link}}">/go/ipl/orange-cap</a>
+                    <div class="tournament-stats-item--content">
+                      <div class="tournament-stats-item--image">
+                        <img src="{{item.img || teamDefaultImg}}"
+                          width="36" height="36" alt="player image" class="" data-img-params="?h=72">
+                      </div>
+                      <div class="tournament-stats-item--info">
+                        <div class="tournament-stats-item--info-primary">{{item.name}}</div>
+                        <div class="tournament-stats-item--info-secondary">{{item.team}}</div>
+                      </div>
+                    </div>
+                    <footer class="tournament-stats-item--footer">
+                      <div class="tournament-stats-item--stat-value">
+                        <span>{{item.value}} </span>
+                        <!-- <span>Runs</span> -->
+                      </div>
+                      <div class="tournament-stats-item--stat-label">{{item.label}}</div>
+                    </footer>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+      <div  elevation=",3" class="sc-fqkvVR dJjecO" >
+        <div label="Advertisement" class="sc-3df62f2a-0 bxiFqS"></div>
+        <div label="Advertisement" id="div-gpt-ad-1680079501010-0" class="sc-3df62f2a-1 eRcWyt"
+          style="min-height: 250px;"></div>
+      </div>
+
+      <div elevation=",2" class="sc-fqkvVR jeeaPw" style="margin-top: 12px;">
+        <div class="right">
+          <section class="sk-widget ">
+
+            <div class="latest-popular-news-container" data-component-id="latest_popular_news_widget__cricket"
+              data-section="" data-imp-id="widget_latest_popular_news__latest_popular_news_widget__cricket">
+              <div class="panel ">
+                <div class="panel-body ">
+                  <div class="controls-container">
+                    <button class="news-switcher " [class]="selectedNewsTab=='latest'?'active':''"
+                      (click)="getHomeSidebarNewData('latest')" data-section="latest">
+                      <h2>Latest News</h2>
+                    </button>
+                    <button class="news-switcher" [class]="selectedNewsTab=='popular'?'active':''"
+                      (click)="getHomeSidebarNewData('popular')" data-section="popular">
+                      <h2>Most Popular</h2>
+                    </button>
+                  </div>
+                  <div class="content">
+                    <div class="news-items latest_popular_news_widget__cricket__news_latest"
+                      *ngIf="selectedNewsTab=='latest'">
+                      <a *ngFor="let newsitem of lestesNewsList?.latest;let i=index"
+                        routerLink="/cricket-news/{{newsitem.link}}" class="news-item" data-sequence="1"
+                        data-section="">
+                        <div class="news-sequence">{{i+1}}</div>
+                        <div class="news-content">
+                          <div class="news-title">{{newsitem.title}}</div>
+                        </div>
+                      </a>
+
+                    </div>
+                    <div class="news-items latest_popular_news_widget__cricket__news_popular "
+                      *ngIf="selectedNewsTab=='popular'">
+                      <a *ngFor="let newsitem of lestesNewsList?.popular;let i=index;"
+                        routerLink="/cricket-news/{{newsitem.link}}" class="news-item" data-sequence="6"
+                        data-section="">
+                        <div class="news-sequence">{{i+1}}</div>
+                        <div class="news-content">
+                          <div class="news-title">{{newsitem.title}}</div>
+                        </div>
+                      </a>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- <div class="section-separator "></div> -->
+
+          <div class="section-separator "></div>
+
+
+
+          <!-- <div class="section-separator "></div> -->
+
+
+
+          <!-- <div class="section-separator "></div> -->
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+</div>
+
+
+
+
+<section id="mobileview">
+  <section class="wrapper-container">
+    <div class="fragment-container">
+
+      <main class="category-home">
+        <section class="score-carousel-container">
+
+          <div style="position: relative;clear:both">
+            <div class="scroll-button score-carousel-scroll-left" style="display: none;">
+              <img src="/assets/arrow-icon-red.svg" height="15" width="10"
+                alt="right-icon">
+            </div>
+            <div class="scroll-button score-carousel-scroll-right" style="display: block;">
+              <img src="/assets/arrow-icon-red.svg" height="15" width="10" alt="left-icon">
+            </div>
+            <div id="keeda_cricket_widget" data-imp-id="widget_sport_carousel">
+              <div class="keeda_drop_down_container" style="height: unset;">
+                <div class="keeda_widget_drop_down_menu" style="display: inline-block;">
+                  <div class="keeda_widget_menu" (click)="toggleMenu()">
+                    <span class="keeda_widget_menu_title">
+                      {{selectedvalue}}
+                    </span>
+                    <span><img class="keeda_widget_drop_down_arrow" src="/assets/down_arrow.svg"
+                        alt="dropdown" width="12" height="12">
+                    </span>
+                  </div>
+                </div>
+
+                <div class="keeda_widget_drop_down_menu_listing" style="display: block;" *ngIf="toggleMenubtn">
+                  <div class="keeda_widget_drop_down_menu_list" data-event-slug="featured_v2" data-event-name="Featured"
+                    *ngFor="let item of CricketMainTabs; let i=index" (click)="getCricketMatches(item,i)">
+                    {{item.name}}
+                  </div>
+                </div>
+                <span class="keeda_carousel_all_scores">
+                  <a routerLink="/cricket-schedule"> ALL FIXTURES</a>
+                </span>
+              </div>
+              <div class="keeda_widget_loader" style="display: block;" *ngIf="loader==true">
+                <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                  alt="loader" style="transform: rotate(6500deg);">
+              </div>
+              <div class="keeda_widget keeda-widget-tab-carousel">
+                <div class="keeda_widget_match_listing">
+                  <div class="keeda_cricket_single_match" [ngClass]="item.is_next_match==true?'next-game':''"
+                    *ngFor="let item  of matchList;let i=index">
+                    <div class="keeda_cricket_match_list pre">
+                      <div class="keeda_widget_info cricket">
+                        <div class="cricket-match-card-header-secondary-text marquee-strip">
+                          <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}</span>
+                          <span>•</span>
+                          <span class="cricket-match-card--match-type">{{item.format | titlecase}}</span>
+                          <span>•</span>
+                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                        </div>
+                        <div class="keeda_widget_live_info" *ngIf="item.status==='live'">LIVE</div>
+
+                      </div>
+                      <div class="keeda_widget_match_detail">
+                        <div class="keeda_widget_team_group">
+                          <div class="keeda_widget_team " data-team-name="IND">
+                            <img src="{{item.t1_flag || '../../../../assets/team-default.png'}}" width="54" height="38"
+                              alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
+                            <span class="keeda_widget_team_name cricket">{{item.t1_key}}</span>
+                            <span class="keeda_widget_score cricket"
+                              *ngIf="item.in_play==false && item.status=='pre'">{{convertDate(item.datetime)}}</span>
+                            <span class="keeda_widget_score cricket"
+                              *ngIf="item.in_play !==true && item.status=='post'">{{item.t1_score}}</span>
+                            <span class="keeda_widget_score cricket"
+                              *ngIf="item.in_play==true || item.status=='live'">{{liveData[item.id]?.score_strip?.[0]?.score
+                              || item.t1_score}}</span>
+
+                          </div>
+                          <div class="keeda_widget_team " data-team-name="ENG">
+                            <img src="{{item.t2_flag || '../../../../assets/team-default.png'}}" width="54" height="38"
+                              alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
+                            <span class="keeda_widget_team_name cricket">{{item.t2_key}}</span>
+                            <span class="keeda_widget_score cricket" id="time"
+                              *ngIf="item.in_play==false && item.status=='pre'">{{item.datetime
+                              |date:"shortTime"}}</span>
+                            <span class="keeda_widget_score cricket"
+                              *ngIf="item.in_play !==true && item.status=='post'">{{item.t2_score}}</span>
+                            <span class="keeda_widget_score cricket"
+                              *ngIf="item.in_play==true || item.status=='live'">{{liveData[item.id]?.score_strip?.[1]?.score
+                              || item.t2_score}}</span>
+
+                          </div>
+                        </div>
+                        <div class="scorecard-countdown-timer   hidden " id="scorecard-countdown-timer">
+                          <div class="countdown-timer-title">
+                            Starts In
+                          </div>
+                          <div class="countdown-timer-section">
+                            <div class="min-timer">
+                              <div class="scorecard-timer-content">59</div>
+                              <span class="timer-info">m</span>
+                            </div>
+                            <span class="double-dot-wrapper">
+                              <span class="dot"></span><span class="dot"></span>
+                            </span>
+                            <div class="sec-timer">
+                              <div class="scorecard-timer-content">52</div>
+                              <span class="timer-info">s</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="keeda_widget_result_info pre marquee-container"
+                        *ngIf="item.in_play !==true && item.status !=='live'"
+                        [class]="liveData?.info?.length < 30? 'marquee-container':''">
+                        <div class="marquee-strip">{{item.result}}</div>
+                      </div>
+                      <div class="keeda_widget_result_info live" *ngIf="item.in_play==true || item.status=='live'"
+                        [class]="liveData?.result?.length < 25? 'marquee-container':''">
+                        <div class="marquee-strip">{{liveData?.info || item.result}}</div>
+                      </div>
+                      <div class="keeda_widget_result_info pre  hidden ">
+                      </div>
+                    </div>
+                    <div class="keeda-cricket-widget--carousel-footer">
+                      <a class="hover-translucent" routerLink="/pointTable/{{item.event_slug}}">
+                        <span>{{item.has_table==true?"Points Table":null}}</span>
+                        <img *ngIf="item.has_table==true"
+                          src="../../assets/ic-chevron-right.svg" width="16" height="16"
+                          alt="ic-right">
+                      </a>
+
+                      <a class="hover-translucent" routerLink="/child-shedule/{{item.event_slug}}/upcoming">
+                        <span>{{item.has_schedule==true?"Schedule":null}}</span>
+                        <img src="/assets/ic-chevron-right.svg" width="16" height="16"
+                          alt="ic-right">
+                      </a>
+                    </div>
+                    <a class="keeda_cricket_match_link" routerLink="/live-cricket-score/{{item.id}}"
+                      title="{{item.t1}} VS {{item.t2}}">India vs England preview</a>
+                  </div>
+                  <div class="keeda_cricket_single_match match-carousel-ad"
+                    style="padding: 3px 0px; margin: 0px; width: 0px; transition: width 1s ease-in-out; background: transparent;">
+
+                    <div id="div-gpt-ad-1632146417332-0" style="min-width: 0px; min-height: 100px;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <section class="page-info-divider">
+          <div class="h-gap">
+            <div class="divider-heading-wrapper">
+              <div class="divider-heading-container">
+                <h1 class="divider-heading">Cricket</h1>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-container1">
+          <section class="pinned-stories">
+            <div class="panel">
+              <div class="panel-body p-t-0 p-b-0">
+                <div class="feed-items">
+                  <div class="sport-feed-item-primary" *ngFor="let item of newsList?.slice(0,1);">
+                    <div class="sports-feed-item-primary-element">
+                      <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="1"
+                        data-section="">{{item.link}}</a>
+                      <img width="334" height="200"
+                        alt="No James Anderson as England name a spin-dominant bowling attack for first Test against India"
+                        src="{{item.img}}" class="lazy-img-bg">
+                      <div class="sports-feed-item-element-meta">
+                        <div class="sports-primary-title">{{item.title}}</div>
+                        <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="sk-widget ">
+
+            <div class="latest-popular-news-container" data-component-id="latest_popular_news_widget__cricket"
+              data-section="" data-imp-id="widget_latest_popular_news__latest_popular_news_widget__cricket">
+              <div class="panel ">
+                <div class="panel-body ">
+                  <div class="controls-container">
+                    <button class="news-switcher " [class]="selectedNewsTab=='latest'?'active':''"
+                      (click)="getHomeSidebarNewData('latest')" data-section="latest">
+                      <h2>Latest News</h2>
+                    </button>
+                    <button class="news-switcher" [class]="selectedNewsTab=='popular'?'active':''"
+                      (click)="getHomeSidebarNewData('popular')" data-section="popular">
+                      <h2>Most Popular</h2>
+                    </button>
+                  </div>
+                  <div class="content">
+                    <div class="news-items latest_popular_news_widget__cricket__news_latest"
+                      *ngIf="selectedNewsTab=='latest'">
+                      <a *ngFor="let newsitem of lestesNewsList?.latest;let i=index"
+                        routerLink="/cricket-news/{{newsitem.link}}" class="news-item" data-sequence="1"
+                        data-section="">
+                        <div class="news-sequence">{{i+1}}</div>
+                        <div class="news-content">
+                          <div class="news-title">{{newsitem.title}}</div>
+                        </div>
+                      </a>
+
+                    </div>
+                    <div class="news-items latest_popular_news_widget__cricket__news_popular "
+                      *ngIf="selectedNewsTab=='popular'">
+                      <a *ngFor="let newsitem of lestesNewsList?.popular;let i=index;"
+                        routerLink="/cricket-news/{{newsitem.link}}" class="news-item" data-sequence="6"
+                        data-section="">
+                        <div class="news-sequence">{{i+1}}</div>
+                        <div class="news-content">
+                          <div class="news-title">{{newsitem.title}}</div>
+                        </div>
+                      </a>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </section>
+          <div class="section-separator "></div>
+          <!-- <section class="sk-widget ">
+
+            <div class="primis-player-container">
+              <div id="video-player-container--"></div>
+
+            </div>
+          </section> -->
+          <div class="section-separator "></div>
+
+          <div class="section-separator "></div>
+
+          <section class="sk-widget points-table">
+            <div class="panel ">
+              <header class="panel-header ">
+                <h2 class="panel-heading">IPL 2024 Points Table</h2>
+                <a class="view-more-cta" routerLink="/pointTable/ipl" data-section="points-table">
+                  <span>Full Table</span>
+                </a>
+              </header>
+              <div class="panel-body no-padding">
+                <div class="widget--tournament-points-table">
+                  <div class="tournament-points-table-container ">
+                    <div class="tournament-points-table-groups hidden">
+                      <button class="points-table-group-switcher active" data-group-title="Indian Premier League">Indian
+                        Premier League</button>
+                    </div>
+                    <div class="tournament-points-table-group-table " style="padding:0 12px" data-group-title="Indian Premier League">
+                      <div class="keeda-data-table-wrapper">
+                        <div class="keeda-data-table-container">
+                          <table class="keeda-data-table">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <div class="ta-c">Pos</div>
+                                </th>
+                                <th class="column-team">
+                                  <div class="ta-l">Teams</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">P</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">W</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">L</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">D</div>
+                                </th>
+                                <th class="selected">
+                                  <div class="ta-c">PTS</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">NRR</div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody *ngFor="let item of pionteTableData;">
+                              <tr *ngFor="let el of item.group?.slice(0,6)">
+                                <td>
+                                  <div class="ta-c">{{el.position}}</div>
+                                </td>
+                                <td>
+                                  <div class="points-table-team"><img width="24" height="24" alt="team-flag"
+                                      [src]="el.team_flag" (error)="el.team_flag = '../../assets/team-default.png'"
+                                      class="">
+                                    <div class="points-table-team-name">{{el.team_short_name}}</div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.played}}</div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.won}}</div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.lost}}</div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.tied}}</div>
+                                </td>
+                                <td class="selected">
+                                  <div class="ta-c">{{el.points}}</div>
+                                </td>
+                                <td>
+                                  <div class="ta-c">{{el.nrr}}</div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+
+          <div class="section-separator " *ngIf="rankingList"></div>
+          <section class="sk-widget icc-ranking" *ngIf="rankingList">
+            <div class="panel ">
+              <header class="panel-header ">
+                <h2 class="panel-heading">ICC Rankings</h2>
+                <a class="view-more-cta" routerLink="/ranking/icc-odi-ranking" data-section="icc-ranking">
+                  <span>View All</span>
+                </a>
+              </header>
+              <div class="panel-body p-b-0">
+
+                <div class="widget--icc-ranking">
+                  <div class="icc-ranking-container">
+                    <div class="primary-control-tabs">
+                      <div class="primary-tab-switcher-wrapper" (click)="getIccRankingData('icc-t20-international-rankings')">
+                        <label class="primary-tab-switcher"
+                          [class]="selectedRanking==='icc-t20-international-rankings'?'selectranking':''">
+                          <span>T20 Ranking</span>
+                        </label>
+                      </div>
+                      <div class="primary-tab-switcher-wrapper" (click)="getIccRankingData('icc-odi-ranking')">
+                        <label class="primary-tab-switcher"
+                          [class]="selectedRanking==='icc-odi-ranking'?'selectranking':''">
+                          <span>ODI Ranking</span>
+                        </label>
+                      </div>
+                      <div class="primary-tab-switcher-wrapper" (click)="getIccRankingData('icc-test-ranking')">
+                        <label class="primary-tab-switcher"
+                          [class]="selectedRanking==='icc-test-ranking'?'selectranking':''">
+                          <span>Test Ranking</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="secondary-control-tabs">
+                      <div class="secondary-tab-switcher-wrapper" (click)="getDataByTbs('team')">
+                        <label class="secondary-tab-switcher" [class]="rankingByTabs==='team'?'activeTabs':''">
+                          <span>Team</span>
+                        </label>
+                      </div>
+                      <div class="secondary-tab-switcher-wrapper" (click)="getDataByTbs('batting')">
+                        <label class="secondary-tab-switcher" [class]="rankingByTabs==='batting'?'activeTabs':''">
+                          <span>Batting</span>
+                        </label>
+                      </div>
+                      <div class="secondary-tab-switcher-wrapper" (click)="getDataByTbs('Bowling')">
+                        <label class="secondary-tab-switcher" [class]="rankingByTabs==='Bowling'?'activeTabs':''">
+                          <span>Bowling</span>
+                        </label>
+                      </div>
+                      <div class="secondary-tab-switcher-wrapper" (click)="getDataByTbs('All-Rounde')">
+                        <label class="secondary-tab-switcher" [class]="rankingByTabs==='All-Rounde'?'activeTabs':''">
+                          <span>All-Rounder</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="ranking-content-wrapper">
+                      <div class="ranking-content" *ngIf="rankingByTabs==='team'">
+                        <div class="ranking-item-header">
+                          <div class="player-team-rank">Rank</div>
+                          <div class="player-team-kind">Team</div>
+                          <div class="player-team-rating">Rating</div>
+                        </div>
+                        <div class="ranking-item team" *ngFor="let item of rankingList[0]?.data;let i=index">
+                          <div class="player-team-rank">{{item.POS}}</div>
+                          <div class="player-team-info">
+                            <!-- <div class="player-team-thumb">
+                              <img src="{{item.img}}" class="" width="35" height="25" alt="India"
+                                data-img-params="?h=50">
+                            </div> -->
+                            <div class="">
+                              <div class="player-team-name">
+                                <a class="player-team-name-primary" routerLink="/team">{{item.TEAM}}</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="player-team-rating">{{item.RATING}}</div>
+                        </div>
+
+                      </div>
+                      <div class="ranking-content" *ngIf="rankingByTabs==='batting'">
+                        <div class="ranking-item-header">
+                          <div class="player-team-rank">Rank</div>
+                          <div class="player-team-kind">Player</div>
+                          <div class="player-team-rating">Rating</div>
+                        </div>
+                        <div class="ranking-item player" *ngFor="let item of rankingList[1]?.data;let i=index">
+                          <div class="player-team-rank">{{item.POS}}</div>
+                          <div class="player-team-info">
+                            <!-- <div class="player-team-thumb">
+                              <img class="img-with-fallbacks" width="35" height="35" alt="Suryakumar Yadav"
+                                src="{{item.img}}">
+                            </div> -->
+                            <div class="">
+                              <div class="player-team-name">
+                                <a class="player-team-name-primary" >{{item.PLAYER}}</a>
+                                <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="player-team-rating">{{item.RATING}}</div>
+                        </div>
+                      </div>
+                      <div class="ranking-content" *ngIf="rankingByTabs=='Bowling'">
+                        <div class="ranking-item-header">
+                          <div class="player-team-rank">Rank</div>
+                          <div class="player-team-kind">Player</div>
+                          <div class="player-team-rating">Rating</div>
+                        </div>
+                        <div class="ranking-item player" *ngFor="let item of rankingList[2]?.data;let i=index">
+                          <div class="player-team-rank">{{item.POS}}</div>
+                          <div class="player-team-info">
+                            <!-- <div class="player-team-thumb">
+                              <img class="img-with-fallbacks" width="35" height="35" alt="Adil Rashid"
+                                src="{{item.img}}">
+                            </div> -->
+                            <div class="">
+                              <div class="player-team-name">
+                                <a class="player-team-name-primary" routerLink="/player">{{item.PLAYER}}</a>
+                                <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="player-team-rating">{{item.RATING}}</div>
+                        </div>
+
+                      </div>
+                      <div class="ranking-content" *ngIf="rankingByTabs=='All-Rounde'">
+                        <div class="ranking-item-header">
+                          <div class="player-team-rank">Rank</div>
+                          <div class="player-team-kind">Player</div>
+                          <div class="player-team-rating">Rating</div>
+                        </div>
+                        <div class="ranking-item player"
+                          *ngFor="let item of rankingList[3]?.data;let i=index">
+                          <div class="player-team-rank">{{item.POS}}</div>
+                          <div class="player-team-info">
+                            <!-- <div class="player-team-thumb">
+                              <img class="img-with-fallbacks" width="35" height="35" alt="Shakib Al Hasan"
+                                src="{{item.img}}">
+                            </div> -->
+                            <div class="">
+                              <div class="player-team-name">
+                                <a class="player-team-name-primary" >{{item.PLAYER}}</a>
+                                <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="player-team-rating">{{item.RATING}}</div>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+
+
+          <div class="section-separator"></div>
+          <section class="feed-stories">
+            <div class="panel">
+              <div class="panel-body">
+                <div class="feed-items linear">
+                  <ng-container *ngFor="let item of newsList?.slice(1)">
+                    <div class="sport-feed-item-primary" *ngIf="item.type=='primary'">
+                      <div class="sports-feed-item-primary-element">
+                        <a class="feed-item-cta" *ngIf="item.isLiveNews==true"
+                          routerLink="/cricket-schedule">{{item.title}}</a>
+                        <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="5"
+                          data-section="">{{item.link}}</a>
+                        <img width="334" height="200"
+                          alt="Suryakumar Yadav named the ICC Men's T20I cricketer of the year for 2023"
+                          src="{{item.img}}" class="lazy-img-bg">
+                        <div class="sports-feed-item-element-meta">
+                          <div class="live-indicator" *ngIf="item.isLiveNews==true">
+                            <div class="blob white"></div>Live
+                          </div>
+
+                          <div class="sports-primary-title">{{item.title}}</div>
+                          <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="feed-item-secondary" *ngIf="item.type=='secondary'">
+                      <div class="sports-feed-item-secondary-element">
+                        <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="6"
+                          data-section="">{{item.link}}</a>
+                        <img class="feed-element-img lazy-img-bg" width="82" height="83"
+                          alt="India's 5 all-time highest run-scorers vs England in Tests ft. Sachin Tendulkar"
+                          src="{{item.img}}">
+                        <div class="sports-feed-item-secondary-meta">
+                          <div class="sports-item-title">{{item.title}}</div>
+                          <div class="sports-feed-item-secondary-modified-time">{{item.time}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div class="section-separator"></div>
+          <section class="feed-stories">
+            <div class="panel">
+              <div class="panel-body">
+                <div class="feed-items linear">
+                  <div class="sport-feed-item-primary">
+                    <div class="sports-feed-item-primary-element">
+                      <a class="feed-item-cta"
+                        routerLink="/cricket/news-what-controversy-around-england-spinner-shoaib-bashir-ahead-1st-test-india"
+                        data-sequence="9" data-section="">What is the controversy around England spinner Shoaib Bashir
+                        ahead of the 1st Test against India?</a>
+                      <img width="334" height="200"
+                        alt="What is the controversy around England spinner Shoaib Bashir ahead of the 1st Test against India?"
+                        src=""
+                        class="lazy-img-bg">
+                      <div class="sports-feed-item-element-meta">
+                        <div class="sports-primary-title">What is the controversy around England spinner Shoaib Bashir
+                          ahead of the 1st Test against India?</div>
+                        <div class="sports-feed-item-primary-modified-time">1h</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="feed-item-secondary">
+                    <div class="sports-feed-item-secondary-element">
+                      <a class="feed-item-cta"
+                        routerLink="/cricket/news-if-try-play-bazball-indian-conditions-match-likely-end-inside-2-days-siraj-s-bold-proclamation-ahead-ind-vs-eng-tests"
+                        data-sequence="10" data-section="">"If they try to play Bazball in Indian conditions then the
+                        match is likely to end inside 2 days" - Siraj's bold proclamation ahead of IND vs ENG Tests</a>
+                      <img class="feed-element-img lazy-img-bg" width="82" height="83"
+                        alt="&quot;If they try to play Bazball in Indian conditions then the match is likely to end inside 2 days&quot; - Siraj's bold proclamation ahead of IND vs ENG Tests"
+                        src="">
+                      <div class="sports-feed-item-secondary-meta">
+                        <div class="sports-item-title">"If they try to play Bazball in Indian conditions then the match
+                          is likely to end inside 2 days" - Siraj's bold proclamation ahead of IND vs ENG Tests</div>
+                        <div class="sports-feed-item-secondary-modified-time">2h</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="feed-item-secondary">
+                    <div class="sports-feed-item-secondary-element">
+                      <a class="feed-item-cta"
+                        routerLink="/cricket/news-bangladesh-s-maruf-mridha-penalized-breaching-icc-code-conduct-india-u19-world-cup-2024"
+                        data-sequence="11" data-section="">Bangladesh's Maruf Mridha penalized for breaching ICC Code of
+                        Conduct against India during U19 World Cup 2024</a>
+                      <img class="feed-element-img lazy-img-bg" width="82" height="83"
+                        alt="Bangladesh's Maruf Mridha penalized for breaching ICC Code of Conduct against India during U19 World Cup 2024"
+                        src="">
+                      <div class="sports-feed-item-secondary-meta">
+                        <div class="sports-item-title">Bangladesh's Maruf Mridha penalized for breaching ICC Code of
+                          Conduct against India during U19 World Cup 2024</div>
+                        <div class="sports-feed-item-secondary-modified-time">2h</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="feed-item-secondary">
+                    <div class="sports-feed-item-secondary-element">
+                      <a class="feed-item-cta"
+                        routerLink="/cricket/news-india-vs-england-2024-test-series-telecast-channel-where-watch-live-streaming-details-india"
+                        data-sequence="12" data-section="">India vs England 2024 Test series Telecast Channel: Where to
+                        watch and live streaming details in India</a>
+                      <img class="feed-element-img lazy-img-bg" width="82" height="83"
+                        alt="India vs England 2024 Test series Telecast Channel: Where to watch and live streaming details in India"
+                        src="">
+                      <div class="sports-feed-item-secondary-meta">
+                        <div class="sports-item-title">India vs England 2024 Test series Telecast Channel: Where to
+                          watch and live streaming details in India</div>
+                        <div class="sports-feed-item-secondary-modified-time">3h</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <footer class="panel-footer">
+                <a class="panel-cta-button view-more-cta" routerLink="/cricket/news" data-section="news">
+                  <span>More Cricket News</span>
+                </a>
+              </footer> -->
+            </div>
+          </section>
+
+          <div class="section-separator "></div>
+          <section class="page-info">
+            <div class="panel">
+              <header class="panel-header">
+                <h2 class="panel-heading">About Cricket</h2>
+              </header>
+              <div class="panel-body">
+
+                <div class="page-seo-content">
+                  <div id="removeCollapse" class="cms-content collapsed" data-imp-id="widget_page_seo_content">
+                    <h2 id="cricket-0">Live Cricket Score</h2>
+                    <p><br></p>
+                    <p>Cricket is not just a sport. It’s not a religion either. It’s a bundle of a billion emotions that
+                      change every second. And the best way to enjoy it is in real time! But with so much cricket
+                      happening, it gets difficult to keep track of who’s playing who and who’s hitting sixes against
+                      whom. </p>
+                    <p>So if you are someone who can’t help themselves but check the live score after every few minutes,
+                      you are at just the right place. We at Sportskeeda thrive to provide coverage of every cricket
+                      match with the fastest ball-by-ball commentary, the best tactical insights, fantasy tips and much
+                      more — all in a seamless, easy-to-enjoy experience!</p>
+                    <h2 id="cricket-1"><br>Today's Cricket Match Live Score</h2>
+                    <p><br>The good thing about cricket is, it’s always on! With so many countries now joining the
+                      bat-and-ball wagon, there’s some match or the other going on at some corner of the world, even
+                      when you are reading this!</p>
+                    <p>And where there’s cricket, there’s us! Don’t miss a single ball — scroll up or go to
+                      Sportskeeda’s home page to find live scores from not only the Indian sub-continent but Africa, the
+                      Middle East, Europe and Oceania. </p>
+                    <h2 id="cricket-2"><br>Women's Cricket Live Score</h2>
+                    <p><br></p>
+                    <p>After years of unfair struggle, women’s cricket is finally growing at a good pace. With the
+                      arrival of new T20 competitions, viewership and crowd attendance records being broken frequently,
+                      parity with men in prize money for ICC matches, and the emergence of a lot of superstars, it looks
+                      like in a league of its own.</p>
+                    <p>Sportskeeda is a proud supporter of this revolution. Here, we not only offer live score and
+                      updates but also give you unrivaled in-depth coverage of every match and event. And just like the
+                      <a title="Women’s Premier League" routerLink="/go/womens-premier-league" target="_blank">Women’s
+                        Premier League</a>, we are only getting started!
+                    </p>
+                    <h2 id="cricket-3"><br>International Cricket Live Score</h2>
+                    <p><br>We all love to see our favorite stars from different countries play together in colorful T20
+                      leagues. However, after everything, is there any better sight than <a title="India"
+                        routerLink="/team/india-national-cricket-team" target="_blank">India</a> and <a title="Pakistan"
+                        routerLink="/team/pakistan-cricket-team" target="_blank">Pakistan</a> singing their national
+                      anthems before a World Cup match or <a title="England" routerLink="/team/england-cricket"
+                        target="_blank">England</a> and <a title="Australia" routerLink="/team/australian-cricket-team"
+                        target="_blank">Australia</a> going head-on in the Ashes, or the <a title="Netherlands"
+                        routerLink="/team/netherlands-cricket" target="_blank">Netherlands</a> defying the odds to beat
+                      <a title="West Indies" routerLink="/team/west-indies-cricket-team" target="_blank">West
+                        Indies</a>?
+                    </p>
+                    <p>Whether you bleed blue, green, red or orange, catch all the patriotic flavors of your favorite
+                      sport right here at Sportskeeda!</p>
+                    <h2 id="cricket-5">Test Match Live Score</h2>
+                    <p><br>The real ‘test’, as they call it, red-ball cricket has stood the test of time better than
+                      anything else in the sport (that was true even before Bazball came to the scene). That’s because
+                      it still is the biggest examination of batters’ technique and patience, for the bowlers’ guile and
+                      fitness and for the fielder’s attention and concentration. </p>
+                    <p>We love the whites at Sportskeeda! Our live scores and coverage won’t let you miss any field
+                      change, any dropped catch, any LBW call, any shattered record, or (wink wink) any controversy!</p>
+                    <h2 id="cricket-7">ODI Cricket Match Live Score</h2>
+                    <p><br></p>
+                    <p>Obituaries have already been written about ODI cricket but, as it did in the 2019 World Cup
+                      final, the format keeps on springing up brilliant matches every year to survive. And till there’s
+                      the World Cup, which still takes the bragging rights of making players into legends, it’ll go on.
+                    </p>
+                    <p>In a way, the format is even more unpredictably stirring than T20s and Tests. You don’t know what
+                      you will get when you give T20 or Test-oriented players 50 overs to showcase what they’ve got.
+                      It’s ever-evolving and thus always a great spectacle.</p>
+                    <p>Don’t want to miss it? You know where to come!</p>
+                    <h2 id="cricket-9">T20 Match Live Score</h2>
+                    <p><br>When the English and Wales Cricket Board started the Twenty20 competition in 2003, they
+                      wouldn’t have imagined the monstrosity of the change that they were bringing to the sport. For
+                      most of the young fans, T20 cricket is the only cricket. </p>
+                    <p>All the money, glamor and excitement aside, the format has played a major role in enhancing
+                      cricket’s popularity around the world. Now, it’s a hub of innovation and tactical mastery, where,
+                      no matter at what time you tune in and for how long, you will be entertained!</p>
+                    <p>So join us at Sportskeeda for an immersive T20 experience and catch every thrilling moment as it
+                      unfolds on the field!</p>
+                    <h2 id="cricket-10"><br>Domestic Cricket Match Live Score</h2>
+                    <p><br></p>
+                    <p>This is where stars are born. From Sachin Tendulkar to <a title="Virat Kohli"
+                        routerLink="/player/virat-kohli" target="_blank">Virat Kohli</a>, <a title="AB de Villiers"
+                        routerLink="/player/ab-de-villiers" target="_blank">AB de Villiers</a> to Baby AB, and Meg
+                      Lanning to Darcie Brown, domestic cricket is where it all starts. </p>
+                    <p>Before they become fan-favorite celebrities, all cricketers go through the hard grind of domestic
+                      cricket. Here, they are tested for composure under pressure and the ability to stand out from the
+                      crowd. They do all that just to catch the eye of that one selector who’d trust them to get that
+                      national call-up. Those who don’t make it, play for their states and families with passion and
+                      heart.</p>
+                    <p>If you want to know the next big thing in your country’s cricket before anyone else, catch the
+                      live scores of domestic matches at Sportskeeda and stay ahead of the curve!</p>
+                    <h2 id="cricket-12">Indian Cricket Team Live Score</h2>
+                    <p><br></p>
+                    <p>Maybe, you are just a Virat Kohli fan. Or maybe you only like to whistle for <a title="MS Dhoni"
+                        routerLink="/player/ms-dhoni" target="_blank">MS Dhoni</a>. Or you only worship Harmanpreet
+                      Kaur’s that knock against Australia. But at the end of the day your heart must surely beat a bit
+                      faster when you see India play together at the big stage, doesn’t it?</p>
+                    <p>Trophy or no trophy, the men and women in blue don’t fail their fans when it’s about giving them
+                      something to cherish about. Catch all the live scores and happenings here at Sportskeeda and offer
+                      your support, love, or even constructive criticism as loudly as you can. India, India!</p>
+                    <p><br></p>
+                    <p><br></p>
+                  </div>
+                  <div class="content-overlay-area">
+                    <div class="content-overlay "></div>
+                    <div class="view-toggle-container " id="addExpanded">
+                      <button class="view-toggle-content-btn" (click)="collapseddata()">
+                        <span>Read <span class="view-toggle-text">{{readmoreless ? 'Less' : 'More'}}</span></span>
+                        <img width="6" height="10" loading="lazy" alt="chevron-icon"
+                          src="/assets/arrow-icon.svg">
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+          <div class="section-separator"></div>
+         
+        </section>
+      </main>
+
+      <div class="sk-ads-taboola-container sk-ads-taboola-sportspage">
+
+
+        <div id="taboola-below-article-thumbnails"></div>
+
+      </div>
+
+    </div>
+  </section>
+</section>

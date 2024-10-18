@@ -1,0 +1,149 @@
+<!-- ================================================= -->
+<ng-container *ngIf="mainheader==true " >
+  <section class="primary-nav" *ngIf="showheader==true " >
+
+    <div class="primary-navigation">
+      <div class="wrapper-container">
+        <div class="nav-items">
+          <div class="primary-nav-items" data-imp-id="page_primary_nav_menu">
+            <ul>
+              <li routerLink="/home"  routerLinkActive="active">
+                <a data-sequence="1">Cricket</a>
+              </li>
+              <li routerLink="/cricket-schedule"  routerLinkActive="active">
+                <a data-sequence="1">Schedule</a>
+              </li>
+              <li [ngClass]="{ 'active': (i+2 )=== activeIndex }"
+                *ngFor="let item of cricketMenuList?.slice(2,10) let i =index , trackBy:userByName">
+                <a data-sequence="1" (click)="navigateToroutes(item ,i)">{{item.name=="Cricket Home"?"Cricket":item.name}}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="primary-more-nav-items" *ngIf="cricketMenuList?.length >= 10">
+            <div class="more-items-trigger">
+              <div class="more-items-trigger--text">More</div>
+              <img src="/assets/ic-chevron-top--e9e9e9.svg" width="11" height="7"
+                alt="chevron-down">
+            </div>
+            <div class="more-nav-menu-wrapper">
+              <ul class="more-nav-menu" >
+                <li routerLinkActive="active" *ngFor="let item of cricketMenuList?.slice(10,-1) let i =index ,trackBy:userByName">
+                  <a (click)="navigateToroutes(item ,i)" data-sequence="12">{{item.name}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+<!-- buleheader for other component -->
+<section class="primary-nav" *ngIf="buleheader">
+
+  <div class="primary-navigation">
+    <div class="wrapper-container">
+      <div class="nav-items">
+        <div class="secondary-navigation">
+          <div class="nav-group">
+            <div class="active-item">Menu</div>
+            <div class="secondary-nav-items-indicator"></div>
+          </div>
+          <!-- <div class="secondary-nav-items">
+
+          </div> -->
+          <div class="secondary-nav-items">
+            <ul>
+              <li routerLink="/home"  routerLinkActive="active">
+                <a data-sequence="1">Cricket</a>
+              </li>
+              <li routerLink="/cricket-schedule"  routerLinkActive="active">
+                <a data-sequence="1">Schedule</a>
+              </li>
+              <li [ngClass]="activeSlugsName==i?'active':''"
+                *ngFor="let item of cricketMenuList?.slice(2, -3) let i =index , trackBy:userByName">
+                <a data-sequence="1" (click)="navigateToroutes(item ,i)">{{item.name=="Cricket Home"?"Cricket":item.name}}</a>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+        <div class="separator"></div>
+        <div class="primary-nav-items" data-imp-id="page_primary_nav_menu">
+          <ul>
+            <li routerLink="/go/{{evenSlug}}" routerLinkActive="active" routerLinkActive="active">
+              <a data-sequence="1">{{selectedName || evenSlug | uppercase}}</a>
+            </li>
+            <li routerLink="/news/{{evenSlug}}/news" routerLinkActive="active">
+              <a data-sequence="2">News</a>
+            </li>
+            <li *ngIf="evenSlug!=='ipl'" routerLink="/goo/{{evenSlug}}/most-runs" (click)="redirectchildshedulepsge('most-runs')" routerLinkActive="active">
+              <a data-sequence="3">Most Runs</a>
+            </li>
+            <li *ngIf="evenSlug!=='ipl'" routerLink="/goo/{{evenSlug}}/most-wickets" (click)="redirectchildshedulepsge('most-wickets')" routerLinkActive="active">
+              <a data-sequence="4">Most Wickets</a>
+            </li>
+            <li *ngIf="evenSlug==='ipl'" routerLink="/goo/{{evenSlug}}/orange-cap" (click)="redirectchildshedulepsge('orange-cap')" routerLinkActive="active">
+              <a data-sequence="3">Orange Cap</a>
+            </li>
+            <li *ngIf="evenSlug==='ipl'" routerLink="/goo/{{evenSlug}}/purple-cap" (click)="redirectchildshedulepsge('purple-cap')" routerLinkActive="active">
+              <a data-sequence="4">Purple Cap</a>
+            </li>
+            <li routerLink="/child-shedule/{{evenSlug}}/upcoming" routerLinkActive="active">
+              <a data-sequence="5">Schedule</a>
+            </li>
+            <li routerLink="/pointTable/{{evenSlug}}" routerLinkActive="active">
+              <a data-sequence="6">Points Table</a>
+            </li>
+            <li routerLink="/stats/{{evenSlug}}" routerLinkActive="active">
+              <a data-sequence="6">Stats</a>
+            </li>
+          </ul>
+        </div>
+        <div class="primary-more-nav-items hidden">
+          <div class="more-items-trigger">
+            <div class="more-items-trigger--text">More</div>
+            <img src="/assets/ic-chevron-top--e9e9e9.svg" width="11" height="7"
+              alt="chevron-down">
+          </div>
+          <div class="more-nav-menu-wrapper">
+            <ul class="more-nav-menu"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+<section class="breadcrumb-section" id="dd" [class]="livehiddenheader!==true?'hidden':''">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <span>Cricket >{{currentPath}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+
+</ng-container>

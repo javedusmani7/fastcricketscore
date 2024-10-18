@@ -1,0 +1,575 @@
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/home">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home">Cricket</a>
+        </li>
+        <li>
+          <a routerLink="/go/{{turnament}}">{{seriesInfo?.title}}</a>
+        </li>
+        <li>
+          <span>{{routeName.split('-').join(" ") | titlecase}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+<section class="hero-section">
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+    <div class="wrapper-container">
+
+      <div class="hero-content ">
+        <div class="left">
+          <div class="hero-h1-container">
+            <h1 class="hero-h1">{{seriesInfo?.title}} {{routeName | titlecase}}</h1>
+          </div>
+          <div class="hash-tagline">{{seriesInfo?.dates}}</div>
+        </div>
+        <div class="right">
+          <div class="hero-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<section class="wrapper-container">
+  <div class="fragment-container">
+
+    <main class="event-subpage">
+      <section class="layout-wrapper">
+        <div class="content-container">
+          <div class="right">
+            <section class="sk-widget ">
+
+              <div class="latest-popular-news-container"
+                data-component-id="latest_popular_news_widget__england-vs-india" data-section=""
+                data-imp-id="widget_latest_popular_news__latest_popular_news_widget__england-vs-india">
+                <div class="panel " *ngIf="latestNewsList?.length > 0 || popularNewsList?.length > 0">
+                  <header class="panel-header ">
+                    <h2 class="panel-heading" *ngIf="latestNewsList?.length > 0 && popularNewsList?.length <= 0">Latest
+                      News</h2>
+                    <h2 class="panel-heading" *ngIf="latestNewsList?.length < 0 && popularNewsList?.length > 0">popular
+                      News</h2>
+                  </header>
+                  <div class="panel-body ">
+                    <div class="controls-container" *ngIf="latestNewsList?.length > 0 && popularNewsList?.length > 0">
+                      <button class="news-switcher " [class]="selectedNewsTab=='latest'?'active':''"
+                        (click)="getneswdata('latest')" data-section="latest">
+                        <h2>Latest News</h2>
+                      </button>
+                      <button class="news-switcher" [class]="selectedNewsTab=='popular'?'active':''"
+                        (click)="popularNewsdata('popular')" data-section="popular">
+                        <h2>Most Popular</h2>
+                      </button>
+                    </div>
+                    <div class="content">
+                      <div class="news-items latest_popular_news_widget__england-vs-india__news_latest"
+                        *ngIf="selectedNewsTab=='latest'">
+                        <a *ngFor="let item of latestNewsList;let i=index" routerLink="/cricket-news/{{item.link}}"
+                          class="news-item" data-sequence="1" data-section="">
+                          <div class="news-sequence">{{i+1}}</div>
+                          <div class="news-content">
+                            <div class="news-title">{{item.title}}</div>
+                          </div>
+                        </a>
+
+                      </div>
+                      <div class="news-items latest_popular_news_widget__england-vs-india__news_popular"
+                        *ngIf="selectedNewsTab=='popular'">
+                        <a *ngFor="let item of popularNewsList;let i=index;" routerLink="/cricket-news/{{item.link}}"
+                          class="news-item" data-sequence="6" data-section="">
+                          <div class="news-sequence">{{i+1}}</div>
+                          <div class="news-content">
+                            <div class="news-title">{{item.title}}</div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </section>
+            <div class="section-separator "></div>
+            <section class="sk-widget schedule">
+              <div class="panel ">
+                <header class="panel-header ">
+                  <h2 class="panel-heading">{{upcominglist?.[0]?.event_menu_name }} Schedule</h2>
+                  <a class="view-more-cta" routerLink="/child-shedule/{{turnament}}/upcoming" data-section="schedule">
+                    <span>View All</span>
+                  </a>
+                </header>
+                <div class="panel-body ">
+
+                  <div class="widget--tournament-schedule-results">
+                    <div class="schedule-results-container" data-imp-id="widget_schedule_results">
+                      <div class="schedule-results-controls">
+                        <button class="schedule-results-controls-tab-switcher "
+                          [class]="selectedTabupcoming == true ? 'active' : ''" (click)="getupcomming()">
+                          <span>Upcoming</span>
+                        </button>
+                        <button class="schedule-results-controls-tab-switcher"
+                          [class]="resulttab == true ? 'active' : ''" (click)="getresult()">
+                          <span>Results</span>
+                        </button>
+                      </div>
+                      <div class="schedule-results-content">
+
+                        <div class="schedule-results-tab-content schedule-results-tab-content--upcoming"
+                          *ngIf="selectedTabupcoming">
+                          <ng-container>
+                            <div class="panel-body" *ngIf="upcominglist?.length==0 && loader!==true">
+                              <div class="page-empty-state">
+                                <img width="70" height="67" alt="speaker"
+                                  src="/assets/cmc-pre-live-icon.svg"
+                                  class="lazy-img-bg">
+                                <div class="page-empty-state-message">Data is not available</div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <div class="schedule-results-item size--24" *ngFor="let item of upcominglist?.slice(0,5)">
+                            <a class="schedule-results-item-cta"
+                              (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"
+                              data-sequence="1"></a>
+                            <div class="schedule-results-item-wrapper">
+                              <div class="schedule-results-item-team-info">
+                                <img src="{{item.t1_flag}}" (error)="item.t1_flag = '../../assets/team-default.png'" class="schedule-results-item-team-flag" width="24"
+                                  height="24" alt="team-flag" data-img-params="?h=48">
+                                <div class="schedule-results-item-team-name">{{item.t1_key}}</div>
+                              </div>
+                              <div class="schedule-results-item-content">
+                                <div class="schedule-results-item-upcoming-content">
+                                  <div class="cricket-schedule-results-item-match-number">{{item.description}}</div>
+                                  <div class="cricket-schedule-results-item-match-time convert-utc-to-local"
+                                    data-utc-date-time="2024-02-15T04:00:00+00:00" data-format="dd mmm, hh:MM TT">
+                                    {{item.datetime | date:"dd MMM, hh:MM a"}}</div>
+                                </div>
+                              </div>
+                              <div class="schedule-results-item-team-info">
+                                <img src="{{item.t2_flag}}" (error)="item.t2_flag = '../../assets/team-default.png'" class="schedule-results-item-team-flag" width="24"
+                                  height="24" alt="team-flag" data-img-params="?h=48">
+                                <div class="schedule-results-item-team-name">{{item.t2_key}}</div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="schedule-results-tab-content schedule-results-tab-content--results "
+                          *ngIf="resulttab">
+                          <ng-container>
+                            <div class="panel-body" *ngIf="resultdata?.length==0 && loader!==true">
+                              <div class="page-empty-state">
+                                <img width="70" height="67" alt="speaker"
+                                  src="/assets/cmc-pre-live-icon.svg"
+                                  class="lazy-img-bg">
+                                <div class="page-empty-state-message">Data is not available</div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <div class="schedule-results-item size--24" *ngFor="let item of resultdata?.slice(0,5)">
+                            <a class="schedule-results-item-cta"
+                              (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"
+                              data-sequence="1"></a>
+                            <div class="schedule-results-item-wrapper">
+                              <div class="schedule-results-item-team-info">
+                                <img class="schedule-results-item-team-flag img-with-fallbacks" width="24" height="24"
+                                  alt="team-flag" src="{{item.t1_flag}}" (error)="item.t1_flag = '../../assets/team-default.png'">
+                                <div class="schedule-results-item-team-name">{{item.t1_key}}</div>
+                              </div>
+                              <div class="schedule-results-item-content">
+                                <div class="schedule-results-item-results-content">
+                                  <div class="cricket-schedule-results-item-match-score">
+                                    <div class="cricket-schedule-results-item-match-score--runs">{{item.t1_score.split('
+                                      ')[0]}}<br>&amp;{{item.t1_score.split(' ')[0]}}</div>
+                                  </div>
+                                  <div class="cricket-schedule-results-item-vs-text">vs</div>
+                                  <div class="cricket-schedule-results-item-match-score">
+                                    <div class="cricket-schedule-results-item-match-score--runs">{{item.t2_score.split('
+                                      ')[0]}}<br>&amp;{{item.t2_score.split(' ')[0]}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="schedule-results-item-team-info">
+                                <img class="schedule-results-item-team-flag img-with-fallbacks" width="24" height="24"
+                                  alt="team-flag" src="{{item.t2_flag}}" (error)="item.t2_flag = '../../assets/team-default.png'">
+                                <div class="schedule-results-item-team-name">{{item.t2_key}}</div>
+                              </div>
+                            </div>
+                            <footer class="schedule-results-item-footer">
+                              <div class="schedule-results-item-footer-content">
+                                <span class="schedule-results-item-footer-content-highlight">{{item.description}}</span>
+                                <span>{{item.result}}</span>
+                              </div>
+                            </footer>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div class="section-separator "></div>
+          </div>
+          <div class="left">
+            <div class="subpage-container">
+
+              <section class="cricket-stats-container">
+                <div class="panel cricket-stats-panel">
+                  <div class="panel-header">
+                    <div class="data-filter-dropdowns">
+                      <div class="data-filter-dropdown-wrapper">
+                        <select class="data-filter-dropdown redirect" (change)="onSelectChange($event)">
+                          <optgroup label="Batting Stats">
+                            <option [selected]="routeName" value="most-runs">{{routeName.split('-').join(" ") |
+                              titlecase}}</option>
+
+
+                            <!-- <option selected="{{routeName}}" value="most-runs">Most Runs</option> -->
+                            <option value="most-fours">Most 4s</option>
+                            <option value="most-sixes">Most 6s</option>
+                            <option value="best-strike-rate">Highest Strike Rate</option>
+                            <option value="highest-scores">Highest Individual Score</option>
+                            <option value="most-fifties">Most 50s</option>
+                            <option value="most-hundreds">Most 100s</option>
+                          </optgroup>
+                          <optgroup label="Bowling Stats">
+                            <option value="most-wickets">Most Wickets</option>
+                            <option value="best-economy">Best Economy</option>
+                            <option value="most-maidens">Most Maidens</option>
+                            <option value="best-bowling-average">Best Bowling Figures</option>
+                            <option value="most-four-wickets">Most 4 Wickets</option>
+                            <option value="most-five-wickets">Most 5 Wickets</option>
+                            <option value="best-bowling-strike-rate">Best Strike Rates</option>
+                          </optgroup>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="keeda_widget_loader" style="display: block; text-align: center; margin-top: 10%;"
+                    *ngIf="loader==true">
+                    <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                      alt="loader" style="transform: rotate(7500deg);">
+                  </div>
+
+                  <ng-container>
+                    <div class="panel-body" *ngIf="mostrunList?.length==0 && loader!==true">
+                      <div class="page-empty-state">
+                        <img width="70" height="67" alt="speaker"
+                          src="/assets/cmc-pre-live-icon.svg" class="lazy-img-bg">
+                        <div class="page-empty-state-message">Data is not available</div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="loader!==true">
+                    <div class="panel-body" *ngIf="mostrunList?.length!==0">
+                      <div class="keeda-data-table-wrapper">
+                        <div class="keeda-data-table-container" data-smooth-auto-scroll="true">
+                          <table class="keeda-data-table">
+
+                            <thead *ngIf="routeName=='highest-scores'">
+                              <tr>
+                                <th>
+                                  <div class="ta-c">Pos</div>
+                                </th>
+                                <th class="sticky">
+                                  <div class="ta-l">Player</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">Team</div>
+                                </th>
+                                <th class="selected">
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/highest-scores">HS</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <span>BF</span>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/best-strike-rate">SR</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/most-fours">4s</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/most-sixes">6s</a>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <thead
+                              *ngIf="routeName!='most-wickets' && routeName!='highest-scores' && routeName!='best-economy' && routeName!='most-maidens' && routeName!='best-bowling-average' && routeName!='most-four-wickets' && routeName!='most-five-wickets' && routeName!='best-bowling-strike-rate' && routeName!='purple-cap'">
+                              <tr>
+                                <th>
+                                  <div class="ta-c">Pos</div>
+                                </th>
+                                <th class="sticky">
+                                  <div class="ta-l">Player</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">Team</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <span>Mat</span>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <span>Inns</span>
+                                  </div>
+                                </th>
+                                <th class="selected">
+                                  <!-- <div class="ta-c" *ngif="routeName!=='most-wickets' || routeName!=='best-economy' || routeName!=='most-maidens' || routeName!=='best-bowling-average' || routeName!=='most-four-wickets' || routeName!=='most-five-wickets' || routeName!=='best-bowling-strike-rate'">
+              <a class="column-cta" >Runs</a>
+              </div> -->
+                                  <div class="ta-c">
+                                    <a class="column-cta">RUNS</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta">SR</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <span>Avg</span>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta">HS</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta">50s</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta">100s</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta">4s</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta">6s</a>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <thead
+                              *ngIf="routeName=='most-wickets' || routeName=='best-economy' || routeName=='most-maidens' || routeName=='best-bowling-average' || routeName=='most-four-wickets' || routeName=='most-five-wickets' || routeName=='best-bowling-strike-rate' || routeName=='purple-cap'">
+                              <tr>
+                                <th>
+                                  <div class="ta-c">Pos</div>
+                                </th>
+                                <th class="sticky">
+                                  <div class="ta-l">Player</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">Team</div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <span>Mat</span>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <span>Inns</span>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <span>Ovr</span>
+                                  </div>
+                                </th>
+                                <th class="selected">
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/most-wickets">Wkts</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/best-economy">Eco</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <span>Avg</span>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/most-four-wickets">4W</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/most-five-wickets">5W</a>
+                                  </div>
+                                </th>
+                                <th>
+                                  <div class="ta-c">
+                                    <a class="column-cta" routerLink="/go/sheffield-shield/best-bowling-average">BBI</a>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+
+
+                              <ng-container *ngIf="routeName=='highest-scores'">
+                                <tr *ngFor="let item of mostrunList; let i=index, trackBy:userByName">
+
+                                  <td>
+                                    <div class="ta-c">{{item.Pos}}</div>
+                                  </td>
+                                  <td class="sticky">
+                                    <div class="ta-l no-overflow">
+                                      <a class="player-name"
+                                        routerLink="/player/{{item['player-slug']}}">{{item.Player}}</a>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c no-overflow">
+                                      <a class="team-name" routerLink="/team/{{item['team-slug']}}">{{item.Team}}</a>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.HS}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.BF}}</div>
+                                  </td>
+
+                                  <td>
+                                    <div class="ta-c">{{item.SR}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item['4s']}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item['4s']}}</div>
+                                  </td>
+
+                                </tr>
+                              </ng-container>
+                              <ng-container *ngIf="routeName !=='highest-scores'">
+                                <tr *ngFor="let item of mostrunList; let i=index, trackBy:userByName">
+
+                                  <td>
+                                    <div class="ta-c">{{item.Pos}}</div>
+                                  </td>
+                                  <td class="sticky">
+                                    <div class="ta-l no-overflow">
+                                      <a class="player-name"
+                                        routerLink="/player/{{item['player-slug']}}">{{item.Player}}</a>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c no-overflow">
+                                      <a class="team-name" routerLink="/team/{{item['team-slug']}}">{{item.Team}}</a>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.Mat}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.Inns}}</div>
+                                  </td>
+                                  <td [class]="item.Runs?'selected':''">
+                                    <div class="ta-c">{{item.Runs || item.Ovr}}</div>
+                                  </td>
+                                  <td [class]="item.Wkts?'selected':''">
+                                    <div class="ta-c">{{item.SR || item.Wkts}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.Avg || item.Eco}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.HS || item.Avg}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item['50s'] || item['4W']}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item['100s'] || item['5W']}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item['4s'] || item.BBI}}</div>
+                                  </td>
+                                  <td *ngIf="item['6s']">
+                                    <div class="ta-c">{{item['6s']}}</div>
+                                  </td>
+                                </tr>
+                              </ng-container>
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                </div>
+              </section>
+              <div class="section-separator"></div>
+
+            </div>
+            <div class="content-ad-container">
+              <div class="ad-container" id="" style="
+      min-height: 31px;
+      width: 100%; text-align: center;clear:both;
+      ">
+                <div class="ad-declare-explicit"></div>
+
+                <div id="div-gpt-ad-1589376019464-0" class="">
+
+                </div>
+              </div>
+
+            </div>
+            <div class="section-separator"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="sk-ads-taboola-container sk-ads-taboola-eventpage">
+      <div id="taboola-below-article-thumbnails"></div>
+
+    </div>
+
+  </div>
+</section>
