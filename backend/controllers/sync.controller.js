@@ -48,7 +48,7 @@ exports.syncSeason = async (req, res) => {
 exports.syncCompetetionList = async (req, res) => {
     try {
         const token = req.query.token;
-        const season = "2024";
+        const season = "2023";
     
         const response = await fetchCompetetionDataFromEntitySport(token , ENTITYSPORT_API_URL + "seasons/" + season + "/" +'competitions');
 
