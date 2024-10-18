@@ -48,8 +48,11 @@ exports.syncSeason = async (req, res) => {
 exports.syncCompetetionList = async (req, res) => {
     try {
         const token = req.query.token;
-        const response = await fetchCompetetionDataFromEntitySport(token , ENTITYSPORT_API_URL + 'competitions');
-        if(response.status == "unauthorized"){
+        const season = "2024";
+    
+        const response = await fetchCompetetionDataFromEntitySport(token , ENTITYSPORT_API_URL + "seasons/" + season + "/" +'competitions');
+
+        if(response.status == "unauthorized" || response.status == "forbidden"){
             res.status(200).json({ status : false , message: 'Error fetching data from Entitysport API' });
         }else{
 
@@ -62,8 +65,8 @@ exports.syncCompetetionList = async (req, res) => {
                     upsert: true // Insert if not found
                 }
             }));
+            
 
-            // Execute bulk operations
             const result = await Competetion.bulkWrite(bulkOps);
 
             if(result){
@@ -83,8 +86,11 @@ exports.syncCompetetion = async (req, res) => {
     try {
         const token = req.query.token;
         const competetionId = req.query.cid;
+
+        console.log();
         const response = await fetchCompetetionDataFromEntitySport(token , ENTITYSPORT_API_URL + 'competitions/' + competetionId);
-        if(response.status == "unauthorized"){
+        
+        if(response.status == "unauthorized" || response.status == "forbidden"){
             res.status(200).json({ status : false , message: 'Error fetching data from Entitysport API' });
         }else{
             res.status(200).json({ status : true , message: response.response });
@@ -121,6 +127,24 @@ const fetchSeasonDataFromEntitySport = async (token) => {
 
 // Private method for making a third-party API call for getting the competetionList details
 const fetchCompetetionDataFromEntitySport = async (token , url) => {
+    try {
+        const response = await axios({
+          method: "get", 
+          url: url,
+          params: {
+            token: token,
+          },
+        });
+        return response.data;
+    } 
+    catch (error) {
+      // retrun error
+      return error.response.data;
+    }
+};
+
+
+const fetchCompetetionDataFromCricketLiveLine= async (token , url) => {
     try {
         const response = await axios({
           method: "get", 
