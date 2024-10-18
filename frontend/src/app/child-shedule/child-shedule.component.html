@@ -1,0 +1,488 @@
+<!-- for mobile nav -->
+<section class="breadcrumb-section" id="mobilevivew">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/">Cricket</a>
+        </li>
+        <li>
+          <a routerLink="/go/{{eventgrupname}}">{{seriesTitle?.title}}</a>
+        </li>
+        <li>
+          <span>Schedule</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/">Cricket</a>
+        </li>
+        <li>
+          <a routerLink="/go/{{eventgrupname}}">{{seriesTitle?.title}}</a>
+        </li>
+        <li>
+          <span>Schedule</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<section class="hero-section" id="desktopview">
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+    <div class="wrapper-container">
+
+      <div class="hero-content ">
+        <div class="left">
+          <div class="hero-h1-container">
+            <h1 class="hero-h1">{{seriesTitle?.title}} Schedule</h1>
+          </div>
+          <div class="hash-tagline">{{seriesTitle?.dates}}</div>
+        </div>
+        <div class="right">
+          <div class="hero-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- for mobile hero section -->
+<section class="hero-section" id="mobilevivew">
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+    <div class="wrapper-container">
+
+      <div class="hero-content ">
+        <div class="left">
+          <div class="hero-h1-container">
+            <h1 class="hero-h1">{{seriesTitle?.title}}</h1>
+          </div>
+          <div class="hash-tagline">{{seriesTitle?.dates}}</div>
+        </div>
+        <div class="right">
+          <div class="hero-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<section class="wrapper-container">
+  <div class="fragment-container">
+
+    <main class="event-subpage">
+      <section class="layout-wrapper">
+        <div class="content-container">
+          <div class="right" *ngIf="latestNewsList?.length > 0 || popularNewsList?.length > 0">
+            <section class="sk-widget ">
+
+              <div class="latest-popular-news-container"
+                data-component-id="latest_popular_news_widget__england-vs-india" data-section=""
+                data-imp-id="widget_latest_popular_news__latest_popular_news_widget__england-vs-india">
+                <div class="panel ">
+                  <header class="panel-header ">
+                    <h2 class="panel-heading" *ngIf="latestNewsList?.length > 0 && popularNewsList?.length <= 0">Latest
+                      News</h2>
+                    <h2 class="panel-heading" *ngIf="latestNewsList?.length < 0 && popularNewsList?.length > 0">popular
+                      News</h2>
+                  </header>
+                  <div class="panel-body ">
+                    <div class="controls-container" *ngIf="latestNewsList?.length > 0 && popularNewsList?.length > 0">
+                      <button class="news-switcher " (click)="getneswdata('latest')"
+                        [class]="selectedNewsTab=='latest'?'active':''" data-section="latest">
+                        <h2>Latest News</h2>
+                      </button>
+                      <button class="news-switcher" (click)="popularNewsdata('popular')"
+                        [class]="selectedNewsTab=='popular'?'active':''" data-section="popular">
+                        <h2>Most Popular</h2>
+                      </button>
+                    </div>
+                    <div class="content">
+                      <div class="news-items latest_popular_news_widget__england-vs-india__news_latest"
+                        *ngIf="selectedNewsTab=='latest'">
+                        <a *ngFor="let item of latestNewsList; let i=index;" routerLink="/cricket-news/{{item.link}}"
+                          class="news-item">
+                          <div class="news-sequence">{{i+1}}</div>
+                          <div class="news-content">
+                            <div class="news-title">{{item.title}}</div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="news-items latest_popular_news_widget__england-vs-india__news_popular"
+                        *ngIf="selectedNewsTab=='popular'">
+                        <a *ngFor="let item of popularNewsList;let i=index;" routerLink="/cricket-news/{{item.link}}"
+                          class="news-item" data-sequence="6" data-section="">
+                          <div class="news-sequence">{{i+1}}</div>
+                          <div class="news-content">
+                            <div class="news-title">{{item.title}}</div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </section>
+            <div class="section-separator "></div>
+          </div>
+          <div class="left">
+            <div class="subpage-container">
+
+              <section class="cricket-schedule-container">
+
+
+                <div class="panel">
+                  <div class="panel-header">
+                    <div class="cricket-schedule-cta-buttons ">
+                      <a class="cricket-schedule-cta-button " [class]="selectedTab == 'matches-live' ? 'active' : ''"
+                        (click)="getMatchesbySeries('matches-live',eventgrupname)">Live</a>
+                      <a class="cricket-schedule-cta-button" [class]="selectedTab == 'upcoming' ? 'active' : ''"
+                        (click)="getMatchesbySeries('upcoming',eventgrupname)">Upcoming</a>
+                      <a class="cricket-schedule-cta-button" (click)="getMatchesbySeries('result',eventgrupname)"
+                        [class]="selectedTab == 'result' ? 'active' : ''">Results</a>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class="data-filter-dropdowns" *ngIf="selectedTab !== 'matches-live'">
+                      <div class="data-filter-dropdown-wrapper">
+                        <select class="data-filter-dropdown redirect" (change)="getCricketMatches($event)">
+                          <option [value]="item.slug"
+                            *ngFor="let item of cricketMenuList?.slice(2); let i=index ,trackBy:userByName"
+                            [selected]="eventgrupname==item.slug || routeName==item.slug">{{item.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="page-empty-state" *ngIf="upcominglist?.length==0">
+                      <img width="70" height="67" alt="speaker"
+                        src="/assets/cmc-pre-live-icon.svg" class="lazy-img-bg">
+                      <div class="page-empty-state-message">No matches are available</div>
+                    </div>
+                    <div class="cricket-match-cards"
+                      *ngFor="let item of upcominglist; let i = index ,trackBy:userByName">
+
+                      <div class="cricket-match-card-container pre">
+                        <a class="cricket-match-card-cta"
+                          (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"></a>
+                        <header class="cricket-match-card-header">
+                          <div *ngIf="item.status=='post'"
+                            class="cricket-match-card-header-primary-text convert-utc-to-local "
+                            data-utc-date-time="2024-03-27T14:00:00+00:00" data-format="ddd, mmm d - h:ss TT">
+                            {{item.datetime | date:"EEE, MMM d - h:mm a"}}</div>
+                          <div class="cricket-match-card-header-secondary-text">
+
+                            <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}
+                              {{item.format}}</span>
+                            <span>•</span>
+                            <span class="cricket-match-card--match-venue">{{item.venue_stadium}}</span>
+                            <span>•</span>
+                            <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                          </div>
+                        </header>
+                        <div class="cricket-match-card-content">
+                          <div class="cricket-match-card-scores">
+                            <div class="cricket-match-card-score-item" data-team-id="25">
+                              <div class="cricket-match-card-team-info">
+                                <img [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg"
+                                  class="cricket-match-card-team-logo" width="27" height="19" alt="team logo"
+                                  data-img-params="?w=54">
+                                <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                              </div>
+                              <div class="cricket-match-card-team-score">
+                                <div class="cricket-match-card-team-live-score" *ngIf="item.status=='live'">
+                                  {{item.t1_score}}</div>
+                                <div class="cricket-match-card-team-live-score" *ngIf="item.status=='post'">
+                                  {{item.t1_score}}</div>
+
+                                <div class="cricket-match-card-team-live-overs"></div>
+                              </div>
+                            </div>
+                            <div class="cricket-match-card-score-item" data-team-id="490">
+                              <div class="cricket-match-card-team-info">
+                                <img [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg"
+                                  class="cricket-match-card-team-logo" width="27" height="19" alt="team logo"
+                                  data-img-params="?w=54">
+                                <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                              </div>
+                              <div class="cricket-match-card-team-score">
+                                <div class="cricket-match-card-team-live-score" *ngIf="item.status=='live'">
+                                  {{item.t2_score}}</div>
+                                <div class="cricket-match-card-team-live-score" *ngIf="item.status=='post'">
+                                  {{item.t2_score}}</div>
+
+                                <div class="cricket-match-card-team-live-overs"></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="cricket-match-card-timer">
+                            <div class="cricket-match-card-timer--date convert-utc-to-local"
+                              data-utc-date-time="2024-02-15T04:00:00+00:00" data-format="ddd, mmm d"
+                              data-user-friendly-day="true" *ngIf="item.status=='pre'">{{convertDate(item.datetime)}}
+                            </div>
+                            <div class="cricket-match-card-timer--time convert-utc-to-local"
+                              data-utc-date-time="2024-02-15T04:00:00+00:00" data-format="h:ss TT"
+                              *ngIf="item.status=='pre'">{{item.datetime |
+                              date:"hh:mm a"}}</div>
+                          </div>
+                        </div>
+                        <footer class="cricket-match-card-footer" *ngIf="item.status=='post'">
+                          <div class="cricket-match-card-footer-primary-text">{{item.result}}</div>
+                        </footer>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="section-separator"></div>
+                <div class="panel" *ngIf="selectedTab == 'matches-live'">
+                  <div class="panel-header">
+                    <h2 class="panel-heading">Upcoming Fixtures</h2>
+                  </div>
+                  <div class="panel-body">
+                    <div class="cricket-match-cards">
+                      <div class="cricket-match-card-container pre"
+                        *ngFor="let item of upcomingFeature; let i = index ,trackBy:userByName">
+                        <a class="cricket-match-card-cta"
+                          (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)">/live-cricket-score/gujarat-giants-women-vs-up-warriorz-18th-match-11-march-2024</a>
+                        <header class="cricket-match-card-header">
+                          <div class="cricket-match-card-header-secondary-text">
+                            <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}
+                              {{item.format}}</span>
+                            <span>•</span>
+                            <span class="cricket-match-card--match-venue">{{item.venue_stadium}}</span>
+                            <span>•</span>
+                            <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                          </div>
+                        </header>
+                        <div class="cricket-match-card-content">
+                          <div class="cricket-match-card-scores">
+                            <div class="cricket-match-card-score-item" data-team-id="127613">
+                              <div class="cricket-match-card-team-info">
+                                <img src="{{item.t1_flag || teamDefaultImg}}" class="cricket-match-card-team-logo"
+                                  width="27" height="19" alt="team logo" data-img-params="?w=54">
+                                <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                              </div>
+                              <div class="cricket-match-card-team-score">
+                                <div class="cricket-match-card-team-live-score"></div>
+                                <div class="cricket-match-card-team-live-overs"></div>
+                              </div>
+                            </div>
+                            <div class="cricket-match-card-score-item" data-team-id="127614">
+                              <div class="cricket-match-card-team-info">
+                                <img src="{{item.t2_flag || teamDefaultImg}}" class="cricket-match-card-team-logo"
+                                  width="27" height="19" alt="team logo" data-img-params="?w=54">
+                                <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                              </div>
+                              <div class="cricket-match-card-team-score">
+                                <div class="cricket-match-card-team-live-score"></div>
+                                <div class="cricket-match-card-team-live-overs"></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="cricket-match-card-timer">
+                            <div class="cricket-match-card-timer--date convert-utc-to-local"
+                              data-utc-date-time="2024-03-11T14:00:00+00:00" data-format="ddd, mmm d"
+                              data-user-friendly-day="true">{{convertDate(item.datetime)}}</div>
+                            <div class="cricket-match-card-timer--time convert-utc-to-local"
+                              data-utc-date-time="2024-03-11T14:00:00+00:00" data-format="h:ss TT">{{item.datetime |
+                              date:"hh:mm a"}}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div class="content-ad-container">
+              <div class="ad-container" id="" style="
+    min-height: 31px;
+    width: 100%; text-align: center;clear:both;
+    ">
+                <div class="ad-declare-explicit"></div>
+
+                <div id="div-gpt-ad-1589376019464-0" class="">
+
+                </div>
+              </div>
+
+            </div>
+            <div class="section-separator"></div>
+            <section class="sk-widget leaderboard">
+              <div class="panel ">
+                <header class="panel-header ">
+                  <h2 class="panel-heading">{{upcominglist?.[0]?.event_menu_name}} Leaderboard</h2>
+                  <a class="view-more-cta" (click)="getrouteandCheckwidth('/stats','/stat',eventgrupname)"
+                    data-section="leaderboard">
+                    <span>View All</span>
+                  </a>
+                </header>
+                <div class="panel-body">
+
+                  <div class="widget--tournament-leaderboard" data-imp-id="widget_tournament_leaderboard__0">
+                    <div class="tournament-leaderboard-container">
+                      <div class="slider-container ">
+                        <div class="slider-filters ">
+                          <button class="slider-filter-switcher " (click)="getStats('batting',eventgrupname)"
+                            [class]="battingbtn=='batting'?'active':''">Batting</button>
+                          <button class="slider-filter-switcher " (click)="getStats('bowling',eventgrupname)"
+                            [class]="battingbtn=='bowling'?'active':''">Bowling</button>
+                        </div>
+                        <div class="slider-control slider-control--left " (click)="scrollLeft()"
+                          [ngStyle]="{'display': rightScrollCount > 0 ? 'block': 'none'}">
+                          <button class="slider-control-btn">
+                            <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                              src="/assets/ic-cheveron-right--2d2d2d.svg">
+                          </button>
+                        </div>
+                        <div class="slider-items" #widgetsContent>
+                          <ng-container *ngIf="battingbtn=='batting'">
+                            <div class="slider-item" data-type="batting"
+                              *ngFor="let item of statsList?.['Batting Stats'];">
+                              <div class="tournament-leaderboard-item">
+                                <div class="leaderboard-card-container">
+                                  <header class="leaderboard-card-header">
+                                    <div class="leaderboard-card-header-heading">{{item.heading}}</div>
+                                  </header>
+                                  <div class="leaderboard-card-primary-items"
+                                    *ngFor="let player of item.players?.slice(0,1)">
+                                    <div class="leaderboard-card-item--primary">
+                                      <div class="leaderboard-card-item--primary-content">
+                                        <a class="item-cta" routerLink="/player/{{player.sk_slug}}"></a>
+                                        <div class="leaderboard-card-item--primary-content-left">
+                                          <div class="leaderboard-card-item--primary-player-name">{{player.name.split('
+                                            ')[0]}} <br>{{player.name.split(' ')[1]}}e</div>
+                                          <div class="leaderboard-card-item--primary-stat">{{player.stat}}</div>
+                                          <img [src]="player.flag"
+                                            (error)="player.flag = '../../assets/team-default.png'"
+                                            class="leaderboard-card-item--primary-team-flag" width="30" height="20"
+                                            alt="team flag" data-img-params="?h=40">
+                                        </div>
+                                        <div class="leaderboard-card-item--primary-content-right">
+                                          <div class="leaderboard-card-item--primary-player-thumb">
+                                            <img [src]="player.image" (error)="player.image = teamDefaultImg" class=""
+                                              width="78" height="78" alt="player image" data-img-params="?h=156">
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="leaderboard-card-secondary-items">
+                                    <div class="leaderboard-card-item--secondary"
+                                      *ngFor="let player of item.players.slice(1)">
+                                      <div class="leaderboard-card-item--secondary-rank">
+                                        <span>{{player.rank}}</span>
+                                      </div>
+                                      <img [src]="player.flag" (error)="player.flag = '../../assets/team-default.png'"
+                                        class="leaderboard-card-item--secondary-team-flag" width="30" height="20"
+                                        alt="team flag" data-img-params="?h=40">
+                                      <div class="leaderboard-card-item--secondary-player">
+                                        <a routerLink="/player/{{player.sk_slug}}">{{player.name}}</a>
+                                      </div>
+                                      <div class="leaderboard-card-item--secondary-stat">{{player.stat}}</div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="battingbtn=='bowling'">
+                            <div class="slider-item " data-type="bowling"
+                              *ngFor="let item of statsList['Bowling Stats']">
+                              <div class="tournament-leaderboard-item" *ngFor="let player of item.players?.slice(0,1)">
+                                <div class="leaderboard-card-container">
+                                  <header class="leaderboard-card-header">
+                                    <div class="leaderboard-card-header-heading">{{item.heading}}</div>
+                                  </header>
+                                  <div class="leaderboard-card-primary-items">
+                                    <div class="leaderboard-card-item--primary">
+                                      <div class="leaderboard-card-item--primary-content">
+                                        <a class="item-cta" routerLink="/player/{{player.sk_slug}}"></a>
+                                        <div class="leaderboard-card-item--primary-content-left">
+                                          <div class="leaderboard-card-item--primary-player-name">{{player.name.split('
+                                            ')[0]}} <br>{{player.name.split(' ')[1]}}</div>
+                                          <div class="leaderboard-card-item--primary-stat">{{player.stat}}</div>
+                                          <img class="leaderboard-card-item--primary-team-flag img-with-fallbacks"
+                                            width="30" height="20" alt="team flag" [src]="player.flag"
+                                            (error)="player.flag = '../../assets/team-default.png'">
+                                        </div>
+                                        <div class="leaderboard-card-item--primary-content-right">
+                                          <div class="leaderboard-card-item--primary-player-thumb">
+                                            <img class="img-with-fallbacks" width="78" height="78" alt="player image"
+                                              [src]="player.image" (error)="player.image = teamDefaultImg">
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="leaderboard-card-secondary-items">
+                                    <div class="leaderboard-card-item--secondary"
+                                      *ngFor="let player of item.players?.slice(1)">
+                                      <div class="leaderboard-card-item--secondary-rank">
+                                        <span>{{player.rank}}</span>
+                                      </div>
+                                      <img class="leaderboard-card-item--secondary-team-flag img-with-fallbacks"
+                                        width="30" height="20" alt="team flag" [src]="player.flag"
+                                        (error)="player.flag = '../../assets/team-default.png'">
+                                      <div class="leaderboard-card-item--secondary-player">
+                                        <a routerLink="/player">{{player.name}}</a>
+                                      </div>
+                                      <div class="leaderboard-card-item--secondary-stat">{{player.stat}}</div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+
+                        </div>
+                        <div class="slider-control slider-control--right" (click)="scrollRight()">
+                          <button class="slider-control-btn">
+                            <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                              src="/assets/ic-cheveron-right--2d2d2d.svg">
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+            <div class="section-separator "></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="sk-ads-taboola-container sk-ads-taboola-eventpage">
+      <div id="taboola-below-article-thumbnails"></div>
+    </div>
+  </div>
+</section>

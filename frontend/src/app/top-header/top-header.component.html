@@ -1,0 +1,275 @@
+<section class="top-header masthead" id="desktopiew" >
+  <header class="header--top-head" data-imp-id="page_top_header">
+    <div class="top-head-container">
+      <div class="left v-gap">
+        <div class="sidebar-toggle d-none">
+          <button id="main-menu" role="button" aria-label="sidebar menu toggle"></button>
+        </div>
+      </div>
+      <div class="wrapper-container">
+        <div class="center">
+          <div class="brand-and-nav">
+            <div class="brand">
+              <a routerLink="/" class="brand-cta">
+
+                <img class="brand-logo" width="200" height="24" alt="tejscore logo" title="tejscore"
+                  src="../../assets/new-green-logo.svg">
+              </a>
+            </div>
+            <div class="top-nav">
+
+              <div class="top-navigation" data-imp-id="page_top_nav_menu">
+                <nav>
+                  <ul class="top-nav-items-list">
+                    <li routerLinkActive="active">
+                      <a routerLink="/home" data-sequence="1">Cricket</a>
+                    </li>
+                    <!-- <li routerLinkActive="active">
+                      <a routerLink="/live/{{evenSlug}}" data-sequence="1">Live Scores</a>
+                    </li> -->
+                    <li routerLinkActive="active" >
+                      <a routerLink="/cricket-schedule" data-sequence="2">Schedule</a>
+                    </li>
+                    <!-- <li routerLinkActive="active">
+                      <a routerLink="/news" data-sequence="3">News</a>
+                    </li> -->
+                    <li routerLinkActive="active">
+                      <a routerLink="/series" data-sequence="4">Series</a>
+                    </li>
+                    <li routerLinkActive="active">
+                      <div class="dropdown">
+                        <a class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                          Rankings
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li><a class="dropdown-item" style="margin-left: 8px;color: #000 ;" routerLink="/iccRanking/icc-odi-ranking" >ICC ODI Ranking</a></li>
+                          <li><a class="dropdown-item" style="margin-left: 8px; color: #000 ;" routerLink="/iccRanking/icc-test-ranking">ICC Test Ranking</a></li>
+                          <li><a class="dropdown-item" style="margin-left: 8px; color: #000 ;" routerLink="/iccRanking/icc-t20-international-rankings">ICC T20 Ranking
+                          </a></li>
+                        </ul>
+                      </div>
+                      <!-- <a routerLink="/rankings" data-sequence="5">Rankings</a> -->
+                    </li>
+
+                  </ul>
+                </nav>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="right">
+        <div id="keeda-profile-container" style="background: transparent;">
+          <div class="logged-out">
+            <!-- <a class="login-cta" routerLink="/login">Log in</a> -->
+          </div>
+          <div class="toggle hidden">
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</section>
+
+
+
+
+<section class="top-header masthead " id="mobileview" (click)="$event.stopPropagation()">
+  <header class="header--top-head" [style]="mainheader == false ? 'position: fixed;' : '' " data-imp-id="page_top_header">
+    <div class="top-head-container">
+      <div class="left v-gap">
+        <div class="sidebar-toggle" >
+          <button id="main-menu" aria-label="sidebar menu toggle" role="button" id="dropdownMenuLink"
+            data-bs-toggle="dropdown" aria-expanded="false" (click)="sidebarmenus()"></button>
+        </div>
+      </div>
+      <div class="center">
+        <div class="brand-and-nav">
+          <div class="brand-sub-nav">
+            <div class="brand">
+              <a routerLink="/" class="brand-cta">
+
+                <img  class="brand-logo img-fluid" width="169" height="20" alt="tejscore logo" title="tejscore"
+                  src="../../assets/new-green-logo.svg">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <div id="keeda-profile-container" style="background: transparent;">
+          <div class="logged-out">
+            <!-- <a class="login-cta"
+              routerLink="/login">Log in</a> -->
+          </div>
+          <div class="toggle hidden">
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</section>
+
+
+
+
+<!-- for mobile header====== -->
+<ng-container *ngIf="mainheader==true">
+  <section class="primary-nav" id="primarynav" *ngIf="showheader" >
+
+    <div class="primary-navigation">
+      <div class="wrapper-container">
+        <div class="nav-items">
+          <div class="secondary-navigation">
+            <div class="nav-group" >
+              <div class="active-item " ></div>
+              <!-- <div class="secondary-nav-items-indicator"></div> -->
+              <div class="separator"></div>
+            </div>
+          </div>
+          <div class="primary-nav-items" data-imp-id="page_primary_nav_menu">
+            <ul>
+              <li routerLink="/home"  routerLinkActive="active">
+                <a data-sequence="1">Cricket</a>
+              </li>
+              <li routerLink="/cricket-schedule"  routerLinkActive="active">
+                <a data-sequence="1">Schedule</a>
+              </li>
+              <li [ngClass]="{ 'active': (i+2 )=== activeIndex }"
+                *ngFor="let item of cricketMenuList?.slice(2, -3) let i =index">
+                <a data-sequence="1" (click)="navigateToroutes(item ,i)">{{item.name=="Cricket Home"?"Cricket":item.name}}</a>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <section class="primary-nav" id="primarynav" *ngIf="!showheader" >
+
+    <div class="primary-navigation">
+      <div class="wrapper-container">
+        <div class="nav-items">
+          <div class="secondary-navigation">
+            <div class="nav-group" >
+              <div class="active-item " ></div>
+              <!-- <div class="secondary-nav-items-indicator"></div> -->
+              <div class="separator"></div>
+            </div>
+          </div>
+          <div class="primary-nav-items" data-imp-id="page_primary_nav_menu">
+
+            <ul>
+              <li routerLink="/go/{{evenSlug}}" routerLinkActive="active" routerLinkActive="active">
+              <a   data-sequence="1">{{selectedName || evenSlug | titlecase}}</a>
+              </li>
+              <li routerLink="/news/{{evenSlug}}/new" routerLinkActive="active">
+              <a  data-sequence="2">News</a>
+              </li>
+              <li *ngIf="evenSlug!=='ipl'"  routerLink="/goo/{{evenSlug}}/most-runs" (click)="redirectchildshedulepsge('most-runs')" routerLinkActive="active">
+              <a  data-sequence="3">Most Runs</a>
+              </li>
+              <li *ngIf="evenSlug!=='ipl'"  routerLink="/goo/{{evenSlug}}/most-wickets" (click)="redirectchildshedulepsge('most-wickets')" routerLinkActive="active">
+              <a  data-sequence="4">Most Wickets</a>
+              </li >
+              <li *ngIf="evenSlug==='ipl'" routerLink="/goo/{{evenSlug}}/orange-cap" (click)="redirectchildshedulepsge('orange-cap')" routerLinkActive="active">
+                <a  data-sequence="3">Orange Cap</a>
+                </li>
+                <li *ngIf="evenSlug==='ipl'" routerLink="/goo/{{evenSlug}}/purple-cap" (click)="redirectchildshedulepsge('purple-cap')" routerLinkActive="active">
+                <a  data-sequence="4">Purple Cap</a>
+                </li >
+              <li routerLink="/child-shedule/{{evenSlug}}/upcoming" routerLinkActive="active">
+              <a  data-sequence="5">Schedule</a>
+              </li>
+              <li routerLink="/stat/{{evenSlug}}" routerLinkActive="active">
+              <a  data-sequence="6">Stats</a>
+              </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+</ng-container>
+
+
+
+<!-- side menu -->
+<div class="keeda-side-menu Sportspage open" id="keeda-side-menu" *ngIf="sidebarmenu">
+  <div class="favorites-select-overlay">
+  </div>
+  <section class="favorites-search">
+    <div class="search-container">
+      <label for="search-input" class="title">🔍 Search</label>
+      <input id="search-input" onfocusout="triggerSidebarSearchFocusOutGAEvent(this)" onfocus="onSideMenuSearchFocus()"
+        onkeyup="onSearchTrack(this)" class="keeda-search-input" type="text" placeholder="Event, Team, Player, Sport">
+      <div class="search-dismiss">
+      </div>
+    </div>
+    <div class="search-results"></div>
+    <div class="no-result-message hidden">
+      No Results Found
+    </div>
+  </section>
+  <template id="favorites-choice-block">
+    <div class="favorites-choice-block">
+      <a class="favorites-choice-name"></a>
+    </div>
+  </template>
+  <div id="sidebar-create-article" class="write-an-article hidden"
+    onclick="window.location=('/creator/getting-started')">Create</div>
+  <div id="keeda-profile-container">
+    <div class="logged-out hidden">
+      <a class="login-cta" routerLink="#">Login / Sign up </a>
+    </div>
+  
+  </div>
+
+  <div class="sidebar-separator"></div>
+  <section class="popular active ">
+
+    <div class="list">
+
+      <div class="favorites-choice-block" >
+      <a class="favorites-choice-name" (click)="onclickHidesidebar()" routerLink="/cricket-schedule">Live Matches</a>
+    </div>
+     <div class="favorites-choice-block" >
+      <a class="favorites-choice-name" (click)="onclickHidesidebar()" routerLink="/cricket-schedule">Schedule</a>
+    </div>
+    <div class="favorites-choice-block" >
+      <a class="favorites-choice-name" (click)="onclickHidesidebar()" routerLink="/news">News</a>
+    </div>
+    <div class="favorites-choice-block" >
+      <a class="favorites-choice-name" (click)="onclickHidesidebar()" routerLink="/series">Series</a>
+    </div>
+    <div class="favorites-choice-block" >
+      <a class="favorites-choice-name" (click)="onclickHidesidebar()" routerLink="/ranking/icc-odi-ranking">Ranking</a>
+    </div>
+
+    </div>
+  </section>
+  <div class="sidebar-separator "></div>
+
+  <div class="sidebar-separator"></div>
+
+  <div class="sidebar-separator"></div>
+
+  <div class="padder">
+  </div>
+</div>
+
+<!-- for mobile blue header====== -->
+

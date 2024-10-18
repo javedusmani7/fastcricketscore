@@ -1,0 +1,555 @@
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <span>Cricket > {{currentRoute}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="wrapper-container">
+  <div class="fragment-container">
+
+    <main class="category-subpage">
+      <section class="layout-wrapper">
+        <div class="content-container">
+          <div class="sidebar-container" id="sidebarmobileview">
+
+            <aside class="sidebar">
+              <div class="sidebar-content">
+                <div class="ad-container" id="" style="
+  min-height: 80px;
+  width: 100%; text-align: center;clear:both;
+  ">
+                  <div class="ad-declare-explicit"></div>
+
+                  <div id="div-gpt-ad-1653457590899-0" class="">
+
+                  </div>
+                </div>
+                <div class="ad-container" id="" style="
+  min-height: 80px;
+  width: 100%; text-align: center;clear:both;
+  ">
+                  <div class="ad-declare-explicit"></div>
+
+                  <div id="div-gpt-ad-1471939034701-0" class="">
+
+                  </div>
+                </div>
+
+              </div>
+            </aside>
+          </div>
+          <div class="left">
+            <div class="subpage-container">
+
+
+
+              <section class="cricket-schedule-container">
+                <div class="panel">
+                  <div class="panel-header">
+                    <h1 class="panel-heading">Cricket Schedule 2024 : Today's and Upcoming Cricket Match Schedule</h1>
+                  </div>
+                  <div class="panel-body no-padding">
+                    <div class="cricket-schedule-cta--wrapper">
+                      <div class="cricket-schedule-cta-container">
+                        <a class="cricket-schedule-cta active" routerLink="/cricket/schedule">
+                          <div>Days</div>
+                        </a>
+                        <a class="cricket-schedule-cta" routerLink="/series">
+                          <div>Series</div>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="cricket-day-wise-schedule">
+                      <div class="cricket-day-wise-schedule-tabs-container">
+                        <div class="cricket-day-wise-schedule-tab" [ngClass]="live ? 'active' : ''"
+                          (click)="getmeatches('live')">
+                          <button class="cricket-day-wise-schedule-tab-btn" data-category-target="live">Live</button>
+                        </div>
+                        <div class="cricket-day-wise-schedule-tab" [ngClass]="upcoming ? 'active' : ''">
+                          <button class="cricket-day-wise-schedule-tab-btn" data-category-target="upcoming"
+                            (click)="getmeatches('upcoming')">Upcoming</button>
+                        </div>
+                        <div class="cricket-day-wise-schedule-tab" [ngClass]="result ? 'active' : ''"
+                          (click)="getmeatches('result')">
+                          <button class="cricket-day-wise-schedule-tab-btn"
+                           >Result</button>
+                        </div>
+                      </div>
+                      <div class="cricket-day-wise-schedule-content-container">
+                        <div class="cricket-day-wise-schedule-category live" *ngIf="live">
+                          <div class="cricket-schedule-filters-wrapper">
+                            <div class="cricket-schedule-filters-container">
+                              <div class="cricket-schedule-filter-items" data-value-key="cid">
+                                <div class="slider-container s">
+                                  <div class="slider-control slider-control--left hidden">
+                                    <button class="slider-control-btn">
+                                      <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                                        src="/assets/ic-cheveron-right--2d2d2d.svg">
+                                    </button>
+                                  </div>
+                                  <div class="slider-items">
+                                    <div class="slider-item" *ngIf="tabs1 && tabs1.length > 0">
+                                      <button class="cricket-schedule-filter-item "
+                                        (click)="getMatchesBySeries1('All',999)" data-filter-value=""
+                                        [class]="matchseriesname1=='All'?'active':''">All</button>
+                                    </div>
+                                    <div class="slider-item" *ngFor="let item of tabs1 let i =index ,trackBy:userByName">
+                                      <button class="cricket-schedule-filter-item "
+                                        (click)="getMatchesBySeries1(item.slug,i)" data-filter-value=""
+                                        [ngClass]="{ 'active': i === activeIndex }">{{item.name}}</button>
+                                    </div>
+                                  </div>
+                                  <div class="slider-control slider-control--right hidden">
+                                    <button class="slider-control-btn">
+                                      <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                                        src="/assets/ic-cheveron-right--2d2d2d.svg">
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="cricket-day-schedule">
+                            <div class="keeda_widget_loader" style="display: block;" *ngIf="loaderlive">
+                              <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                                alt="loader" style="transform: rotate(7500deg);">
+                            </div>
+                            <div class="cricket-schedule-tournament-groups">
+                              <ng-container *ngFor="let key of getKeysWithArrayValue(livematches); let i=index ,trackBy:userByName">
+                                <div class="cricket-tournament-container" data-cid="127693"
+                                  *ngIf="matchseriesname1=='All' || matchseriesname1==livematches[key][0].event_slug">
+                                  <div class="cricket-tournament-title">
+                                    <a routerLink="/child-shedule/{{livematches[key][0].event_slug}}/upcoming">{{key}}</a>
+                                  </div>
+                                  <div class="cricket-tournament-matches">
+                                    <div class="cricket-match-card-container live" *ngFor="let item of livematches[key]; let i=index ,trackBy:userByName"
+                                      data-match-slug="australia-vs-west-indies-match-2-25-january-2024"
+                                      data-match-t1="17" data-match-t2="5" data-match-cid="127693">
+                                      <a class="d-none">{{liveevent_slugs(item.event_slug)}}</a>
+                                      <a class="cricket-match-card-cta" (click)="getrouteandCheckwidth('/live','/live-cricket-score',item.id)"
+                                        ></a>
+                                      <header class="cricket-match-card-header">
+                                        <div class="cricket-match-card-live-indicator">{{item.status  | uppercase}}</div>
+                                        <div class="cricket-match-card-header-primary-text hidden"
+                                          data-utc-date-time="2024-01-25T04:00:00+00:00"
+                                          data-format="ddd, mmm d - h:ss TT">Thu, Jan 25 - 9:30 AM</div>
+                                        <div class="cricket-match-card-header-secondary-text">
+                                          <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}} {{item.format | titlecase}}</span>
+                                          <span>•</span>
+                                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                                        </div>
+                                      </header>
+                                      <div class="cricket-match-card-content">
+                                        <div class="cricket-match-card-scores">
+                                          <div class="cricket-match-card-score-item" data-team-id="17">
+                                            <div class="cricket-match-card-team-info">
+                                              <img class="cricket-match-card-team-logo img-with-fallbacks" width="27"
+                                                height="19" alt="team logo" [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg">
+                                              <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+
+                                              <div class="cricket-match-card-team-live-score"  *ngIf="livescorefromapi">{{item.t1_score}}</div>
+                                              <div class="cricket-match-card-team-live-score"   *ngIf="!livescorefromapi">{{getScoreForMatch(item.id, item.t1_key) || item.t1_score}}</div>
+
+
+                                            </div>
+                                          </div>
+                                          <div class="cricket-match-card-score-item" data-team-id="5">
+                                            <div class="cricket-match-card-team-info">
+                                              <img class="cricket-match-card-team-logo img-with-fallbacks" width="27"
+                                                height="19" alt="team logo" [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg"
+                                                data-img-params="?w=54">
+                                              <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score"  *ngIf="livescorefromapi">{{item.t2_score}}</div>
+                                              <div class="cricket-match-card-team-live-score"    *ngIf="!livescorefromapi">{{ getScoreForMatch(item.id, item.t2_key) || item.t2_score}}</div>
+
+                                              <!-- <div class="cricket-match-card-team-live-overs">(2.2 ov)</div> -->
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <footer class="cricket-match-card-footer">
+                                        <div class="cricket-match-card-footer-primary-text">{{item.result}}</div>
+                                      </footer>
+                                    </div>
+                                  </div>
+                                </div>
+                              </ng-container>
+
+
+                            </div>
+                          </div>
+
+
+                        </div>
+                        <div class="cricket-day-wise-schedule-category upcoming" *ngIf="upcoming==true">
+                          <div class="cricket-schedule-filters-wrapper">
+                            <div class="cricket-schedule-filters-container">
+                              <div class="cricket-schedule-filter-items" >
+                                <div class="slider-container s">
+                                  <div class="keeda_widget_loader" style="display: block;" *ngIf="loaderUpcoming">
+                                    <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                                      alt="loader" style="transform: rotate(7500deg);">
+                                  </div>
+                                  <div class="slider-control slider-control--left hidden-view">
+                                    <button class="slider-control-btn">
+                                      <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                                        src="/assets/ic-cheveron-right--2d2d2d.svg">
+                                    </button>
+                                  </div>
+                                  <div class="slider-items">
+                                    <div class="slider-item" *ngIf="!loaderUpcoming">
+                                      <button class="cricket-schedule-filter-item "
+                                        [class]="upcomingTab==false?'active':''" data-filter-value=""
+                                        (click)="getMatchesBySeries('All')">All</button>
+                                    </div>
+                                    <div class="slider-item" *ngFor="let item of tabs2 let i =index ,trackBy:userByName">
+                                      <button class="cricket-schedule-filter-item "
+                                        (click)="getUpcomingMatchesBySeries(item.slug,i)" data-filter-value=""
+                                        [ngClass]="{ 'active': i === activeIndexupcomingTab }">{{item.name}}</button>
+                                    </div>
+                                  </div>
+                                  <div class="slider-control slider-control--right hidden-view">
+                                    <button class="slider-control-btn">
+                                      <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                                        src="/assets/ic-cheveron-right--2d2d2d.svg">
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <ng-container *ngIf="!upcomingTab">
+
+                            <div class="cricket-day-schedule" *ngFor="let upkey of getkeysdata(jsonData); let i=index ,trackBy:userByName">
+                              <div class="cricket-schedule-date-separator ">
+                                <div class="cricket-schedule-date-separator-text">{{ upkey}}</div>
+                              </div>
+                              <div class="cricket-schedule-tournament-groups">
+                                <div class="cricket-tournament-container" data-cid="128397"
+                                  *ngFor="let series of getkeysdata(jsonData[upkey]) ; let i=index ,trackBy:userByName">
+                                  <div class="cricket-tournament-title">
+                                    <a routerLink="/child-shedule/{{jsonData[upkey][series][0].event_slug}}/upcoming">{{series}}</a>
+                                  </div>
+                                  <div class="cricket-tournament-matches">
+                                    <div class="cricket-match-card-container pre"
+                                      *ngFor="let item of jsonData[upkey][series]; let i=index ,trackBy:userByName">
+                                      <a class="d-none">{{liveevent_slugs(item.event_slug)}}</a>
+
+                                      <a class="cricket-match-card-cta" (click)="getrouteandCheckwidth('/livecricket-score','/live-cricket-score',item.id)"
+                                       ></a>
+                                      <header class="cricket-match-card-header">
+                                        <div class="cricket-match-card-header-secondary-text">
+                                          <span class="cricket-match-card--match-type">{{item.match_number}}
+                                            {{item.format}}</span>
+                                          <span>•</span>
+                                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                                        </div>
+                                      </header>
+                                      <div class="cricket-match-card-content">
+                                        <div class="cricket-match-card-scores">
+                                          <div class="cricket-match-card-score-item" data-team-id="128225">
+                                            <div class="cricket-match-card-team-info">
+                                              <img class="cricket-match-card-team-logo img-with-fallbacks" width="27"
+                                                height="19" alt="team logo" [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg">
+                                              <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score"></div>
+                                              <div class="cricket-match-card-team-live-overs"></div>
+                                            </div>
+                                          </div>
+                                          <div class="cricket-match-card-score-item" data-team-id="14090">
+                                            <div class="cricket-match-card-team-info">
+                                              <img class="cricket-match-card-team-logo img-with-fallbacks" width="27"
+                                                height="19" alt="team logo" [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg">
+                                              <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score"></div>
+                                              <div class="cricket-match-card-team-live-overs"></div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="cricket-match-card-timer">
+                                          <div class="cricket-match-card-timer--date">
+                                            {{convertDate(item.datetime) }}</div>
+                                          <div class="cricket-match-card-timer--time">
+                                            {{item.datetime | date:"h:mm a"}}</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </ng-container>
+
+                          <ng-container *ngIf="upcomingTab">
+                            <div class="cricket-day-schedule">
+                              <div class="cricket-schedule-tournament-groups">
+                                <div class="cricket-tournament-container" data-cid="128434">
+                                  <div class="keeda_widget_loader" style="display: block;" *ngIf="loaderUpcoming">
+                                    <img class="spin cricket-ball" src="../../assets/cricket_ball (1).svg"
+                                      alt="loader" style="transform: rotate(7500deg);">
+                                  </div>
+                                  <div class="cricket-tournament-title">
+                                    <a routerLink="/child-shedule/{{metchesupcoming[0].event_slug}}/upcoming">{{metchesupcoming[0]?.event_slug.split('-').join(" ") | titlecase}}</a>
+                                  </div>
+
+                                  <div class="cricket-tournament-matches" *ngFor="let item of metchesupcoming; let i=index ,trackBy:userByName">
+                                    <div class="cricket-match-card-container pre"
+                                     >
+                                      <a class="cricket-match-card-cta"
+                                      (click)="getrouteandCheckwidth('/livecricket-score','/live-cricket-score',item.id)"></a>
+                                      <header class="cricket-match-card-header">
+                                        <div class="cricket-match-card-header-secondary-text">
+                                          <span class="cricket-match-card--match-type">{{item.description}}</span>
+                                          <span>•</span>
+                                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                                        </div>
+                                      </header>
+                                      <div class="cricket-match-card-content">
+                                        <div class="cricket-match-card-scores">
+                                          <div class="cricket-match-card-score-item" data-team-id="21">
+                                            <div class="cricket-match-card-team-info">
+                                              <img [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg"class="cricket-match-card-team-logo"
+                                                width="27" height="19" alt="team logo" data-img-params="?w=54">
+                                              <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score"></div>
+                                              <div class="cricket-match-card-team-live-overs"></div>
+                                            </div>
+                                          </div>
+                                          <div class="cricket-match-card-score-item" data-team-id="498">
+                                            <div class="cricket-match-card-team-info">
+                                              <img [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg" class="cricket-match-card-team-logo"
+                                                width="27" height="19" alt="team logo" data-img-params="?w=54">
+                                              <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score"></div>
+                                              <div class="cricket-match-card-team-live-overs"></div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="cricket-match-card-timer">
+                                          <div class="cricket-match-card-timer--date"> {{convertDate(item.datetime) }}
+                                          </div>
+                                          <div class="cricket-match-card-timer--time">{{item.datetime | date:"h:mm a"}}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <div class="cricket-schedule-category-disclaimer" *ngIf="!loaderUpcoming">Only next 45 days are shown here. Click the
+                            series name for a
+                            detailed view of all matches in a series.</div>
+                        </div>
+                        <div class="cricket-day-wise-schedule-category recent" data-category="recent"
+                          *ngIf="result==true">
+                          <div class="cricket-schedule-filters-wrapper">
+                            <div class="cricket-schedule-filters-container">
+                              <div class="cricket-schedule-filter-items" >
+                                <div class="slider-container s">
+                                  <div class="keeda_widget_loader" style="display: block;" *ngIf="loaderResult">
+                                    <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                                      alt="loader" style="transform: rotate(7500deg);">
+                                  </div>
+                                  <div class="slider-control slider-control--left hidden-view">
+                                    <button class="slider-control-btn">
+                                      <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                                        src="/assets/ic-cheveron-right--2d2d2d.svg">
+                                    </button>
+                                  </div>
+                                  <div class="slider-items">
+                                    <div class="slider-item" *ngIf="!loaderResult">
+                                      <button class="cricket-schedule-filter-item "
+                                        [class]="resultTab==false?'active':''" data-filter-value=""
+                                        (click)="getMatchesBySeriesresult('All')">All</button>
+                                    </div>
+                                    <div class="slider-item" *ngFor="let item of tabs3 let i =index, trackBy:userByName">
+                                      <button class="cricket-schedule-filter-item "  [ngClass]="{ 'active': i === activeIndexresultTab }"
+                                        (click)="getResultMatchesBySeries(item.slug,i)"
+                                        data-filter-value="">{{item.name}}</button>
+                                    </div>
+                                  </div>
+                                  <div class="slider-control slider-control--right hidden-view">
+                                    <button class="slider-control-btn">
+                                      <img height="19" width="13" alt="scroll button icon" loading="lazy"
+                                        src="/assets/ic-cheveron-right--2d2d2d.svg">
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <ng-container *ngIf="!resultTab">
+
+                            <div class="cricket-day-schedule" *ngFor="let upkey of getkeysdata(resultList); let i=index ,trackBy:userByName">
+                              <div class="cricket-schedule-date-separator">
+                                <div class="cricket-schedule-date-separator-text">{{ upkey}}</div>
+                              </div>
+                              <div class="cricket-schedule-tournament-groups">
+                                <div class="cricket-tournament-container" data-cid="128431"
+                                  *ngFor="let series of getkeysdata(resultList[upkey]); let i=index">
+                                  <div class="cricket-tournament-title">
+                                    <a routerLink="/child-shedule/{{resultList[upkey][series][0].event_slug}}/upcoming">{{series}}</a>
+                                  </div>
+                                  <div class="cricket-tournament-matches">
+                                    <div class="cricket-match-card-container post"
+                                      *ngFor="let item of resultList[upkey][series]; let i=index ,trackBy:userByName"
+                                     >
+                                      <a class="d-none">{{resultevent_slug(item.event_slug)}}</a>
+
+                                      <a class="cricket-match-card-cta" (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"
+                                        ></a>
+                                      <header class="cricket-match-card-header">
+                                        <div class="cricket-match-card-live-indicator hidden">{{item.status}}</div>
+                                        <div class="cricket-match-card-header-primary-text  "
+                                          data-utc-date-time="2024-01-27T06:00:00+00:00"
+                                          data-format="ddd, mmm d - h:ss TT">{{item.datetime | date :"EEE ,MMM d - hh:mm a"}}</div>
+                                        <div class="cricket-match-card-header-secondary-text">
+                                          <span
+                                            class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}
+                                            {{item.format}}</span>
+                                          <span>•</span>
+                                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                                        </div>
+                                      </header>
+                                      <div class="cricket-match-card-content">
+                                        <div class="cricket-match-card-scores">
+                                          <div class="cricket-match-card-score-item" data-team-id="127110">
+                                            <div class="cricket-match-card-team-info">
+                                              <img class="cricket-match-card-team-logo img-with-fallbacks" width="27"
+                                                height="19" alt="team logo" [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg">
+                                              <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score">{{item.t1_score}}</div>
+                                            </div>
+                                          </div>
+                                          <div class="cricket-match-card-score-item" data-team-id="127117">
+                                            <div class="cricket-match-card-team-info">
+                                              <img class="cricket-match-card-team-logo img-with-fallbacks" width="27"
+                                                height="19" alt="team logo" [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg">
+                                              <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score">{{item.t2_score}}</div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <footer class="cricket-match-card-footer">
+                                        <div class="cricket-match-card-footer-primary-text">{{item.result}}</div>
+                                      </footer>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="resultTab">
+                            <div class="cricket-day-schedule">
+                              <div class="cricket-schedule-tournament-groups">
+                                <div class="cricket-tournament-container" data-cid="127693">
+                                  <div class="keeda_widget_loader" style="display: block;" *ngIf="loaderResult">
+                                    <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                                      alt="loader" style="transform: rotate(7500deg);">
+                                  </div>
+                                  <div class="cricket-tournament-title">
+                                    <a routerLink="/child-shedule/{{metchesresult[0].event_slug}}/upcoming">{{metchesresult[0]?.event_slug.split('-').join(" ") | titlecase}}</a>
+                                  </div>
+                                  <div class="cricket-tournament-matches" *ngFor="let item of metchesresult; let i=index ,trackBy:userByName">
+                                    <div class="cricket-match-card-container post"
+                                      >
+                                      <a class="cricket-match-card-cta"
+                                        routerLink="/scorecard/{{item.id}}"></a>
+                                      <header class="cricket-match-card-header">
+                                        <div class="cricket-match-card-live-indicator hidden">LIVE</div>
+                                        <div class="cricket-match-card-header-primary-text  "
+                                          data-utc-date-time="2024-02-11T08:00:00+00:00"
+                                          data-format="ddd, mmm d - h:ss TT">{{item.datetime | date :"EEE ,MMM d - hh:mm a"}}</div>
+                                        <div class="cricket-match-card-header-secondary-text">
+                                          <span class="cricket-match-card--match-type">{{item.description}}</span>
+                                          <span>•</span>
+                                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                                        </div>
+                                      </header>
+                                      <div class="cricket-match-card-content">
+                                        <div class="cricket-match-card-scores">
+                                          <div class="cricket-match-card-score-item" data-team-id="5">
+                                            <div class="cricket-match-card-team-info">
+                                              <img class="cricket-match-card-team-logo" width="27" height="19"
+                                                alt="team logo" [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg"
+                                               >
+                                              <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score">{{item.t1_score}}</div>
+                                              <!-- <div class="cricket-match-card-team-live-overs">(20 ov)</div> -->
+                                            </div>
+                                          </div>
+                                          <div class="cricket-match-card-score-item" data-team-id="17">
+                                            <div class="cricket-match-card-team-info">
+                                              <img class="cricket-match-card-team-logo" width="27" height="19"
+                                                alt="team logo" [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg"
+                                                >
+                                              <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                                            </div>
+                                            <div class="cricket-match-card-team-score">
+                                              <div class="cricket-match-card-team-live-score">{{item.t2_score}}</div>
+                                              <!-- <div class="cricket-match-card-team-live-overs">(20 ov)</div> -->
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <footer class="cricket-match-card-footer">
+                                        <div class="cricket-match-card-footer-primary-text">{{item.result}}</div>
+                                      </footer>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="section-separator"></div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</section>

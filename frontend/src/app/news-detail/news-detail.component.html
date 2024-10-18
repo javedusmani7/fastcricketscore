@@ -1,0 +1,57 @@
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/">Cricket News</a>
+        </li>
+        <!-- <li>
+          <a >IPL 2024</a>
+        </li> -->
+        <li>
+          <span>{{newsDetail?.title}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+<div class="leadercont"
+  >
+
+  <h1 id="heading" class="title">{{newsDetail?.title}}</h1>
+  <div class="bysdk">
+    <!-- <div>B</div> -->
+    <!-- <div>|</div> -->
+    <div>{{newsDetail?.date}}</div>
+  </div>
+
+
+  <div class="keeda_widget_loader" style="display: block;" *ngIf="loader==true">
+    <img class="spin cricket-ball" src="../../assets/cricket_ball.svg"
+      alt="loader" style="transform: rotate(7500deg);">
+  </div>
+
+  <div class="intro"*ngIf="loader!==true">
+    <figure class="image"><noscript><img class="sk-app-thumbnail" alt="Virat Kohli became a father for the 2nd time"
+          src="{{newsDetail?.img}}"></noscript><img class=""
+        width="960" height="540"
+        alt="" loading="lazy"
+        src="{{newsDetail?.img}}">
+    </figure>
+  </div>
+</div>
+
+<div class="container11" *ngIf="loader!==true">
+  <!-- <div [innerHTML]="newsDetail?.content"></div> -->
+
+  <blockquote [innerHTML]="newsDetail?.content">
+  </blockquote>
+</div>

@@ -1,0 +1,685 @@
+<section class="breadcrumb-section">
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/">Cricket </a>
+        </li>
+        <li>
+          <span>{{teamList?.name}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+<section class="hero-section">
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+    <div class="wrapper-container">
+
+      <div class="layers">
+        <div class="layer layer1"></div>
+        <div class="layer layer2"></div>
+        <div class="layer layer3"></div>
+      </div>
+      <div class="hero-content">
+        <div class="left">
+          <div class="team-details">
+            <div class="team-img">
+              <img src="{{teamList?.img || '../../../../assets/team-default.png'}}" width="134" height="134" loading="lazy"
+                alt="Indian Cricket Team" class="" data-img-params="?w=268">
+            </div>
+            <div class="team-info">
+              <div class="row">
+                <h1 class="team-name">{{teamList?.name}}</h1>
+                <div class="taxonomy-share">
+                  <div class="share-top share-container">
+                    <button type="button" class="share-text-holder share-btn">
+                      <img src="../../assets/ic-share-gray.svg" width="21" height="16" loading="lazy"
+                        class="forward-share lazy-img-bg" alt="Share icon">
+                      <span class="action-text">Share</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<section class="team-page-tabs-section">
+  <div class="tabs-container">
+    <div class="team-page-tabs wrapper-container">
+      <div class="tab-header " [class]="selectedtab=='Overview'?'selected':''">
+        <a class="page-tab " (click)="Overview('Overview')" [class]="selectedtab=='Overview'?'hovered':''"
+          data-tab="">Overview</a>
+      </div>
+      <div class="tab-header " [class]="selectedtab=='schedule'?'selected':''">
+        <a class="page-tab " (click)="getscheduleSquads('schedule')" data-tab="schedule"
+          [class]="selectedtab=='schedule'?'hovered':''">Schedule</a>
+      </div>
+      <div class="tab-header " [class]="selectedtab=='teamfullsquad'?'selected':''">
+        <a class="page-tab " (click)="getTeamSquads('teamfullsquad')" data-tab="squad"
+          [class]="selectedtab=='teamfullsquad'?'hovered':''">Squad</a>
+      </div>
+      <div class="tab-header " [class]="selectedtab=='news'?'selected':''">
+        <a class="page-tab "  [class]="selectedtab=='news'?'hovered':''" (click)="getTeamSquadsNews('news')" data-tab="news">News</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="wrapper-container">
+  <div class="fragment-container">
+
+    <main class="team-home">
+      <section class="layout-wrapper" *ngIf="selectedtab=='Overview'">
+        <div class="content-container">
+          <div class="right">
+          </div>
+          <div class="left">
+
+            <section class="team-personal-info">
+              <div class="panel">
+                <header class="panel-header">
+                  <h2 class="panel-heading">Team Information</h2>
+                </header>
+                <div class="panel-body no-padding-d">
+                  <table class="team-personal-info-table">
+                    <tbody class="team-personal-info-items main-info-items">
+                      <tr class="row item-details" *ngFor="let keyValuePair of teamList?.teamInfo | keyvalue">
+                        <td class="column left">{{ keyValuePair.key }}</td>
+                        <td class="column right">{{ keyValuePair.value }}</td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+            <div class="section-separator"></div>
+            <!-- <section class="sk-widget ">
+              <div class="vidazoo-player-container">
+                <div id="video-player-container--"></div>
+              </div>
+            </section> -->
+            <div class="section-separator "></div>
+            <section class="results-fixtures">
+              <div class="panel">
+                <header class="panel-header">
+                  <h2 class="panel-heading">Fixtures &amp; Results</h2>
+                  <a class="view-more-cta" routerLink="/team/{{teamName}}">
+                    <span>Full Schedule</span>
+                  </a>
+                </header>
+                <div class="panel-body">
+                  <div class="results-fixtures-match pre"*ngIf="nextMatch!==null">
+                    <div class="sub-head">Next Match</div>
+                    <div class="widget--tournament-schedule-results">
+                      <div class="schedule-results-item size--36" >
+                        <a class="schedule-results-item-cta"
+                        (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',nextMatch?.id)"
+                          data-sequence="1"></a>
+                        <div class="schedule-results-item-wrapper">
+                          <div class="schedule-results-item-team-info">
+                            <img src="{{nextMatch?.t1_flag || '../../../../assets/team-default.png'}}"
+                              class="schedule-results-item-team-flag" width="36" height="36" alt="team-flag" loading="lazy"
+                             >
+                            <div class="schedule-results-item-team-name">{{nextMatch?.t1_key}}</div>
+                          </div>
+                          <div class="schedule-results-item-content">
+                            <div class="schedule-results-item-upcoming-content">
+                              <div class="cricket-schedule-results-item-match-number">{{nextMatch?.description}}</div>
+                              <div class="cricket-schedule-results-item-match-time convert-utc-to-local"
+                                data-utc-date-time="2024-02-23T04:00:00+00:00" data-format="dd mmm, hh:MM TT">
+                                {{gatedate(nextMatch?.datetime)}}  {{getTime(nextMatch?.datetime)}}</div>
+                            </div>
+                          </div>
+                          <div class="schedule-results-item-team-info">
+                            <img src="{{nextMatch?.t2_flag || '../../../../assets/team-default.png'}}"
+                              class="schedule-results-item-team-flag" width="36" height="36" alt="team-flag"
+                              loading="lazy">
+                            <div class="schedule-results-item-team-name">{{nextMatch?.t2_key}}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="results-fixtures-match post" *ngIf="lastMatches!==null">
+                    <div class="sub-head">Last Match Results</div>
+                    <div class="widget--tournament-schedule-results">
+                      <div class="schedule-results-item size--36">
+                        <a class="schedule-results-item-cta"
+                        (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',lastMatches?.id)"
+                          data-sequence="1"></a>
+                        <div class="schedule-results-item-wrapper">
+                          <div class="schedule-results-item-team-info">
+                            <img src="{{lastMatches?.t1_flag || '../../../../assets/team-default.png'}}"
+                              class="schedule-results-item-team-flag" width="36" height="36" alt="team-flag"
+                              loading="lazy">
+                            <div class="schedule-results-item-team-name">{{lastMatches?.t1_key}}</div>
+                          </div>
+                          <div class="schedule-results-item-content">
+                            <div class="schedule-results-item-results-content">
+                              <div class="cricket-schedule-results-item-match-score">
+                                <div class="cricket-schedule-results-item-match-score--runs">{{lastMatches?.t1_score}}
+                                </div>
+                              </div>
+                              <div class="cricket-schedule-results-item-vs-text">vs</div>
+                              <div class="cricket-schedule-results-item-match-score">
+                                <div class="cricket-schedule-results-item-match-score--runs">{{lastMatches?.t2_score}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="schedule-results-item-team-info">
+                            <img src="{{nextMatch?.t2_flag || '../../../../assets/team-default.png'}}"
+                              class="schedule-results-item-team-flag" width="36" height="36" alt="team-flag"
+                              data-img-params="?h=72">
+                            <div class="schedule-results-item-team-name">{{lastMatches?.t2_key}}</div>
+                          </div>
+                        </div>
+                        <footer class="schedule-results-item-footer">
+                          <div class="schedule-results-item-footer-content">
+                            <span
+                              class="schedule-results-item-footer-content-highlight">{{lastMatches?.match_number_with_format}}</span>
+                            <span>{{lastMatches?.result}}</span>
+                          </div>
+                        </footer>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                </div>
+              </div>
+            </section>
+            <div class="section-separator"></div>
+            <section class="team-squad">
+              <div class="panel">
+                <header class="panel-header">
+                  <h2 class="panel-heading">Squad</h2>
+                  <a class="view-more-cta" routerLink="/team/india-national-cricket-team/squad">
+                    <span>Full Squad</span>
+                  </a>
+                </header>
+                <div class="panel-body">
+                  <div class="team-squads-format-tabs ">
+                    <!-- <div id="team-overall-t20i" class="team-squads-ta " [class]="activeindex==i?'active-tab':''" *ngFor="let tab of teamList?.tabs;let i=index;"
+                    (click)="toggleSquadTeams(tab.id,i)">
+                    {{tab.name}}
+                  </div> -->
+                    <div id="team-overall-test" class="team-squads-tab" onclick="toggleSquadTeams('test')" [class]="activeindex==i?'active-tab':''" *ngFor="let tab of teamList?.tabs;let i=index;" (click)="toggleSquadTeams(tab.id,i)">
+                      {{tab.name}}
+                    </div>
+                    <!-- <div id="team-overall-odi" class="team-squads-tab" onclick="toggleSquadTeams('odi')">
+                      ODI
+                    </div> -->
+                  </div>
+                  <div class="team-squad-container">
+                    <div id="team-overall-detail-t20i" class="team-squads-detail">
+                      <div class="players-section" *ngFor="let item of teamListtabData">
+                        <div class="squad-players " *ngFor="let el of item.players; let i=index; trackBy:userByName">
+                          <a class="team-player-link " aria-label="team-player" routerLink="/player/{{el.slug}}"></a>
+                          <div class="team-squad-player">
+                            <div class="team-player-img">
+                              <img class="player-img lazy-img-bg" height="40" width="40" alt="player-img"
+                                src="{{el.img}}" loading="lazy">
+                            </div>
+                            <div class="squad-player-info">
+                              <span class="team-squad-player-name">
+                                <span class="team-squad-player--name">{{el.name}}</span>
+                                <div class="team-squad-info" *ngIf="el.style=='IND • Right Handed Bat'">
+                                  <span class="overseas-icon">(wk)</span>
+                                </div>
+                              </span>
+                              <span class="team-squad-player--batting-style">
+                                {{el.style}}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div class="section-separator"></div>
+
+
+            <div class="section-separator"></div>
+
+            <div class="section-separator"></div>
+            <section class="page-info">
+
+
+            </section>
+            <div class="section-separator"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- //////////////////////////////////////// -->
+      <section class="layout-wrapper" *ngIf="selectedtab=='teamfullsquad'">
+        <div class="content-container">
+          <div class="left">
+            <section class="team-full-squad">
+              <div class="panel">
+                <header class="panel-header">
+                  <h1 class="panel-heading">{{teamList?.name}} Team Squad - 2024</h1>
+                </header>
+                <div class="team-squad-players">
+                  <div class="team-full-squads-format-tabs ">
+                    <div id="team-overall-t20i" class="team-full-squads-tab " [class]="activeindex==i?'active-tab':''" *ngFor="let tab of squadList?.tabs;let i=index;"
+                      (click)="toggleFullSquadTeams(tab.id,i)">
+                      {{tab.name}}
+                    </div>
+                    <!-- <div id="team-overall-test" class="team-full-squads-tab" onclick="toggleFullSquadTeams('test')">
+                      TEST
+                    </div>
+                    <div id="team-overall-odi" class="team-full-squads-tab" onclick="toggleFullSquadTeams('odi')">
+                      ODI
+                    </div> -->
+                  </div>
+                  <div class="team-full-squad-container">
+                    <div id="team-overall-detail-t20i" class="team-full-squads-detail">
+                      <div class="players-section">
+                        <div class="team-role-player">
+                          <div class="role-title">
+                            Batters
+                          </div>
+                        </div>
+                        <div class="team-role-player-section">
+                          <div class="squad-players " *ngFor="let item of squadtabData?.Batters">
+                            <a class="team-player-link " aria-label="team-player"
+                              routerLink="/player/{{item.slug}}"></a>
+                            <div class="team-squad-player">
+                              <div class="team-player-img">
+                                <img class="player-img lazy-img-bg" height="40" width="40" alt="player-img" loading="lazy"
+                                  src="{{item.img}}">
+                              </div>
+                              <div class="squad-player-info">
+                                <span class="team-squad-player-name">
+                                  <span class="team-squad-player--name">{{item.name}} </span>
+                                  <div class="team-squad-info">
+                                  </div>
+                                </span>
+                                <span class="team-squad-player--batting-style">
+                                  {{item.style}}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="team-role-player">
+                          <div class="role-title">
+                            Bowlers
+                          </div>
+                        </div>
+                        <div class="team-role-player-section">
+                          <div class="squad-players " *ngFor="let item of squadtabData?.Bowlers">
+                            <a class="team-player-link " aria-label="team-player"
+                              routerLink="/player/{{item.slug}}"></a>
+                            <div class="team-squad-player">
+                              <div class="team-player-img">
+                                <img class="player-img lazy-img-bg" height="40" width="40" alt="player-img" loading="lazy"
+                                  src="{{item.img}}">
+                              </div>
+                              <div class="squad-player-info">
+                                <span class="team-squad-player-name">
+                                  <span class="team-squad-player--name">{{item.name}}</span>
+                                  <div class="team-squad-info">
+                                  </div>
+                                </span>
+                                <span class="team-squad-player--batting-style">
+                                  {{item.style}}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="team-role-player">
+                          <div class="role-title">
+                            All Rounders
+                          </div>
+                        </div>
+                        <div class="team-role-player-section">
+                          <div class="squad-players" *ngFor="let item of squadtabData?.['All Rounders']">
+                            <a class="team-player-link " aria-label="team-player"
+                              routerLink="/player/{{item.slug}}"></a>
+                            <div class="team-squad-player">
+                              <div class="team-player-img">
+                                <img class="player-img lazy-img-bg" height="40" width="40" alt="player-img" loading="lazy"
+                                  src="{{item.img}}">
+                              </div>
+                              <div class="squad-player-info">
+                                <span class="team-squad-player-name">
+                                  <span class="team-squad-player--name">{{item.name}}</span>
+                                  <div class="team-squad-info">
+                                  </div>
+                                </span>
+                                <span class="team-squad-player--batting-style">
+                                  {{item.style}}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div class="sidebar-container">
+
+          <aside class="sidebar">
+            <div class="sidebar-content">
+              <div class="ad-container " id="" style="
+        min-height: 80px;
+        width: 100%; text-align: center;clear:both;
+        ">
+                <div class="ad-declare-explicit"></div>
+
+                <div id="div-gpt-ad-1653457590899-0" class="">
+                </div>
+              </div>
+              <div class="ad-container " id="" style="
+        min-height: 80px;
+        width: 100%; text-align: center;clear:both;
+        ">
+                <div class="ad-declare-explicit"></div>
+                <div id="div-gpt-ad-1471939034701-0" class="">
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+
+
+      <section class="team-full-schedule" *ngIf="selectedtab=='schedule'">
+        <div class="panel">
+          <header class="panel-header no-v-padding-m">
+            <h1 class="panel-heading">{{teamList?.name}} Team Schedule</h1>
+          </header>
+          <div class="panel-body no-padding">
+            <div class="team-full-schedule">
+              <div class="team-schedule-tabs">
+                <div id="team-upcoming" class="team-schedule-tab " [class]="resultstab!=='results'?'active-tab':''" (click)="toggleScheduleType('scheduless')">
+                  Upcoming
+                </div>
+                <div id="team-results" class="team-schedule-tab" [class]="resultstab=='results'?'active-tab':''" (click)="toggleScheduleType('results')">
+                  Results
+                </div>
+              </div>
+              <div class="team-schedule-container">
+               <ng-container *ngIf="resultstab!=='results'">
+                <div class="page-empty-state"
+                *ngIf="noData">
+                  <img width="70" height="67" alt="speaker" src="../../assets/cmc-pre-live-icon.svg" class="lazy-img-bg">
+                  <div class="page-empty-state-message">No upcoming matches are available</div>
+                  </div>
+                <div id="team-detail-upcoming"  class="team-schedule-detail" *ngFor="let key of getkeysdata3(upcomingMatchshedule)">
+                  <a class="tournament-anchor clickable" routerLink="/go/sri-lanka-vs-bangladesh/schedule">
+                    <div class="tournament-detail">{{key}}<img
+                        src="../../assets/right_blue_arrow.svg" width="7" height="12"
+                        alt="arrow" class="tournament-icon"></div>
+                  </a>
+                  <ng-container >
+                    <div class="cricket-match-card-container pre"
+                    *ngFor="let item of upcomingMatchshedule[key]">
+                      <a class="cricket-match-card-cta"
+                      (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"></a>
+                      <header class="cricket-match-card-header">
+                        <div class="cricket-match-card-header-secondary-text">
+                          <span class="cricket-match-card--match-type">{{item.match_number_with_format}}</span>
+                          <span>•</span>
+                          <span class="cricket-match-card--match-venue">{{item.venue}}</span>
+                          <span>•</span>
+                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                        </div>
+                      </header>
+                      <div class="cricket-match-card-content">
+                        <div class="cricket-match-card-scores">
+                          <div class="cricket-match-card-score-item" data-team-id="23">
+                            <div class="cricket-match-card-team-info">
+                              <img src="{{item.t1_flag || '../../../../assets/team-default.png'}}"
+                                class="cricket-match-card-team-logo" width="27" height="19" alt="team logo"
+                                data-img-params="?w=54">
+                              <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                            </div>
+                            <div class="cricket-match-card-team-score">
+                              <div class="cricket-match-card-team-live-score"></div>
+                              <div class="cricket-match-card-team-live-overs"></div>
+                            </div>
+                          </div>
+                          <div class="cricket-match-card-score-item" data-team-id="21">
+                            <div class="cricket-match-card-team-info">
+                              <img
+                                src="{{item.t2_flag || '../../../../assets/team-default.png'}}"
+                                class="cricket-match-card-team-logo" width="27" height="19" alt="team logo"
+                                data-img-params="?w=54">
+                              <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                            </div>
+                            <div class="cricket-match-card-team-score">
+                              <div class="cricket-match-card-team-live-score"></div>
+                              <div class="cricket-match-card-team-live-overs"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="cricket-match-card-timer">
+                          <div class="cricket-match-card-timer--date convert-utc-to-local"
+                           >{{gatedate(item.datetime)}}</div>
+                          <div class="cricket-match-card-timer--time convert-utc-to-local"
+                            data-utc-date-time="2024-03-22T04:00:00+00:00" data-format="h:ss TT">{{getTime(item.datetime)}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                </div>
+               </ng-container>
+               <ng-container *ngIf="resultstab=='results'">
+                <div class="page-empty-state"  *ngIf="noData1">
+                  <img width="70" height="67" alt="speaker" src="../../assets/cmc-pre-live-icon.svg" class="lazy-img-bg">
+                  <div class="page-empty-state-message">No recent matches are available</div>
+                  </div>
+                <div id="team-detail-results" class="team-schedule-detail result-sec " *ngFor="let key of getkeysdata4(ResultMatcheslist)">
+                  <a class="tournament-anchor clickable" routerLink="/go/sri-lanka-vs-bangladesh/schedule">
+                    <div class="tournament-detail">{{key}} <img
+                        src="../../assets/right_blue_arrow.svg" width="7" height="12" loading="lazy"
+                        alt="arrow" class="tournament-icon"></div>
+                  </a>
+                  <div class="cricket-match-card-container post"
+                  *ngFor="let item of ResultMatcheslist[key]">
+                    <a class="cricket-match-card-cta"
+                    (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"></a>
+                    <header class="cricket-match-card-header">
+                      <div class="cricket-match-card-live-indicator hidden">LIVE</div>
+                      <div class="cricket-match-card-header-primary-text convert-utc-to-local "
+                        data-utc-date-time="2024-03-18T04:00:00+00:00" data-format="ddd, mmm d - h:ss TT">Mon, Mar 18 -
+                        9:00 AM</div>
+                      <div class="cricket-match-card-header-secondary-text">
+                        <span class="cricket-match-card--match-type">{{item.description}}</span>
+                        <span>•</span>
+                        <span class="cricket-match-card--match-venue">{{item.venue}}</span>
+                        <span>•</span>
+                        <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                      </div>
+                    </header>
+                    <div class="cricket-match-card-content">
+                      <div class="cricket-match-card-scores">
+                        <div class="cricket-match-card-score-item" data-team-id="21">
+                          <div class="cricket-match-card-team-info">
+                            <img class="cricket-match-card-team-logo" width="27" height="19" alt="team logo"
+                              src="{{item.t1_flag || '/assets/team-default.png'}}"
+                            >
+                            <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                          </div>
+                          <div class="cricket-match-card-team-score">
+                            <div class="cricket-match-card-team-live-score">{{item.t1_score}}</div>
+                          </div>
+                        </div>
+                        <div class="cricket-match-card-score-item" data-team-id="23">
+                          <div class="cricket-match-card-team-info">
+                            <img class="cricket-match-card-team-logo" width="27" height="19" alt="team logo"
+                              src="{{item.t2_flag || '/assets/team-default.png'}}"
+                            >
+                            <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                          </div>
+                          <div class="cricket-match-card-team-score">
+                            <div class="cricket-match-card-team-live-score">{{item.t2_score}}6</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <footer class="cricket-match-card-footer">
+                      <div class="cricket-match-card-footer-primary-text">{{item.result}}</div>
+                    </footer>
+                  </div>
+
+                </div>
+
+               </ng-container>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+
+      <div class="left" *ngIf="selectedtab=='news'">
+        <section class="pinned-stories">
+        <div class="panel">
+        <header class="panel-header">
+        <h1 class="panel-heading">{{teamList?.name}} News</h1>
+        </header>
+        <div class="panel-body no-padding">
+
+        </div>
+        </div>
+        </section>
+        <div class="section-separator"></div>
+        <section class="news-stories">
+        <div class="panel">
+        <div class="panel-body no-padding">
+        <div class="feed-items" >
+          <ng-container *ngFor="let item of teamNews; let i=index;">
+            <div class="sport-feed-item-primary" *ngIf="item.type=='primary'">
+              <div class="sports-feed-item-primary-element">
+                <a class="feed-item-cta"
+                  routerLink="/cricket-news/{{extractPartFromLink(item.link)}}"
+                  >{{item.title}}</a>
+                <img width="334" height="200" loading="lazy"
+                  alt=""
+                  src="{{item.img}}"
+                  class="lazy-img-bg">
+                <div class="sports-feed-item-element-meta">
+                  <div class="sports-primary-title">{{item.title}}</div>
+                  <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="feed-item-secondary" *ngIf="item.type=='secondary'" >
+              <div class="sports-feed-item-secondary-element">
+                <a class="feed-item-cta"
+                  routerLink="/cricket-news/{{item.link}}"
+                  data-sequence="2" data-section="">{{item.link}}</a>
+                <img class="feed-element-img" width="82" height="83" loading="lazy"
+                  alt=""
+                  src="{{item.img}}">
+                <div class="sports-feed-item-secondary-meta">
+                  <div class="sports-item-title">{{item.title}}</div>
+                  <div class="sports-feed-item-secondary-modified-time">{{item.time}}</div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+        </div>
+        </div>
+        </section>
+        <div class="section-separator"></div>
+        <section class="pagination-section">
+        <style>
+        .pagination-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 10px 0;
+        }
+        .pagination-numbers {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        overflow-x: auto;
+        display: flex;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        align-items: center;
+        }
+        .pagination-numbers::-webkit-scrollbar {
+        display: none;
+        }
+        .pagination-container .pagination-number {
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        color: #474747;
+        padding: 1px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+        }
+        .pagination-container .pagination-number:hover {
+        color: #D32F2F;
+        }
+        .pagination-container a.pagination-number {
+        text-decoration: none;
+        }
+        .pagination-container .pagination-number.disabled {
+        color: #999999;
+        }
+        .pagination-container .pagination-number.selected {
+        color: #ffffff;
+        background: #D32F2F;
+        border-radius: 50%;
+        }
+        </style>
+
+
+        </section>
+        </div>
+    </main>
+    <div class="sk-ads-taboola-container sk-ads-taboola-teampage">
+      <div id="taboola-below-article-thumbnails"></div>
+    </div>
+  </div>
+</section>
+
+

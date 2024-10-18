@@ -1,0 +1,469 @@
+<div class="wrapper-container editor-width-100-pc">
+  <div class="fragments-container">
+    <div class="cricket-top-section-v2" id="cricket-top-section-v2">
+      <div class="top-score-section-v2">
+        <div class="top-score-title">
+          <div class="cricket-match-card-header-secondary-text">
+            <span class="cricket-match-card--match-type">{{scorelist?.description}}</span>
+            <span>•</span>
+            <span class="cricket-match-card--match-venue">{{scorelist?.venue_stadium}}</span>
+            <span>•</span>
+            <span class="cricket-match-card--match-venue">{{scorelist?.venue_location}}</span>
+          </div>
+        </div>
+        <div class="score-primary-partition unset-box-shadow">
+          <div class="match-teams">
+            <div class="team-1-score-strip-baseline"></div>
+            <div class="score-strip team1-score-strip" *ngFor="let el of liveScoreList">
+              <div class="flag-country  pre-match-team-info " [class]="el.status=='post'?'flag-countrys':''">
+                <img [src]="el.team_flag" (error)="el.team_flag = teamDefaultImg" width="48" height="38"
+                  alt="team-logo" class="flag bind" data="data.score_strip.0.team_flag" data-img-params="?w=192">
+                <span class="country bind" data="data.score_strip.0.name"><a
+                    routerLink="/team/{{el.slug}}">{{el.name}}</a></span>
+              </div>
+              <div class="score-over">
+                <div class="powerplay-tooltip">
+                  <div class="bottom powerplay-tooltip-1"> </div>
+                  <i></i>
+                  <span class="power-play-label team1 hidden"></span>
+                </div>
+                <span class="score bind" data="data.score_strip.0.score_wickets_info"
+                  *ngIf="scorelist.match_status !=='pre'">{{el.score}}</span>
+                <span class="overs-info bind" data="data.score_strip.0.overs_info"></span>
+              </div>
+            </div>
+            <div class="team-2-score-strip-baseline"></div>
+          </div>
+          <div class="match-scorecard-time " id="match-scorecard-time">
+            <span class="match-date" *ngIf="scorelist.match_status=='pre'">{{convertedDateTime.split(",")[0]}} </span>
+            <span class="match-time" *ngIf="scorelist.match_status=='pre'"> {{convertedDateTime.split(",")[1]}} </span>
+          </div>
+          <div class="scorecard-countdown-timer hidden" id="scorecard-countdown-timer">
+            <div class="line-ups">Lineups Out</div>
+            <div class="countdown-timer-title">
+              Starts In
+            </div>
+            <div class="countdown-timer-section">
+              <div class="min-timer">
+                <div class="scorecard-timer-content">30</div>
+                <span class="timer-info">m</span>
+              </div>
+              <span class="double-dot-wrapper">
+                <span class="dot"></span><span class="dot"></span>
+              </span>
+              <div class="sec-timer">
+                <div class="scorecard-timer-content">41</div>
+                <span class="timer-info">s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="score-primary-partition ">
+          <div class="match-teams">
+            <div class="team-1-score-strip-baseline"></div>
+            <div class="score-strip team1-score-strip"  *ngFor="let el of liveScoreList">
+              <div class="flag-country ">
+                <img src="{{el.team_flag}}"
+                  width="48" height="38" alt="team-logo" class="flag bind" data="data.score_strip.0.team_flag"
+                  data-img-params="?w=192">
+                <span class="country bind" data="data.score_strip.0.name">
+                  <a routerLink="/team/india-national-cricket-team" aria-label="team-redirect"> {{el.short_name}} </a>
+                </span>
+              </div>
+              <div class="score-over ">
+                <div class="powerplay-tooltip">
+                  <div class="bottom powerplay-tooltip-1"> </div>
+                  <i></i>
+                  <span class="power-play-label team1 hidden"></span>
+                </div>
+                <span class="score bind" data="data.score_strip.0.score_wickets_info">{{el.score}}</span>
+              </div>
+
+            </div>
+            <div class="match-scorecard-time " id="match-scorecard-time">
+              <span class="match-date" *ngIf="scorelist.match_status !=='live'"> {{convertedDateTime.split(",")[0]}} </span>
+              <span class="match-time" *ngIf="scorelist.match_status !=='live'"> {{convertedDateTime.split(",")[1]}}</span>
+            </div>
+
+          </div>
+
+        </div> -->
+        <div class="score-secondary-partition">
+          <div class="match_info cricket-block">
+            <div>
+              <span class="bind match-info match-result " data="data.info" *ngIf="scorelist?.match_status=='pre'">Match
+                yet to start</span>
+              <span class="bind match-info match-result " [class]="scorelist?.match_status=='post'?'win':'white'"
+                *ngIf="scorelist?.match_status!=='pre'">
+                {{scorelist?.info}} <span class="win-margin"></span>
+              </span>
+            </div>
+          </div>
+          <div class="vertical-partition" data="data.info" *ngIf="scorelist?.match_status=='live'">
+            <div class="run-rate-div current-run-rate-div p-l-0">
+              <span class="run-rate-label">CRR:</span>
+              <span class="run-rate-value current-run-rate">{{liveScoreList[0]?.run_rate_numeric ||
+                liveScoreList[1]?.run_rate_numeric}}</span>
+            </div>
+            <div class="run-rate-div required-run-rate-div ">
+              <span class="run-rate-label">RRR:</span>
+              <span class="run-rate-value required-run-rate">{{liveScoreList[0]?.required_run_rate}}
+              </span>
+            </div>
+            <div class="run-rate-div overs-left-today-div hidden">
+              <span class="run-rate-label overs-left">Overs left today:</span>
+              <span class="run-rate-value overs-left-today">
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="cricket-block score-strip-holder">
+      <div class="row fl tabs-container font-common preview-fantasy-header-row">
+        <div class="cmc-inside-tabs">
+          <div class="preview-header cmc-scrollable-tab" routerLink="/livecricket-score/{{matchId}}">
+            <div class="cmc-section-tab preview-tab ">
+              Info</div>
+          </div>
+          <!-- <div class="fantasy-header cmc-scrollable-tab"  routerLink="/livecricket-score/{{matchId}}">
+      <div class="cmc-section-tab fantasy-tab ">Fantasy</div>
+      </div> -->
+          <div class="commentary-tab-header cmc-scrollable-tab" routerLink="/live/{{matchId}}">
+            <div class="cmc-section-tab commentary-tab ">Live</div>
+          </div>
+          <div class="scorecard-header cmc-scrollable-tab" routerLink="/scorecard/{{matchId}}">
+            <div class="cmc-section-tab scorecard-tab header-hovered">
+              Scorecard</div>
+          </div>
+          <div class="scorecard-header cmc-scrollable-tab" *ngIf="scorelist?.match_status=='pre'"
+            routerLink="/squad/{{matchId}}">
+            <div class="cmc-section-tab scorecard-tab ">
+              Squad</div>
+          </div>
+          <div class="match-squad-header cmc-scrollable-tab " *ngIf="scorelist?.match_status!=='pre'"
+            routerLink="/squad/{{matchId}}">
+            <div class="cmc-section-tab squad-tab">
+              <span id="squad-tab-title">Playing XI</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="innings-master-container scorecard-section-v2">
+      <div class="empty-state-holder scorecard-pre-div innings-empty-state " *ngIf="scorelist?.match_status=='pre'">
+        <div class="empty-state-msg">
+          <!-- <p>{{scorelist?.match_status}}pppppppppppppppp</p> -->
+
+          <img height="70" width="70" alt="cmc-icon"
+            src="../../assets/cmc-pre-scorecard-icon.svg" class="lazy-img-bg">
+          <span class="empty-state-msg-desc">Match has not started yet</span>
+        </div>
+
+      </div>
+      <div class="all-innings-parent-div scorecard-cmc">
+        <div id="match-players-section" class="match-players-section" *ngIf="scorelist?.match_status=='post'">
+          <div class="match-player-div" id="man-of-match">
+            <a class="match-player-link player-cta" id="mom-player-link" aria-label="match-player"
+              routerLink="/player/{{scorelist?.player_of_match.player_slug}}"></a>
+            <div class="left-section">
+              <div class="match-player-img">
+                <img class="player-img" id="match-player-img" height="58" width="58" alt="player-img"
+                  src="{{getPlayerImage(scorelist?.player_of_match.player_slug) || '../../assets/team-default.png'}}">
+              </div>
+            </div>
+            <div class="right-section">
+              <div class="player-stats-div">
+                <div class="player-name-div">
+                  <span class="match-palyer">Player of the Match</span>
+                  <span class="match-player-name" id="player-of-match"><span
+                      class="player-link">{{scorelist?.player_of_match.player_name}}</span></span>
+                </div>
+                <div class="match-player-score">
+                  <div id="batting-stat" class="player-stats-runs hidden">
+                  </div>
+                  <div id="bowling-stat" class="player-stats-runs"> {{scorelist?.player_of_match.batting_stat ||
+                    scorelist?.player_of_match.bowling_stat}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="inning-tabs-wrapper post" *ngIf="Innings && Innings.length > 0">
+          <div class="inning-tab" id="innings-name-0" *ngFor="let tab of Innings;let i=index ;trackBy:userByName"
+            (click)="selectTab(i)" [class.active]="selectedTabIndex === i">
+            {{tab.short_name.slice(0,8)}}
+          </div>
+
+          <div *ngIf="Innings && Innings.length > 0" class="inning-tab" id="match-info-tab"
+            [ngClass]="selectedTabIndex==99? 'active':'' " (click)="gatInningsByTabs('all',99)">
+            Info
+          </div>
+        </div>
+        <div>
+          <div class="all-innings-new-parent-div " #container>
+            <ng-container>
+              <div class="one-innings-div innings-content-0" id="innings-content-{{i}}"
+                *ngFor="let item of Innings; let i=index;trackBy:userByName" [hidden]="selectedTabIndex !== i">
+                <div class="scorecard-accordion" data-id="0">
+                  <div class="scorecard-accordion-title" id="item{{i}}">
+                    {{item.name}}<span class="innings-label"></span>
+
+                  </div>
+                  <div class="innings-score-info">
+                    <p class="innings-total-top">
+                      {{item.runs}}/{{item.wickets}}<span class="scorecard-overs"> ({{item.overs}})</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="innings-table-batting">
+                  <div class="innings-table-header">
+                    <div class="innings-batsman">Batters</div>
+                    <div title="Runs made" class="text-center">R</div>
+                    <div title="Balls taken" class="text-center">B</div>
+                    <div title="Fours" class="text-center">4s</div>
+                    <div title="Sixes" class="text-center">6s</div>
+                    <div class="long-div scorecard-strike-rate" title="Strike Rate">SR</div>
+                  </div>
+                  <ng-container>
+                    <div class="innings-table-body"
+                      *ngFor="let el of Innings[i]?.batting;let i=index;trackBy:userByName">
+                      <div class="innings-table-row-holder " [class]="el.out_str=='Not out'?'batsman-not-out':''">
+                        <div class="parent-row-holder">
+                          <div class="innings-table-row inning-bat">
+                            <div class="innings-batsman">
+                              <span class="batsman-name">
+                                <a class="player-cta" routerLink="/player/{{el.name}}">
+                                  {{el.name}}
+                                </a>
+                              </span>
+                              <div class="captain-div" *ngIf="el.is_captain==true">
+                                (C)
+                              </div>
+                            </div>
+                            <div class="innings-runs bold text-center">{{el.runs}}</div>
+                            <div class="innings-balls text-center">{{el.balls}}</div>
+                            <div class="innings-fours text-center">{{el.fours}}</div>
+                            <div class="innings-sixes text-center">{{el.sixes}}</div>
+                            <div class="innings-strike-rate  scorecard-strike-rate">{{el.strike_rate}}
+                            </div>
+                          </div>
+                          <div class="innings-bowler-row">
+                            <p class="innings-batsman-reason">{{el.out_str}}</p>
+                          </div>
+                        </div>
+                        <span class="not-out-mark hidden"></span>
+                      </div>
+
+                    </div>
+                  </ng-container>
+
+                  <div class="innings-table-row-holder innings-extras-row-holder">
+                    <div class="innings-table-row innings-extras-row">
+                      <div class="innings-extras-label">Extras</div>
+                      <div class="innings-extras-runs bold text-center">{{item.extras}}</div>
+                      <div class="innings-extras-desc"></div>
+                      <div class="innings-extras-desc"></div>
+                      <div class="innings-extras-desc"></div>
+                      <div class="innings-extras-info">(B: {{item.bye}}, LB: {{item.legbye}}, NB:
+                        {{item.noball}}, W: {{item.wide}})</div>
+                    </div>
+                  </div>
+                  <div class="innings-table-row-holder innings-total-row-holder">
+                    <div class="innings-table-row innings-total-row last">
+                      <div class="innings-total-label">
+                        <span>TOTAL</span>
+                        <p class="innings-total-description">({{item.overs}} Ov, RR: {{item.run_rate}})</p>
+                      </div>
+                      <div class="innings-total-runs bold text-center">{{item.runs}}/{{item.wickets}}</div>
+                      <div class="innings-balls"></div>
+                      <div class="innings-total-fours text-center">{{item.fours}}</div>
+                      <div class="innings-total-sixes text-center">{{item.sixes}}</div>
+                      <div class="innings-strike-rate"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="innings-table-bowling">
+                  <div class="innings-table-header">
+                    <div class="innings-bowler">Bowlers</div>
+                    <div class="text-center" title="Overs">O</div>
+                    <div class="text-center" title="Maiden overs">M</div>
+                    <div class="text-center" title="Runs given">R</div>
+                    <div class="text-center" title="Wickets taken">W</div>
+                    <div class="long-div" title="Economy">ER</div>
+                    <div title="Extras">EXT</div>
+                  </div>
+                  <div class="innings-table-body" *ngFor="let el of Innings[i]?.bowling;let i=index;trackBy:userByName">
+                    <div class="innings-table-row-holder">
+                      <div class="innings-table-row">
+                        <div class="innings-bowler">
+                          <span class="bowler-name"><a class="player-cta"
+                              routerLink="/player/{{el.name}}">{{el.name}}</a></span>
+                        </div>
+                        <div class="innings-overs text-center">{{el.overs}}</div>
+                        <div class="innings-maiden-overs text-center">{{el.maiden_overs}}</div>
+                        <div class="innings-runs text-center">{{el.runs}}</div>
+                        <div class="innings-wickets bold text-center">{{el.wickets}}</div>
+                        <div class="innings-economy long-div">{{el.economy}}</div>
+                        <div class="innings-extras">{{el.extras}}</div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="innings-table-fow">
+                  <div class="innings-table-header">
+                    <div class="innings-fow-batsman">Fall Of Wickets</div>
+                    <div title="Score" class="long-div">SCORE</div>
+                    <div title="Over" class="long-div">OVER</div>
+                  </div>
+                  <div class="innings-table-body innings-table-fow-body">
+                    <div class="innings-table-row-holder"
+                      *ngFor="let el of Innings[i]?.fall_of_wickets_array ;let i=index;trackBy:userByName">
+                      <div class="innings-table-row">
+                        <div class="innings-fow-batsman">
+                          <span class="fow-batsman"><a class="player-cta"
+                              routerLink="/player/{{el.batsman_name}}">{{el.batsman_name}}</a></span>
+                          <p class=" innings-fow-reason">{{el.how_out}}</p>
+                        </div>
+                        <div class="innings-score long-div">{{i+1}}-{{el.score}}</div>
+                        <div class="innings-over long-div">{{el.overs}}</div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+
+          </div>
+        </div>
+        <!-- ////////////////////////////////////////////////////////////////// -->
+
+
+        <div class="match-info-section" id="match-info-section">
+          <div class="section-header">
+            <div class="section-title">Match Info</div>
+          </div>
+          <div class="section-body">
+          </div>
+            <div class="preview-sections match-info-v2">
+              <div class="preview-card-holder-v2">
+                <div class="match-detail-row">
+                  <div class="match-detail-title">
+                    Date &amp; Time
+                  </div>
+                  <div class="match-detail-info">
+                    <span>{{formattedDate}}</span>
+                  </div>
+                </div>
+                <div class="match-detail-row">
+                  <div class="match-detail-title">
+                    Venue
+                  </div>
+                  <div class="match-detail-info">
+                    {{scorelist?.venue}}
+                  </div>
+                </div>
+                <div class="match-detail-row">
+                  <div class="match-detail-title">
+                    Match
+                  </div>
+                  <div class="match-detail-info">
+                    {{scorelist?.description}},
+                    <div>
+                      <a routerLink="/go/england-vs-india"> {{scorelist?.series}}</a>
+                    </div>
+                    <div class="match-links">
+                      <a class="match-link" routerLink="/pointTable/{{scorelist?.series_keeda_slug}}">
+                        <div class="link-item">Point Table<img alt="arrow-icon" height="6" width="10"
+                            src="/assets/right-arrow-0B65F0.svg"></div>
+                      </a>
+                      <a class="match-link" routerLink="/child-shedule/{{scorelist?.series_keeda_slug}}/upcoming">
+                        <div class="link-item">Schedule<img alt="arrow-icon" height="6" width="10"
+                            src="/assets/right-arrow-0B65F0.svg"></div>
+                      </a>
+                      <a class="match-link" routerLink="/stats/{{scorelist?.series_keeda_slug}}">
+                        <div class="link-item">Stats<img alt="arrow-icon" height="6" width="10"
+                            src="/assets/right-arrow-0B65F0.svg"></div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="match-detail-row" *ngIf="scorelist?.umpires">
+                  <div class="match-detail-title">
+                    Umpires
+                  </div>
+                  <div class="match-detail-info">
+                    {{scorelist?.umpires}}
+                  </div>
+                </div>
+                <div class="match-detail-row" *ngIf="scorelist?.referee">
+                  <div class="match-detail-title">
+                    Referee
+                  </div>
+                  <div class="match-detail-info">
+                    {{scorelist?.referee}}
+                  </div>
+                </div>
+                <div class="match-detail-row" >
+                  <div class="match-detail-title">
+                    Toss
+                  </div>
+                  <div class="match-detail-info">
+                    <div class="cmc-toss-info preview-info-msg">{{scorelist?.secondary_info==""?'Toss yet to take Place':scorelist?.secondary_info}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="feedback-parent-container Scorecard" data-brand-logo="logo/sk-short-logo.png"
+         >
+          <div class="feedback-cta-container">
+            <!-- <div class="feedback-cta-holder">
+              <button class="feedback-cta-button" data-feedback-page="cmc-feedback" data-feedback-sheet=""
+                data-feedback-section="Scorecard">How can we improve our Scorecard?</button>
+            </div> -->
+          </div>
+          <div class="feedback-popup-container"></div>
+          <div class="feedback-success-modal-container"></div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="right-sidebar">
+
+    <div class="rightStickyTopWrap">
+    <div class="rightStickyTop">
+    <div class="sidebar-ad-top">
+    <div class="ad-container" id="" style="
+    min-height: 80px;
+    width: 100%; text-align: center;clear:both;
+    ">
+    <div class="ad-declare-explicit"></div>
+
+    <div id="div-gpt-ad-1653457590899-0" class="">
+    </div>
+    </div>
+    </div>
+    <div class="ad-container" id="" style="
+    min-height: 80px;
+    width: 100%; text-align: center;clear:both;
+    ">
+    <div class="ad-declare-explicit"></div>
+
+    <div id="div-gpt-ad-1680275006038-0" class="">
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div>
+</div>

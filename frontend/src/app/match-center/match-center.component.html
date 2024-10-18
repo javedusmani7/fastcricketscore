@@ -1,0 +1,979 @@
+<div class="container editor-width-100-pc wrapper-container" id="wrapper-containerss">
+  <div class="fragments-container ">
+    <div class="content-holder">
+      <div class="feed-header">
+      </div>
+      <div id="match-content" class="">
+        <div class="cricket-top-section-v2" id="cricket-top-section-v2">
+          <div class="top-score-section-v2">
+            <div class="top-score-title">
+              <div class="cricket-match-card-header-secondary-text">
+                <span class="cricket-match-card--match-type">{{infoData?.description}}</span>
+                <span>•</span>
+                <span class="cricket-match-card--match-venue">{{infoData?.venue}}</span>
+                <span>•</span>
+                <span class="cricket-match-card--match-venue">{{infoData?.venue_location}}</span>
+              </div>
+            </div>
+
+
+            <div class="score-primary-partition unset-box-shadow">
+              <div class="match-teams">
+                <div class="team-1-score-strip-baseline"></div>
+                <div class="score-strip team1-score-strip" *ngFor="let item of matchesDtata">
+                  <div class="flag-country  pre-match-team-info " [class]="item.status=='post'?'flag-countrys':''">
+                    <img [src]="item.team_flag" (error)="item.team_flag = '../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
+                      data="data.score_strip.0.team_flag" data-img-params="?w=192">
+                    <span class="country bind" data="data.score_strip.0.name"><a
+                        routerLink="/team/{{item.slug}}">{{item.name}}</a></span>
+                  </div>
+                  <div class="score-over">
+                    <div class="powerplay-tooltip">
+                      <div class="bottom powerplay-tooltip-1"> </div>
+                      <i></i>
+                      <span class="power-play-label team1 hidden"></span>
+                    </div>
+                    <span class="score bind" data="data.score_strip.0.score_wickets_info">{{item.score}}</span>
+                    <!-- <span class="overs-info bind" data="data.score_strip.0.overs_info"></span> -->
+                  </div>
+                </div>
+                <div class="team-2-score-strip-baseline"></div>
+
+              </div>
+              <div class="match-scorecard-time " id="match-scorecard-time">
+                <span class="match-date" *ngIf="infoData?.match_status=='pre'">{{formattedDate2}} </span>
+                <span class="match-time" *ngIf="infoData?.match_status=='pre'">{{formattedTime}} </span>
+              </div>
+              <div class="scorecard-countdown-timer hidden" id="scorecard-countdown-timer">
+                <div class="line-ups">Lineups Out</div>
+                <div class="countdown-timer-title">
+                  Starts In
+                </div>
+                <div class="countdown-timer-section">
+                  <div class="min-timer">
+                    <div class="scorecard-timer-content">18</div>
+                    <span class="timer-info">m</span>
+                  </div>
+                  <span class="double-dot-wrapper">
+                    <span class="dot"></span><span class="dot"></span>
+                  </span>
+                  <div class="sec-timer">
+                    <div class="scorecard-timer-content">42</div>
+                    <span class="timer-info">s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="score-secondary-partition">
+              <div class="match_info cricket-block">
+                <div *ngIf="infoData?.match_status=='pre'">
+                  <span class="bind match-info match-result " data="data.info">Match yet to start</span>
+                </div>
+                <div>
+                  <span class="bind match-info match-result win" data="data.info"
+                    *ngIf="infoData?.match_status=='post'">
+                    {{infoData?.info}}
+                  </span>
+                  <span class="bind match-info match-result " data="data.info"
+                    *ngIf="infoData?.match_status=='live'">{{infoData?.info}}</span>
+
+                </div>
+              </div>
+              <div class="vertical-partition" *ngIf="infoData?.match_status=='live'">
+                <div class="run-rate-div current-run-rate-div p-l-0" *ngIf="infoData?.score_strip[1]?.run_rate_numeric || infoData?.score_strip[0]?.run_rate_numeric">
+                  <span class="run-rate-label">CRR:</span>
+                  <span class="run-rate-value current-run-rate">{{infoData?.score_strip[1]?.run_rate_numeric || infoData?.score_strip[0]?.run_rate_numeric}}</span>
+                </div>
+                <div class="run-rate-div required-run-rate-div ">
+                  <span class="run-rate-label">RRR:</span>
+                  <span class="run-rate-value required-run-rate">
+                  </span>
+                </div>
+                <div class="run-rate-div overs-left-today-div ">
+                  <span class="run-rate-label overs-left">Overs left today:</span>
+                  <span class="run-rate-value overs-left-today">
+                    {{infoData?.day_remaining_over}}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="score-secondary-partition">
+              <div class="match_info cricket-block">
+                <div>
+                  <span class="bind match-info match-result win" data="data.info">
+                    {{infoData?.info}}
+                  </span>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <div class="cricket-block score-strip-holder">
+          <div class="row fl tabs-container font-common preview-fantasy-header-row">
+            <div class="cmc-inside-tabs">
+              <div class="preview-header cmc-scrollable-tab" routerLink="/livecricket-score/{{matchId}}">
+                <div class="cmc-section-tab preview-tab header-hovered">
+                  Info</div>
+              </div>
+              <!-- <div class="fantasy-header cmc-scrollable-tab" onclick="toggleFantasy(this)">
+                <div class="cmc-section-tab fantasy-tab ">Fantasy</div>
+              </div> -->
+              <div class="commentary-tab-header cmc-scrollable-tab" routerLink="/live/{{matchId}}">
+                <div class="cmc-section-tab commentary-tab ">Live</div>
+              </div>
+              <div class="scorecard-header cmc-scrollable-tab" routerLink="/scorecard/{{matchId}}">
+                <div class="cmc-section-tab scorecard-tab ">
+                  Scorecard</div>
+              </div>
+              <div class="match-squad-header cmc-scrollable-tab " routerLink="/squad/{{matchId}}">
+                <div class="cmc-section-tab squad-tab ">
+                  <span id="squad-tab-title">Playing XI</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div id="preview-data" class="preview-data preview-data-v2 info-cmc">
+          <div class="panel hidden ">
+            <div class="panel-heading">
+              <div class="panel-heading-text">Match Preview</div>
+            </div>
+            <div class="panel-body">
+              <div id="pinned-preview-section">
+
+                <div class="pinned-video-sections">
+                  <div class="pinned-main-sub-headings">
+                    <span class="pinned-video-title">Match Preview</span>
+                  </div>
+                  <div class="pinned-video-link">
+                    <object class="pinned-video-frame" id="preview-pinned-video" height="380px"></object>
+                    <img class="pinned-video-substitute hidden" style="height:380px; width: 100%;" data-lazy=""
+                      src="data:image/svg+xml;charset=utf-8,<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' style='fill:rgba(0, 0, 0, 0);'/></svg>"
+                      alt="pinned-video">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-body no-padding">
+
+              <div class="preview-sections match-info-v2">
+                <div class="preview-card-holder-v2">
+                  <div class="match-detail-row">
+                    <div class="match-detail-title">
+                      Date &amp; Time
+                    </div>
+                    <div class="match-detail-info">
+                      <span>{{convertedDateTimes }}</span>
+                    </div>
+                  </div>
+                  <div class="match-detail-row">
+                    <div class="match-detail-title">
+                      Venue
+                    </div>
+                    <div class="match-detail-info">
+                      {{infoData?.venue}}
+                    </div>
+                  </div>
+                  <div class="match-detail-row">
+                    <div class="match-detail-title">
+                      Match
+                    </div>
+                    <div class="match-detail-info">
+                      {{addOrdinalSuffix(infoData?.match_number)}} {{infoData?.game_type}} ,
+                      <div>
+                        <a style="text-decoration:underline" routerLink="/go/{{infoData?.series_keeda_slug}}"> {{infoData?.series}}</a>
+                      </div>
+                      <div class="match-links">
+                        <a class="match-link" routerLink="/pointTable/{{infoData?.series_keeda_slug}}">
+                          <div class="link-item">Point Table<img alt="arrow-icon" height="6" width="10"
+                              src="/assets/right-arrow-0B65F0.svg"></div>
+                        </a>
+                        <a class="match-link" routerLink="/child-shedule/{{infoData?.series_keeda_slug}}/upcoming">
+                          <div class="link-item">Schedule<img alt="arrow-icon" height="6" width="10"
+                              src="/assets/right-arrow-0B65F0.svg"></div>
+                        </a>
+                        <a class="match-link" routerLink="/stats/{{infoData?.series_keeda_slug}}">
+                          <div class="link-item">Stats<img alt="arrow-icon" height="6" width="10"
+                              src="/assets/right-arrow-0B65F0.svg"></div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="match-detail-row" *ngIf="infoData?.umpires">
+                    <div class="match-detail-title">
+                      Umpires
+                    </div>
+                    <div class="match-detail-info">
+                      {{infoData?.umpires}}
+                    </div>
+                  </div>
+                  <div class="match-detail-row" *ngIf="infoData?.referee">
+                    <div class="match-detail-title">
+                      Referee
+                    </div>
+                    <div class="match-detail-info">
+                      {{infoData?.referee}}
+                    </div>
+                  </div>
+                  <div class="match-detail-row" >
+                    <div class="match-detail-title">
+                      Toss
+                    </div>
+                    <div class="match-detail-info">
+                      <div class="cmc-toss-info preview-info-msg">{{infoData?.secondary_info==""?'Toss yet to take Place':infoData?.secondary_info}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-heading">
+              <div class="panel-heading-text">Pitch Report</div>
+            </div>
+            <div class="panel-body">
+
+              <div class="pitch-report-container">
+                <div class="report-wrapper">
+                  <div class="report-details remove-border-radius">
+                    <span class="detail-label">Pitch</span><span
+                      class="detail-value">{{infoData?.pitch?.pitch_condition}}</span>
+                  </div>
+                  <div class="report-details remove-border-radius">
+                    <span class="detail-label">Pace Bowling</span><span
+                      class="detail-value">{{infoData?.pitch?.pace_bowling_condition}}</span>
+                  </div>
+                  <div class="report-details ">
+                    <span class="detail-label">Batting Condition</span><span
+                      class="detail-value">{{infoData?.pitch?.batting_condition}}</span>
+                  </div>
+                  <div class="report-details ">
+                    <span class="detail-label">Spin Bowling</span><span
+                      class="detail-value">{{infoData?.pitch?.spine_bowling_condition}}</span>
+                  </div>
+                </div>
+                <div class="stats-header-wrapper">
+                  <div class="stats-header">VENUE STATS</div>
+                </div>
+                <div class="stats-wrapper">
+                  <div class="stats-info" *ngFor="let item of infoData?.preview_data.avg_venue_scores">
+                    <div class="inning-label">
+                      <div class="inning-bg"></div>
+                      {{addOrdinalSuffix(item.inning_number)}} Innings
+                    </div>
+                    <div class="stat-details">
+                      <div class="stat-detail "><span class="value">{{item.avg_runs}}</span><span class="label">Avg Runs</span>
+                      </div>
+                      <div class="stat-detail "><span class="value">{{item.avg_wickets}}</span><span class="label">Avg
+                          Wkts</span></div>
+                      <div class="stat-detail "><span class="value">{{item.avg_strike_rate}}</span><span class="label">Avg
+                          SR</span></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="panel " *ngIf="infoData?.match_status!=='post' && infoData?.weather.weather!=='<nil>'">
+            <div class="panel-heading">
+              <div class="panel-heading-text">Weather Update</div>
+            </div>
+            <div class="panel-body no-padding">
+
+              <div class="weather-update-section " id="weather-info-tab" data-parent-id="weather-info-tab">
+                <div class="weather-update-heading">
+                  <div class="heading-title">
+                    <span>{{infoData?.weather.weather}}</span>
+                  </div>
+                </div>
+                <div class="weather-update">
+                  <div class="weather-update-detail">
+                    <div class="weather-location-box">
+                      <div class="detail-card">
+                        <div class="location">
+                          <div class="marquee-strip">
+                            <span class="city">{{infoData?.venue_location}}</span>
+                            <span>{{infoData?.venue_country}}</span>
+                          </div>
+                        </div>
+                        <div class="last-updated">
+                        Updated: {{convertedDateTimes}}
+                        </div>
+                      </div>
+                      <div class="detail-card">
+                        <div class="weather-img"></div>
+                        <div>
+                          <div class="weather-detail"><span class="temperature">{{infoData?.weather.temp}}</span><span
+                              class="separator-dot"></span><span class="weather-type">{{infoData?.weather.weather}}</span></div>
+                          <div class="weather-description">{{infoData?.weather.weather_desc}}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="detail-card" id="clouds-container">
+                      <div class="clouds-percentage">{{infoData?.weather.clouds}}%</div>
+                      <div class="clouds">Clouds</div>
+                    </div>
+                    <div class="detail-card " id="rain-container">
+                      <div class="rain-percentage">{{infoData?.weather.pop}}%</div>
+                      <div class="rain">Rain %</div>
+                    </div>
+                    <div class="detail-card hidden" id="humidity-container">
+                      <div class="humidity-percentage">{{infoData?.weather.humidity}}%</div>
+                      <div class="humidity">Humidity</div>
+                    </div>
+                    <div class="detail-card">
+                      <div class="wind-details"><span class="wind-value">{{infoData?.weather.wind_speed | number:'1.2-2'}}</span> kmph</div>
+                      <div class="wind">Wind</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="panel playing-xi " *ngIf="infoData?.match_status !=='pre'">
+            <div class="panel-heading">
+              <div class="panel-heading-text">
+                <span>Playing XI</span><span class="lineups-text">Lineups Out</span>
+              </div>
+              <img class="playing-eleven-icon arrow-up lazy-img-bg" height="8" width="14" alt="icon"
+                src="/up-arrow-icon.svg">
+            </div>
+            <div class="panel-body">
+
+              <div id="info-squad-data" class="info-squad-data playing-xi " data-parent-id="squad-info-tab">
+                <div class="cmc-squad-players">
+                  <div class="playing-xi-sections" id="playing-info-xi-players">
+                    <div class="info-main-sub-headings info-playingxi" onclick="togglePlayingClass()">
+                      <span>Playing XI</span>
+                      <img class="playing-eleven-icon arrow-up" height="8" width="14" alt="icon"
+                        src="data:image/svg+xml;charset=utf-8,<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' style='fill:rgba(0, 0, 0, 0);'/></svg>"
+                        data-lazy="/up-arrow-icon.svg">
+                    </div>
+
+                    <div id="squad-team-card-holder"
+                      class="players-data preview-card-holder playing-content playing-content-open">
+                      <div class="preview-card-content team-card">
+                        <div class="team-holder" *ngIf="infoData?.match_status!=='live'">
+                          <span>
+                            <img width="48"
+                            height="38" alt="team-logo" [src]="infoData?.score_strip[1]?.team_flag || teamDefaultImg"
+                            class="team-flag img-with-fallbacks"
+                            id="team-flag-IND">
+                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[1]?.slug}}">{{infoData?.score_strip[1]?.short_name}}</a>
+                          </span>
+                          <span>vs</span>
+                          <span>
+                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[0]?.slug}}">{{infoData?.score_strip[0]?.short_name}}</a>
+                            <img width="48"
+                                height="38" alt="team-logo" [src]="infoData?.score_strip[0]?.team_flag || teamDefaultImg"
+                                class="team-flag img-with-fallbacks" id="team-flag-ENG">
+                          </span>
+                        </div>
+                        <div class="team-holder" *ngIf="infoData?.match_status=='live'">
+                          <span>
+                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[1]?.slug}}">{{infoData?.score_strip[1]?.short_name}}
+                            </a><img width="48"
+                            height="38" alt="team-logo" [src]="infoData?.score_strip[1]?.team_flag || teamDefaultImg"
+                            class="team-flag img-with-fallbacks"
+                            id="team-flag-IND">
+                          </span>
+                          <span>vs</span>
+                          <span>
+                            <img width="48"
+                                height="38" alt="team-logo" [src]="infoData?.score_strip[0]?.team_flag || teamDefaultImg"
+                                class="team-flag img-with-fallbacks" id="team-flag-ENG">
+                            <a class="team-flag-anchor"
+                              routerLink="/team/{{infoData?.score_strip[0]?.slug}}">{{infoData?.score_strip[0]?.short_name}}</a>
+                          </span>
+                        </div>
+                        <div class="squads-holder">
+                          <div class="impact-players " id="impact-players" *ngIf="infoData?.squad[0]?.impact_players && infoData?.squad[0]?.impact_players.length > 0">
+                            <div class="impact-title">Impact Player</div>
+                            <div class="impact-section">
+                              <div class="team-squad team-squad-left" id="team-impact-RCB">
+                                <ng-container *ngFor="let impPlayer of infoData?.squad[0]?.impact_players;let i=index,trackBy:userByName">
+                                  <div class="player-role-info" >
+                                    <div class="player-img-anchor"><img class="player-img " [class]="impPlayer.in=='true'?'impact-in':'impact-out'"
+                                      [src]="getPlayerImage(impPlayer.sk_slug)  || '../../assets/team-default.png'" alt="player-img"
+                                        height="40" width="40"></div>
+                                    <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{impPlayer.sk_slug}}"><span
+                                          class="player-name">{{impPlayer.name}}</span></a>
+                                      <p class="player-role">
+                                        <!-- <span>{{impPlayer.role}}</span> -->
+                                        <span>{{ impPlayer.role === 'wicket-keeper' ? 'Bat & WK' : impPlayer.role === 'all-rounder' ? 'All' : impPlayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                                        <span class="impact-role impact-player-div role-left">
+                                        <img *ngIf="impPlayer.in=='true'"
+                                            class="impact-player-role-icon" alt="impact-role-icon" title="Impact Player"
+                                            src="/assets/cmc-impact-player.png">
+                                            <img *ngIf="impPlayer.out=='true'" class="impact-player-role-icon" alt="impact-role-icon" title="Substitute"
+                                            src="../../assets/cmc-substitute-player.png">
+                                            <span class="impact-tooltip">Impact Player</span>
+                                            </span></p>
+                                    </div>
+                                  </div>
+                                  <div class="impact-image">
+                                    <img class="impact-player-icon"
+                                      src="/assets/impact-players-arrow.png" alt="impact-player">
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="team-squad team-squad-border">
+                                <hr>
+                              </div>
+                              <div class="team-squad team-squad-right" id="team-impact-KKR">
+                                <div class="player-role-info" *ngFor="let impPlayer of infoData?.squad[1]?.impact_players;let i=index,trackBy:userByName">
+                                  <div class="squad-player right-info"><a class="player-cta" routerLink="/player/angkrish-raghuvanshi"><span
+                                        class="player-name">{{impPlayer.name}}</span></a>
+                                    <p class="player-role"><span class="impact-role impact-player-div role-right"><img *ngIf="impPlayer.in=='true'"
+                                      class="impact-player-role-icon" alt="impact-role-icon" title="Impact Player"
+                                      src="/assets/cmc-impact-player.png">
+                                      <img *ngIf="impPlayer.out=='true'" class="impact-player-role-icon" alt="impact-role-icon" title="Substitute"
+                                      src="/assets/cmc-substitute-player.png"><span class="impact-tooltip">Impact
+                                          Player</span></span>
+                                          <!-- <span>{{impPlayer.role}}</span> -->
+                                          <span>{{ impPlayer.role === 'wicket-keeper' ? 'Bat & WK' : impPlayer.role === 'all-rounder' ? 'All' : impPlayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                                        </p>
+                                  </div>
+                                  <div class="player-img-anchor"><img class="player-img"  [class]="impPlayer.in=='true'?'impact-in':'impact-out'"
+                                    [src]="getPlayerImage(impPlayer.sk_slug)  || '../../assets/team-default.png'" alt="player-img"
+                                      height="40" width="40"></div>
+                                </div>
+                                <div class="impact-image"><img class="impact-player-icon"
+                                    src="/assets/impact-players-arrow.png" alt="impact-player"></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="substitute-title playing-xi-title " *ngIf="infoData?.squad[0]?.impact_players && infoData?.squad[0]?.impact_players.length > 0">Playing XI</div>
+                          <div class="team-squad team-squad-left" id="team-IND">
+                            <div class="player-role-info"
+                              *ngFor="let player of infoData?.squad[0]?.players;let i=index;">
+                              <div class="player-img-anchor"><img class="player-img"
+                                  [src]="getPlayerImage(player.sk_slug) || '../../assets/team-default.png'"
+                                  alt="player-img" height="40" width="40"></div>
+                              <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{player.sk_slug}}" [class]="player.sk_slug==''?'blck':''"><span
+                                    class="player-name" [class]="player.sk_slug==''?'blck':''">{{player.name}}</span><span class="role-icon" *ngIf="player.position=='captain'">(C)</span><span class="player-delta-in left" *ngIf="player.delta==1"><span></span></span></a>
+                                <p class="player-role">
+                                  <!-- <span>{{player.role}}</span> -->
+                                  <span>{{ player.role === 'wicket-keeper' ? 'Bat & WK' : player.role === 'all-rounder' ? 'All' : player.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                                </p>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="team-squad team-squad-border">
+                            <hr>
+                          </div>
+                          <div class="team-squad team-squad-right" id="team-ENG">
+                            <div class="player-role-info"
+                              *ngFor="let player of infoData?.squad[1]?.players;let i=index;">
+                              <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{player.sk_slug}}" >
+                                <span class="role-icon" *ngIf="player.position=='captain'">(C)</span><span class="player-delta-in right" *ngIf="player.delta==1"><span></span></span>
+                                <span
+                                    class="player-name" [class]="player.sk_slug==''?'blck':''">{{player.name}}</span></a>
+                                <p class="player-role">
+                                  <!-- <span>{{player.role}}</span> -->
+                                  <span>{{ player.role === 'wicket-keeper' ? 'Bat & WK' : player.role === 'all-rounder' ? 'All' : player.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                                </p>
+                              </div>
+                              <div class="player-img-anchor"><img class="player-img"
+                                  [src]="getPlayerImage(player.sk_slug) || '../../assets/team-default.png'"
+                                  alt="player-img" height="40" width="40"></div>
+                            </div>
+
+                          </div>
+                          <div class="substitute-players hidden" id="substitute-players">
+                            <div class="substitute-title">Substitute</div>
+                            <div class="team-squad team-squad-left" id="team-substitute-IND"></div>
+                            <div class="team-squad team-squad-border">
+                              <hr>
+                            </div>
+                            <div class="team-squad team-squad-right" id="team-substitute-ENG"></div>
+                          </div>
+                          <div class="bench-players " id="bench-players">
+                            <div class="bench-title">Bench</div>
+                            <div class="team-squad team-squad-left" id="team-bench-IND">
+                              <div class="player-role-info"
+                                *ngFor="let bnplayer of infoData?.squad?.[0]?.bench_players;let i=index;">
+                                <div class="player-img-anchor"><img class="player-img"
+                                    [src]="getPlayerImage(bnplayer.name) || '../../assets/team-default.png'"
+                                    alt="player-img" height="40" width="40"></div>
+                                <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{bnplayer.sk_slug}}" ><span [class]="bnplayer.sk_slug==''?'blck':''"
+                                      class="player-name">{{bnplayer.name}}</span><span class="player-delta-out left" *ngIf="bnplayer.delta==-1"><span></span></span></a>
+                                  <p class="player-role">
+                                    <!-- <span>{{bnplayer.role}}</span> -->
+                                    <span>{{ bnplayer.role === 'wicket-keeper' ? 'Bat & WK' : bnplayer.role === 'all-rounder' ? 'All' : bnplayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                                  </p>
+                                </div>
+                              </div>
+
+                            </div>
+                            <div class="team-squad team-squad-border">
+                              <hr>
+                            </div>
+                            <div class="team-squad team-squad-right" id="team-bench-ENG">
+                              <div class="player-role-info"
+                                *ngFor="let bnplayer of infoData?.squad?.[1]?.bench_players;let i=index;">
+                                <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{bnplayer.sk_slug}}k"><span class="player-delta-out right" *ngIf="bnplayer.delta==-1"><span></span></span><span
+                                      class="player-name" [class]="bnplayer.sk_slug==''?'blck':''">{{bnplayer.name}}</span></a>
+                                  <p class="player-role">
+                                    <!-- <span>{{bnplayer.role}}</span> -->
+                                    <span>{{ bnplayer.role === 'wicket-keeper' ? 'Bat & WK' : bnplayer.role === 'all-rounder' ? 'All' : bnplayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                                  </p>
+                                </div>
+                                <div class="player-img-anchor"><img class="player-img"
+                                    [src]="getPlayerImage(bnplayer.name) || '../../assets/team-default.png'"
+                                    alt="player-img" height="40" width="40"></div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <button class="cmc-toggle-btn"
+                          >
+                          <span>Hide Playing XI</span>
+                          <img class="sports-accordion-arrow" width="6" height="10"
+                            src="data:image/svg+xml;charset=utf-8,<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' style='fill:rgba(0, 0, 0, 0);'/></svg>"
+                            alt="hide-players"
+                            data-lazy="/assets/arrow-icon.svg">
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- ///////////////////////////////////// -->
+          <div class="panel squad " *ngIf="infoData?.match_status=='pre' && infoData?.squad?.[0]?.bench_players?.length > 0">
+            <div class="panel-heading" (click)="expandHidesqure()">
+              <div class="panel-heading-text">
+                <span>Squads</span><span class="lineups-text">Playing XI to be announced</span>
+              </div>
+            </div>
+            <div class="panel-body" *ngIf="hidesquad">
+
+              <div id="info-squad-data" class="info-squad-data squad " data-parent-id="squad-info-tab">
+                <div class="cmc-squad-players">
+                  <div class="squad-sections " id="playing-info-squad-players" [style.height]="fullsqure">
+                    <div class="info-main-sub-headings info-squad-player" onclick="">
+                      <span>Squads</span>
+                      <img class="playing-eleven-icon playing-eleven-squad-icon arrow-up " height="8" width="14"
+                        alt="icon"
+                        src="data:image/svg+xml;charset=utf-8,<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' style='fill:rgba(0, 0, 0, 0);'/></svg>"
+                        data-lazy="/assets/up-arrow-icon.svg">
+                    </div>
+                    <div id="preview-squad-holder"
+                      class="players-data preview-card-holder playing-content playing-squad-content playing-content-open">
+                      <div class="preview-card-content team-card">
+                        <div class="team-holder">
+                          <span>
+                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[0].slug}}">
+                              <img
+                                src="{{infoData?.score_strip[0].team_flag || teamDefaultImg}}"
+                                width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-SL"
+                                data-img-params="?w=192">
+                              {{infoData?.score_strip[0].short_name}}
+                            </a>
+                          </span>
+                          <span>vs</span>
+                          <span>
+                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[1].slug}}">
+                              {{infoData?.score_strip[1].short_name}}
+                              <img
+                                src="{{infoData?.score_strip[1].team_flag || teamDefaultImg}}"
+                                width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-AFG"
+                                data-img-params="?w=192">
+                            </a>
+                          </span>
+                        </div>
+                        <div class="squads-holder">
+                          <div class="team-squad team-squad-left" id="team-SL">
+                            <div class="player-role-info" *ngFor="let bnplayer of infoData?.squad?.[0]?.bench_players;let i=index;">
+                              <div class="player-img-anchor"><img class="player-img"
+                                [src]="getPlayerImage(bnplayer.name) || teamDefaultImg"
+                                alt="player-img" height="40" width="40"></div>
+                              <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{bnplayer.sk_slug}}"><span
+                                    class="player-name" [class]="bnplayer.sk_slug==''?'blck':''">{{bnplayer.name}}</span></a>
+                                <p class="player-role">
+                                  <!-- <span>{{bnplayer.role}}</span> -->
+                                  <span>{{ bnplayer.role === 'wicket-keeper' ? 'Bat & WK' : bnplayer.role === 'all-rounder' ? 'All' : bnplayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                                </p>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="team-squad team-squad-border">
+                            <hr>
+                          </div>
+                          <div class="team-squad team-squad-right" id="team-AFG">
+                            <div class="player-role-info" *ngFor="let bnplayer of infoData?.squad?.[1]?.bench_players;let i=index;">
+                              <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{bnplayer.sk_slug}}"><span
+                                    class="player-name">{{bnplayer.name}}</span></a>
+                                <p class="player-role">
+                                  <!-- <span>{{bnplayer.role}}</span> -->
+                                  <span>{{ bnplayer.role === 'wicket-keeper' ? 'Bat & WK' : bnplayer.role === 'all-rounder' ? 'All' : bnplayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+
+                                </p>
+                              </div>
+                              <div class="player-img-anchor"><img class="player-img"
+                                [src]="getPlayerImage(bnplayer.name) || teamDefaultImg"
+                                alt="player-img" height="40" width="40"></div>
+                            </div>
+
+                          </div>
+                        </div>
+
+
+                      </div>
+                    </div>
+                    <div class="squad-over-layer info-squad-view" [class]="hidebtn?'hidden':''"></div>
+                    <div class="squad-view-more" >
+                      <button class="squad-view-more-button" *ngIf="!hidebtn"
+                        (click)="expandfullsqure()"><span class="view-toggle-text"
+                          id="view-toggle-text">Full Squads</span>
+                        <img class="sports-accordion-arrow lazy-img-bg" width="6" height="10"
+                          src="/assets/arrow-icon.svg" alt="icon">
+                      </button>
+                      <button id="hidebttn" class="squad-view-more-button"*ngIf="hidebtn"
+                        (click)="expandHidesqure()"><span class="view-toggle-text"
+                          id="view-toggle-text">Hide Squads</span>
+                        <img class="sports-accordion-arrow lazy-img-bg" width="6" height="10"
+                          src="/assets/arrow-icon.svg" alt="icon">
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-body no-padding" *ngIf="infoData?.prediction_poll?.question">
+              <div class="info-prediction-poll info-prediction-poll-v2">
+                <div class="poll-question-wrapper"><span
+                    class="poll-question">{{infoData?.prediction_poll?.question}}</span>
+                  <p class="poll-count">{{sum_of_vote_count}} votes</p>
+                </div>
+                <div class="prediction-poll-content preview-card-content poll-card-content" style="text-align: center;"
+                 >
+                  <div class="poll-option has-winner text-center"><span class="poll-option-color" [style.width.%]="calculatePercentage(infoData?.prediction_poll?.options?.opt1?.vote_count)"></span>
+                    <p class="poll-option-text polls-text ">{{infoData?.score_strip?.[0]?.short_name}} : {{calculatePercentage(infoData?.prediction_poll.options?.opt1?.vote_count) | number:'1.0-0'}}%</p>
+
+                    <!-- <p class="poll-option-text polls-text"  *ngIf="infoData?.match_status=='pre'">{{item.text.split(' ')[0].slice(0,1)+item.text.split(' ')[1].slice(0,1)}}</p> -->
+
+                  </div>
+                  <div class="poll-option has-winner"><span class="poll-option-color" [style.width.%]="calculatePercentage(infoData?.prediction_poll?.options?.opt2?.vote_count)"></span>
+                    <p class="poll-option-text polls-text" >{{infoData?.score_strip?.[1]?.short_name}} : {{calculatePercentage(infoData?.prediction_poll.options?.opt2?.vote_count) | number:'1.0-0'}}%</p>
+
+                    <!-- <p class="poll-option-text polls-text"  *ngIf="infoData?.match_status=='pre'">{{item.text.split(' ')[0].slice(0,1)+item.text.split(' ')[1].slice(0,1)}}</p> -->
+
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="panel" *ngIf="showtTable?.length > 0">
+            <div class="panel-heading">
+            <div class="panel-heading-text">Points Table</div>
+            <div class="point-table">
+            <button id="full-table-button" routerLink="/pointTable/ipl">
+            Full Table
+            <img alt="arrow-icon" height="9" width="6" src="/assets/right-arrow-0B65F0.svg" class="lazy-img-bg">
+            </button>
+            </div>
+            </div>
+            <div class="panel-body no-padding">
+            <style>
+            .teams-ranking-section-v2 {
+            width: 100%;
+            flex-direction: column;
+            display: flex;
+            margin-bottom: 0;
+            }
+            .teams-ranking-section-v2 .teams-ranking-heading {
+            background: #E5E8E8;
+            padding: 6px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 21px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            }
+            .teams-ranking-section-v2 .point-table {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 18px;
+            }
+            .teams-ranking-section-v2 .point-table button {
+            color: #0B65F0;
+            text-decoration: none;
+            background: #E5E8E8;
+            gap: 6px;
+            align-items: center;
+            border: none;
+            display: flex;
+            cursor: pointer;
+            font-family: 'Poppins-cmc', -apple-system, BlinkMacSystemFont, "Segoe UI", "Liberation Sans", sans-serif;
+            }
+            .teams-ranking-section-v2 .point-table img {
+            background: transparent;
+            }
+            .teams-ranking-section-v2 .teams-ranking-info {
+            overflow-x: auto;
+            }
+            .teams-ranking-section-v2 .teams-ranking-info table {
+            display: table;
+            margin-left: 0;
+            width: 100%;
+            white-space: nowrap;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table {
+            background: #fff;
+            border: none;
+            }
+            .teams-ranking-section-v2 .teams-ranking-info thead {
+            font-weight: bold;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table tr {
+            background: none !important;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table td {
+            font-size: 14px;
+            color: #0f0f0f;
+            text-align: center;
+            padding-left: 8px;
+            }
+            .teams-ranking-section-v2 .keeda-widget-cricket-flag {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin: 0 10px 0 0;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table .points-table-team-name>div {
+            display: flex;
+            align-items: center;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table .points-table-team-name>div>img {
+            height: 21px;
+            width: 27px;
+            object-fit: contain;
+            background: none;
+            margin: 0 6px 0 0;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table .overall-points {
+            font-weight: bold;
+            color: #000;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table thead tr,
+            .teams-ranking-section-v2 .teams-ranking-table tbody tr {
+            border-bottom: 1px solid #F5F5F5 !important;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table th {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 21px;
+            text-transform: capitalize;
+            color: #474747;
+            text-align: center;
+            padding: 10px;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table td {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 21px;
+            text-transform: capitalize;
+            text-align: center;
+            color: #666666;
+            padding: 10px;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table .points-body tr:last-child {
+            border: none !important;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table .team-name {
+            text-align: left;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table .points-table-team-name {
+            text-align: left;
+            vertical-align: middle;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table .points-table-team-name a {
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 21px;
+            color: #0B65F0;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table .overall-points {
+            color: #666666;
+            }
+            @media (max-width: 768px) {
+            .teams-ranking-section-v2 {
+            padding: 12px 16px 0;
+            margin-top: 0px;
+            }
+            .teams-ranking-section-v2 .table-title {
+            background: #F5F5F5;
+            padding: 6px 16px;
+            }
+            .teams-ranking-section-v2 .teams-ranking-table th,
+            .teams-ranking-section-v2 .teams-ranking-table td,
+            .teams-ranking-section-v2 .teams-ranking-table .points-table-team-name a {
+            font-size: 12px;
+            line-height: 18px;
+            padding: 10px 5px;
+            }
+            .teams-ranking-section-v2 .point-table img {
+            height: 10px;
+            width: 6px;
+            }
+            .teams-ranking-section-v2 .point-table {
+            font-size: 12px;
+            }
+            .teams-ranking-section-v2 .teams-ranking-heading {
+            padding: 6px 16px;
+            }
+            .teams-ranking-section-v2 .teams-ranking-info {
+            border-radius: 4px;
+            border: 1px solid #DFDFDF;
+            }
+            }
+            </style>
+            <div class="teams-ranking-section-v2">
+            <div class="teams-ranking-info">
+            <table class="teams-ranking-table" id="info-points-table-data">
+              <thead>
+                <tr>
+                  <th title="Position">#</th>
+                  <th class="team-name" title="Teams">Team</th>
+                  <th title="Played">P</th>
+                  <th title="Won">W</th>
+                  <th title="Lost">L</th>
+                  <th title="Draw">D</th>
+                  <th title="No Result">NR</th>
+                  <th title="Points">PTS</th>
+                  <th title="Net Run Rate">NRR</th>
+                </tr>
+              </thead>
+              <tbody class="points-body" *ngFor="let el of pionteTableData;">
+                <ng-container *ngFor="let item of el.group;">
+                  <tr *ngIf="matchesDtata?.[0]?.name==item.team_name">
+                    <td>{{item.position}}</td>
+                    <td class="points-table-team-name">
+                      <div><img src="{{item.team_flag}}" width="48"
+                          height="38" alt="team-logo" class="team-flag" data-img-params="?w=96"><span title="Chennai Super Kings"><a
+                            routerLink="/team/{{item.team_slug}}">{{item.team_name}}</a></span></div>
+                    </td>
+                    <td>{{item.played}}</td>
+
+                    <td>{{item.won}}</td>
+                    <td>{{item.lost}}</td>
+                    <td>{{item.deductions || 0}}</td>
+                    <td>{{item.no_result}}</td>
+                    <td>{{item.points}}</td>
+                    <td >{{item.nrr}}</td>
+                  </tr>
+                  <tr *ngIf="matchesDtata?.[1]?.name==item.team_name">
+                    <td>{{item.position}}</td>
+                    <td class="points-table-team-name">
+                      <div><img src="{{item.team_flag}}" width="48" loading="lazy"
+                          height="38" alt="team-logo" class="team-flag" data-img-params="?w=96"><span title="Chennai Super Kings"><a
+                            routerLink="/team/{{item.team_slug}}">{{item.team_name}}</a></span></div>
+                    </td>
+                    <td>{{item.played}}</td>
+
+                    <td>{{item.won}}</td>
+                    <td>{{item.lost}}</td>
+                    <td>{{item.deductions || 0}}</td>
+                    <td>{{item.no_result}}</td>
+                    <td>{{item.points}}</td>
+                    <td >{{item.nrr}}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+            </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="article-content" data-postid="india-vs-england-3rd-match-15-february-2024"></div>
+
+    </div>
+  </div>
+  <div class="right-sidebar">
+    <div class="rightStickyTopWrap" style="height: 100px;">
+    <div class="rightStickyTop">
+    <div class="sidebar-ad-top">
+    <div class="ad-container" id="" style="
+    min-height: 80px;
+    width: 100%; text-align: center;clear:both;
+    ">
+    <div class="ad-declare-explicit"></div>
+
+    <div id="div-gpt-ad-1653457590899-0" class="">
+    <script>
+    if (typeof displayAdSlot !== 'undefined' && !window['AVOID_LOADING_SIDEBAR_AD_UNITS']) {
+    displayAdSlot('div-gpt-ad-1653457590899-0');
+    }
+    </script>
+    </div>
+    </div>
+
+    </div>
+    <div class="ad-container" id="" style="
+    min-height: 80px;
+    width: 100%; text-align: center;clear:both;
+    ">
+    <div class="ad-declare-explicit"></div>
+
+    <div id="div-gpt-ad-1680275006038-0" class="">
+    </div>
+    </div>
+
+    </div>
+    </div>
+
+    </div>
+</div>

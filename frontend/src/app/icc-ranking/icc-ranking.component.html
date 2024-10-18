@@ -1,0 +1,198 @@
+<section class="breadcrumb-section">
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/">Cricket </a>
+        </li>
+        <li>
+          <span>{{rankingname.split('-').join('  ') | titlecase }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="hero-section">
+  <div class="tag-page-bg">
+    <div class="tag-page-header ">
+      <div class="tag-page-header-info">
+        <div class="tag-page-header-title">
+          <h1>{{rankingname.split('-').join('  ') | titlecase }}</h1>
+          <div class="taxonomy-share">
+          </div>
+        </div>
+      </div>
+      <div class="smart-menu-holder">
+
+        <nav id="pnProductNav" class="pn-ProductNav">
+          <div id="pnProductNavContents" class="pn-ProductNav_Contents">
+            <a class="smart-menu-item"
+             >
+             {{rankingname.split('-').join('  ') | uppercase}}
+            </a>
+
+          </div>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container editor-width-100-pc wrapper-container">
+  <div class="fragments-container ">
+    <div class="content-holder">
+      <div class="feed-header">
+      </div>
+      <div class="tag-page-info-container">
+        <div class="tagPage-info-holder">
+          <div style="display:block;">
+            <div style="clear:both;">
+              <div class="taxonomy-content tag-page-content-holder ">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h2 id="icc-odi-ranking-0"><strong>{{rankinglist[0]?.heading}}</strong></h2>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td data-row="1"><strong>POS</strong></td>
+                          <td data-row="1"><strong>TEAM</strong></td>
+                          <td data-row="1"><strong>MATCHES</strong></td>
+                          <td data-row="1" id="widthth"><strong>POINTS</strong></td>
+                          <td data-row="1"><strong>RATING</strong></td>
+                        </tr>
+                        <tr *ngFor="let item of rankinglist[0]?.data;">
+                          <td >{{item.POS}}</td>
+                          <td ><strong>{{item.TEAM}}</strong></td>
+                          <td style="text-align: center;"> {{item.MATCHES}}</td>
+                          <td id="widthtd">{{item.POINTS}}</td>
+                          <td style="text-align: right;">{{item.RATING}}</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-md-6">
+                    <h2 id="icc-odi-ranking-1 " style="font-weight: bolder;" >{{rankinglist[1]?.heading}}</h2>
+                    <table>
+                      <tbody>
+                        <tr >
+                          <td data-row="1"><strong>POS</strong></td>
+                          <td data-row="1"><strong>PLAYER</strong></td>
+                          <td data-row="1"><strong>TEAM</strong></td>
+                          <td data-row="1"><strong>RATING</strong></td>
+                        </tr>
+                        <tr *ngFor="let item2 of rankinglist[1]?.data;">
+                          <td data-row="2">{{item2.POS}}</td>
+                          <td data-row="2"><strong>{{item2.PLAYER}}</strong></td>
+                          <td data-row="2">{{item2.TEAM}}</td>
+                          <td data-row="2">{{item2.RATING}}</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <hr>
+                  <div class="row">
+                    <div class="col-md-6">
+                <h2 id="icc-odi-ranking-2"><strong style="color: rgb(34, 34, 34);">{{rankinglist[2]?.heading}}</strong>
+                </h2>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td data-row="1"><strong>POS</strong></td>
+                      <td data-row="1"><strong>PLAYER</strong></td>
+                      <td data-row="1"><strong>TEAM</strong></td>
+                      <td data-row="1"><strong>RATING</strong></td>
+                    </tr>
+                    <tr *ngFor="let item3 of rankinglist[2]?.data;">
+                      <td data-row="2">{{item3.POS}}</td>
+                      <td data-row="2"><strong>{{item3.PLAYER}}</strong></td>
+                      <td data-row="2">{{item3.TEAM}}</td>
+                      <td data-row="2">{{item3.RATING}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                    </div>
+                    <div class="col-md-6">
+                <h2 id="icc-odi-ranking-3"><strong>ICC ODI All-Rounders Ranking</strong></h2>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td data-row="1"><strong>POS</strong></td>
+                      <td data-row="1"><strong>PLAYER</strong></td>
+                      <td data-row="1"><strong>TEAM</strong></td>
+                      <td data-row="1"><strong>RATING</strong></td>
+                    </tr>
+                    <tr *ngFor="let itemAllRounder of rankinglist[3]?.data;">
+                      <td data-row="2">{{itemAllRounder.POS}}</td>
+                      <td data-row="2"><strong>{{itemAllRounder.PLAYER}}</strong></td>
+                      <td data-row="2">{{itemAllRounder.TEAM}}</td>
+                      <td data-row="2">{{itemAllRounder.RATING}}</td>
+                    </tr>
+
+                  </tbody>
+                </table>
+                    </div>
+                  </div>
+
+                <div class="ad-container " id="infinite-content-ad-29"
+                  style="width: 100%; text-align: center;clear:both;                        ">
+                  <div class="ad-declare-explicit"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12">
+
+                    <h2 id="icc-odi-ranking-4"><strong>{{rankinglist[4]?.heading}}:</strong></h2>
+                    <p><br></p>
+                    <table class="table table-bordered" style="width : 100%">
+                      <tbody>
+                        <tr>
+                          <td data-row="1"><strong>Team</strong></td>
+                          <td data-row="1"><strong>From</strong></td>
+                          <td data-row="1"><strong>Till</strong></td>
+                        </tr>
+                        <tr *ngFor="let item4 of rankinglist[4]?.data;">
+                          <td data-row="2"><a style="color: rgb(17, 85, 204);" routerLink="/team/australian-cricket-team"
+                              target="_blank">{{item4.Team}}</a></td>
+                          <td data-row="2">{{item4.From}}</td>
+                          <td data-row="2">{{item4.Till}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="tag-see-more hidden" onclick="readMoreToggle(this);">
+                <span class="read-more-text">Read More</span>
+                <img class="read-more-icon" width="10" height="10" alt="read-more-icon"
+                  src="/assets/arrow-icon-red.svg">
+              </div>
+              <div class="see-less-container hidden">
+                <div class="tag-see-less" onclick="readLessToggle(this);">
+                  <span class="read-less-text">Read Less</span>
+                  <img class="read-less-icon" width="10" height="10" alt="read-less-icon"
+                    src="/assets/arrow-icon-red.svg">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tag-page-related-stories-section">
+      
+
+      </div>
+      <div class="sk-ads-taboola-container sk-ads-taboola-tagpage">
+        <div id="taboola-below-article-thumbnails"></div>
+      </div>
+    </div>
+  </div>
+</div>

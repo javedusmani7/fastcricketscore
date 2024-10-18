@@ -1,0 +1,924 @@
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <a routerLink="/cricket">Cricket </a>
+        </li>
+        <li>
+          <a routerLink="/go/{{turnament}}">{{seriesInfo?.title}}</a>
+        </li>
+        <li>
+          <span>Stats</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+<section class="hero-section">
+
+  <div class="hero-container" data-imp-id="page_primary_hero">
+    <div class="wrapper-container">
+
+      <div class="hero-content ">
+        <div class="left">
+          <div class="hero-h1-container">
+            <h1 class="hero-h1">{{seriesInfo?.title}} </h1>
+          </div>
+          <div class="hash-tagline">{{seriesInfo?.dates}}</div>
+        </div>
+        <div class="right">
+          <div class="hero-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<section class="wrapper-container" id="desktopiew">
+  <div class="fragment-container">
+    <main class="event-subpage">
+      <section class="layout-wrapper">
+        <div class="content-container">
+          <div class="right">
+            <section class="sk-widget ">
+
+              <div class="latest-popular-news-container"
+                >
+                <div class="panel " *ngIf="latestNewsList?.length > 0 || popularNewsList?.length > 0" >
+                  <header class="panel-header ">
+                    <h2 class="panel-heading"  *ngIf="latestNewsList?.length > 0 && popularNewsList?.length <= 0">Latest News</h2>
+                    <h2 class="panel-heading"  *ngIf="latestNewsList?.length < 0 && popularNewsList?.length > 0">popular News</h2>
+                    </header>
+
+                  <div class="panel-body ">
+                    <div class="controls-container" *ngIf="latestNewsList?.length > 0 && popularNewsList?.length > 0" >
+                      <button class="news-switcher" (click)="getneswdata('latest')"
+                        [class]="selectedNewsTab=='latest'?'active':''" data-section="latest">
+                        <h2>Latest News</h2>
+                      </button>
+                      <button class="news-switcher" (click)="popularNewsdata('popular')"
+                        [class]="selectedNewsTab=='popular'?'active':''" data-section="popular">
+                        <h2>Most Popular</h2>
+                      </button>
+                    </div>
+                    <div class="content">
+                      <div class="news-items latest_popular_news_widget__england-vs-india__news_latest"
+                        *ngIf="selectedNewsTab==='latest'">
+                        <a *ngFor="let item of latestNewsList; let i=index;" routerLink="/cricket-news/{{item.link}}"
+                          class="news-item" data-sequence="1" data-section="">
+                          <div class="news-sequence">{{i+1}}</div>
+                          <div class="news-content">
+                            <div class="news-title">{{item.title}}</div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="news-items latest_popular_news_widget__england-vs-india__news_popular"
+                        *ngIf="selectedNewsTab=='popular'">
+                        <a *ngFor="let item of popularNewsList; let i=index;" routerLink="/cricket-news/{{item.link}}"
+                          class="news-item" data-sequence="1" data-section="">
+                          <div class="news-sequence">{{i+1}}</div>
+                          <div class="news-content">
+                            <div class="news-title">{{item.title}}</div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </section>
+            <div class="section-separator "></div>
+            <section class="sk-widget schedule">
+              <div class="panel ">
+                <header class="panel-header ">
+                  <h2 class="panel-heading">{{upcominglist?.[0]?.event_menu_name}}  Schedule</h2>
+                  <a class="view-more-cta" routerLink="/child-shedule/{{turnament}}/upcoming" data-section="schedule">
+                    <span>View All</span>
+                  </a>
+                </header>
+                <div class="panel-body ">
+
+
+                  <div class="widget--tournament-schedule-results">
+                    <div class="schedule-results-container" data-imp-id="widget_schedule_results">
+                      <div class="schedule-results-controls">
+                        <button class="schedule-results-controls-tab-switcher "
+                          [class]="selectedTabupcoming == true ? 'active' : ''" (click)="getupcomming()">
+                          <span>Upcoming</span>
+                        </button>
+                        <button class="schedule-results-controls-tab-switcher"
+                          [class]="resulttab == true ? 'active' : ''" (click)="getresult()">
+                          <span>Results</span>
+                        </button>
+                      </div>
+                      <div class="schedule-results-content">
+
+                        <div class="schedule-results-tab-content schedule-results-tab-content--upcoming"
+                          *ngIf="selectedTabupcoming">
+                          <div class="schedule-results-empty-message" *ngIf="upcominglist?.length <= 0">
+                            <img class="schedule-results-empty-message--icon" width="70" height="67"
+                              alt="loudspeaker-icon"
+                              src="/assets/cmc-pre-live-icon.svg">
+                            <div class="schedule-results-empty-message--text">No upcoming matches</div>
+                          </div>
+                          <div class="schedule-results-item size--24" *ngFor="let item of upcominglist?.slice(0,5)">
+                            <a class="schedule-results-item-cta"
+                            (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"></a>
+                            <div class="schedule-results-item-wrapper">
+                              <div class="schedule-results-item-team-info">
+                                <img class="schedule-results-item-team-flag img-with-fallbacks" width="24" height="24"
+                                  alt="team-flag" src="{{item.t1_flag || '/assets/team-default.png'}}" (error)="item.t1_flag = '../../assets/team-default.png'">
+                                <div class="schedule-results-item-team-name">{{item.t1_key}}</div>
+                              </div>
+                              <div class="schedule-results-item-content">
+                                <div class="schedule-results-item-upcoming-content">
+                                  <div class="cricket-schedule-results-item-match-number">{{item.description}}</div>
+                                  <div class="cricket-schedule-results-item-match-time convert-utc-to-local"
+                                    data-utc-date-time="2024-02-15T04:00:00+00:00" data-format="dd mmm, hh:MM TT">
+                                    {{item.datetime | date:"dd MMM, hh:mm a"}}
+                                  </div>
+
+                                </div>
+                              </div>
+                              <div class="schedule-results-item-team-info">
+                                <img class="schedule-results-item-team-flag img-with-fallbacks" width="24" height="24"
+                                  alt="team-flag" src="{{item.t2_flag}}" (error)="item.t2_flag = '../../assets/team-default.png'">
+                                <div class="schedule-results-item-team-name">{{item.t2_key}}</div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="schedule-results-tab-content schedule-results-tab-content--results "
+                          *ngIf="resulttab">
+                          <div class="schedule-results-empty-message" *ngIf="resultdata?.length <= 0">
+                            <img class="schedule-results-empty-message--icon" width="70" height="67"
+                              alt="loudspeaker-icon"
+                              src="/assets/cmc-pre-live-icon.svg">
+                            <div class="schedule-results-empty-message--text">No result matches</div>
+                          </div>
+                          <div class="schedule-results-item size--24" *ngFor="let item of resultdata?.slice(0,5)">
+                            <a class="schedule-results-item-cta"
+                            (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"></a>
+                            <div class="schedule-results-item-wrapper">
+                              <div class="schedule-results-item-team-info">
+                                <img class="schedule-results-item-team-flag img-with-fallbacks" width="24" height="24"
+                                  alt="team-flag" src="{{item.t1_flag || '../../../../assets/team-default.png'}}" (error)="item.t1_flag = '../../assets/team-default.png'">
+                                <div class="schedule-results-item-team-name">{{item.t1_key}}</div>
+                              </div>
+                              <div class="schedule-results-item-content">
+                                <div class="schedule-results-item-results-content">
+                                  <div class="cricket-schedule-results-item-match-score">
+                                    <div class="cricket-schedule-results-item-match-score--runs"><span>{{gett1Scores(item.t1_score)[0]}}</span>
+                                      <span class="cricket-schedule-results-item-match-score--overs ">({{gett1Scores(item.t1_score)[1]}})</span>
+                                    </div>
+                                  </div>
+                                  <div class="cricket-schedule-results-item-vs-text">vs</div>
+                                  <div class="cricket-schedule-results-item-match-score">
+                                    <div class="cricket-schedule-results-item-match-score--runs"><span>{{gett1Scores(item.t2_score)[0]}}</span>
+                                      <span class="cricket-schedule-results-item-match-score--overs ">({{gett1Scores(item.t2_score)[1]}})</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="schedule-results-item-team-info">
+                                <img class="schedule-results-item-team-flag img-with-fallbacks" width="24" height="24"
+                                  alt="team-flag" [src]="item.t2_flag" (error)="item.t2_flag = '../../assets/team-default.png'">
+                                <div class="schedule-results-item-team-name">{{item.t2_key}}</div>
+                              </div>
+                            </div>
+                            <footer class="schedule-results-item-footer">
+                              <div class="schedule-results-item-footer-content">
+                                <span class="schedule-results-item-footer-content-highlight">{{item.description}}</span>
+                                <span>{{item.result}}</span>
+                              </div>
+                            </footer>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div class="section-separator "></div>
+            <section class="sk-widget points-table" *ngIf="pointsRes?.length > 0">
+              <div class="panel ">
+                <header class="panel-header ">
+                  <h2 class="panel-heading">{{upcominglist?.[0]?.event}} Points Table</h2>
+                  <a class="view-more-cta" routerLink="/pointTable/{{turnament}}" data-section="points-table">
+                    <span>Full Table</span>
+                  </a>
+                </header>
+                <div class="panel-body no-padding">
+
+                  <div class="widget--tournament-points-table">
+                    <div class="tournament-points-table-container">
+                      <div class="tournament-points-table-groups hidden">
+                        <button class="points-table-group-switcher active"
+                          data-group-title="Women's Premier League">Women's Premier League</button>
+                      </div>
+                      <div class="tournament-points-table-group-table " data-group-title="Women's Premier League">
+                        <div class="keeda-data-table-wrapper">
+                          <div class="keeda-data-table-container">
+                            <table class="keeda-data-table">
+                              <thead>
+                                <tr>
+                                  <th>
+                                    <div class="ta-c">Pos</div>
+                                  </th>
+                                  <th class="column-team">
+                                    <div class="ta-l">Teams</div>
+                                  </th>
+                                  <th>
+                                    <div class="ta-c">P</div>
+                                  </th>
+                                  <th>
+                                    <div class="ta-c">W</div>
+                                  </th>
+                                  <th>
+                                    <div class="ta-c">L</div>
+                                  </th>
+                                  <th>
+                                    <div class="ta-c">D</div>
+                                  </th>
+                                  <th class="selected">
+                                    <div class="ta-c">PTS</div>
+                                  </th>
+                                  <th>
+                                    <div class="ta-c">NRR</div>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of pointsRes?.slice(0,5)">
+                                  <td>
+                                    <div class="ta-c">{{item.position}}</div>
+                                  </td>
+                                  <td><a class="points-table-team" routerLink="/team/royal-challengers-bangalore-women"
+                                      sequence="1"><img [src]="item.team_flag || teamDefaultImg" width="24" height="24"
+                                        alt="team-flag" class="" data-img-params="?w=96">
+                                      <div class="points-table-team-name">{{item.team_short_name}}</div>
+                                    </a></td>
+                                  <td>
+                                    <div class="ta-c">{{item.played}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.won}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.lost}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.tied}}</div>
+                                  </td>
+                                  <td class="selected">
+                                    <div class="ta-c">{{item.points}}</div>
+                                  </td>
+                                  <td>
+                                    <div class="ta-c">{{item.nrr}}</div>
+                                  </td>
+                                </tr>
+
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </section>
+
+
+          </div>
+          <div class="left">
+            <div class="subpage-container">
+              <section class="cricket-stats-container">
+                <div class="panel">
+                  <div class="panel-body">
+                    <div class="keeda_widget_loader" style="display: block; text-align: center; margin-top: 10%;"
+                      *ngIf="loader==true">
+                      <img class="spin cricket-ball"
+                        src="../../assets/cricket_ball.svg" alt="loader"
+                        style="transform: rotate(7500deg);">
+                    </div>
+                    <div class="page-empty-state" *ngIf="statsList?.['Batting Stats']?.length == 0 ">
+                      <img width="70" height="67" alt="speaker"
+                        src="../../assets/cmc-pre-live-icon.svg" class="lazy-img-bg">
+                      <div class="page-empty-state-message">Stats are not available</div>
+                    </div>
+                    <div class="stats-categories" *ngIf="statsList?.['Batting Stats']?.length > 0">
+                      <div class="stats-category">
+                        <header class="stats-category-header">
+                          <h2 class="stats-category-heading">Batting Stats</h2>
+                        </header>
+                        <div class="stats-category-items" *ngFor="let item of statsList?.['Batting Stats']">
+                          <div class="stats-item-container" *ngFor="let player of item.players?.slice(0,1)">
+                            <div class="leaderboard-card-container">
+                              <header class="leaderboard-card-header">
+                                <div class="leaderboard-card-header-heading">{{item.heading}}</div>
+                              </header>
+                              <div class="leaderboard-card-primary-items">
+                                <div class="leaderboard-card-item--primary">
+                                  <div class="leaderboard-card-item--primary-content">
+                                    <div class="leaderboard-card-item--primary-content-left">
+                                      <div class="leaderboard-card-item--primary-player-name" >{{player.name.split('
+                                        ')[0]}} <br>{{player.name.split(' ')[1]}}</div>
+                                      <div class="leaderboard-card-item--primary-stat">{{player.stat}}</div>
+                                      <img [src]="player.flag" (error)="player.flag = '../../assets/team-default.png'"
+                                        class="leaderboard-card-item--primary-team-flag" width="30" height="20"
+                                        alt="team flag" data-img-params="?h=40">
+                                    </div>
+                                    <div class="leaderboard-card-item--primary-content-right">
+                                      <div class="leaderboard-card-item--primary-player-thumb">
+                                        <img [src]="player.image"
+                                          (error)="player.image = '../../assets/team-default.png'" class="" width="78"
+                                          height="78" alt="player image" data-img-params="?h=156">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="leaderboard-card-secondary-items">
+                                <div class="leaderboard-card-item--secondary"
+                                  *ngFor="let player of item.players.slice(1)">
+                                  <div class="leaderboard-card-item--secondary-rank">
+                                    <span>{{player.rank}}</span>
+                                  </div>
+                                  <img src="{{player.flag}}" class="leaderboard-card-item--secondary-team-flag"
+                                    width="30" height="20" alt="team flag" data-img-params="?h=40">
+                                  <div class="leaderboard-card-item--secondary-player">
+                                    <a routerLink="/player/">{{player.name}}</a>
+                                  </div>
+                                  <div class="leaderboard-card-item--secondary-stat">{{player.stat}}</div>
+                                </div>
+                              </div>
+                              <footer class="leaderboard-card-footer">
+                                <a class="leaderboard-card-footer-cta"
+                                  routerLink="/goo/{{turnament}}/{{getAngularFormat(item.heading)}}">Full
+                                  List</a>
+                              </footer>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="stats-category">
+                        <header class="stats-category-header">
+                          <h2 class="stats-category-heading">Bowling Stats</h2>
+                        </header>
+                        <div class="stats-category-items" *ngFor="let item of statsList?.['Bowling Stats']">
+                          <div class="stats-item-container" *ngFor="let player of item.players?.slice(0,1)">
+                            <div class="leaderboard-card-container">
+                              <header class="leaderboard-card-header">
+                                <div class="leaderboard-card-header-heading">{{item.heading}}</div>
+                              </header>
+                              <div class="leaderboard-card-primary-items">
+                                <div class="leaderboard-card-item--primary">
+                                  <div class="leaderboard-card-item--primary-content">
+                                    <!-- <a class="item-cta" routerLink="/player/tom-hartley">Tom <br>Hartley</a> -->
+                                    <div class="leaderboard-card-item--primary-content-left">
+                                      <div class="leaderboard-card-item--primary-player-name">{{player.name.split('
+                                        ')[0]}} <br>{{player.name.split(' ')[1]}} </div>
+                                      <div class="leaderboard-card-item--primary-stat">{{player.stat}}</div>
+                                      <img [src]="player.flag" (error)="player.flag = '../../assets/team-default.png'"
+                                        class="leaderboard-card-item--primary-team-flag" width="30" height="20"
+                                        alt="team flag" data-img-params="?h=40">
+                                    </div>
+                                    <div class="leaderboard-card-item--primary-content-right">
+                                      <div class="leaderboard-card-item--primary-player-thumb">
+                                        <img [src]="player.image"
+                                          (error)="player.image = '../../assets/team-default.png'" class="" width="78"
+                                          height="78" alt="player image" data-img-params="?h=156">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="leaderboard-card-secondary-items">
+                                <div class="leaderboard-card-item--secondary"
+                                  *ngFor="let player of item.players?.slice(1)">
+                                  <div class="leaderboard-card-item--secondary-rank">
+                                    <span>{{player.rank}}</span>
+                                  </div>
+                                  <img [src]="player.flag" (error)="player.flag = '../../assets/team-default.png'"
+                                    class="leaderboard-card-item--secondary-team-flag" width="30" height="20"
+                                    alt="team flag" data-img-params="?h=40">
+                                  <div class="leaderboard-card-item--secondary-player">
+                                    <a routerLink="/player/">{{player.name}}</a>
+                                  </div>
+                                  <div class="leaderboard-card-item--secondary-stat">{{player.stat}}</div>
+                                </div>
+                              </div>
+                              <footer class="leaderboard-card-footer">
+                                <a class="leaderboard-card-footer-cta"
+                                  routerLink="/goo/{{turnament}}/{{getAngularFormat(item.heading)}}">Full
+                                  List</a>
+                              </footer>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="section-separator"></div>
+              </section>
+              <div class="section-separator "></div>
+
+              <section class="page-info" *ngIf="turnament=='ipl'">
+                <div class="panel">
+                  <header class="panel-header">
+                    <h2 class="panel-heading">IPL 2024 Stats</h2>
+                  </header>
+                  <div class="panel-body">
+                    <style>
+                      .page-seo-content {
+                        position: relative;
+                        overflow: hidden;
+                        padding-bottom: 40px;
+                      }
+
+                      .page-seo-content .content-overlay-area {
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        height: 80px;
+                        z-index: 0;
+                      }
+
+                      .page-seo-content .content-overlay-area .content-overlay {
+                        background: linear-gradient(180deg, rgba(255, 255, 255, 0.49) 0%, #FFFFFF 56.93%);
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        left: 0;
+                        top: 0;
+                        z-index: 1;
+                      }
+
+                      .page-seo-content .view-toggle-container {
+                        height: 100%;
+                        display: flex;
+                        align-items: flex-end;
+                        justify-content: center;
+                      }
+
+                      .page-seo-content .view-toggle-container.expanded {
+                        justify-content: flex-end;
+                      }
+
+                      .page-seo-content .view-toggle-container .view-toggle-content-btn {
+                        cursor: pointer;
+                        position: relative;
+                        z-index: 2;
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 4px 10px;
+                        background-color: #fff;
+                        border: 1px solid #666666;
+                        border-radius: 28px;
+                      }
+
+                      .page-seo-content .view-toggle-container .view-toggle-content-btn span {
+                        color: #666666;
+                        font-size: 12px;
+                        line-height: 18px;
+                      }
+
+                      .page-seo-content .view-toggle-container .view-toggle-content-btn img {
+                        width: 6px;
+                        height: 10px;
+                        transform: rotate(90deg);
+                        background-color: transparent;
+                      }
+
+                      .page-seo-content .view-toggle-container.expanded .view-toggle-content-btn img {
+                        transform: rotate(-90deg);
+                      }
+
+                      .page-seo-content .cms-content {
+                        overflow: hidden;
+                        height: 100%;
+                      }
+
+                      .page-seo-content .cms-content.collapsed {
+                        max-height: 210px;
+                      }
+
+                      .page-seo-content .cms-content p {
+                        margin: 0;
+                        padding: 0;
+                        color: #2D2D2D;
+                        font-weight: 400;
+                        font-size: 16px;
+                        line-height: 32px;
+                      }
+
+                      .page-seo-content .cms-content pt h2 {
+                        margin: 10px 0 0 0;
+                        font-weight: 600;
+                        font-size: 20px;
+                        line-height: 30px;
+                      }
+
+                      .page-seo-content .cms-content ul {
+                        margin-left: 20px;
+                      }
+
+                      .page-seo-content .cms-content li>p {
+                        display: inline;
+                      }
+
+                      .page-seo-content .cms-content ul+p {
+                        margin-left: 20px;
+                      }
+
+                      .page-seo-content .cms-content li {
+                        margin: 0;
+                        padding: 0;
+                        color: #2D2D2D;
+                        font-weight: 400;
+                        font-size: 16px;
+                        line-height: 32px;
+                        list-style-type: disc;
+                        list-style-position: inside;
+                      }
+
+                      .page-seo-content .cms-content .toc {
+                        width: 60%;
+                        background: #F5F7FD !important;
+                      }
+
+                      .page-seo-content .cms-content .toc .accordion-title {
+                        background: #EAECF0 !important;
+                        font-weight: 600;
+                        font-size: 15px;
+                      }
+
+                      .page-seo-content .cms-content .toc.active>.accordion-title::after {
+                        top: 6px;
+                      }
+
+                      .page-seo-content .cms-content .toc-content {
+                        font-size: 14px;
+                      }
+
+                      .page-seo-content .cms-content .toc-content li {
+                        word-wrap: break-word;
+                      }
+
+                      .page-seo-content .cms-content .toc-content li a:hover {
+                        color: #0b65f0 !important;
+                      }
+
+                      .page-seo-content .cms-content .toc-content li a {
+                        color: #2D2D2D !important;
+                        text-decoration: none;
+                      }
+
+                      .page-seo-content .cms-content .toc-content li:before {
+                        color: #666666;
+                      }
+
+                      .page-seo-content .cms-content .toc-info--holder {
+                        margin: 14px 0;
+                      }
+
+                      .page-seo-content .cms-content .toc-info--holder ol {
+                        counter-reset: my-counter;
+                        padding-left: 0;
+                      }
+
+                      .page-seo-content .cms-content .toc-info--holder li {
+                        display: block;
+                        padding-left: 0;
+                      }
+
+                      .page-seo-content .cms-content .toc-info--holder li:before {
+                        content: counters(my-counter, ".") ". ";
+                        counter-increment: my-counter;
+                        display: inline;
+                        margin-right: 4px;
+                        vertical-align: top;
+                        text-align: right;
+                        white-space: nowrap;
+                        width: 1.2em;
+                      }
+
+                      .page-seo-content .cms-content .toc-info--holder ol {
+                        counter-reset: my-counter;
+                        padding-left: 12px;
+                      }
+
+                      .page-seo-content .cms-content .toc-info--holder li a {
+                        display: inline-block;
+                        width: 90%;
+                      }
+
+                      .page-seo-content .cms-content .accordion-wrapper {
+                        clear: both;
+                        display: block;
+                        position: relative;
+                        background: #FFFFFF;
+                        border: 1px solid #e9e9e9;
+                        margin-bottom: 16px;
+                      }
+
+                      .page-seo-content .cms-content .accordion-wrapper .accordion-title {
+                        padding: 8px 20px;
+                        font-weight: 600;
+                        font-size: 15px;
+                        line-height: 22px;
+                        color: #474747;
+                        margin: 0 !important;
+                        background: #F5F7FD;
+                        position: relative;
+                        width: 100%;
+                        cursor: pointer;
+                      }
+
+                      .page-seo-content .cms-content .accordion-wrapper .accordion-title::after {
+                        content: "";
+                        display: block;
+                        position: absolute;
+                        top: 8px;
+                        right: 16px;
+                        background: url("../../assets/arrow-down.svg") no-repeat;
+                        width: 24px;
+                        height: 24px;
+                        transition: all 0.3s ease-in;
+                        background-size: cover;
+                        transform: rotate(180deg);
+                      }
+
+                      .page-seo-content .cms-content .accordion-wrapper.active .accordion-title::after {
+                        transform: rotate(0deg);
+                        bottom: 6px;
+                      }
+
+                      .page-seo-content .cms-content .accordion-wrapper .accordion-content {
+                        padding: 0 16px 8px;
+                        display: none;
+                      }
+
+                      .page-seo-content .cms-content .accordion-wrapper.active .accordion-content {
+                        display: block;
+                      }
+
+                      .page-seo-content .cms-content .toc-info--holder li:before {
+                        content: counters(my-counter, ".") ". ";
+                        counter-increment: my-counter;
+                      }
+
+                      .page-seo-content .cms-content .toc-info--holder li:before {
+                        content: counters(my-counter, ".") ". ";
+                        counter-increment: my-counter;
+                        display: inline;
+                        margin-right: 4px;
+                        vertical-align: top;
+                      }
+
+                      .page-seo-content .cms-content .title-toc {
+                        font-size: 1.5em;
+                        font-weight: bold;
+                      }
+
+                      @media all and (max-width: 768px) {
+                        .page-seo-content .cms-content .toc {
+                          width: 100%;
+                        }
+
+                        .page-seo-content .cms-content .toc .accordion-title {
+                          height: 33px;
+                          padding: 7px 0 7px 16px !important;
+                        }
+
+                        .page-seo-content .cms-content .toc-content li {
+                          word-wrap: break-word;
+                          margin-top: 8px;
+                        }
+
+                        .page-seo-content .cms-content .toc .accordion-title::after {
+                          top: 5px;
+                        }
+
+                        .page-seo-content .cms-content .accordion-wrapper {
+                          margin-bottom: 0;
+                        }
+
+                        .page-seo-content .cms-content .accordion-wrapper>h2 {
+                          padding: 12px 16px;
+                          font-weight: 500;
+                          font-size: 17px;
+                          line-height: 1.5;
+                          padding-right: 44px;
+                          -webkit-tap-highlight-color: transparent;
+                        }
+
+                        .page-seo-content .cms-content .accordion-wrapper .accordion-title::after {
+                          top: 5px;
+                          right: 12px;
+                        }
+
+                        .page-seo-content .cms-content p {
+                          font-size: 14px;
+                          line-height: 22px;
+                        }
+
+                        .page-seo-content .cms-content h2 {
+                          font-weight: 600;
+                          font-size: 16px;
+                          line-height: 24px;
+                        }
+
+                        .page-seo-content .cms-content .title-toc {
+                          font-weight: 600;
+                          font-size: 16px;
+                          line-height: 24px;
+                        }
+
+                        .page-seo-content .cms-content li {
+                          font-size: 14px;
+                          line-height: 22px;
+                        }
+                      }
+                    </style>
+                    <div class="page-seo-content">
+                      <div id="removeCollapse" class="cms-content collapsed" data-imp-id="widget_page_seo_content">
+                        <h3><strong>IPL 2024 Stats</strong></h3>
+                        <p><br></p>
+                        <p>The Indian Premier League (IPL) will continue to provide nail-biting entertainment to the
+                          fans worldwide in its seventeenth edition in 2024. The IPL stats are a good set to measure the
+                          entertainment it provided as some cricketing stars dazzled the competition with their
+                          performances.</p>
+                        <p><br></p>
+                        <h2><strong>IPL Stats - Batting</strong></h2>
+                        <p><br></p>
+                        <h3 data-gtm-vis-first-on-screen11995632_98="12823"
+                          data-gtm-vis-total-visible-time11995632_98="100" data-gtm-vis-has-fired11995632_98="1">
+                          <strong>IPL Most Runs</strong></h3>
+                        <p><br></p>
+                        <p>The record for most IPL runs belongs to the Royal Challengers Bangalore (<a
+                            target="_blank">RCB</a>)
+                          star Virat Kohli who has scored 7,263 runs in 237 matches and is 646 runs ahead of the Punjab
+                          Kings captain Shikhar Dhawan. Dhawan has made 6,617 runs in 216 matches. </p>
+                        <p><br></p>
+                        <h3 data-gtm-vis-first-on-screen11995632_98="55398"
+                          data-gtm-vis-total-visible-time11995632_98="100" data-gtm-vis-has-fired11995632_98="1">
+                          <strong>Best Individual Score</strong></h3>
+                        <p><br></p>
+                        <p>The best individual score in IPL history is also the highest individual score in T20 cricket.
+                          <a target="_blank">Chris Gayle</a>
+                          scored 175 not out against Pune Warriors India in 2013.</p>
+                        <p><br></p>
+                        <h3><strong>Best Batting Averages</strong></h3>
+                        <p><br></p>
+                        <p>Vivrant Sharma has the best batting average of 69.00 in the IPL. He played just one innings
+                          for Sunrisers Hyderabad (SRH) and scored 69 runs in that game. For batters with minimum 1000
+                          runs or 50 matches, Lucknow SuperGiants (LSG) captain KL Rahul has the best batting average
+                          of<strong> 46.77 </strong>scoring 4,163 runs in 109 innings. </p>
+                        <p><br></p>
+                        <h3><strong>Best Strike Rates</strong></h3>
+                        <p><br></p>
+                        <p>Kolkata Knight Riders’ all-rounder Andre Russell has a batting strike rate of 174.00,, the
+                          best in the IPL. He has scored 2,262 runs at that rate in 96 innings. He is in superb form of
+                          late as well and will be looking to have an entertaining show once again. Among Indian
+                          players, Virender Sehwag has the best strike rate of 155.44, scoring 2,728 runs in 104
+                          innings. </p>
+                        <p><br></p>
+                        <h3><strong>Most Hundreds</strong></h3>
+                        <p><br></p>
+                        <p>The record for smashing the most IPL hundred is held by none other than Virat Kohli. The RCB
+                          superstar has racked up seven hundreds, four of which came during IPL 2016 only. </p>
+                        <p><br></p>
+                        <h3><strong>Most Fifties</strong></h3>
+                        <p><br></p>
+                        <p>David Warner has 61 half-centuries in the IPL in 176 matches. On second spot is Virat Kohli
+                          and Shikhar Dhawan, hammering 50 fifties each.</p>
+                        <p><br></p>
+                        <h3><strong>Most Sixes</strong></h3>
+                        <p><br></p>
+                        <p>Former PBKS and RCB batter Chris Gayle is way ahead of all other batters in the IPL with 357
+                          sixes, 100 more than the second-best Rohit Sharma (257). </p>
+                        <p><br></p>
+                        <h3><strong>Most Fours</strong></h3>
+                        <p><br></p>
+                        <p>David Warner is narrowly ahead in this list of batters with most fours. The Australian has
+                          hit 646 fours thus far. Virat Kohli, on the other hand, has clobbered 643 boundaries for RCB.
+                        </p>
+                        <h3><strong>Most runs in a single IPL edition</strong></h3>
+                        <p><br></p>
+                        <p>Virat Kohli mustered 973 runs at an average of 81.08 during IPL 2016. This is the most any
+                          batter has scored in a single IPL season. Shubman Gill came close to this record in IPL 2023,
+                          where he hammered 890 runs for GT. </p>
+                        <h2><strong>IPL Stats - Bowling</strong></h2>
+                        <h3><strong>Most Wickets</strong></h3>
+                        <p><br></p>
+                        <p>Yuzvendra Chahal leads the IPL Stats when it comes to the bowling department. The Rajasthan
+                          Royals player has taken 187 wickets at an average of 21.68 in 144 innings. </p>
+                        <h3><strong>Most 5-wicket Hauls</strong></h3>
+                        <p><br></p>
+                        <p>Bhuvneshwar Kumar (both for SRH) Jaydev Unadkat (one for Rising Pune Supergiant and one for
+                          RCB) and James Faulkner (both for RR) have taken two five-wicket hauls each.</p>
+                        <h3><strong>Best Economies</strong></h3>
+                        <p><br></p>
+                        <p>The IPL statistics for best economies (minimum 100 overs bowled) is held by former India and
+                          RCB captain Anil Kumble. Kumble took 45 wickets at an economy rate of 6.57 after 160.5 overs.
+                        </p>
+                        <h3><strong>Best bowling figures in an innings </strong></h3>
+                        <p><br></p>
+                        <p>Alzarri Joseph claimed superb figures of 6/12 against SRH in IPL 2019. This remains the best
+                          bowling spell in an IPL innings. Among Indians, Anil Kumble (vs RR) and Akash Madhwal’s (vs
+                          LSG) 5/5 is the best spell in IPL history. </p>
+                        <h3><strong>Most wickets in a single IPL edition</strong></h3>
+                        <p><br></p>
+                        <p>The stat for taking the most wickets in a single IPL edition is held by two pacers in Dwayne
+                          Bravo and Harshal Patel. Both bowlers took 32 wickets each. While Bravo bagged his wickets for
+                          CSK in 2013, Harshal claimed his 32 wickets for RCB in IPL 2021. </p>
+                        <p><br></p>
+                        <h2><strong>IPL Stats - Wicket-keeping </strong></h2>
+                        <h3><strong>Most dismissals </strong></h3>
+                        <p><br></p>
+                        <p>MS Dhoni has inflicted the most dismissals in IPL history. His wicket-keeping has earned 180
+                          dismissals in IPL history. </p>
+                        <h3><strong>Most dismissals in an IPL innings</strong></h3>
+                        <p><br></p>
+                        <p>Kumar Sangakkara inflicted five dismissals from behind the stumps in an IPL game against RCB,
+                          the most by any wicket-keeper in a single IPL innings. </p>
+                        <p><br></p>
+                        <h2><strong>IPL Stats - Fielding </strong></h2>
+                        <h3><strong>Most catches</strong></h3>
+                        <p><br></p>
+                        <p>Suresh Raina bagged 109 catches during his 205-match long IPL career, which is the most by
+                          any outfielder. Virat Kohli is likely to surpass Raina in IPL 2024. Kohli has so far taken 106
+                          catches in 235 IPL innings. </p>
+                        <h3><strong>Most catches in an IPL innings</strong></h3>
+                        <p><br></p>
+                        <p>Mohammad Nabi bagged five catches against Mumbai Indians in an IPL game in 2021. This stat of
+                          holding to most catches in an IPL innings remains with Nabi, who will play for MI in IPL 2024.
+                        </p>
+                        <p><br></p>
+                      </div>
+                      <div class="content-overlay-area">
+                        <div class="content-overlay "></div>
+                        <div class="view-toggle-container " id="addExpanded">
+                          <button class="view-toggle-content-btn" (click)="collapseddata()">
+                            {{readmoreless ? 'Less' : 'More'}}                            <img width="6" height="10" loading="lazy" alt="chevron-icon"
+                              src="../../assets/arrow-icon.svg">
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div class="content-ad-container">
+              <div class="ad-container" id="" style="
+      min-height: 31px;
+      width: 100%; text-align: center;clear:both;
+      ">
+                <div class="ad-declare-explicit"></div>
+
+                <div id="div-gpt-ad-1589376019464-0" class="">
+
+                </div>
+              </div>
+
+            </div>
+            <div class="section-separator"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="sk-ads-taboola-container sk-ads-taboola-eventpage">
+
+
+      <div id="taboola-below-article-thumbnails"></div>
+
+    </div>
+
+  </div>
+</section>

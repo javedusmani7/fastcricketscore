@@ -1,0 +1,138 @@
+
+
+
+<section class="breadcrumb-section">
+
+  <div class="breadcrumb-container">
+    <div class="wrapper-container">
+      <ul class="breadcrumb-list">
+        <li>
+          <a routerLink="/">
+            <img width="12" height="10" alt="home icon"
+              src="/assets/ic_breadcrumb_home.svg">
+          </a>
+        </li>
+        <li>
+          <span>Cricket > {{currentRoute}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="wrapper-container">
+  <div class="fragment-container">
+  <main class="category-subpage">
+  <section class="layout-wrapper">
+  <div class="content-container">
+  <div class="sidebar-container">
+
+  <aside class="sidebar">
+  <div class="sidebar-content">
+  <div class="ad-container" id="" style="
+  min-height: 80px;
+  width: 100%; text-align: center;clear:both;
+  ">
+  <div class="ad-declare-explicit"></div>
+
+  <div id="div-gpt-ad-1653457590899-0" class="">
+
+  </div>
+  </div>
+
+  <div class="ad-container" id="" style="
+  min-height: 80px;
+  width: 100%; text-align: center;clear:both;
+  ">
+  <div class="ad-declare-explicit"></div>
+
+  <div id="div-gpt-ad-1471939034701-0" class="">
+
+  </div>
+  </div>
+
+  </div>
+  </aside>
+  </div>
+  <div class="left">
+  <div class="subpage-container">
+
+
+  <section class="cricket-schedule-container">
+  <div class="panel">
+  <div class="panel-header">
+  <h1 class="panel-heading">Cricket Schedule 2024 : Today's and Upcoming Cricket Match Schedule</h1>
+  </div>
+  <div class="panel-body no-padding">
+  <div class="cricket-schedule-cta--wrapper">
+  <div class="cricket-schedule-cta-container">
+  <a class="cricket-schedule-cta" routerLink="/cricket-schedule">
+  <div>Days</div>
+  </a>
+  <a class="cricket-schedule-cta active" routerLink="/series">
+  <div>Series</div>
+  </a>
+  </div>
+  </div>
+  <div class="cricket-series-wise-schedule" >
+  <div class="cricket-schedule-filters-wrapper">
+  <div class="cricket-schedule-filters-container">
+  <div class="cricket-schedule-filter-items" data-value-key="type" data-target-containers=".cricket-series-schedule" data-targets=".cricket-tournament-card" data-wrapper="">
+  <div class="slider-container s">
+  <div class="slider-control slider-control--left hidden">
+  <button class="slider-control-btn">
+  <img height="19" width="13" alt="scroll button icon" loading="lazy" src="/assets/ic-cheveron-right--2d2d2d.svg">
+  </button>
+  </div>
+  <div class="slider-items">
+  </div>
+  <div class="slider-control slider-control--right hidden">
+  <button class="slider-control-btn">
+  <img height="19" width="13" alt="scroll button icon" loading="lazy" src="/assets/ic-cheveron-right--2d2d2d.svg">
+  </button>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  <div class="cricket-series-wise-schedule-container">
+    <div class="accordion cricket-series-schedule" id="accordionExample" >
+      <div class="cricket-series-schedule accordion-item " *ngFor="let key of getkeysdata(serieslist); let i = index">
+        <h2 class="accordion-header " id="heading{{i}}">
+          <button class="accordion-button bgColorHeading" type="button" data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapseOne' + i" aria-expanded="true" aria-controls="collapseOne">
+            {{ key }}
+          </button>
+        </h2>
+        <div class="accordion-content-container show"  id="collapseOne{{i}}">
+          <div class="accordion-content accc-contant">
+          <div class="cricket-tournament-cards">
+            <ng-container >
+              <div class="cricket-tournament-card linked" data-type="International"  *ngFor="let el of serieslist[key]; let j = index">
+                <a class="cricket-tournament-card--cta" routerLink="/child-shedule/{{el.slug}}/upcoming" aria-label="tournament cta"></a>
+                <div class="cricket-tournament-card--content">
+                <div class="cricket-tournament-card--title" [class]="el.slug==''?'black':''">{{el.title}}</div>
+                <div class="cricket-tournament-card--formats">{{el.formats}}</div>
+                <div class="cricket-tournament-card--dates">{{el.dates}}</div>
+                </div>
+                </div>
+            </ng-container>
+
+          </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  <div class="section-separator"></div>
+  </section>
+  </div>
+  </div>
+  </div>
+  </section>
+  </main>
+
+  </div>
+  </section>
