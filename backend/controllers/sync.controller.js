@@ -1,17 +1,16 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-
-
+// mongoose.set('debug', true);
 require('dotenv').config();
 
 
-// load models 
-
+// load models
 const Sport = require('../models/Sport');
 const Source = require('../models/Source');
 const Season = require('../models/Season');
 const Competetion = require('../models/Competetion');
 const Match = require('../models/Match');
+const Matchscorecard = require('../models/Matchscorecard');
 const { fetchEntitySportData } = require('../utils/EntitySports.util');
 
 // predefine constant values
@@ -153,6 +152,7 @@ exports.syncCompetetionMatches = async (req, res) => {
         
 
          // Prepare bulk operations
+
         const bulkOps = updatedItems.map(item => ({
             updateOne: {
                 filter: { match_id: item.match_id }, 
@@ -209,7 +209,7 @@ exports.syncCompetetionList = async (req, res) => {
         const seasons = await Season.find({status:true});
 
         const finalResponse = await Promise.all(seasons.map(async (season) => {
-            return await fetchEntitySportData(token , ENTITYSPORT_API_URL + "seasons/" + season.name + "/" +'competitions');
+            return await fetchEntitySportData(token , ENTITYSPORT_API_URL + "seasons/" + season.name + "/" +'competitions' , 100000);
         }));
 
         let resultSize = finalResponse?.length;
