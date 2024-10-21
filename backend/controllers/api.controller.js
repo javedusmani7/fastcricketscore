@@ -35,6 +35,45 @@ exports.getSeasons = async (req, res) => {
 
 
 
+exports.getCompetetionMatches = async (req, res) => {
+
+    // Get page and limit from query parameters
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit) || 10; // Default to 10 items per page
+
+    // Calculate the number of items to skip
+    const skip = (page - 1) * limit;
+
+    // // Making an api call from Entity sports and then saving into our database
+    try {
+        // Fetch the items with pagination
+        const items = await Match.find()
+        .skip(skip)
+        .limit(limit)
+        .exec();
+
+        // Get the total count of items for the total pages
+        const totalCount = await Match.countDocuments();
+
+        // Send the response with pagination info
+        const response = {
+            status: 200,
+            message: "Matches retrieved successfully.",
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+            currentPage: page,
+            data: items
+        }
+        res.json(response);
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from getCompetetionMatches API' });
+    }
+}
+
+
+
 // this function will make an API call on our competetionlist according to sport and season
 
 exports.getCompetetionList = async (req, res) => {
