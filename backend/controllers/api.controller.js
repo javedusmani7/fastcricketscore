@@ -99,7 +99,21 @@ exports.getCompetetionList = async (req, res) => {
 
         filter.datestart = { $gt: oneMonthAgo};
 
-        const competetionRows = await Competetion.find({...filter}).sort({datestart: 1}); // Fetch all competetions
+        // const competetionRows = await Competetion.find({...filter}).sort({datestart: 1}); // Fetch all competetions
+
+
+
+        const competetionRows = await Competetion.aggregate([
+            { $match: {...filter} }, // Filter orders based on criteria
+            {
+                $lookup: {
+                    from: 'matches', // Join with Customers collection
+                    localField: '_id', // The field from the Orders collection
+                    foreignField: 'cid', // The field from the Customers collection
+                    as: 'matchData' // Output field to add
+                }
+            },
+        ]);
 
         function formatDate(dateStr) {
             const options = { month: 'short', day: 'numeric' };
@@ -116,7 +130,9 @@ exports.getCompetetionList = async (req, res) => {
         const category = [];
 
         // Iterate over each competition in the database
-        competetionRows.forEach((competition) => {
+        competetionRows.forEach(async (competition) => {
+
+            // let matches = await Match.find({cid : competition._id});
 
             if(category.indexOf(competition.category) === -1)
                 category.push(competition.category)
@@ -147,10 +163,17 @@ exports.getCompetetionList = async (req, res) => {
             }).join(", ");
 
             // Push the competition details into the appropriate month
+
+            let matchesData = [];
+
+            competition.matchData.map((match) =>{
+                matchesData.push({_id : match._id , short_title : match.short_title , result : match.result , teama : match.teama , teamb:match.teamb , venue: match.venue , date:match.date_start_ist})
+            })
             result[monthYear].push({
                 id: competition._id,
                 title: competition.title,
                 category: competition.category,
+                matches:matchesData,
                 formats: formatCountResult,
                 dates: `${formatDate(competition.datestart)} - ${formatDate(competition.dateend)}`,
                 venue: competition.venue,
