@@ -48,16 +48,22 @@ exports.getCompetetionMatches = async (req, res) => {
     // Calculate the number of items to skip
     const skip = (page - 1) * limit;
 
+    // check if the match_id exists or not
+    const match_id = parseInt(req.query.match_id) || false;  // Default to 10 items per page
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id not found' });
+    }
+
     // // Making an api call from Entity sports and then saving into our database
     try {
         // Fetch the items with pagination
-        const items = await Match.find()
+        const items = await Match.find({ match_id: match_id })
         .skip(skip)
         .limit(limit)
         .exec();
 
         // Get the total count of items for the total pages
-        const totalCount = await Match.countDocuments();
+        const totalCount = await Match.countDocuments({ match_id: match_id });
 
         // Send the response with pagination info
         const response = {
