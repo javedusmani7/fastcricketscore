@@ -20,6 +20,8 @@ const sport_id = process.env.CRICKET_SPORT_ID;
 const source_id = process.env.ENTITYSPORT_API_SOURCE_ID;
 
 
+
+
 // this function will make an API call to the ENTITYSPORT and get all available seasons
 // once we get it, it will store to the database
 exports.syncSeason = async (req, res) => {
@@ -54,7 +56,7 @@ exports.syncSeason = async (req, res) => {
     // Making an api call from Entity sports and then saving into our database
     try {
         const token = req.query.token;
-        const response = await fetchSeasonDataFromEntitySport(token);
+        const response = await fetchEntitySportData(token , ENTITYSPORT_API_URL + 'seasons');
 
         // updating new items on the response so that we may have sport on each items
         const items = response.response.items;
@@ -203,45 +205,67 @@ exports.syncCompetetionList = async (req, res) => {
 
     try {
         const token = req.query.token;
-        const season = "2024";
+
+        const seasons = await Season.find({status:true});
+
+        const finalResponse = await Promise.all(seasons.map(async (season) => {
+            return await fetchEntitySportData(token , ENTITYSPORT_API_URL + "seasons/" + season.name + "/" +'competitions');
+        }));
+
+        let resultSize = finalResponse?.length;
+        
+        if(resultSize > 0){
+
+            finalResponse.map(async (response , i) => {
     
-        const response = await fetchCompetetionDataFromEntitySport(token , ENTITYSPORT_API_URL + "seasons/" + season + "/" +'competitions');
-
-        if(response.status == "unauthorized" || response.status == "forbidden"){
-            res.status(200).json({ status : false , message: 'Error fetching data from Entitysport API' });
-        }else{
-
-
-            const items = response.response.items;
-
-
-            const updatedItems = items.map(item => {
-                return {
-                    ...item,         // Spread existing properties
-                    sport_id: sport_primary_key,  // Add a new property
-                    source_id: source_primary_key // Add a new property
-                };
-            });
-
-
-            const bulkOps = updatedItems.map(item => ({
-                updateOne: {
-                    filter: { cid: item.cid }, 
-                    update: { $set: item }, 
-                    upsert: true // Insert if not found
+                if(response.status == "unauthorized" || response.status == "forbidden"){
+                    res.status(200).json({ status : false , message: 'Error fetching data from Entitysport API' });
+    
+                }else{
+        
+                    const items = response.response.items;
+        
+                    const updatedItems = items.map(item => {
+                        return {
+                            ...item,         // Spread existing properties
+                            sport_id: sport_primary_key,  // Add a new property
+                            source_id: source_primary_key // Add a new property
+                        };
+                    });
+        
+        
+                    const bulkOps = updatedItems.map(item => ({
+                        updateOne: {
+                            filter: { cid: item.cid }, 
+                            update: { $set: item }, 
+                            upsert: true // Insert if not found
+                        }
+                    }));
+                    
+        
+                    const result = await Competetion.bulkWrite(bulkOps);
+        
+                    if(!result){
+                        res.status(200).json({ status : false , message: "Problem in Insert" });
+                    }
+                    
                 }
-            }));
-            
 
-            const result = await Competetion.bulkWrite(bulkOps);
+                if(i == resultSize - 1){
 
-            if(result){
-                res.status(200).json({ status : true , message: response.response });
-            }else{
-                res.status(200).json({ status : false , message: "Problem in Insert" });
-            }
-            
+                    res.status(200).json({ status : true , message: "Season Competetions Synced" });
+
+                }
+    
+            })
+
+
+        }else{
+            res.status(200).json({ status : false , message: 'Error fetching data from Entitysport API' });
         }
+        
+
+        
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -249,80 +273,24 @@ exports.syncCompetetionList = async (req, res) => {
 
 
 exports.syncCompetetion = async (req, res) => {
-    try {
-        const token = req.query.token;
-        const competetionId = req.query.cid;
+    // try {
+    //     const token = req.query.token;
+    //     const competetionId = req.query.cid;
 
-        console.log();
-        const response = await fetchCompetetionDataFromEntitySport(token , ENTITYSPORT_API_URL + 'competitions/' + competetionId);
+    //     console.log();
+    //     const response = await fetchCompetetionDataFromEntitySport(token , ENTITYSPORT_API_URL + 'competitions/' + competetionId);
         
-        if(response.status == "unauthorized" || response.status == "forbidden"){
-            res.status(200).json({ status : false , message: 'Error fetching data from Entitysport API' });
-        }else{
-            res.status(200).json({ status : true , message: response.response });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
-    }
+    //     if(response.status == "unauthorized" || response.status == "forbidden"){
+    //         res.status(200).json({ status : false , message: 'Error fetching data from Entitysport API' });
+    //     }else{
+    //         res.status(200).json({ status : true , message: response.response });
+    //     }
+    // } catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    // }
 }
 
 
 
 // START: Private Methods from Here
-
-// Private method for making a third-party API call for getting the seasons details
-const fetchSeasonDataFromEntitySport = async (token) => {
-    try {
-        const response = await axios({
-          method: "get", 
-          url: ENTITYSPORT_API_URL + 'seasons',
-          params: {
-            token: token,
-          },
-        });
-        return response.data;
-    } 
-    catch (error) {
-      // retrun error
-      return error.response.data;
-    }
-};
-
-
-
-// Private method for making a third-party API call for getting the competetionList details
-const fetchCompetetionDataFromEntitySport = async (token , url) => {
-    try {
-        const response = await axios({
-          method: "get", 
-          url: url,
-          params: {
-            token: token,
-          },
-        });
-        return response.data;
-    } 
-    catch (error) {
-      // retrun error
-      return error.response.data;
-    }
-};
-
-
-const fetchCompetetionDataFromCricketLiveLine= async (token , url) => {
-    try {
-        const response = await axios({
-          method: "get", 
-          url: url,
-          params: {
-            token: token,
-          },
-        });
-        return response.data;
-    } 
-    catch (error) {
-      // retrun error
-      return error.response.data;
-    }
-};

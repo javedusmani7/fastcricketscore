@@ -1,5 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
+// mongoose.set('debug', true);
 require('dotenv').config();
 
 
@@ -9,6 +10,9 @@ const Source = require('../models/Source');
 const Season = require('../models/Season');
 const Competetion = require('../models/Competetion');
 const Match = require('../models/Match');
+
+
+
 
 
 // this function will make an API call on our seasons table and get all available seasons
@@ -41,7 +45,22 @@ exports.getCompetetionList = async (req, res) => {
     console.log("Inside getCompetetions API call");
     // // Making an api call from Entity sports and then saving into our database
     try {
-        const competetionRows = await Competetion.find({}); // Fetch all competetions
+
+        const filter = {}
+
+        if(req.params.category){
+            filter.category = req.query.category;
+        }
+        
+
+        const today = new Date();
+        let oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        oneMonthAgo = oneMonthAgo.toISOString().split('T')[0];
+
+        filter.datestart = { $gt: oneMonthAgo};
+
+        const competetionRows = await Competetion.find({...filter}).sort({datestart: 1}); // Fetch all competetions
 
         function formatDate(dateStr) {
             const options = { month: 'short', day: 'numeric' };
@@ -55,8 +74,15 @@ exports.getCompetetionList = async (req, res) => {
 
         const result = {};
 
+        const category = [];
+
         // Iterate over each competition in the database
         competetionRows.forEach((competition) => {
+
+            if(category.indexOf(competition.category) === -1)
+                category.push(competition.category)
+
+
             const startDate = new Date(competition.datestart);
             const monthYear = startDate.toLocaleString('default', { month: 'long', year: 'numeric' });  // Get "Month Year" format
 
@@ -85,6 +111,7 @@ exports.getCompetetionList = async (req, res) => {
             result[monthYear].push({
                 id: competition._id,
                 title: competition.title,
+                category: competition.category,
                 formats: formatCountResult,
                 dates: `${formatDate(competition.datestart)} - ${formatDate(competition.dateend)}`,
                 venue: competition.venue,
@@ -96,7 +123,8 @@ exports.getCompetetionList = async (req, res) => {
         const response = {
             status: 200,
             message: "Competetions retrieved successfully.",
-            data: result
+            data: result,
+            category:category
         }
         
         res.json(response);
