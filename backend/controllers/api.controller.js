@@ -204,7 +204,7 @@ exports.getCompetetionList = async (req, res) => {
             let matchesData = [];
 
             competition.matchData.map((match) =>{
-                matchesData.push({_id : match._id , short_title : match.short_title , result : match.result , teama : match.teama , teamb:match.teamb , venue: match.venue , date:match.date_start_ist})
+                matchesData.push({_id : match._id , short_title : match.short_title , status_str : match.status_str, result : match.result, teama : match.teama , teamb:match.teamb , venue: match.venue , date:match.date_start_ist})
             })
             result[monthYear].push({
                 id: competition._id,
