@@ -10,6 +10,7 @@ const Source = require('../models/Source');
 const Season = require('../models/Season');
 const Competetion = require('../models/Competetion');
 const Match = require('../models/Match');
+const Matchscorecard = require('../models/Matchscorecard');
 
 
 
@@ -79,6 +80,36 @@ exports.getCompetetionMatches = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error fetching data from getCompetetionMatches API' });
+    }
+}
+
+// this function will make an API call to the Scorecard Table and return the response
+// token: for authenticate token
+// match_id: match_id so that we can fetch the scorecard bases of match_id
+exports.getMatchScoreCard = async (req, res) => {
+
+    // check if the match_id exists or not
+    const match_id = parseInt(req.query.match_id) || false;  // Default to 10 items per page
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id not found' });
+    }
+
+    // // Making an api call from Entity sports and then saving into our database
+    try {
+        // Fetch the item
+        const MatchscorecardRow = await Matchscorecard.findOne({match_id: match_id});
+
+        // Send the response
+        const response = {
+            status: 200,
+            message: "Match Scorecard retrieved successfully.",
+            data: MatchscorecardRow
+        }
+        res.json(response);
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
     }
 }
 
