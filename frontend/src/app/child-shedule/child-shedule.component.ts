@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ServiceService } from '../service.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
@@ -7,9 +7,10 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
   templateUrl: './child-shedule.component.html',
   styleUrls: ['./child-shedule.component.css']
 })
-export class ChildSheduleComponent implements OnInit {
+export class ChildSheduleComponent implements OnInit,OnDestroy {
   @ViewChild("widgetsContent", { static: false, read: ElementRef }) widgetsContent: any;
 
+  tempData: any
   rightScrollCount = 0;
   seriesTitle: any
   liveLiteamDefaultImgst: any
@@ -25,56 +26,80 @@ export class ChildSheduleComponent implements OnInit {
   routeName = ""
   short_name = ""
   selectedIndex: any; // Or initialize with the index of the initially selected option
-  selectedTab = 'upcoming'
+  selectedTab = 'Scheduled'
   selectedNewsTab = 'latest'
   latestNewsList: any
   popularNewsList: any
   scores: any;
+  mainData:any=[]
   // toggleMenubtn = false
-
   constructor(private apiservice: ServiceService, private route: ActivatedRoute, private router: Router) { }
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.eventgrupname = this.route.snapshot.paramMap.get('event_slug');
+
     })
-    this.getMatchesbySeries('upcoming', this.eventgrupname)
-    this.getTitalDta(this.eventgrupname)
-    this.getCricketMenu()
-    this.getStats("batting", this.eventgrupname)
-    this.getneswdata('latest')
-    this.popularNewsdata('latest')
+    this.getStoreData()
+    // this.getMatchesbySeries('upcoming', this.eventgrupname)
+    // this.getTitalDta(this.eventgrupname)
+    // this.getCricketMenu()
+    // this.getStats("batting", this.eventgrupname)
+    // this.getneswdata('latest')
+    // this.popularNewsdata('latest')
+    // console.log(
+    //   "mvkvnjbhbfv",this.apiservice.seriesMatchData.getValue()
+    // )
+
+  }
+  getStoreData(): any {
+    let data = JSON.parse(localStorage.getItem('seriesMatchData')|| '');
+    if (Object.keys(data).length > 0 && data != null) {
+      this.tempData = data;
+      this.mainData = this.tempData.matches.filter((item:any )=> item.status_str == 'Scheduled')
+    } else {
+      //api call 
+    }
+    console.log("this.tempData",this.tempData)
 
   }
   getMatchesbySeries(data: any, eventName: any) {
-    if (data == "upcoming") {
+    if (data == "Scheduled") {
       this.selectedTab = data;
+      this.mainData = this.tempData.matches.filter((item:any )=> item.status_str == this.selectedTab)
+      // let url = '/child-shedule/' + eventName + "/" + this.selectedTab
+      // this.apiservice.getUpcomingMatchesbyseries(eventName).subscribe((res: any) => {
+      //   this.upcominglist = res.data
+      //   console.log("this is upcoming list", this.upcominglist)
+      //   this.short_name = res.data[0].short_name
+      //   let url = '/child-shedule/' + eventName + "/" + this.selectedTab
+
+      //   this.router.navigateByUrl(url);
+      // })
       let url = '/child-shedule/' + eventName + "/" + this.selectedTab
-      this.apiservice.getUpcomingMatchesbyseries(eventName).subscribe((res: any) => {
-        this.upcominglist = res.data
-        this.short_name = res.data[0].short_name
-        let url = '/child-shedule/' + eventName + "/" + this.selectedTab
 
-        this.router.navigateByUrl(url);
-      })
-    } else if (data == "matches-live") {
+      this.router.navigateByUrl(url);
+    } else if (data == "Live") {
       this.selectedTab = data;
-
-      this.apiservice.getLiveMatchesbyseries(eventName).subscribe((res: any) => {
-        this.upcominglist = res.data
-        let url = '/child-shedule/' + eventName + "/" + this.selectedTab
-        this.router.navigateByUrl(url);
-      })
-      this.apiservice.getUpcomingMatchesbyseries(eventName).subscribe((res: any) => {
-        this.upcomingFeature = res.data
-      })
-    } else if (data == "result") {
+      this.mainData = this.tempData.matches.filter((item:any )=> item.status_str == this.selectedTab)
+      // this.apiservice.getLiveMatchesbyseries(eventName).subscribe((res: any) => {
+      //   this.upcominglist = res.data
+      //   let url = '/child-shedule/' + eventName + "/" + this.selectedTab
+      //   this.router.navigateByUrl(url);
+      // })
+      // this.apiservice.getUpcomingMatchesbyseries(eventName).subscribe((res: any) => {
+      //   this.upcomingFeature = res.data
+      // })
+    } else if (data == "Completed") {
       this.selectedTab = data;
-      this.apiservice.getResultMatchesbyseries(eventName).subscribe((res: any) => {
-        this.upcominglist = res.data
-        let url = '/child-shedule/' + eventName + "/" + this.selectedTab
-        this.router.navigateByUrl(url);
-      })
+      this.mainData = this.tempData.matches.filter((item:any )=> item.status_str == this.selectedTab)
+      // this.apiservice.getResultMatchesbyseries(eventName).subscribe((res: any) => {
+      //   this.upcominglist = res.data
+      //   let url = '/child-shedule/' + eventName + "/" + this.selectedTab
+      //   this.router.navigateByUrl(url);
+      // })
     }
+    // let url = '/child-shedule/' + eventName + "/" + this.selectedTab
+    //     this.router.navigateByUrl(url);
   }
 
   addOrdinalSuffix(num: string): string {
@@ -155,7 +180,7 @@ export class ChildSheduleComponent implements OnInit {
     const screenWidth = window.innerWidth;
     return screenWidth < 768; // Example threshold for mobile view
   }
-  getrouteandCheckwidth(route: any, route1: any, id: any) {
+  getrouteandCheckwidth(route: any, route1: any, id: any=84398) {
     let url1 = route + '/' + id
     let url2 = route1 + '/' + id
     const isMobile = this.checkIfMobile();
@@ -203,6 +228,12 @@ export class ChildSheduleComponent implements OnInit {
     this.rightScrollCount = this.rightScrollCount - 1;
     this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft - 950), behavior: 'smooth' });
   }
+
+  ngOnDestroy(): void {
+    localStorage.removeItem('seriesMatchData')
+  }
+
+
 
 
 }

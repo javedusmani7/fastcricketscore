@@ -1,7 +1,9 @@
+import { query } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 export class ServiceService {
   CompetitionUrl="http://localhost:3000/api/competetions?token=ad3749cfdb0cceb518412cf46"
   sportUrl= "http://localhost:3000/api/seasons?token=ad3749cfdb0cceb518412cf46ef9e44a";
-  baseUrl = "http://192.46.214.33:3000/api/data";
+  baseUrl = environment.baseUrl;
   sendLoggedData: BehaviorSubject<any> = new BehaviorSubject('abc')
   sendLoggedData1 = new Subject<any>()
   sendLoggedData2 = new Subject<any>()
@@ -26,6 +28,7 @@ export class ServiceService {
   checkInterval: any
   intervalSubscription: any;
   loggedIn = false
+  seriesMatchData: BehaviorSubject<any> = new BehaviorSubject({})
   constructor(private http: HttpClient, private router: Router) {
   }
 
@@ -97,6 +100,11 @@ export class ServiceService {
   }
   getLiveCricketScore(matchId: any) {
     return this.http.get(`${this.baseUrl}/getLiveCricketScore/` + matchId)
+  }
+
+  getInfoCricketScores(matchId: any) {
+    return this.http.get(`${this.baseUrl}/competetionMatches?token=${environment.token}&match_id=${matchId}`)
+   
   }
   getSeriesMostRuns(tournament_slug: any) {
     return this.http.get(`${this.baseUrl}/getSeriesMostRuns/` + tournament_slug)

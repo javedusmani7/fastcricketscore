@@ -4,23 +4,23 @@
       <div class="top-score-section-v2">
         <div class="top-score-title">
           <div class="cricket-match-card-header-secondary-text">
-            <span class="cricket-match-card--match-type">{{scorelist?.description}}</span>
+            <span class="cricket-match-card--match-type">{{scorelist?.result}}</span>
             <span>•</span>
-            <span class="cricket-match-card--match-venue">{{scorelist?.venue_stadium}}</span>
+            <span class="cricket-match-card--match-venue">{{scorelist?.venue.name}}</span>
             <span>•</span>
-            <span class="cricket-match-card--match-venue">{{scorelist?.venue_location}}</span>
+            <span class="cricket-match-card--match-venue">{{scorelist?.venue.location}}</span>
           </div>
         </div>
         <div class="score-primary-partition unset-box-shadow">
           <div class="match-teams">
             <div class="team-1-score-strip-baseline"></div>
             <div class="score-strip team1-score-strip" *ngFor="let el of liveScoreList">
-              <div class="flag-country  pre-match-team-info " [class]="el.status=='post'?'flag-countrys':''">
+              <!-- <div class="flag-country  pre-match-team-info " [class]="el.status=='post'?'flag-countrys':''">
                 <img [src]="el.team_flag" (error)="el.team_flag = teamDefaultImg" width="48" height="38"
                   alt="team-logo" class="flag bind" data="data.score_strip.0.team_flag" data-img-params="?w=192">
                 <span class="country bind" data="data.score_strip.0.name"><a
                     routerLink="/team/{{el.slug}}">{{el.name}}</a></span>
-              </div>
+              </div> -->
               <div class="score-over">
                 <div class="powerplay-tooltip">
                   <div class="bottom powerplay-tooltip-1"> </div>
@@ -28,15 +28,15 @@
                   <span class="power-play-label team1 hidden"></span>
                 </div>
                 <span class="score bind" data="data.score_strip.0.score_wickets_info"
-                  *ngIf="scorelist.match_status !=='pre'">{{el.score}}</span>
+                  *ngIf="scorelist.status_str !=='Scheduled'">{{el.score}}</span>
                 <span class="overs-info bind" data="data.score_strip.0.overs_info"></span>
               </div>
             </div>
             <div class="team-2-score-strip-baseline"></div>
           </div>
           <div class="match-scorecard-time " id="match-scorecard-time">
-            <span class="match-date" *ngIf="scorelist.match_status=='pre'">{{convertedDateTime.split(",")[0]}} </span>
-            <span class="match-time" *ngIf="scorelist.match_status=='pre'"> {{convertedDateTime.split(",")[1]}} </span>
+            <span class="match-date" *ngIf="scorelist.status_str=='Live'">{{convertedDateTime.split(",")[0]}} </span>
+            <span class="match-time" *ngIf="scorelist.status_str=='Live'"> {{convertedDateTime.split(",")[1]}} </span>
           </div>
           <div class="scorecard-countdown-timer hidden" id="scorecard-countdown-timer">
             <div class="line-ups">Lineups Out</div>
@@ -81,8 +81,8 @@
 
             </div>
             <div class="match-scorecard-time " id="match-scorecard-time">
-              <span class="match-date" *ngIf="scorelist.match_status !=='live'"> {{convertedDateTime.split(",")[0]}} </span>
-              <span class="match-time" *ngIf="scorelist.match_status !=='live'"> {{convertedDateTime.split(",")[1]}}</span>
+              <span class="match-date" *ngIf="scorelist.status_str !=='live'"> {{convertedDateTime.split(",")[0]}} </span>
+              <span class="match-time" *ngIf="scorelist.status_str !=='live'"> {{convertedDateTime.split(",")[1]}}</span>
             </div>
 
           </div>
@@ -91,15 +91,15 @@
         <div class="score-secondary-partition">
           <div class="match_info cricket-block">
             <div>
-              <span class="bind match-info match-result " data="data.info" *ngIf="scorelist?.match_status=='pre'">Match
+              <span class="bind match-info match-result " data="data.info" *ngIf="scorelist?.status_str=='pre'">Match
                 yet to start</span>
-              <span class="bind match-info match-result " [class]="scorelist?.match_status=='post'?'win':'white'"
-                *ngIf="scorelist?.match_status!=='pre'">
+              <span class="bind match-info match-result " [class]="scorelist?.status_str=='post'?'win':'white'"
+                *ngIf="scorelist?.status_str!=='pre'">
                 {{scorelist?.info}} <span class="win-margin"></span>
               </span>
             </div>
           </div>
-          <div class="vertical-partition" data="data.info" *ngIf="scorelist?.match_status=='live'">
+          <div class="vertical-partition" data="data.info" *ngIf="scorelist?.status_str=='live'">
             <div class="run-rate-div current-run-rate-div p-l-0">
               <span class="run-rate-label">CRR:</span>
               <span class="run-rate-value current-run-rate">{{liveScoreList[0]?.run_rate_numeric ||
@@ -137,15 +137,15 @@
             <div class="cmc-section-tab scorecard-tab header-hovered">
               Scorecard</div>
           </div>
-          <div class="scorecard-header cmc-scrollable-tab" *ngIf="scorelist?.match_status=='pre'"
+          <div class="scorecard-header cmc-scrollable-tab" *ngIf="scorelist?.status_str=='pre'"
             routerLink="/squad/{{matchId}}">
             <div class="cmc-section-tab scorecard-tab ">
               Squad</div>
           </div>
-          <div class="match-squad-header cmc-scrollable-tab " *ngIf="scorelist?.match_status!=='pre'"
+          <div class="match-squad-header cmc-scrollable-tab " *ngIf="scorelist?.status_str!=='pre'"
             routerLink="/squad/{{matchId}}">
             <div class="cmc-section-tab squad-tab">
-              <span id="squad-tab-title">Playing XI</span>
+              <span id="squad-tab-title">Squad</span>
             </div>
           </div>
 
@@ -154,9 +154,9 @@
     </div>
 
     <div class="innings-master-container scorecard-section-v2">
-      <div class="empty-state-holder scorecard-pre-div innings-empty-state " *ngIf="scorelist?.match_status=='pre'">
+      <div class="empty-state-holder scorecard-pre-div innings-empty-state " *ngIf="scorelist?.status_str=='pre'">
         <div class="empty-state-msg">
-          <!-- <p>{{scorelist?.match_status}}pppppppppppppppp</p> -->
+          <!-- <p>{{scorelist?.status_str}}pppppppppppppppp</p> -->
 
           <img height="70" width="70" alt="cmc-icon"
             src="../../assets/cmc-pre-scorecard-icon.svg" class="lazy-img-bg">
@@ -165,7 +165,7 @@
 
       </div>
       <div class="all-innings-parent-div scorecard-cmc">
-        <div id="match-players-section" class="match-players-section" *ngIf="scorelist?.match_status=='post'">
+        <div id="match-players-section" class="match-players-section" *ngIf="scorelist?.status_str=='post'">
           <div class="match-player-div" id="man-of-match">
             <a class="match-player-link player-cta" id="mom-player-link" aria-label="match-player"
               routerLink="/player/{{scorelist?.player_of_match.player_slug}}"></a>
@@ -359,7 +359,7 @@
                     Date &amp; Time
                   </div>
                   <div class="match-detail-info">
-                    <span>{{formattedDate}}</span>
+                    <span>{{convertedDateTimes}}</span>
                   </div>
                 </div>
                 <div class="match-detail-row">
@@ -367,7 +367,7 @@
                     Venue
                   </div>
                   <div class="match-detail-info">
-                    {{scorelist?.venue}}
+                    {{scorelist?.venue.name}}
                   </div>
                 </div>
                 <div class="match-detail-row">
@@ -375,7 +375,7 @@
                     Match
                   </div>
                   <div class="match-detail-info">
-                    {{scorelist?.description}},
+                    {{scorelist?.result}},
                     <div>
                       <a routerLink="/go/england-vs-india"> {{scorelist?.series}}</a>
                     </div>
@@ -416,7 +416,7 @@
                     Toss
                   </div>
                   <div class="match-detail-info">
-                    <div class="cmc-toss-info preview-info-msg">{{scorelist?.secondary_info==""?'Toss yet to take Place':scorelist?.secondary_info}}</div>
+                    <div class="cmc-toss-info preview-info-msg">{{scorelist?.toss.text==""?'Toss yet to take Place':scorelist?.toss.text}}</div>
                   </div>
                 </div>
               </div>
