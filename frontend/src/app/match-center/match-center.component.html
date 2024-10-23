@@ -470,7 +470,7 @@
                                   [src]="getPlayerImage(player.player_id) || '../../assets/team-default.png'"
                                   alt="player-img" height="40" width="40"></div>
                               <div class="squad-player left-info" ><a class="player-cta" routerLink="/player/{{player.player_id}}" [class]="player.player_id==''?'blck':''"><span
-                                    class="player-name" [class]="player.player_id==''?'blck':''">{{player.name}}</span><span class="role-icon" *ngIf="player.position=='captain'">(C)</span><span class="player-delta-in left" *ngIf="player.delta==1"><span></span></span></a>
+                                    class="player-name" [class]="player.player_id==''?'blck':''">{{player.name}}</span><span class="role-icon" *ngIf="player.role_str=='(C)'">(C)</span><span class="player-delta-in left" *ngIf="player.delta==1"><span></span></span></a>
                                 <p class="player-role">
                                   <span>{{ player.role === 'wk' ? 'Bat & WK' : player.role === 'all' ? 'All' : player.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
 
@@ -486,7 +486,7 @@
                             <div class="player-role-info"
                               *ngFor="let player of getPlayingXIPlayers(matchSquads?.teamb?.squads);let i=index;">
                               <div class="squad-player right-info" ><a class="player-cta" routerLink="/player/{{player.player_id}}" >
-                                <span class="role-icon" *ngIf="player.position=='captain'">(C)</span><span class="player-delta-in right" *ngIf="player.delta==1"><span></span></span>
+                                <span class="role-icon" *ngIf="player.role_str=='(C)'">(C)</span><span class="player-delta-in right" *ngIf="player.delta==1"><span></span></span>
                                 <span
                                     class="player-name" [class]="player.player_id==''?'blck':''">{{player.name}}</span></a>
                                 <p class="player-role">
