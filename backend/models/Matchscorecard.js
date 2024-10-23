@@ -97,7 +97,11 @@ const Matchscorecard = new mongoose.Schema({
     },
     current_over: { type: String },
     previous_over: { type: String },
-    man_of_the_match: { type: String },
+    man_of_the_match: {
+      pid: { type: Number },
+      name: { type: String },
+      thumb_url: { type: String },
+    },
     man_of_the_series: { type: String },
     is_followon: { type: Boolean, default: 0 },
     team_batting_first: { type: String },
