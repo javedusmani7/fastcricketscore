@@ -8,11 +8,11 @@
           <div class="top-score-section-v2">
             <div class="top-score-title">
               <div class="cricket-match-card-header-secondary-text">
-                <span class="cricket-match-card--match-type">{{infoData?.description}}</span>
+                <span class="cricket-match-card--match-type">{{infoData?.result}}</span>
                 <span>•</span>
-                <span class="cricket-match-card--match-venue">{{infoData?.venue}}</span>
+                <span class="cricket-match-card--match-venue">{{infoData?.venue.name}}</span>
                 <span>•</span>
-                <span class="cricket-match-card--match-venue">{{infoData?.venue_location}}</span>
+                <span class="cricket-match-card--match-venue">{{infoData?.venue.location}}</span>
               </div>
             </div>
 
@@ -21,12 +21,12 @@
               <div class="match-teams">
                 <div class="team-1-score-strip-baseline"></div>
                 <div class="score-strip team1-score-strip" *ngFor="let item of matchesDtata">
-                  <div class="flag-country  pre-match-team-info " [class]="item.status=='post'?'flag-countrys':''">
+                  <!-- <div class="flag-country  pre-match-team-info " [class]="item.status=='post'?'flag-countrys':''">
                     <img [src]="item.team_flag" (error)="item.team_flag = '../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
                       data="data.score_strip.0.team_flag" data-img-params="?w=192">
                     <span class="country bind" data="data.score_strip.0.name"><a
                         routerLink="/team/{{item.slug}}">{{item.name}}</a></span>
-                  </div>
+                  </div> -->
                   <div class="score-over">
                     <div class="powerplay-tooltip">
                       <div class="bottom powerplay-tooltip-1"> </div>
@@ -140,7 +140,7 @@
               </div>
               <div class="match-squad-header cmc-scrollable-tab " routerLink="/squad/{{matchId}}">
                 <div class="cmc-section-tab squad-tab ">
-                  <span id="squad-tab-title">Playing XI</span>
+                  <span id="squad-tab-title">Squad</span>
                 </div>
               </div>
 
@@ -189,7 +189,7 @@
                       Venue
                     </div>
                     <div class="match-detail-info">
-                      {{infoData?.venue}}
+                      {{infoData?.venue.name}}
                     </div>
                   </div>
                   <div class="match-detail-row">
@@ -197,7 +197,7 @@
                       Match
                     </div>
                     <div class="match-detail-info">
-                      {{addOrdinalSuffix(infoData?.match_number)}} {{infoData?.game_type}} ,
+                      {{addOrdinalSuffix(infoData?.match_number)}} {{infoData?.format_str}} ,
                       <div>
                         <a style="text-decoration:underline" routerLink="/go/{{infoData?.series_keeda_slug}}"> {{infoData?.series}}</a>
                       </div>
@@ -238,7 +238,7 @@
                       Toss
                     </div>
                     <div class="match-detail-info">
-                      <div class="cmc-toss-info preview-info-msg">{{infoData?.secondary_info==""?'Toss yet to take Place':infoData?.secondary_info}}</div>
+                      <div class="cmc-toss-info preview-info-msg">{{infoData?.toss.text==""?'Toss yet to take Place':infoData?.toss.text}}</div>
                     </div>
                   </div>
                 </div>
@@ -255,25 +255,25 @@
                 <div class="report-wrapper">
                   <div class="report-details remove-border-radius">
                     <span class="detail-label">Pitch</span><span
-                      class="detail-value">{{infoData?.pitch?.pitch_condition}}</span>
+                      class="detail-value">{{infoData?.pitch?.pitch_condition?infoData?.pitch?.pitch_condition:'-'}}</span>
                   </div>
                   <div class="report-details remove-border-radius">
                     <span class="detail-label">Pace Bowling</span><span
-                      class="detail-value">{{infoData?.pitch?.pace_bowling_condition}}</span>
+                      class="detail-value">{{infoData?.pitch?.pace_bowling_condition?infoData?.pitch?.pace_bowling_condition:'-'}}</span>
                   </div>
                   <div class="report-details ">
                     <span class="detail-label">Batting Condition</span><span
-                      class="detail-value">{{infoData?.pitch?.batting_condition}}</span>
+                      class="detail-value">{{infoData?.pitch?.batting_condition?infoData?.pitch?.batting_condition:'-'}}</span>
                   </div>
                   <div class="report-details ">
                     <span class="detail-label">Spin Bowling</span><span
-                      class="detail-value">{{infoData?.pitch?.spine_bowling_condition}}</span>
+                      class="detail-value">{{infoData?.pitch?.spine_bowling_condition?infoData?.pitch?.spine_bowling_condition:'-'}}</span>
                   </div>
                 </div>
-                <div class="stats-header-wrapper">
+                <!-- <div class="stats-header-wrapper">
                   <div class="stats-header">VENUE STATS</div>
-                </div>
-                <div class="stats-wrapper">
+                </div> -->
+                <!-- <div class="stats-wrapper">
                   <div class="stats-info" *ngFor="let item of infoData?.preview_data.avg_venue_scores">
                     <div class="inning-label">
                       <div class="inning-bg"></div>
@@ -288,12 +288,12 @@
                           SR</span></div>
                     </div>
                   </div>
-                </div>
+                </div> -->
 
               </div>
             </div>
           </div>
-          <div class="panel " *ngIf="infoData?.match_status!=='post' && infoData?.weather.weather!=='<nil>'">
+          <div class="panel " *ngIf="infoData?.status_str!=='Completed' && infoData?.weather.length >0">
             <div class="panel-heading">
               <div class="panel-heading-text">Weather Update</div>
             </div>
@@ -311,8 +311,8 @@
                       <div class="detail-card">
                         <div class="location">
                           <div class="marquee-strip">
-                            <span class="city">{{infoData?.venue_location}}</span>
-                            <span>{{infoData?.venue_country}}</span>
+                            <span class="city">{{infoData?.venue.location}}</span>
+                            <span>{{infoData?.venue.country}}</span>
                           </div>
                         </div>
                         <div class="last-updated">

@@ -860,15 +860,15 @@
   line-height: 18px;
 }
 
-.cricket-schedule-filter-items button.cricket-schedule-filter-item:hover {
+/* .cricket-schedule-filter-items button.cricket-schedule-filter-item:hover {
   background-color: #f5f5f5;
-}
+} */
 
-.cricket-schedule-filter-items button.cricket-schedule-filter-item.active {
+/* .cricket-schedule-filter-items button.cricket-schedule-filter-item.active {
   border-color: #FFE5E5;
   background: #FFE5E5;
   color: #D32F2F;
-}
+} */
 
 @media (max-width: 768px) {
   .cricket-schedule-filters-container {
@@ -1186,4 +1186,18 @@
     z-index: 99;
 }
 
+}
+
+/* .cricket-schedule-filter-items button.cricket-schedule-filter-item {
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 10px;
+  cursor: pointer;
+} */
+
+.cricket-schedule-filter-items button.active{
+  border-color: #FFE5E5;
+  background: #FFE5E5;
+  color: #D32F2F;
 }
