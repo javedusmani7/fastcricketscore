@@ -102,6 +102,14 @@ export class ServiceService {
     return this.http.get(`${this.baseUrl}/getLiveCricketScore/` + matchId)
   }
 
+  getInfoCricket(matchId: any) {
+    return this.http.get(`${this.baseUrl}/competetionMatches?token=${environment.token}&match_id=${matchId}`)
+   
+  }
+  getMatchSquads(matchId: any) {
+    return this.http.get(`${this.baseUrl}/matchSquads?token=${environment.token}&match_id=${matchId}`)
+   
+  }
   getInfoCricketScores(matchId: any) {
     return this.http.get(`${this.baseUrl}/competetionMatches?token=${environment.token}&match_id=${matchId}`)
    

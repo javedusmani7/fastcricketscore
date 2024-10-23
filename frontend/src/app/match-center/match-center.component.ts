@@ -3,6 +3,7 @@ import { ServiceService } from '../service.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SocketServiceService } from '../socket-service.service';
 import { DatePipe } from '@angular/common';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-match-center',
@@ -26,7 +27,8 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
   hidesquad=true
   formattedDate2:any
   formattedTime:any
-  teamDefaultImg="../../assets/team-default.png"
+  teamDefaultImg="../../assets/team-default.png";
+  matchSquads:any;
 
   constructor(private datePipe: DatePipe,private apiservic:ServiceService, private route:ActivatedRoute,private router:Router,private socket:SocketServiceService){}
 
@@ -34,7 +36,8 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.matchId=this.route.snapshot.paramMap.get('id');
     })
-    this.getInfoCricketScores();// for info
+    this.getInfoCricket();// for info
+    this.getMatchSquads();
     // this.socket.connectSocket()
     // this.getinfoData()
     // this.socket.setLiveScore(this.matchId)
@@ -157,8 +160,8 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
     return numInt + (suffix[(v - 20) % 10] || suffix[v] || suffix[0]);
   }
 
-  getInfoCricketScores() {
-    this.apiservic.getInfoCricketScores(this.matchId).subscribe((res: any) => {
+  getInfoCricket() {
+    this.apiservic.getInfoCricket(this.matchId).subscribe((res: any) => {
       this.infoData = res.data[0];
      this.matchesDtata = res.data[0];
      this.datetimeconvart(this.infoData?.timestamp_start)
@@ -175,6 +178,22 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
     })
 
   }
+
+  getMatchSquads() {
+    this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
+          this.matchSquads = res.data;
+   this.playerImages=""
+    })
+
+  }
+
+
+  getBenchPlayers(list:any){
+       return list.filter((item:any)=> item.playing11 == 'false')
+  }
+  getPlayingXIPlayers(list:any){
+    return list.filter((item:any)=> item.playing11 == 'true')
+}
   }
 
 
