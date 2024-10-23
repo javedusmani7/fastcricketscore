@@ -34,27 +34,28 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.matchId=this.route.snapshot.paramMap.get('id');
     })
-    this.socket.connectSocket()
-    this.getinfoData()
-    this.socket.setLiveScore(this.matchId)
-    this.socket.getLiveScore(this.matchId)
-    this.socket.getLiveScoreData().subscribe((res:any)=>{
-      this.infoData=res.message
-      this.matchesDtata=res.message?.score_strip
-      this.datetimeconvart(this.infoData?.datetime)
-      if(res.message?.player_images){
-        this.playerImages=res.message.player_images
-      }else{
-        this.playerImages=""
+    this.getInfoCricketScores();// for info
+    // this.socket.connectSocket()
+    // this.getinfoData()
+    // this.socket.setLiveScore(this.matchId)
+    // this.socket.getLiveScore(this.matchId)
+    // this.socket.getLiveScoreData().subscribe((res:any)=>{
+    //   this.infoData=res.message
+    //   this.matchesDtata=res.message?.score_strip
+    //   this.datetimeconvart(this.infoData?.datetime)
+    //   if(res.message?.player_images){
+    //     this.playerImages=res.message.player_images
+    //   }else{
+    //     this.playerImages=""
 
-      }
+    //   }
 
-      this.formattedDate2 = this.formatDate(this.infoData?.datetime);
-      this.formattedTime = this.formatTime(this.infoData?.datetime);
-      this.prediction_pollArr = Object.values(this.infoData?.prediction_poll?.options);
-      this.sum_of_vote_count= this.prediction_pollArr?.reduce((total:any, option:any) => total + option?.vote_count, 0);
-    })
-    this.getPointsTableData()
+    //   this.formattedDate2 = this.formatDate(this.infoData?.datetime);
+    //   this.formattedTime = this.formatTime(this.infoData?.datetime);
+    //   this.prediction_pollArr = Object.values(this.infoData?.prediction_poll?.options);
+    //   this.sum_of_vote_count= this.prediction_pollArr?.reduce((total:any, option:any) => total + option?.vote_count, 0);
+    // })
+    // this.getPointsTableData()
   }
   ngOnDestroy(): void {
     this.socket.destorySocket()
@@ -154,6 +155,25 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
     const suffix = ["th", "st", "nd", "rd"];
     const v = numInt % 100;
     return numInt + (suffix[(v - 20) % 10] || suffix[v] || suffix[0]);
+  }
+
+  getInfoCricketScores() {
+    this.apiservic.getInfoCricketScores(this.matchId).subscribe((res: any) => {
+      this.infoData = res.data[0];
+     this.matchesDtata = res.data[0];
+     this.datetimeconvart(this.infoData?.timestamp_start)
+     // this.playerImages=res.data?.player_images
+     if(res.data?.player_images){
+       this.playerImages=res.data?.player_images
+     }else{
+       this.playerImages=""
+
+     }
+     this.formattedDate2 = this.formatDate(this.infoData?.timestamp_start);
+     this.formattedTime = this.formatTime(this.infoData?.timestamp_start);
+
+    })
+
   }
   }
 

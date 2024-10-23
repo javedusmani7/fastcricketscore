@@ -48,8 +48,8 @@ display: flex;
 gap: 10px;
 justify-content: space-between;
 }
-.hero-container .hero-content.has-banner {
-}
+/* .hero-container .hero-content.has-banner {
+} */
 .hero-container .hero-content .left {
 display: flex;
 flex-direction: column;
@@ -77,8 +77,8 @@ max-width: 100%;
 height: 260px;
 object-fit: cover;
 }
-.hero-container .hero-content.has-countdown .hero-img img {
-}
+/* .hero-container .hero-content.has-countdown .hero-img img {
+} */
 .hero-container .hero-content .hero-h1-container {
 position: relative;
 display: flex;
@@ -1712,4 +1712,8 @@ margin: 0;
   z-index: 1001;
   width: 180px;
   padding: 10px 0;
+}
+
+.cricket-match-card-content {
+  margin-bottom: 20px;
 }

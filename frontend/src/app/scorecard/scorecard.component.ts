@@ -2,6 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { ServiceService } from '../service.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SocketServiceService } from '../socket-service.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-scorecard',
@@ -38,37 +39,38 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
   inningTabs=""
   selectedTabIndex = 0;
   teamDefaultImg = '../../assets/team-default.png'
+  convertedDateTimes:any
 
 
 
-
-  constructor(private apiservic: ServiceService, private route: ActivatedRoute, private router: Router,private socketService:SocketServiceService) { }
+  constructor(private datePipe: DatePipe,private apiservic: ServiceService, private route: ActivatedRoute, private router: Router,private socketService:SocketServiceService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.matchId = this.route.snapshot.paramMap.get('id');
     })
-    this.socketService.connectSocket()
-    this.getLiveCricketScores()
-    this.socketService.setLiveScore(this.matchId)
-    this.socketService.getLiveScore(this.matchId)
-    this.socketService.getLiveScoreData().subscribe((res:any)=>{
-      this.liveScoreList = res.message.score_strip
-      this.scorelist = res.message
-      this.pitchReport = res.message.pitch
-      this.weatherReport = res.message.weather
-      this.datetimeconvart(this.scorelist.datetime)
-      this.datetimeconvartdata(this.scorelist.datetime)
-      this.squadData = res.message.squad
-      this.playerImages = res.message.player_images
-      this.Innings=res.message.innings
-      this.not_batted=Object.values( this.Innings[0]?.not_batted);
-      if(this.scorelist.match_status =="live"){
-        this.hide=true
-      }else{
-        this.hide=false
-      }
-    })
+    // this.socketService.connectSocket()
+    // this.getLiveCricketScores();
+    this.getInfoCricketScores();// for info
+    // this.socketService.setLiveScore(this.matchId)
+    // this.socketService.getLiveScore(this.matchId)
+    // this.socketService.getLiveScoreData().subscribe((res:any)=>{
+    //   this.liveScoreList = res.message.score_strip
+    //   this.scorelist = res.message
+    //   this.pitchReport = res.message.pitch
+    //   this.weatherReport = res.message.weather
+    //   this.datetimeconvart(this.scorelist.datetime)
+    //   this.datetimeconvartdata(this.scorelist.datetime)
+    //   this.squadData = res.message.squad
+    //   this.playerImages = res.message.player_images
+    //   this.Innings=res.message.innings
+    //   this.not_batted=Object.values( this.Innings[0]?.not_batted);
+    //   if(this.scorelist.match_status =="live"){
+    //     this.hide=true
+    //   }else{
+    //     this.hide=false
+    //   }
+    // })
 
   }
   ngOnDestroy(): void {
@@ -131,6 +133,7 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     }
   }
   datetimeconvartdata(unixTimestamp:any){
+    console.log("fvnkjbfvh")
     const milliseconds = unixTimestamp * 1000;
     const dateObject = new Date(milliseconds);
 
@@ -191,6 +194,29 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
       block: "start",
       inline: "nearest"
     });
+  }
+
+  getInfoCricketScores() {
+    this.apiservic.getInfoCricketScores(this.matchId).subscribe((res: any) => {
+    
+     this.scorelist = res.data[0];
+     this.datetimeconvartNew(this.scorelist?.timestamp_start)
+
+    })
+
+  }
+  datetimeconvartNew(unixTimestamp:any){
+    const date = new Date(unixTimestamp * 1000); // Convert Unix timestamp to milliseconds
+    const options: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
+      month: 'short',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+      timeZone: 'Asia/Kolkata' // IST timezone
+    };
+    return this.convertedDateTimes=new Intl.DateTimeFormat('en-IN', options).format(date);
+
   }
 
 

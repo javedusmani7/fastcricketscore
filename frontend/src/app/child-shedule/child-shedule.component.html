@@ -160,80 +160,76 @@
                 <div class="panel">
                   <div class="panel-header">
                     <div class="cricket-schedule-cta-buttons ">
-                      <a class="cricket-schedule-cta-button " [class]="selectedTab == 'matches-live' ? 'active' : ''"
-                        (click)="getMatchesbySeries('matches-live',eventgrupname)">Live</a>
-                      <a class="cricket-schedule-cta-button" [class]="selectedTab == 'upcoming' ? 'active' : ''"
-                        (click)="getMatchesbySeries('upcoming',eventgrupname)">Upcoming</a>
-                      <a class="cricket-schedule-cta-button" (click)="getMatchesbySeries('result',eventgrupname)"
-                        [class]="selectedTab == 'result' ? 'active' : ''">Results</a>
+                      <a class="cricket-schedule-cta-button " [class]="selectedTab == 'Live' ? 'active' : ''"
+                        (click)="getMatchesbySeries('Live',eventgrupname)">Live</a>
+                      <a class="cricket-schedule-cta-button" [class]="selectedTab == 'Scheduled' ? 'active' : ''"
+                      (click)="getMatchesbySeries('Scheduled',eventgrupname)"  >Upcoming</a>
+                      <a class="cricket-schedule-cta-button"  (click)="getMatchesbySeries('Completed',eventgrupname)" 
+                        [class]="selectedTab == 'Completed' ? 'active' : ''">Results</a>
                     </div>
                   </div>
                   <div class="panel-body">
-                    <div class="data-filter-dropdowns" *ngIf="selectedTab !== 'matches-live'">
-                      <div class="data-filter-dropdown-wrapper">
+                    <div class="data-filter-dropdowns" *ngIf="selectedTab !== 'Live'">
+                      <!-- <div class="data-filter-dropdown-wrapper">
                         <select class="data-filter-dropdown redirect" (change)="getCricketMatches($event)">
-                          <option [value]="item.slug"
-                            *ngFor="let item of cricketMenuList?.slice(2); let i=index ,trackBy:userByName"
-                            [selected]="eventgrupname==item.slug || routeName==item.slug">{{item.name}}</option>
+                          <option [value]="item.short_title"
+                            *ngFor="let item of mainData; let i=index ,trackBy:userByName"
+                            [selected]="eventgrupname==item.short_title ">{{item.name}}</option>
                         </select>
-                      </div>
+                      </div> -->
                     </div>
-                    <div class="page-empty-state" *ngIf="upcominglist?.length==0">
+                    <div class="page-empty-state" *ngIf="mainData.length==0">
                       <img width="70" height="67" alt="speaker"
                         src="/assets/cmc-pre-live-icon.svg" class="lazy-img-bg">
                       <div class="page-empty-state-message">No matches are available</div>
                     </div>
                     <div class="cricket-match-cards"
-                      *ngFor="let item of upcominglist; let i = index ,trackBy:userByName">
+                      *ngFor="let item of mainData; let i = index">
 
                       <div class="cricket-match-card-container pre">
                         <a class="cricket-match-card-cta"
-                          (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.id)"></a>
+                          (click)="getrouteandCheckwidth('/scorecard','/live-cricket-score',item.match_id)"></a>
                         <header class="cricket-match-card-header">
-                          <div *ngIf="item.status=='post'"
+                          <div *ngIf="item.status_str=='Scheduled'"
                             class="cricket-match-card-header-primary-text convert-utc-to-local "
                             data-utc-date-time="2024-03-27T14:00:00+00:00" data-format="ddd, mmm d - h:ss TT">
                             {{item.datetime | date:"EEE, MMM d - h:mm a"}}</div>
                           <div class="cricket-match-card-header-secondary-text">
 
                             <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}
-                              {{item.format}}</span>
+                              {{item.format_str}}</span>
                             <span>•</span>
-                            <span class="cricket-match-card--match-venue">{{item.venue_stadium}}</span>
+                            <span class="cricket-match-card--match-venue">{{item.venue.name}}</span>
                             <span>•</span>
-                            <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                            <span class="cricket-match-card--match-venue">{{item.venue.location}}</span>
                           </div>
                         </header>
                         <div class="cricket-match-card-content">
                           <div class="cricket-match-card-scores">
                             <div class="cricket-match-card-score-item" data-team-id="25">
                               <div class="cricket-match-card-team-info">
-                                <img [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg"
+                                <img [src]="item.teama.logo_url" (error)="item.teama.logo_url = teamDefaultImg"
                                   class="cricket-match-card-team-logo" width="27" height="19" alt="team logo"
                                   data-img-params="?w=54">
-                                <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                                <div class="cricket-match-card-team-name">{{item.teama.short_name}}</div>
                               </div>
                               <div class="cricket-match-card-team-score">
-                                <div class="cricket-match-card-team-live-score" *ngIf="item.status=='live'">
-                                  {{item.t1_score}}</div>
-                                <div class="cricket-match-card-team-live-score" *ngIf="item.status=='post'">
-                                  {{item.t1_score}}</div>
+                                <div class="cricket-match-card-team-live-score" *ngIf="item.status_str=='Completed'">
+                                  {{item.teama.scores_full}}</div>
 
                                 <div class="cricket-match-card-team-live-overs"></div>
                               </div>
                             </div>
                             <div class="cricket-match-card-score-item" data-team-id="490">
                               <div class="cricket-match-card-team-info">
-                                <img [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg"
+                                <img [src]="item.teamb.logo_url" (error)="item.thumb_url = teamDefaultImg"
                                   class="cricket-match-card-team-logo" width="27" height="19" alt="team logo"
                                   data-img-params="?w=54">
-                                <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                                <div class="cricket-match-card-team-name">{{item.teamb.short_name}}</div>
                               </div>
                               <div class="cricket-match-card-team-score">
-                                <div class="cricket-match-card-team-live-score" *ngIf="item.status=='live'">
-                                  {{item.t2_score}}</div>
-                                <div class="cricket-match-card-team-live-score" *ngIf="item.status=='post'">
-                                  {{item.t2_score}}</div>
+                                <div class="cricket-match-card-team-live-score"  *ngIf="item.status_str=='Completed'">
+                                  {{item.teamb.scores_full}}</div>
 
                                 <div class="cricket-match-card-team-live-overs"></div>
                               </div>
@@ -242,15 +238,15 @@
                           <div class="cricket-match-card-timer">
                             <div class="cricket-match-card-timer--date convert-utc-to-local"
                               data-utc-date-time="2024-02-15T04:00:00+00:00" data-format="ddd, mmm d"
-                              data-user-friendly-day="true" *ngIf="item.status=='pre'">{{convertDate(item.datetime)}}
+                              data-user-friendly-day="true">{{convertDate(item.date)}}
                             </div>
                             <div class="cricket-match-card-timer--time convert-utc-to-local"
                               data-utc-date-time="2024-02-15T04:00:00+00:00" data-format="h:ss TT"
-                              *ngIf="item.status=='pre'">{{item.datetime |
+                              >{{item.date |
                               date:"hh:mm a"}}</div>
                           </div>
                         </div>
-                        <footer class="cricket-match-card-footer" *ngIf="item.status=='post'">
+                        <footer class="cricket-match-card-footer" *ngIf="item.status_str=='Completed'">
                           <div class="cricket-match-card-footer-primary-text">{{item.result}}</div>
                         </footer>
                       </div>
@@ -271,7 +267,7 @@
                         <header class="cricket-match-card-header">
                           <div class="cricket-match-card-header-secondary-text">
                             <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}
-                              {{item.format}}</span>
+                              {{item.format_str}}</span>
                             <span>•</span>
                             <span class="cricket-match-card--match-venue">{{item.venue_stadium}}</span>
                             <span>•</span>

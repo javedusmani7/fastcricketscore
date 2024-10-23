@@ -73,6 +73,37 @@
   </a>
   </div>
   </div>
+
+  <div class="cricket-schedule-filters-wrapper">
+    <div class="cricket-schedule-filters-container">
+    <div class="cricket-schedule-filter-items" data-value-key="type" data-target-containers=".cricket-series-schedule" data-targets=".cricket-tournament-card" data-wrapper="">
+    <div class="slider-container s">
+    <div class="slider-control slider-control--left hidden">
+    <button class="slider-control-btn">
+    <img height="19" width="13" alt="scroll button icon" loading="lazy" src="//statico.sportskeeda.com/skm/assets/ic-cheveron-right--2d2d2d.svg">
+    </button>
+    </div>
+    <div class="slider-items">
+      <div class="slider-item" *ngFor="let category of categories">
+        <button
+          class="cricket-schedule-filter-item"
+          [ngClass]="{ 'active': activeCategory === category.value }"
+          (click)="setActiveCategory(category.value)"
+        >
+          {{ category.label }}
+        </button>
+      </div>
+    </div>
+    
+    <div class="slider-control slider-control--right hidden">
+    <button class="slider-control-btn">
+    <img height="19" width="13" alt="scroll button icon" loading="lazy" src="//statico.sportskeeda.com/skm/assets/ic-cheveron-right--2d2d2d.svg">
+    </button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
   <div class="cricket-series-wise-schedule" >
   <div class="cricket-schedule-filters-wrapper">
   <div class="cricket-schedule-filters-container">
@@ -96,31 +127,32 @@
   </div>
   <div class="cricket-series-wise-schedule-container">
     <div class="accordion cricket-series-schedule" id="accordionExample" >
-      <div class="cricket-series-schedule accordion-item " *ngFor="let key of getkeysdata(serieslist); let i = index">
-        <h2 class="accordion-header " id="heading{{i}}">
-          <button class="accordion-button bgColorHeading" type="button" data-bs-toggle="collapse"
-                  [attr.data-bs-target]="'#collapseOne' + i" aria-expanded="true" aria-controls="collapseOne">
-            {{ key }}
-          </button>
-        </h2>
-        <div class="accordion-content-container show"  id="collapseOne{{i}}">
-          <div class="accordion-content accc-contant">
-          <div class="cricket-tournament-cards">
-            <ng-container >
-              <div class="cricket-tournament-card linked" data-type="International"  *ngFor="let el of serieslist[key]; let j = index">
-                <a class="cricket-tournament-card--cta" routerLink="/child-shedule/{{el.slug}}/upcoming" aria-label="tournament cta"></a>
-                <div class="cricket-tournament-card--content">
-                <div class="cricket-tournament-card--title" [class]="el.slug==''?'black':''">{{el.title}}</div>
-                <div class="cricket-tournament-card--formats">{{el.formats}}</div>
-                <div class="cricket-tournament-card--dates">{{el.dates}}</div>
-                </div>
-                </div>
-            </ng-container>
+     <div class="cricket-series-schedule accordion-item" *ngFor="let key of getKeysData(serieslist); let i = index">
+  <h2 class="accordion-header" id="heading{{i}}">
+    <button class="accordion-button bgColorHeading" type="button" data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#collapseOne' + i" aria-expanded="true" aria-controls="collapseOne">
+      {{ key }}
+    </button>
+  </h2>
+  <div class="accordion-content-container show" id="collapseOne{{i}}">
+    <div class="accordion-content accc-contant">
+      <div class="cricket-tournament-cards">
+        <ng-container>
+          <div class="cricket-tournament-card linked" *ngFor="let el of filterMatches(serieslist[key])" >
+            <a class="cricket-tournament-card--cta" routerLink="/child-shedule/{{el.title}}/upcoming" aria-label="tournament cta" (click)="setMatchData(el)"></a>
 
+            <div class="cricket-tournament-card--content">
+              <div class="cricket-tournament-card--title" [class]="el.slug == '' ? 'black' : ''">{{ el.title }}</div>
+              <div class="cricket-tournament-card--formats">{{ el.formats }}</div>
+              <div class="cricket-tournament-card--dates">{{ el.dates }}</div>
+            </div>
           </div>
-          </div>
-          </div>
+        </ng-container>
       </div>
+    </div>
+  </div>
+</div>
+
     </div>
   </div>
   </div>
