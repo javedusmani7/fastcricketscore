@@ -127,16 +127,67 @@ exports.getMatchSquads = async (req, res) => {
 
     // // Making an api call from Entity sports and then saving into our database
     try {
-        // Fetch the item
-        const MatchscorecardRow = await Matchsquad.findOne({match_id: match_id});
 
-        // Send the response
+        // Fetch data from both collections based on a common field (e.g., 'commonField')
+        const records1 = await Matchsquad.find({match_id: match_id });
+        const records2 = await Matchscorecard.find({match_id: match_id });
+
+
+         // Create a map for quick lookup based on the common field
+         const records2Map = new Map();
+         records2.forEach(record => {
+             records2Map.set(record.match_id, record);
+         });
+
+         // Combine data based on the common field
+         const combinedData = records1.map(record => {
+             const matchingRecord = records2Map.get(record.match_id);
+             return {
+                teama: record.teama,
+                teamb: record.teamb,
+                _id: record._id,
+                match_id: record.match_id,
+                teams: record.teams,
+                players: record.players,
+                format_str: matchingRecord ? matchingRecord.format_str : null,
+                status_str: matchingRecord ? matchingRecord.status_str : null,
+                status_note: matchingRecord ? matchingRecord.status_note : null,
+                live: matchingRecord ? matchingRecord.live : null,
+                match_notes: matchingRecord ? matchingRecord.match_notes : null
+             };
+         });
+
+         
+         console.log(combinedData[0].status_str);
+         
+        // // Iterate over each competition in the database
+        // let count = 0;
+        // combinedData.forEach(async (item) => {
+        //     console.log(count);
+        //     if(count < 1){
+        //         console.log(count);
+        //     }
+        //     count = count + 1;
+        // });
+
+
         const response = {
             status: 200,
             message: "Match Scorecard retrieved successfully.",
-            data: MatchscorecardRow
+            data: combinedData[0]
         }
         res.json(response);
+
+        // // Fetch the item
+        // const MatchscorecardRow = await Matchsquad.findOne({match_id: match_id});
+
+        // // Send the response
+        // const response = {
+        //     status: 200,
+        //     message: "Match Scorecard retrieved successfully.",
+        //     data: MatchscorecardRow
+        // }
+        // res.json(response);
     } 
     catch (error) {
         console.error(error);
