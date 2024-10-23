@@ -11,6 +11,7 @@ const Season = require('../models/Season');
 const Competetion = require('../models/Competetion');
 const Match = require('../models/Match');
 const Matchscorecard = require('../models/Matchscorecard');
+const Matchsquad = require('../models/Matchsquad');
 const { fetchEntitySportData } = require('../utils/EntitySports.util');
 
 // predefine constant values
@@ -316,7 +317,90 @@ exports.syncMatchScoreCard = async (req, res) => {
         }
 
         // Send response
-        res.json(dataToSave);
+        return res.status(200).json({
+            status: 200,
+            data: dataToSave 
+        });
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    }
+}
+
+
+// this function will make an API call to the ENTITYSPORT and get matches playing11 squads based on match_id
+// token: for authenticate token
+// match_id: match_id so that we can fetch the scorecard bases of match_id
+exports.syncMatchSquads = async (req, res) => {
+
+    // get parameters and check for the required validation
+    let sport_primary_key = false;
+    let source_primary_key = false;
+    const token = req.query.token;
+    const match_id = req.query.match_id;
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it are required.' });
+    }
+    
+    // STEP first; we will get the primaryID details for the sport, source and competetion table 
+    // so that we can pass these references to the matchsSquad tables
+    try {
+
+        // check if the sports exists or not
+        const sportRow = await Sport.findOne({sport_id: sport_id});
+        if (!sportRow) {
+            return res.status(404).json({status: 404, message: 'Sport not found' });
+        }
+        sport_primary_key = sportRow._id;
+
+        // check if the source exists or not
+        const sourceRow = await Source.findOne({source_id: source_id});
+        if (!sourceRow) {
+            return res.status(404).json({status: 404, message: 'Source not found' });
+        }
+        source_primary_key = sourceRow._id;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
+    }
+
+    
+    
+    // STEP Second; Making an api call from Entity sports and then saving into our database
+    try {
+        const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/squads/';
+        const response = await fetchEntitySportData(token, url);
+        const apiData = response.response;
+
+        // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+        const additionalFields = {
+            sport_id: sport_primary_key,
+            source_id: source_primary_key,
+            match_id: match_id
+        };
+        const dataToSave = { ...apiData, ...additionalFields };
+
+        // Step 2: Check if the record already exists
+        // insert and update the records accordingly
+        let MatchsquadRow = await Matchsquad.findOne({match_id: match_id});
+        if (MatchsquadRow) {
+            // Step 3A: Update the existing record
+            Object.assign(MatchsquadRow, dataToSave); // Merge the new data into the existing user object
+            await MatchsquadRow.save();
+        }
+        else{
+            // Step 3B: Create a new record
+            MatchsquadRow = new Matchsquad(dataToSave);
+            await MatchsquadRow.save();
+        }
+
+        // Send response
+        return res.status(200).json({
+            status: 200,
+            data: dataToSave 
+        });
     } 
     catch (error) {
         console.error(error);
