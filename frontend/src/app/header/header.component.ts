@@ -9,6 +9,9 @@ import { ChildSheduleComponent } from '../child-shedule/child-shedule.component'
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  short_title:any
+  tempData:any
+  mainData:any=[]
   cricketMenuList: any
   selected = false
   activeIndex: any;
@@ -82,16 +85,20 @@ export class HeaderComponent implements OnInit {
   }
   private extractValue(param: string): any {
     const parts = param.split('/');
-    this.evenSlug = parts[2];
+    // console.log("parts" , parts)
+    this.evenSlug = decodeURIComponent(parts[2]);
+    // console.log("even",this.evenSlug)
+    
   }
   private extractValue2(param: string): any {
     const parts = param.split('/');
-    this.evenSlug2 =parts[2];
+    this.evenSlug2 =decodeURIComponent(parts[2]);
   }
 
   ngOnInit(): void {
     this.getCricketMenu()
     this.slugs=this.evenSlug2 || this.evenSlug
+    // this.getStoreData()
 
   }
   getRoute(url: string): any {
@@ -112,6 +119,7 @@ export class HeaderComponent implements OnInit {
   navigateToroutes(data: any, index: any) {
     let selectedRoute = "/go/" + data.slug
     this.selectedName = data.name
+    console.log("selected name " , this.selectedName)
     this.activeIndex = index;
     this.activeSlugsName=index
     this.router.navigateByUrl(selectedRoute);
@@ -124,5 +132,19 @@ export class HeaderComponent implements OnInit {
   redirectchildshedulepsge(data : any){
     this.apiservice.callCommonCompo(data)
   }
+
+  // getStoreData(): any {
+  //   let data = JSON.parse(localStorage.getItem('seriesMatchData')|| '');
+  //   if (Object.keys(data).length > 0 && data != null) {
+  //     this.tempData = data;
+  //     this.mainData = this.tempData.matches.filter((item:any )=> item.status_str == 'Scheduled')
+  //     this.short_title=this.mainData.short_title
+  //     console.log("short-title" , this.short_title)
+  //   } else {
+  //     //api call 
+  //   }
+  //   console.log("this.tempData",this.tempData)
+
+  // }
 
 }

@@ -51,7 +51,8 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     })
     // this.socketService.connectSocket()
     // this.getLiveCricketScores();
-    this.getInfoCricketScores();// for info
+    this.getLiveCricketScores() ;
+    this.getInfoCricketScores()// for info
     // this.socketService.setLiveScore(this.matchId)
     // this.socketService.getLiveScore(this.matchId)
     // this.socketService.getLiveScoreData().subscribe((res:any)=>{
@@ -71,6 +72,7 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     //     this.hide=false
     //   }
     // })
+  
 
   }
   ngOnDestroy(): void {
@@ -78,18 +80,19 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
   }
   getLiveCricketScores() {
     this.apiservic.getLiveCricketScore(this.matchId).subscribe((res: any) => {
-      this.liveScoreList = res.data.score_strip
+      this.liveScoreList = res.data
+      console.log("livescorelist" , res)
       this.scorelist = res.data
       this.pitchReport = res.data.pitch
       this.weatherReport = res.data.weather
-      this.datetimeconvart(this.scorelist.datetime)
-      this.datetimeconvartdata(this.scorelist.datetime)
-      this.squadData = res.data.squad
-      this.playerImages = res.data.player_images
+      // this.datetimeconvart(this.scorelist.datetime)
+      // this.datetimeconvartdata(this.scorelist.datetime)
+      this.squadData = res.data.pre_squad
+      // this.playerImages = res.data.player_images
       this.Innings=res.data.innings
       this.inningTabs=this.Innings[0].name
 
-      this.not_batted=Object.values( this.Innings[0]?.not_batted);
+      this.not_batted=Object.values( this.Innings[0]?.did_not_bat);
 
 
       // this.prediction_poll=res.data.prediction_poll
@@ -98,7 +101,7 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
       // this.prediction_pollsData3=this.prediction_poll.options.opt3
 
       // this.sum_of_prediction_poll= this.prediction_poll.options.opt1.vote_count+this.prediction_poll.options.opt2.vote_count+this.prediction_poll.options.opt3.vote_count
-      if(this.scorelist.match_status =="live"){
+      if(this.scorelist.status_str =="live"){
         this.hide=true
       }else{
         this.hide=false
@@ -200,6 +203,7 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     this.apiservic.getInfoCricketScores(this.matchId).subscribe((res: any) => {
     
      this.scorelist = res.data[0];
+     console.log("scorelist " , this.scorelist)
      this.datetimeconvartNew(this.scorelist?.timestamp_start)
 
     })
@@ -219,6 +223,8 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
 
   }
 
-
+  getSum(a:any,b:any){
+return Number(a) + Number(b);
+  }
 
 }

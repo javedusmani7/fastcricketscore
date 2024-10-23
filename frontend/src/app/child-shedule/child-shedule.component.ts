@@ -7,7 +7,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
   templateUrl: './child-shedule.component.html',
   styleUrls: ['./child-shedule.component.css']
 })
-export class ChildSheduleComponent implements OnInit,OnDestroy {
+export class ChildSheduleComponent implements OnInit {
   @ViewChild("widgetsContent", { static: false, read: ElementRef }) widgetsContent: any;
 
   tempData: any
@@ -229,9 +229,9 @@ export class ChildSheduleComponent implements OnInit,OnDestroy {
     this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft - 950), behavior: 'smooth' });
   }
 
-  ngOnDestroy(): void {
-    localStorage.removeItem('seriesMatchData')
-  }
+  // ngOnDestroy(): void {
+  //   localStorage.removeItem('seriesMatchData')
+  // }
 
 
 

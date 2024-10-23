@@ -42,6 +42,7 @@ export class SeriesComponent implements OnInit{
     // Return keys where there are filtered matches
     return Object.keys(serieslist).filter(key => {
       const filteredMatches = this.filterMatches(serieslist[key]);
+      console.log("filtered matches ",this.filterMatches(serieslist[key]))
       return filteredMatches && filteredMatches.length > 0;
     });
   }

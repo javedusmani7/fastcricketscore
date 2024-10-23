@@ -28,7 +28,7 @@
                   <span class="power-play-label team1 hidden"></span>
                 </div>
                 <span class="score bind" data="data.score_strip.0.score_wickets_info"
-                  *ngIf="scorelist.status_str !=='Scheduled'">{{el.score}}</span>
+                  *ngIf="scorelist.status_str !=='Scheduled'">{{el.teama.scores_full}}</span>
                 <span class="overs-info bind" data="data.score_strip.0.overs_info"></span>
               </div>
             </div>
@@ -216,7 +216,7 @@
                   </div>
                   <div class="innings-score-info">
                     <p class="innings-total-top">
-                      {{item.runs}}/{{item.wickets}}<span class="scorecard-overs"> ({{item.overs}})</span>
+                      {{item.scores_full}}
                     </p>
                   </div>
                 </div>
@@ -231,7 +231,7 @@
                   </div>
                   <ng-container>
                     <div class="innings-table-body"
-                      *ngFor="let el of Innings[i]?.batting;let i=index;trackBy:userByName">
+                      *ngFor="let el of Innings[i]?.batsmen;let i=index;trackBy:userByName">
                       <div class="innings-table-row-holder " [class]="el.out_str=='Not out'?'batsman-not-out':''">
                         <div class="parent-row-holder">
                           <div class="innings-table-row inning-bat">
@@ -241,19 +241,19 @@
                                   {{el.name}}
                                 </a>
                               </span>
-                              <div class="captain-div" *ngIf="el.is_captain==true">
-                                (C)
+                              <div class="captain-div" >
+                                {{el.role_str}}
                               </div>
                             </div>
                             <div class="innings-runs bold text-center">{{el.runs}}</div>
-                            <div class="innings-balls text-center">{{el.balls}}</div>
+                            <div class="innings-balls text-center">{{el.balls_faced}}</div>
                             <div class="innings-fours text-center">{{el.fours}}</div>
                             <div class="innings-sixes text-center">{{el.sixes}}</div>
                             <div class="innings-strike-rate  scorecard-strike-rate">{{el.strike_rate}}
                             </div>
                           </div>
                           <div class="innings-bowler-row">
-                            <p class="innings-batsman-reason">{{el.out_str}}</p>
+                            <p class="innings-batsman-reason">{{el.how_out}}</p>
                           </div>
                         </div>
                         <span class="not-out-mark hidden"></span>
@@ -265,21 +265,21 @@
                   <div class="innings-table-row-holder innings-extras-row-holder">
                     <div class="innings-table-row innings-extras-row">
                       <div class="innings-extras-label">Extras</div>
-                      <div class="innings-extras-runs bold text-center">{{item.extras}}</div>
+                      <div class="innings-extras-runs bold text-center">{{item.extra_runs.total}}</div>
                       <div class="innings-extras-desc"></div>
                       <div class="innings-extras-desc"></div>
                       <div class="innings-extras-desc"></div>
-                      <div class="innings-extras-info">(B: {{item.bye}}, LB: {{item.legbye}}, NB:
-                        {{item.noball}}, W: {{item.wide}})</div>
+                      <div class="innings-extras-info">(B: {{item.extra_runs.byes}}, LB: {{item.extra_runs.legbyes}}, NB:
+                        {{item.extra_runs.noballs}}, W: {{item.extra_runs.wides}})</div>
                     </div>
                   </div>
                   <div class="innings-table-row-holder innings-total-row-holder">
                     <div class="innings-table-row innings-total-row last">
                       <div class="innings-total-label">
                         <span>TOTAL</span>
-                        <p class="innings-total-description">({{item.overs}} Ov, RR: {{item.run_rate}})</p>
+                        <p class="innings-total-description">({{item.equations.overs}} Ov, RR: {{item.equations.runrate}})</p>
                       </div>
-                      <div class="innings-total-runs bold text-center">{{item.runs}}/{{item.wickets}}</div>
+                      <div class="innings-total-runs bold text-center">{{item.equations.runs}}/{{item.equations.wickets}}</div>
                       <div class="innings-balls"></div>
                       <div class="innings-total-fours text-center">{{item.fours}}</div>
                       <div class="innings-total-sixes text-center">{{item.sixes}}</div>
@@ -297,7 +297,7 @@
                     <div class="long-div" title="Economy">ER</div>
                     <div title="Extras">EXT</div>
                   </div>
-                  <div class="innings-table-body" *ngFor="let el of Innings[i]?.bowling;let i=index;trackBy:userByName">
+                  <div class="innings-table-body" *ngFor="let el of Innings[i]?.bowlers;let i=index;trackBy:userByName">
                     <div class="innings-table-row-holder">
                       <div class="innings-table-row">
                         <div class="innings-bowler">
@@ -305,11 +305,11 @@
                               routerLink="/player/{{el.name}}">{{el.name}}</a></span>
                         </div>
                         <div class="innings-overs text-center">{{el.overs}}</div>
-                        <div class="innings-maiden-overs text-center">{{el.maiden_overs}}</div>
-                        <div class="innings-runs text-center">{{el.runs}}</div>
+                        <div class="innings-maiden-overs text-center">{{el.maidens}}</div>
+                        <div class="innings-runs text-center">{{el.runs_conceded}}</div>
                         <div class="innings-wickets bold text-center">{{el.wickets}}</div>
-                        <div class="innings-economy long-div">{{el.economy}}</div>
-                        <div class="innings-extras">{{el.extras}}</div>
+                        <div class="innings-economy long-div">{{el.econ}}</div>
+                        <div class="innings-extras">{{getSum(el.noballs,el.wides)}}</div>
                       </div>
                     </div>
 
