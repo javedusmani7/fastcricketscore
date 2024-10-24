@@ -12,6 +12,7 @@ const Competetion = require('../models/Competetion');
 const Match = require('../models/Match');
 const Matchscorecard = require('../models/Matchscorecard');
 const Matchsquad = require('../models/Matchsquad');
+const Matchlive = require('../models/Matchlive');
 
 
 
@@ -120,6 +121,69 @@ exports.getMatchScoreCard = async (req, res) => {
 exports.getMatchSquads = async (req, res) => {
 
     // check if the match_id exists or not
+    let apiResponse = [];
+    const match_id = parseInt(req.query.match_id) || false;  // Default to 10 items per page
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id not found' });
+    }
+
+    // // Making an api call to our database and provide the response
+    try {
+
+        // Fetch data from matchSquad collection and check record is exis or not
+        const records1 = apiResponse = await Matchsquad.find({match_id: match_id });
+        if(!records1[0]){
+            return res.status(404).json({status: 404, message: 'Squad for this match is not exist.', data: []});
+        }
+
+
+        // Fetch scorecard data from databse and getting the scorecard details based on match_id
+        const records2 = await Matchscorecard.find({match_id: match_id });
+        if(records1[0]){
+            // Create a map for quick lookup based on the common field
+            const records2Map = new Map();
+            records2.forEach(record => {
+                records2Map.set(record.match_id, record);
+            });
+
+            // Combine data based on the common field
+            apiResponse = records1.map(record => {
+                const matchingRecord = records2Map.get(record.match_id);
+                return {
+                    teama: record.teama,
+                    teamb: record.teamb,
+                    _id: record._id,
+                    match_id: record.match_id,
+                    teams: record.teams,
+                    players: record.players,
+                    format_str: matchingRecord ? matchingRecord.format_str : null,
+                    status_str: matchingRecord ? matchingRecord.status_str : null,
+                    status_note: matchingRecord ? matchingRecord.status_note : null,
+                    live: matchingRecord ? matchingRecord.live : null,
+                    match_notes: matchingRecord ? matchingRecord.match_notes : null
+                };
+            });
+        }
+
+        // Send the response
+        return res.status(200).json({
+            status: 200, 
+            message: "Match Scorecard retrieved successfully.",
+            data: apiResponse
+        });
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
+    }
+}
+
+// this function will make an API call to the MatchLive Table and return the response
+// token: for authenticate token
+// match_id: match_id so that we can fetch the scorecard bases of match_id
+exports.getMatchLive = async (req, res) => {
+
+    // check if the match_id exists or not
     const match_id = parseInt(req.query.match_id) || false;  // Default to 10 items per page
     if (!match_id) {
         return res.status(404).json({status: 404, message: 'match_id not found' });
@@ -127,67 +191,16 @@ exports.getMatchSquads = async (req, res) => {
 
     // // Making an api call from Entity sports and then saving into our database
     try {
+        // Fetch the item
+        const matchliveRow = await Matchlive.findOne({match_id: match_id});
 
-        // Fetch data from both collections based on a common field (e.g., 'commonField')
-        const records1 = await Matchsquad.find({match_id: match_id });
-        const records2 = await Matchscorecard.find({match_id: match_id });
-
-
-         // Create a map for quick lookup based on the common field
-         const records2Map = new Map();
-         records2.forEach(record => {
-             records2Map.set(record.match_id, record);
-         });
-
-         // Combine data based on the common field
-         const combinedData = records1.map(record => {
-             const matchingRecord = records2Map.get(record.match_id);
-             return {
-                teama: record.teama,
-                teamb: record.teamb,
-                _id: record._id,
-                match_id: record.match_id,
-                teams: record.teams,
-                players: record.players,
-                format_str: matchingRecord ? matchingRecord.format_str : null,
-                status_str: matchingRecord ? matchingRecord.status_str : null,
-                status_note: matchingRecord ? matchingRecord.status_note : null,
-                live: matchingRecord ? matchingRecord.live : null,
-                match_notes: matchingRecord ? matchingRecord.match_notes : null
-             };
-         });
-
-         
-         console.log(combinedData[0].status_str);
-         
-        // // Iterate over each competition in the database
-        // let count = 0;
-        // combinedData.forEach(async (item) => {
-        //     console.log(count);
-        //     if(count < 1){
-        //         console.log(count);
-        //     }
-        //     count = count + 1;
-        // });
-
-
+        // Send the response
         const response = {
             status: 200,
-            message: "Match Scorecard retrieved successfully.",
-            data: combinedData[0]
+            message: "MatchLive details retrieved successfully.",
+            data: matchliveRow
         }
         res.json(response);
-
-        // // Fetch the item
-        // const MatchscorecardRow = await Matchsquad.findOne({match_id: match_id});
-
-        // // Send the response
-        // const response = {
-        //     status: 200,
-        //     message: "Match Scorecard retrieved successfully.",
-        //     data: MatchscorecardRow
-        // }
-        // res.json(response);
     } 
     catch (error) {
         console.error(error);
