@@ -188,7 +188,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if(data=='icc-t20-international-rankings'){
 
         this.rankingList= this.rankingListAll
-        // console.log( this.rankingList," this.rankingList");
+        console.log( this.rankingList," this.rankingList");
 
         this.rankingByTabs='team'
 
@@ -201,7 +201,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.rankingList= this.rankingListAll
         this.rankingByTabs='team'
 
-      }
+      }  console.log("ranking list ",this.rankingList)
 
 
     })

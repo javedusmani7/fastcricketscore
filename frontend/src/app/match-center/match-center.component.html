@@ -17,32 +17,31 @@
             </div>
 
 
-            <div class="score-primary-partition unset-box-shadow">
+            <!-- <div class="score-primary-partition unset-box-shadow">
               <div class="match-teams">
                 <div class="team-1-score-strip-baseline"></div>
                 <div class="score-strip team1-score-strip" *ngFor="let item of matchesDtata">
-                  <!-- <div class="flag-country  pre-match-team-info " [class]="item.status=='post'?'flag-countrys':''">
+                  <div class="flag-country  pre-match-team-info " [class]="item.status=='post'?'flag-countrys':''">
                     <img [src]="item.team_flag" (error)="item.team_flag = '../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
-                      data="data.score_strip.0.team_flag" data-img-params="?w=192">
-                    <span class="country bind" data="data.score_strip.0.name"><a
+                      data="data.teams.0.team_flag" data-img-params="?w=192">
+                    <span class="country bind" data="data.teams.0.name"><a
                         routerLink="/team/{{item.slug}}">{{item.name}}</a></span>
-                  </div> -->
+                  </div>
                   <div class="score-over">
                     <div class="powerplay-tooltip">
                       <div class="bottom powerplay-tooltip-1"> </div>
                       <i></i>
                       <span class="power-play-label team1 hidden"></span>
                     </div>
-                    <span class="score bind" data="data.score_strip.0.score_wickets_info">{{item.score}}</span>
-                    <!-- <span class="overs-info bind" data="data.score_strip.0.overs_info"></span> -->
+                    <span class="score bind" data="data.teams.0.score_wickets_info">{{item.score}}</span>
                   </div>
                 </div>
                 <div class="team-2-score-strip-baseline"></div>
 
               </div>
               <div class="match-scorecard-time " id="match-scorecard-time">
-                <span class="match-date" *ngIf="infoData?.match_status=='pre'">{{formattedDate2}} </span>
-                <span class="match-time" *ngIf="infoData?.match_status=='pre'">{{formattedTime}} </span>
+                <span class="match-date" *ngIf="infoData?.status_str=='pre'">{{formattedDate2}} </span>
+                <span class="match-time" *ngIf="infoData?.status_str=='pre'">{{formattedTime}} </span>
               </div>
               <div class="scorecard-countdown-timer hidden" id="scorecard-countdown-timer">
                 <div class="line-ups">Lineups Out</div>
@@ -63,7 +62,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
 
 
@@ -76,26 +75,26 @@
 
 
 
-
+<!-- 
             <div class="score-secondary-partition">
               <div class="match_info cricket-block">
-                <div *ngIf="infoData?.match_status=='pre'">
+                <div *ngIf="infoData?.status_str=='pre'">
                   <span class="bind match-info match-result " data="data.info">Match yet to start</span>
                 </div>
                 <div>
                   <span class="bind match-info match-result win" data="data.info"
-                    *ngIf="infoData?.match_status=='post'">
+                    *ngIf="infoData?.status_str=='post'">
                     {{infoData?.info}}
                   </span>
                   <span class="bind match-info match-result " data="data.info"
-                    *ngIf="infoData?.match_status=='live'">{{infoData?.info}}</span>
+                    *ngIf="infoData?.status_str=='live'">{{infoData?.info}}</span>
 
                 </div>
               </div>
-              <div class="vertical-partition" *ngIf="infoData?.match_status=='live'">
-                <div class="run-rate-div current-run-rate-div p-l-0" *ngIf="infoData?.score_strip[1]?.run_rate_numeric || infoData?.score_strip[0]?.run_rate_numeric">
+              <div class="vertical-partition" *ngIf="infoData?.status_str=='live'">
+                <div class="run-rate-div current-run-rate-div p-l-0" *ngIf="infoData?.teams[1]?.run_rate_numeric || infoData?.teams[0]?.run_rate_numeric">
                   <span class="run-rate-label">CRR:</span>
-                  <span class="run-rate-value current-run-rate">{{infoData?.score_strip[1]?.run_rate_numeric || infoData?.score_strip[0]?.run_rate_numeric}}</span>
+                  <span class="run-rate-value current-run-rate">{{infoData?.teams[1]?.run_rate_numeric || infoData?.teams[0]?.run_rate_numeric}}</span>
                 </div>
                 <div class="run-rate-div required-run-rate-div ">
                   <span class="run-rate-label">RRR:</span>
@@ -109,7 +108,7 @@
                   </span>
                 </div>
               </div>
-            </div>
+            </div> -->
             <!-- <div class="score-secondary-partition">
               <div class="match_info cricket-block">
                 <div>
@@ -238,7 +237,7 @@
                       Toss
                     </div>
                     <div class="match-detail-info">
-                      <div class="cmc-toss-info preview-info-msg">{{infoData?.toss.text==""?'Toss yet to take Place':infoData?.toss.text}}</div>
+                      <div class="cmc-toss-info preview-info-msg">{{ infoData?.toss.text ? infoData?.toss?.text:'Toss yet to take Place'}}</div>
                     </div>
                   </div>
                 </div>
@@ -302,7 +301,7 @@
               <div class="weather-update-section " id="weather-info-tab" data-parent-id="weather-info-tab">
                 <div class="weather-update-heading">
                   <div class="heading-title">
-                    <span>{{infoData?.weather.weather}}</span>
+                    <span>{{infoData?.weather[0].weather}}</span>
                   </div>
                 </div>
                 <div class="weather-update">
@@ -322,26 +321,26 @@
                       <div class="detail-card">
                         <div class="weather-img"></div>
                         <div>
-                          <div class="weather-detail"><span class="temperature">{{infoData?.weather.temp}}</span><span
-                              class="separator-dot"></span><span class="weather-type">{{infoData?.weather.weather}}</span></div>
-                          <div class="weather-description">{{infoData?.weather.weather_desc}}</div>
+                          <div class="weather-detail"><span class="temperature">{{infoData?.weather[0].temp}}</span><span
+                              class="separator-dot"></span><span class="weather-type">{{infoData?.weather[0].weather}}</span></div>
+                          <div class="weather-description">{{infoData?.weather[0].weather_desc}}</div>
                         </div>
                       </div>
                     </div>
                     <div class="detail-card" id="clouds-container">
-                      <div class="clouds-percentage">{{infoData?.weather.clouds}}%</div>
+                      <div class="clouds-percentage">{{infoData?.weather[0].clouds}}%</div>
                       <div class="clouds">Clouds</div>
                     </div>
-                    <div class="detail-card " id="rain-container">
-                      <div class="rain-percentage">{{infoData?.weather.pop}}%</div>
+                    <!-- <div class="detail-card " id="rain-container">
+                      <div class="rain-percentage">{{infoData?.weather[0].pop}}%</div>
                       <div class="rain">Rain %</div>
-                    </div>
+                    </div> -->
                     <div class="detail-card hidden" id="humidity-container">
-                      <div class="humidity-percentage">{{infoData?.weather.humidity}}%</div>
+                      <div class="humidity-percentage">{{infoData?.weather[0].humidity}}%</div>
                       <div class="humidity">Humidity</div>
                     </div>
                     <div class="detail-card">
-                      <div class="wind-details"><span class="wind-value">{{infoData?.weather.wind_speed | number:'1.2-2'}}</span> kmph</div>
+                      <div class="wind-details"><span class="wind-value">{{infoData?.weather[0].wind_speed | number:'1.2-2'}}</span> kmph</div>
                       <div class="wind">Wind</div>
                     </div>
                   </div>
@@ -350,7 +349,7 @@
 
             </div>
           </div>
-          <div class="panel playing-xi " *ngIf="infoData?.match_status !=='pre'">
+          <div class="panel playing-xi " *ngIf="infoData?.status_str !=='Scheduled'">
             <div class="panel-heading">
               <div class="panel-heading-text">
                 <span>Playing XI</span><span class="lineups-text">Lineups Out</span>
@@ -373,45 +372,45 @@
                     <div id="squad-team-card-holder"
                       class="players-data preview-card-holder playing-content playing-content-open">
                       <div class="preview-card-content team-card">
-                        <div class="team-holder" *ngIf="infoData?.match_status!=='live'">
+                        <div class="team-holder" *ngIf="infoData?.status_str!=='Live'">
                           <span>
                             <img width="48"
-                            height="38" alt="team-logo" [src]="infoData?.score_strip[1]?.team_flag || teamDefaultImg"
+                            height="38" alt="team-logo" [src]="matchSquads?.teams[1]?.logo_url || teamDefaultImg"
                             class="team-flag img-with-fallbacks"
                             id="team-flag-IND">
-                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[1]?.slug}}">{{infoData?.score_strip[1]?.short_name}}</a>
+                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[1]?.abbr}}">{{matchSquads?.teams[1]?.abbr}}</a>
                           </span>
                           <span>vs</span>
                           <span>
-                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[0]?.slug}}">{{infoData?.score_strip[0]?.short_name}}</a>
+                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[0]?.abbr}}">{{matchSquads?.teams[0]?.abbr}}</a>
                             <img width="48"
-                                height="38" alt="team-logo" [src]="infoData?.score_strip[0]?.team_flag || teamDefaultImg"
+                                height="38" alt="team-logo" [src]="matchSquads?.teams[0]?.logo_url || teamDefaultImg"
                                 class="team-flag img-with-fallbacks" id="team-flag-ENG">
                           </span>
                         </div>
-                        <div class="team-holder" *ngIf="infoData?.match_status=='live'">
+                        <div class="team-holder" *ngIf="infoData?.status_str=='Live'">
                           <span>
-                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[1]?.slug}}">{{infoData?.score_strip[1]?.short_name}}
+                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[1]?.abbr}}">{{matchSquads?.teams[1]?.abbr}}
                             </a><img width="48"
-                            height="38" alt="team-logo" [src]="infoData?.score_strip[1]?.team_flag || teamDefaultImg"
+                            height="38" alt="team-logo" [src]="matchSquads?.teams[1]?.logo_url || teamDefaultImg"
                             class="team-flag img-with-fallbacks"
                             id="team-flag-IND">
                           </span>
                           <span>vs</span>
                           <span>
                             <img width="48"
-                                height="38" alt="team-logo" [src]="infoData?.score_strip[0]?.team_flag || teamDefaultImg"
+                                height="38" alt="team-logo" [src]="matchSquads?.teams[0]?.logo_url || teamDefaultImg"
                                 class="team-flag img-with-fallbacks" id="team-flag-ENG">
                             <a class="team-flag-anchor"
-                              routerLink="/team/{{infoData?.score_strip[0]?.slug}}">{{infoData?.score_strip[0]?.short_name}}</a>
+                              routerLink="/team/{{matchSquads?.teams[0]?.slug}}">{{matchSquads?.teams[0]?.abbr}}</a>
                           </span>
                         </div>
                         <div class="squads-holder">
-                          <div class="impact-players " id="impact-players" *ngIf="infoData?.squad[0]?.impact_players && infoData?.squad[0]?.impact_players.length > 0">
+                          <!-- <div class="impact-players " id="impact-players" *ngIf="matchSquads?.teama?.squads[0]?.impact_players && matchSquads?.squad[0]?.impact_players.length > 0">
                             <div class="impact-title">Impact Player</div>
                             <div class="impact-section">
                               <div class="team-squad team-squad-left" id="team-impact-RCB">
-                                <ng-container *ngFor="let impPlayer of infoData?.squad[0]?.impact_players;let i=index,trackBy:userByName">
+                                <ng-container *ngFor="let impPlayer of matchSquads?.squad[0]?.impact_players;let i=index,trackBy:userByName">
                                   <div class="player-role-info" >
                                     <div class="player-img-anchor"><img class="player-img " [class]="impPlayer.in=='true'?'impact-in':'impact-out'"
                                       [src]="getPlayerImage(impPlayer.sk_slug)  || '../../assets/team-default.png'" alt="player-img"
@@ -419,7 +418,6 @@
                                     <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{impPlayer.sk_slug}}"><span
                                           class="player-name">{{impPlayer.name}}</span></a>
                                       <p class="player-role">
-                                        <!-- <span>{{impPlayer.role}}</span> -->
                                         <span>{{ impPlayer.role === 'wicket-keeper' ? 'Bat & WK' : impPlayer.role === 'all-rounder' ? 'All' : impPlayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
 
                                         <span class="impact-role impact-player-div role-left">
@@ -451,7 +449,6 @@
                                       <img *ngIf="impPlayer.out=='true'" class="impact-player-role-icon" alt="impact-role-icon" title="Substitute"
                                       src="/assets/cmc-substitute-player.png"><span class="impact-tooltip">Impact
                                           Player</span></span>
-                                          <!-- <span>{{impPlayer.role}}</span> -->
                                           <span>{{ impPlayer.role === 'wicket-keeper' ? 'Bat & WK' : impPlayer.role === 'all-rounder' ? 'All' : impPlayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
 
                                         </p>
@@ -464,19 +461,18 @@
                                     src="/assets/impact-players-arrow.png" alt="impact-player"></div>
                               </div>
                             </div>
-                          </div>
-                          <div class="substitute-title playing-xi-title " *ngIf="infoData?.squad[0]?.impact_players && infoData?.squad[0]?.impact_players.length > 0">Playing XI</div>
+                          </div> -->
+                          <!-- <div class="substitute-title playing-xi-title " *ngIf="infoData?.squad[0]?.impact_players && infoData?.squad[0]?.impact_players.length > 0">Playing XI</div> -->
                           <div class="team-squad team-squad-left" id="team-IND">
                             <div class="player-role-info"
-                              *ngFor="let player of infoData?.squad[0]?.players;let i=index;">
-                              <div class="player-img-anchor"><img class="player-img"
-                                  [src]="getPlayerImage(player.sk_slug) || '../../assets/team-default.png'"
+                              *ngFor="let player of getPlayingXIPlayers(matchSquads?.teama?.squads);let i=index;">
+                              <div class="player-img-anchor" ><img class="player-img"
+                                  [src]="getPlayerImage(player.player_id) || '../../assets/team-default.png'"
                                   alt="player-img" height="40" width="40"></div>
-                              <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{player.sk_slug}}" [class]="player.sk_slug==''?'blck':''"><span
-                                    class="player-name" [class]="player.sk_slug==''?'blck':''">{{player.name}}</span><span class="role-icon" *ngIf="player.position=='captain'">(C)</span><span class="player-delta-in left" *ngIf="player.delta==1"><span></span></span></a>
+                              <div class="squad-player left-info" ><a class="player-cta" routerLink="/player/{{player.player_id}}" [class]="player.player_id==''?'blck':''"><span
+                                    class="player-name" [class]="player.player_id==''?'blck':''">{{player.name}}</span><span class="role-icon" *ngIf="player.role_str=='(C)'">(C)</span><span class="player-delta-in left" *ngIf="player.delta==1"><span></span></span></a>
                                 <p class="player-role">
-                                  <!-- <span>{{player.role}}</span> -->
-                                  <span>{{ player.role === 'wicket-keeper' ? 'Bat & WK' : player.role === 'all-rounder' ? 'All' : player.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                                  <span>{{ player.role === 'wk' ? 'Bat & WK' : player.role === 'all' ? 'All' : player.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
 
                                 </p>
                               </div>
@@ -488,19 +484,18 @@
                           </div>
                           <div class="team-squad team-squad-right" id="team-ENG">
                             <div class="player-role-info"
-                              *ngFor="let player of infoData?.squad[1]?.players;let i=index;">
-                              <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{player.sk_slug}}" >
-                                <span class="role-icon" *ngIf="player.position=='captain'">(C)</span><span class="player-delta-in right" *ngIf="player.delta==1"><span></span></span>
+                              *ngFor="let player of getPlayingXIPlayers(matchSquads?.teamb?.squads);let i=index;">
+                              <div class="squad-player right-info" ><a class="player-cta" routerLink="/player/{{player.player_id}}" >
+                                <span class="role-icon" *ngIf="player.role_str=='(C)'">(C)</span><span class="player-delta-in right" *ngIf="player.delta==1"><span></span></span>
                                 <span
-                                    class="player-name" [class]="player.sk_slug==''?'blck':''">{{player.name}}</span></a>
+                                    class="player-name" [class]="player.player_id==''?'blck':''">{{player.name}}</span></a>
                                 <p class="player-role">
-                                  <!-- <span>{{player.role}}</span> -->
-                                  <span>{{ player.role === 'wicket-keeper' ? 'Bat & WK' : player.role === 'all-rounder' ? 'All' : player.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                                  <span>{{ player.role === 'wk' ? 'Bat & WK' : player.role === 'all' ? 'All' : player.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
 
                                 </p>
                               </div>
-                              <div class="player-img-anchor"><img class="player-img"
-                                  [src]="getPlayerImage(player.sk_slug) || '../../assets/team-default.png'"
+                              <div class="player-img-anchor" ><img class="player-img"
+                                  [src]="getPlayerImage(player.player_id) || '../../assets/team-default.png'"
                                   alt="player-img" height="40" width="40"></div>
                             </div>
 
@@ -517,15 +512,14 @@
                             <div class="bench-title">Bench</div>
                             <div class="team-squad team-squad-left" id="team-bench-IND">
                               <div class="player-role-info"
-                                *ngFor="let bnplayer of infoData?.squad?.[0]?.bench_players;let i=index;">
-                                <div class="player-img-anchor"><img class="player-img"
+                                *ngFor="let bnplayer of getBenchPlayers(matchSquads?.teama?.squads);let i=index;">
+                                <div class="player-img-anchor" ><img class="player-img"
                                     [src]="getPlayerImage(bnplayer.name) || '../../assets/team-default.png'"
                                     alt="player-img" height="40" width="40"></div>
-                                <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{bnplayer.sk_slug}}" ><span [class]="bnplayer.sk_slug==''?'blck':''"
+                                <div class="squad-player left-info" ><a class="player-cta" routerLink="/player/{{bnplayer.player_id}}" ><span [class]="bnplayer.player_id==''?'blck':''"
                                       class="player-name">{{bnplayer.name}}</span><span class="player-delta-out left" *ngIf="bnplayer.delta==-1"><span></span></span></a>
                                   <p class="player-role">
-                                    <!-- <span>{{bnplayer.role}}</span> -->
-                                    <span>{{ bnplayer.role === 'wicket-keeper' ? 'Bat & WK' : bnplayer.role === 'all-rounder' ? 'All' : bnplayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                                    <span>{{ bnplayer.role === 'wk' ? 'Bat & WK' : bnplayer.role === 'all' ? 'All' : bnplayer.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
 
                                   </p>
                                 </div>
@@ -537,16 +531,15 @@
                             </div>
                             <div class="team-squad team-squad-right" id="team-bench-ENG">
                               <div class="player-role-info"
-                                *ngFor="let bnplayer of infoData?.squad?.[1]?.bench_players;let i=index;">
-                                <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{bnplayer.sk_slug}}k"><span class="player-delta-out right" *ngIf="bnplayer.delta==-1"><span></span></span><span
-                                      class="player-name" [class]="bnplayer.sk_slug==''?'blck':''">{{bnplayer.name}}</span></a>
+                                *ngFor="let bnplayer of getBenchPlayers(matchSquads?.teamb?.squads);let i=index;">
+                                <div class="squad-player right-info" ><a class="player-cta" routerLink="/player/{{bnplayer.player_id}}k"><span class="player-delta-out right" *ngIf="bnplayer.delta==-1"><span></span></span><span
+                                      class="player-name" [class]="bnplayer.player_id==''?'blck':''">{{bnplayer.name}}</span></a>
                                   <p class="player-role">
-                                    <!-- <span>{{bnplayer.role}}</span> -->
-                                    <span>{{ bnplayer.role === 'wicket-keeper' ? 'Bat & WK' : bnplayer.role === 'all-rounder' ? 'All' : bnplayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                                    <span>{{ bnplayer.role === 'wk' ? 'Bat & WK' : bnplayer.role === 'all' ? 'All' : bnplayer.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
 
                                   </p>
                                 </div>
-                                <div class="player-img-anchor"><img class="player-img"
+                                <div class="player-img-anchor" > <img class="player-img"
                                     [src]="getPlayerImage(bnplayer.name) || '../../assets/team-default.png'"
                                     alt="player-img" height="40" width="40"></div>
                               </div>
@@ -554,14 +547,14 @@
                             </div>
                           </div>
                         </div>
-                        <button class="cmc-toggle-btn"
+                        <!-- <button class="cmc-toggle-btn"
                           >
                           <span>Hide Playing XI</span>
                           <img class="sports-accordion-arrow" width="6" height="10"
                             src="data:image/svg+xml;charset=utf-8,<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' style='fill:rgba(0, 0, 0, 0);'/></svg>"
                             alt="hide-players"
                             data-lazy="/assets/arrow-icon.svg">
-                        </button>
+                        </button> -->
                       </div>
                     </div>
 
@@ -574,7 +567,7 @@
 
 
           <!-- ///////////////////////////////////// -->
-          <div class="panel squad " *ngIf="infoData?.match_status=='pre' && infoData?.squad?.[0]?.bench_players?.length > 0">
+          <div class="panel squad " *ngIf="infoData?.status_str=='Scheduled' && matchSquads?.teama?.squads.length >0">
             <div class="panel-heading" (click)="expandHidesqure()">
               <div class="panel-heading-text">
                 <span>Squads</span><span class="lineups-text">Playing XI to be announced</span>
@@ -597,20 +590,20 @@
                       <div class="preview-card-content team-card">
                         <div class="team-holder">
                           <span>
-                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[0].slug}}">
+                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[0].abbr}}">
                               <img
-                                src="{{infoData?.score_strip[0].team_flag || teamDefaultImg}}"
+                                src="{{matchSquads?.teams[0].logo_url || teamDefaultImg}}"
                                 width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-SL"
                                 data-img-params="?w=192">
-                              {{infoData?.score_strip[0].short_name}}
+                              {{matchSquads?.teams[0].abbr}}
                             </a>
                           </span>
                           <span>vs</span>
                           <span>
-                            <a class="team-flag-anchor" routerLink="/team/{{infoData?.score_strip[1].slug}}">
-                              {{infoData?.score_strip[1].short_name}}
+                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[1].abbr}}">
+                              {{matchSquads?.teams[1].abbr}}
                               <img
-                                src="{{infoData?.score_strip[1].team_flag || teamDefaultImg}}"
+                                src="{{matchSquads?.teams[1].logo_url || teamDefaultImg}}"
                                 width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-AFG"
                                 data-img-params="?w=192">
                             </a>
@@ -618,15 +611,14 @@
                         </div>
                         <div class="squads-holder">
                           <div class="team-squad team-squad-left" id="team-SL">
-                            <div class="player-role-info" *ngFor="let bnplayer of infoData?.squad?.[0]?.bench_players;let i=index;">
+                            <div class="player-role-info" *ngFor="let bnplayer of matchSquads?.teama?.squads;let i=index;">
                               <div class="player-img-anchor"><img class="player-img"
                                 [src]="getPlayerImage(bnplayer.name) || teamDefaultImg"
                                 alt="player-img" height="40" width="40"></div>
-                              <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{bnplayer.sk_slug}}"><span
-                                    class="player-name" [class]="bnplayer.sk_slug==''?'blck':''">{{bnplayer.name}}</span></a>
+                              <div class="squad-player left-info"><a class="player-cta" routerLink="/player/{{bnplayer.player_id}}"><span
+                                    class="player-name" [class]="bnplayer.player_id==''?'blck':''">{{bnplayer.name}}</span></a>
                                 <p class="player-role">
-                                  <!-- <span>{{bnplayer.role}}</span> -->
-                                  <span>{{ bnplayer.role === 'wicket-keeper' ? 'Bat & WK' : bnplayer.role === 'all-rounder' ? 'All' : bnplayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                                  <span>{{ bnplayer.role === 'wk' ? 'Bat & WK' : bnplayer.role === 'all' ? 'All' : bnplayer.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
 
                                 </p>
                               </div>
@@ -637,12 +629,11 @@
                             <hr>
                           </div>
                           <div class="team-squad team-squad-right" id="team-AFG">
-                            <div class="player-role-info" *ngFor="let bnplayer of infoData?.squad?.[1]?.bench_players;let i=index;">
-                              <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{bnplayer.sk_slug}}"><span
+                            <div class="player-role-info" *ngFor="let bnplayer of matchSquads?.teamb?.squads;let i=index;">
+                              <div class="squad-player right-info"><a class="player-cta" routerLink="/player/{{bnplayer.player_id}}"><span
                                     class="player-name">{{bnplayer.name}}</span></a>
                                 <p class="player-role">
-                                  <!-- <span>{{bnplayer.role}}</span> -->
-                                  <span>{{ bnplayer.role === 'wicket-keeper' ? 'Bat & WK' : bnplayer.role === 'all-rounder' ? 'All' : bnplayer.role === 'bowler' ? 'Bowl' : 'bat' }}</span>
+                                  <span>{{ bnplayer.role === 'wk' ? 'Bat & WK' : bnplayer.role === 'all' ? 'All' : bnplayer.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
 
                                 </p>
                               </div>
@@ -688,15 +679,15 @@
                 <div class="prediction-poll-content preview-card-content poll-card-content" style="text-align: center;"
                  >
                   <div class="poll-option has-winner text-center"><span class="poll-option-color" [style.width.%]="calculatePercentage(infoData?.prediction_poll?.options?.opt1?.vote_count)"></span>
-                    <p class="poll-option-text polls-text ">{{infoData?.score_strip?.[0]?.short_name}} : {{calculatePercentage(infoData?.prediction_poll.options?.opt1?.vote_count) | number:'1.0-0'}}%</p>
+                    <p class="poll-option-text polls-text ">{{infoData?.teams?.[0]?.short_name}} : {{calculatePercentage(infoData?.prediction_poll.options?.opt1?.vote_count) | number:'1.0-0'}}%</p>
 
-                    <!-- <p class="poll-option-text polls-text"  *ngIf="infoData?.match_status=='pre'">{{item.text.split(' ')[0].slice(0,1)+item.text.split(' ')[1].slice(0,1)}}</p> -->
+                    <!-- <p class="poll-option-text polls-text"  *ngIf="infoData?.status_str=='pre'">{{item.text.split(' ')[0].slice(0,1)+item.text.split(' ')[1].slice(0,1)}}</p> -->
 
                   </div>
                   <div class="poll-option has-winner"><span class="poll-option-color" [style.width.%]="calculatePercentage(infoData?.prediction_poll?.options?.opt2?.vote_count)"></span>
-                    <p class="poll-option-text polls-text" >{{infoData?.score_strip?.[1]?.short_name}} : {{calculatePercentage(infoData?.prediction_poll.options?.opt2?.vote_count) | number:'1.0-0'}}%</p>
+                    <p class="poll-option-text polls-text" >{{infoData?.teams?.[1]?.short_name}} : {{calculatePercentage(infoData?.prediction_poll.options?.opt2?.vote_count) | number:'1.0-0'}}%</p>
 
-                    <!-- <p class="poll-option-text polls-text"  *ngIf="infoData?.match_status=='pre'">{{item.text.split(' ')[0].slice(0,1)+item.text.split(' ')[1].slice(0,1)}}</p> -->
+                    <!-- <p class="poll-option-text polls-text"  *ngIf="infoData?.status_str=='pre'">{{item.text.split(' ')[0].slice(0,1)+item.text.split(' ')[1].slice(0,1)}}</p> -->
 
                   </div>
 

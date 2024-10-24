@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 // import SwiperCore, { Navigation, Pagination } from 'swiper';
 
 // // install Swiper modules
@@ -14,8 +15,16 @@ export class AppComponent implements OnInit {
   mobilview: Boolean = false
   desktopview: Boolean = true
 
+  constructor(private router: Router) { }
+
   ngOnInit(): void {
 
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+          return;
+      }
+      window.scrollTo(0, 0)
+  });
     const mq = window.matchMedia("(max-width: 768px)");
     if (mq.matches) {
       this.mobilview = true

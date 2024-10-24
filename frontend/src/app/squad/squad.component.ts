@@ -31,6 +31,7 @@ export class SquadComponent implements OnInit ,OnDestroy{
 imageLoaded = true;
 formattedDate2:any
 formattedTime:any
+matchSquads:any;
 
   // voteCount: number = 8074;
   totalCount: number = 10000;
@@ -42,28 +43,30 @@ formattedTime:any
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.matchId=this.route.snapshot.paramMap.get('id');
     })
-    this.socket.connectSocket()
-    this.getLiveCricketScores()
-    this.socket.setLiveScore(this.matchId)
-    this.socket.getLiveScore(this.matchId)
-    this.socket.getLiveScoreData().subscribe((res:any)=>{
-      this.liveScoreList=res.message.score_strip
-      this.scorelist=res.message
-      this.pitchReport=res.message.pitch
-      this.weatherReport=res.message.weather
-      this.datetimeconvart(this.scorelist.datetime)
-      this.squadData=res.message.squad
-      this.formattedDate2 = this.formatDate(this.scorelist?.datetime);
-      this.formattedTime = this.formatTime(this.scorelist?.datetime);
-      this.playerImages=res.message.player_images
-      if(this.scorelist.match_status =="live"){
-        this.hide=true
-      }else{
-        this.hide=false
-      }
+    this.getInfoCricketScores();
+    this.getTeamSquards();
+    // this.socket.connectSocket()
+    // this.getLiveCricketScores()
+    // this.socket.setLiveScore(this.matchId)
+    // this.socket.getLiveScore(this.matchId)
+    // this.socket.getLiveScoreData().subscribe((res:any)=>{
+    //   this.liveScoreList=res.message.score_strip
+    //   this.scorelist=res.message
+    //   this.pitchReport=res.message.pitch
+    //   this.weatherReport=res.message.weather
+    //   this.datetimeconvart(this.scorelist.datetime)
+    //   this.squadData=res.message.squad
+    //   this.formattedDate2 = this.formatDate(this.scorelist?.datetime);
+    //   this.formattedTime = this.formatTime(this.scorelist?.datetime);
+    //   this.playerImages=res.message.player_images
+    //   if(this.scorelist.match_status =="live"){
+    //     this.hide=true
+    //   }else{
+    //     this.hide=false
+    //   }
 
 
-    })
+    // })
   }
   ngOnDestroy(): void {
     this.socket.destorySocket()
@@ -148,4 +151,26 @@ formatTime(timestamp: number): any {
 userByName(index: any) {
   return index;
 }
+
+getTeamSquards() {
+  this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
+    this.matchSquads = res.data;
+
+  })
+}
+getInfoCricketScores() {
+  this.apiservic.getInfoCricketScores(this.matchId).subscribe((res: any) => {
+   this.scorelist = res.data[0];
+   this.playerImages=""
+  })
+
+}
+
+getBenchPlayers(list:any){
+  return list.filter((item:any)=> item.playing11 == 'false')
+}
+getPlayingXIPlayers(list:any){
+return list.filter((item:any)=> item.playing11 == 'true')
+}
+
 }

@@ -76,7 +76,7 @@ export class TopHeaderComponent  implements OnInit{
   private extractValue(param: string): any {
     const parts = param.split('/');
 
-    this.evenSlug=parts[2];
+    this.evenSlug=decodeURIComponent(parts[2]);
   }
   ngOnInit(): void {
     // this.apiservice.getSportData().subscribe(
@@ -136,7 +136,7 @@ export class TopHeaderComponent  implements OnInit{
 
 
 
-    this.getCricketMenu()
+    // this.getCricketMenu()
   }
   getRoute(url: string): any {
     const parts = url.split('/');

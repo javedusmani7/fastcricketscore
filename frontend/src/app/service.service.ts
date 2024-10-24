@@ -1,5 +1,6 @@
 import { query } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
+// import { Token } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -9,9 +10,11 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ServiceService {
-  CompetitionUrl="http://localhost:3000/api/competetions?token=ad3749cfdb0cceb518412cf46"
-  sportUrl= "http://localhost:3000/api/seasons?token=ad3749cfdb0cceb518412cf46ef9e44a";
+  // CompetitionUrl="http://localhost:3000/api/competetions?token=ad3749cfdb0cceb518412cf46"
+  // sportUrl= "http://localhost:3000/api/seasons?token=ad3749cfdb0cceb518412cf46ef9e44a";
+  // baseUrl= 'http://192.46.214.33:3000/api/data'
   baseUrl = environment.baseUrl;
+  token=environment.token
   sendLoggedData: BehaviorSubject<any> = new BehaviorSubject('abc')
   sendLoggedData1 = new Subject<any>()
   sendLoggedData2 = new Subject<any>()
@@ -39,17 +42,17 @@ export class ServiceService {
 
   getCompetitionData() : Observable<any>{
 
-    let competition = this.http.get(this.CompetitionUrl);
+    let competition = this.http.get(`${this.baseUrl}/competetions?token=${this.token}`);
     return competition
   }
 
   getSportData_OLD(): Observable<any>{
-    let resultTest=  this.http.get(this.sportUrl);
+    let resultTest=  this.http.get(`${this.baseUrl}/seasons?token=${this.token}`);
     return resultTest
   }
 
   getSportData() {
-    return this.http.get(`${this.sportUrl}`)
+    return this.http.get(`${this.baseUrl}/seasons?token=${this.token}`)
   }
 
   getCricketMenus() {
@@ -99,9 +102,19 @@ export class ServiceService {
     return this.http.get(`${this.baseUrl}/getCricketSeries`)
   }
   getLiveCricketScore(matchId: any) {
-    return this.http.get(`${this.baseUrl}/getLiveCricketScore/` + matchId)
+   let data=this.http.get(`${this.baseUrl}/matchScorecard?token=${environment.token}&match_id=${matchId}`)
+  //  console.log("data " , data)
+   return data
   }
 
+  getInfoCricket(matchId: any) {
+    return this.http.get(`${this.baseUrl}/competetionMatches?token=${environment.token}&match_id=${matchId}`)
+   
+  }
+  getMatchSquads(matchId: any) {
+    return this.http.get(`${this.baseUrl}/matchSquads?token=${environment.token}&match_id=${matchId}`)
+   
+  }
   getInfoCricketScores(matchId: any) {
     return this.http.get(`${this.baseUrl}/competetionMatches?token=${environment.token}&match_id=${matchId}`)
    
