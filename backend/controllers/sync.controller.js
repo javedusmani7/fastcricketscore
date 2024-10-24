@@ -12,8 +12,9 @@ const Competetion = require('../models/Competetion');
 const Match = require('../models/Match');
 const Matchscorecard = require('../models/Matchscorecard');
 const Matchsquad = require('../models/Matchsquad');
-const { fetchEntitySportData } = require('../utils/EntitySports.util');
+const { fetchEntitySportData, fetchEntitySportPlayersProfile } = require('../utils/EntitySports.util');
 const Matchlive = require('../models/Matchlive');
+const Playersprofile = require('../models/Playersprofile');
 
 // predefine constant values
 const ENTITYSPORT_API_URL = process.env.ENTITYSPORT_API_URL;
@@ -611,5 +612,148 @@ exports.syncCompetetion = async (req, res) => {
 }
 
 
+
+
+// this function will make an API call to the ENTITYSPORT and get Players Profile data
+// token: for authenticate token
+exports.syncPlayersProfile_BAK_FOR_BULK = async (req, res) => {
+    
+    // first; we will get the primaryID details for the sport, source table 
+    // so that we can pass these references to the playerProfile tables
+    let sport_primary_key = false;
+    let source_primary_key = false;
+    const token = req.query.token;
+    try {
+
+        // check if the sports exists or not
+        const sportRow = await Sport.findOne({sport_id: sport_id});
+        if (!sportRow) {
+            return res.status(404).json({status: 404, message: 'Sport not found' });
+        }
+        sport_primary_key = sportRow._id;
+
+        // check if the source exists or not
+        const sourceRow = await Source.findOne({source_id: source_id});
+        if (!sourceRow) {
+            return res.status(404).json({status: 404, message: 'Source not found' });
+        }
+        source_primary_key = sourceRow._id;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
+    }
+
+    
+    // Making an api call from Entity sports and then saving into our database
+    try {
+        const url = ENTITYSPORT_API_URL + 'players/';
+        const response = await fetchEntitySportPlayersProfile(token, url, 1000);
+        console.log(response.length);
+
+        // updating new items on the response so that we may have sport & sourceId on each items
+        const updatedItems = response.map(item => {
+            return {
+                ...item,         // Spread existing properties
+                sport_id: sport_primary_key,  // Add a new property
+                source_id: source_primary_key //"6711f69024bc088184fe6911"  // Add a new property
+            };
+        });
+        
+
+         // Prepare bulk operations
+        console.log(updatedItems.length);
+        const bulkOps = updatedItems.map(item => ({
+            updateOne: {
+                filter: { pid: item.pid }, 
+                update: { $set: item }, 
+                upsert: true // Insert if not found
+            }
+        }));
+
+        // // Execute bulk operations
+        console.log(bulkOps.length);
+        const result = await Playersprofile.bulkWrite(bulkOps);
+
+        // Send response
+        res.json(response);
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    }
+}
+
+
+// this function will make an API call to the ENTITYSPORT and get Players Profile data
+// token: for authenticate token
+exports.syncPlayersProfile = async (req, res) => {    
+    let sport_primary_key = false;
+    let source_primary_key = false;
+    let dataToSave = [];
+    const token = req.query.token;
+    const pid = req.query.pid;
+    if (!pid) {
+        return res.status(404).json({status: 404, message: 'pid paramater is missing, it are required.' });
+    }
+    
+    // first; we will get the primaryID details for the sport, source table 
+    // so that we can pass these references to the playerProfile tables
+    try {
+        let playersprofileRow = await Playersprofile.findOne({pid: pid});
+        if (playersprofileRow) {
+            // Send response
+            return res.status(200).json({
+                status: 200,
+                message: "Profile Sync Successfully.",
+                data: playersprofileRow 
+            });
+        }
+        else{
+            // check if the sports exists or not
+            const sportRow = await Sport.findOne({sport_id: sport_id});
+            if (!sportRow) {
+                return res.status(404).json({status: 404, message: 'Sport not found' });
+            }
+            sport_primary_key = sportRow._id;
+    
+            // check if the source exists or not
+            const sourceRow = await Source.findOne({source_id: source_id});
+            if (!sourceRow) {
+                return res.status(404).json({status: 404, message: 'Source not found' });
+            }
+            source_primary_key = sourceRow._id;  
+            
+            
+            // Making an api call from Entity sports and then saving into our database
+            const url = ENTITYSPORT_API_URL + 'players/' + pid;
+            const response = await fetchEntitySportData(token, url);
+            const apiData = response.response.player;  
+            if(apiData !== undefined) {
+                // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+                const additionalFields = {
+                    sport_id: sport_primary_key,
+                    source_id: source_primary_key,
+                };
+                dataToSave = { ...apiData, ...additionalFields };
+                
+                // Step 3B: Create a new record
+                playersprofileRow = new Playersprofile(dataToSave);
+                await playersprofileRow.save();
+            }
+            
+            // Send response
+            return res.status(200).json({
+                status: 200,
+                message: "Profile Sync Successfully.",
+                data: dataToSave 
+            });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from syncPlayersProfile. ', error });
+    }
+}
 
 // START: Private Methods from Here

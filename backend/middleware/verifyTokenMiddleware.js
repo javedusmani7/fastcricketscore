@@ -29,6 +29,14 @@ const verifyTokenMiddleware = async (req, res, next) => {
             if (!match_id) { return res.status(404).json({status: 404, message: 'match_id not found' });}
             const response = await axios.get(temp_apiURL + 'sync/matchLive?token=' + temp_token + "&match_id=" + match_id);
         }
+
+        // temp code that will remove later
+        // using this code we are calling the playerprofile api so that data may be store in the database
+        if(req._parsedUrl.pathname == "/api/playerProfile"){
+            const pid = parseInt(req.query.pid) || false;
+            if (!pid) { return res.status(404).json({status: 404, message: 'pidd not found' });}
+            const response = await axios.get(temp_apiURL + 'sync/playerProfile?token=' + temp_token + "&pid=" + pid);
+        }
         
 
 

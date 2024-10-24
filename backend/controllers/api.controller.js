@@ -13,6 +13,7 @@ const Match = require('../models/Match');
 const Matchscorecard = require('../models/Matchscorecard');
 const Matchsquad = require('../models/Matchsquad');
 const Matchlive = require('../models/Matchlive');
+const Playersprofile = require('../models/Playersprofile');
 
 
 
@@ -327,6 +328,67 @@ exports.getCompetetionList = async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Error fetching data from Our Records' });
     }
+}
+
+
+
+// this function will make an API call to the matchprofile Table and return the response
+// token: for authenticate token
+// pid: pid so that we can fetch the player bases of pid
+exports.getPlayersProfile = async (req, res) => {
+
+     // check if the match_id exists or not
+     const pid = parseInt(req.query.pid) || false;  // Default to 10 items per page
+     if (!pid) {
+         return res.status(404).json({status: 404, message: 'pid not found' });
+     }
+ 
+     // // Making an api call from Entity sports and then saving into our database
+     try {
+         // Fetch the item
+         const playersprofileRow = await Playersprofile.findOne({pid: pid});
+ 
+         // Send the response
+         const response = {
+             status: 200,
+             message: "Match Scorecard retrieved successfully.",
+             data: playersprofileRow
+         }
+         res.json(response);
+     } 
+     catch (error) {
+         console.error(error);
+         res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
+     }
+
+    //  // Making an api call from Entity sports and then saving into our database
+    //  try {
+    //     // Check if the record already exists and if not exist sync it
+    //     let dataToSave = [];
+    //     let playersprofileRow = await Playersprofile.findOne({pid: pid});
+    //     if (!playersprofileRow) {
+    //         const url = ENTITYSPORT_API_URL + 'players/' + pid;
+    //         const response = await fetchEntitySportData(token, url);
+    //         const apiData = response.response;       
+            
+    //         // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+    //         const additionalFields = {
+    //             sport_id: sport_primary_key,
+    //             source_id: source_primary_key,
+    //         };
+    //         dataToSave = { ...apiData, ...additionalFields };
+    //     }
+
+    //     // Send response
+    //     return res.status(200).json({
+    //         status: 200,
+    //         message: "Profile Sync Successfully.",
+    //         data: dataToSave 
+    //     });
+    // } catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    // }
 }
 
 
