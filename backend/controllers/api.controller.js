@@ -14,6 +14,7 @@ const Matchscorecard = require('../models/Matchscorecard');
 const Matchsquad = require('../models/Matchsquad');
 const Matchlive = require('../models/Matchlive');
 const Playersprofile = require('../models/Playersprofile');
+const Playerstatistic = require('../models/Playerstatistic');
 
 
 
@@ -389,6 +390,37 @@ exports.getPlayersProfile = async (req, res) => {
     //     console.error(error);
     //     res.status(500).json({ message: 'Error fetching data from Entitysport API' });
     // }
+}
+
+
+
+// this function will make an API call to the matchstatictic Table and return the response
+// token: for authenticate token
+// pid: pid so that we can fetch the player bases of pid
+exports.getPlayerStatstic = async (req, res) => {
+
+    // check if the match_id exists or not
+    const pid = parseInt(req.query.pid) || false;  // Default to 10 items per page
+    if (!pid) {
+        return res.status(404).json({status: 404, message: 'pid not found' });
+    }
+
+    // // Making an api call from database and return data
+    try {
+        // Fetch the item
+        const playerstatisticRow = await Playerstatistic.findOne({pid: pid});
+
+        // Send the response
+        return res.status(200).json({
+            status: 200,
+            message: "Player Profile Statistic retrieved Successfully",
+            data: playerstatisticRow
+        });
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
+    }
 }
 
 

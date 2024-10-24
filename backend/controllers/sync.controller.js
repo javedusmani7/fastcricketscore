@@ -15,6 +15,7 @@ const Matchsquad = require('../models/Matchsquad');
 const { fetchEntitySportData, fetchEntitySportPlayersProfile } = require('../utils/EntitySports.util');
 const Matchlive = require('../models/Matchlive');
 const Playersprofile = require('../models/Playersprofile');
+const Playerstatistic = require('../models/Playerstatistic');
 
 // predefine constant values
 const ENTITYSPORT_API_URL = process.env.ENTITYSPORT_API_URL;
@@ -746,6 +747,64 @@ exports.syncPlayersProfile = async (req, res) => {
             return res.status(200).json({
                 status: 200,
                 message: "Profile Sync Successfully.",
+                data: dataToSave 
+            });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from syncPlayersProfile. ', error });
+    }
+}
+
+
+// this function will make an API call to the ENTITYSPORT and get Players statistic data
+// token: for authenticate token
+exports.syncPlayerStatstic = async (req, res) => {
+    let dataToSave = [];
+    const pid = req.query.pid;
+    const token = req.query.token;
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    if (!pid) {
+        return res.status(404).json({status: 404, message: 'pid paramater is missing, it are required.' });
+    }
+    
+    // we are checking, records exist for this pid or not, if exist return the data
+    try {
+        let playerStatisticRow = await Playerstatistic.findOne({pid: pid});
+        if (playerStatisticRow) {
+            // Send response
+            return res.status(200).json({
+                status: 200,
+                message: "Player Profile Statistic Sync Successfully.",
+                data: playerStatisticRow 
+            });
+        }
+        else{
+            // Making an api call from Entity sports and then saving into our database
+            const url = ENTITYSPORT_API_URL + 'players/' + pid + '/stats';
+            const response = await fetchEntitySportData(token, url);
+            const apiData = response.response;
+            if(apiData !== undefined && response.status === "ok" ) {
+                
+                // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+                const additionalFields = {
+                    sport_id: sport_primary_key,
+                    source_id: source_primary_key,
+                    pid: pid,
+                };
+                dataToSave = { ...apiData, ...additionalFields };
+                
+                // Step 2: Create a new record
+                playerStatisticRow = new Playerstatistic(dataToSave);
+                await playerStatisticRow.save();
+            }
+            
+            // Send response
+            return res.status(200).json({
+                status: 200,
+                message: "Player Profile Statistic Sync Successfully.",
                 data: dataToSave 
             });
         }
