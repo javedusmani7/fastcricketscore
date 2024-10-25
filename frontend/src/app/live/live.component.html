@@ -4,31 +4,48 @@
       <div class="top-score-section-v2">
         <div class="top-score-title">
           <div class="cricket-match-card-header-secondary-text">
-            <span class="cricket-match-card--match-type">{{scorelist?.description}}</span>
+            <span class="cricket-match-card--match-type">{{scorelist?.title}}</span>
             <span>•</span>
-            <span class="cricket-match-card--match-venue">{{scorelist?.venue_stadium}}</span>
+            <span class="cricket-match-card--match-venue">{{scorelist?.venue.name}}</span>
             <span>•</span>
-            <span class="cricket-match-card--match-venue">{{scorelist?.venue_location}}</span>
+            <span class="cricket-match-card--match-venue">{{scorelist?.venue.location}}</span>
           </div>
         </div>
-        <div class="score-primary-partition" [ngClass]="scorelist?.match_status=='pre'?' unset-box-shadow':''">
+        <div class="score-primary-partition" [ngClass]="scorelist?.match_status=='Scheduled'?' unset-box-shadow':''">
           <div class="match-teams">
             <div class="team-1-score-strip-baseline"></div>
-            <div class="score-strip team2-score-strip " style="left: 209.6px;"
-              *ngFor="let el of liveScoreList; let i=index, trackBy:userByName">
-              <div class="flag-country " [class]="el.status=='post'?'flag-countrys':''">
-                <img [src]="el.team_flag" (error)="el.team_flag = '../../assets/team-default.png'" width="48"
+            <div class="score-strip team2-score-strip " style="left: 209.6px;">
+              <div class="flag-country " [class]="scorelist.status_str=='Completed'?'flag-countrys':''">
+                <img [src]="scorelist.teama.logo_url" (error)="scorelist.teama.logo_url = '../../assets/team-default.png'" width="48"
                   height="38" alt="team-logo" class="flag bind " data="data.score_strip.0.team_flag"
                   data-img-params="?w=192">
                 <span class="country bind" data="data.score_strip.0.name"><a
-                    routerLink="/team/{{el.slug}}">{{el.name}}</a></span>
+                    routerLink="/team/{{scorelist.teama.name}}">{{scorelist.teama.name}}</a></span>
               </div>
               <div class="score-over">
 
-                <span class="score bind" data="data.score_strip.0.score_wickets_info">{{el.score}}</span>
+                <span class="score bind" data="data.score_strip.0.score_wickets_info">{{scorelist.teama.scores_full}}</span>
 
               </div>
             </div>
+
+            <div class="match-teams">
+              <div class="team-1-score-strip-baseline"></div>
+              <div class="score-strip team2-score-strip " style="left: 209.6px;">
+                <div class="flag-country " [class]="scorelist.status_str=='Completed'?'flag-countrys':''">
+                  <img [src]="scorelist.teamb.logo_url" (error)="scorelist.teamb.logo_url = '../../assets/team-default.png'" width="48"
+                    height="38" alt="team-logo" class="flag bind " data="data.score_strip.0.team_flag"
+                    data-img-params="?w=192">
+                  <span class="country bind" data="data.score_strip.0.name"><a
+                      routerLink="/team/{{scorelist.teamb.name}}">{{scorelist.teamb.name}}</a></span>
+                </div>
+                <div class="score-over">
+  
+                  <span class="score bind" data="data.score_strip.0.score_wickets_info">{{scorelist.teamb.scores_full}}</span>
+  
+                </div>
+              </div>
+  
 
           </div>
 
@@ -61,8 +78,8 @@
             <span class="bind match-info match-result " data="data.info" *ngIf="scorelist?.match_status=='pre'">Match
               yet to start</span>
 
-            <div [class]="scorelist?.match_status=='post'?'green':''">
-              <span class="bind match-info match-result " data="data.info">{{scorelist?.info}}</span>
+            <div [class]="scorelist?.match_status=='Scheduled'?'green':''">
+              <span class="bind match-info match-result classgreen" data="data.info">{{scorelist?.status_note}}</span>
             </div>
           </div>
           <div class="vertical-partition" *ngIf="scorelist?.match_status=='live'">
@@ -95,9 +112,9 @@
             <div class="cmc-section-tab preview-tab">
               Info</div>
           </div>
-          <!-- <div class="fantasy-header cmc-scrollable-tab" routerLink="/livecricket-score/{{matchId}}">
-            <div class="cmc-section-tab fantasy-tab">Fantasy</div>
-          </div> -->
+          <div class="fantasy-header cmc-scrollable-tab" routerLink="/fantasy/{{matchId}}">
+            <div class="cmc-section-tab fantasy-tab ">Fantasy</div>
+          </div>
           <div class="commentary-tab-header cmc-scrollable-tab" routerLink="/live/{{matchId}}">
             <div class="cmc-section-tab commentary-tab header-hovered">Live</div>
           </div>
@@ -118,7 +135,7 @@
       </div>
     </div>
     <!-- /////////////////////////////////////////////////////////////// -->
-    <div class="live-poll-section" *ngIf="scorelist?.match_status=='pre'">
+    <div class="live-poll-section" *ngIf="scorelist?.match_status=='Live'">
       <!-- <div class="info-prediction-poll info-prediction-poll-v2">
         <div class="poll-question-wrapper"><span class="poll-question">{{scorelist?.prediction_poll.question}}</span>
           <p class="poll-count">{{sum_of_vote_count}} votes</p>
@@ -370,14 +387,14 @@
             </div>
           </div>
         </div>
-        <div id="match-players-section" class="match-players-section " *ngIf="scorelist?.match_status=='post'">
+        <div id="match-players-section" class="match-players-section " *ngIf="scorelist?.status_str=='Completed'">
           <div class="match-player-div " id="man-of-match">
             <a class="match-player-link player-cta " id="mom-player-link" aria-label="match-player"
-              routerLink="/player/{{scorelist?.player_of_match.player_slug}}"></a>
+              routerLink="/player/{{scorelist?.man_of_the_match.name}}"></a>
             <div class="left-section">
               <div class="match-player-img">
                 <img class="player-img" id="match-player-img" height="58" width="58" alt="player-img"
-                  src="{{getPlayerImage(scorelist?.player_of_match.player_slug) || '../../../../assets/team-default.png'}}">
+                  src="{{ '../../../../assets/team-default.png'}}">
               </div>
             </div>
             <div class="right-section">
@@ -386,12 +403,12 @@
                   <span class="match-palyer">Player of the Match</span>
                   <span class="match-player-name" id="player-of-match">
                     <a class="player-link"
-                      routerLink="/player/{{scorelist?.player_of_match.player_slug}}">{{scorelist?.player_of_match.player_name}}</a>
+                      routerLink="/player/{{scorelist?.man_of_the_match.name}}">{{scorelist?.man_of_the_match.name}}</a>
                   </span>
                 </div>
                 <div class="match-player-score">
                   <div id="batting-stat" class="player-stats-runs ">
-                    {{scorelist?.player_of_match.batting_stat || scorelist?.player_of_match.bowling_stat}}
+                   150(31)
                   </div>
                   <!-- <div id="bowling-stat" class="player-stats-runs ">
                     1/21
@@ -403,11 +420,11 @@
         </div>
 
 
-        <div id="recent-over-section" class="recent-over-section" *ngIf="scorelist?.match_status=='live'">
+        <div id="recent-over-section" class="recent-over-section" *ngIf="scorelist?.status_str=='Scheduled'">
           <div class="cmc-over-section" id="cmc-over-section">
             <div class="slider-container " data-with-auto-scroll="true">
               <div class="slider-control slider-control--left" (click)="scrollLeft()"
-                [ngStyle]="{'display': rightScrollCount > 0 ? 'block': 'none'}">
+                [ngStyle]="{'display': rightScrollCount > 0 ? 'block': 'none'}">f
                 <button class="slider-control-btn">
                   <img height="19" width="13" alt="scroll button icon" loading="lazy"
                     src="/assets/ic-cheveron-right--2d2d2d.svg">
@@ -455,7 +472,7 @@
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="scorelist?.match_status!=='pre'">
+          <ng-container *ngIf="scorelist?.status_str=='Scheduled'">
             <div class="empty-state-holder commentary-empty-state "
               *ngIf="!commentrayList || commentrayList.length === 0">
               <div class="empty-state-msg">
@@ -469,36 +486,36 @@
 
 
           <div class="commentary-title" data-imp-id="commentary-title"
-            *ngIf="commentrayList && commentrayList.length > 0">
+            *ngIf="commentaryList && commentaryList.length > 0">
             Commentary
           </div>
-          <div class="commentary-content" *ngIf="commentrayList && commentrayList.length > 0">
+          <div class="commentary-content" *ngIf="commentaryList && commentaryList.length > 0">
 
             <div class="scroll-up"></div>
             <div id="first_commentary_block" class="">
-              <ng-container *ngFor="let item of commentrayList;let i=index; ,trackBy:userByName">
-                <div class="box-center " id="65d98bfcbddc7e5d014c0fae" *ngIf="!item.opta_ball_type">
+              <ng-container *ngFor="let item of commentaryList;let i=index; ,trackBy:userByName">
+                <div class="box-center " id="65d98bfcbddc7e5d014c0fae" >
 
                   <span class="timestamp commentary-time" rel="1708755964130"></span>
 
                   <div class="commentary-box">
                     <div class="commentary">
-                      <span class="commentary-highlight" [innerHTML]="item.comment_text"></span>
+                      <!-- <span class="commentary-highlight" [innerHTML]="item.commentary"></span> -->
 
                     </div>
                   </div>
 
                 </div>
                 <div class="box-center temporary-auto-comment" id="66666666312e326e6f726d61"
-                  *ngIf="item?.opta_ball_type=='normal' || item?.source=='normal'"> <span class="timestamp commentary-time"
+                > <span class="timestamp commentary-time"
                     rel="1708506525000"></span>
                   <div class="commentary-box">
                     <div class="commentary">
-                      <div class="over-commentary-bubble">{{ extractNumber(item.comment_text) }}</div>
+                      <div class="over-commentary-bubble">{{item.over}}.{{item.ball}}</div>
                       <div class="highlight-background-zero ball-commentary-summary"
-                        [class]="item.runs=='4'?'runs4': item.runs=='6'?'runs6':item.runs=='W'?'wicket-background':''">
-                        {{item.runs || 0}}</div>
-                      <div class="commentary-text" [innerHTML]="item.comment_text"></div>
+                        [class]="item.run=='4'?'runs4': item.run=='6'?'runs6':item.event=='wicket'?'wicket-background':''">
+                        {{item.run || item.score|| 0}}</div>
+                      <div class="commentary-text" [innerHTML]="item.commentary"></div>
                     </div>
                   </div>
                 </div>
@@ -514,7 +531,7 @@
                   </a>
                 </div>
               </div>
-                <div id="65d5bd41bddc7e5d014c0a5b" class="box-center" *ngIf="item.opta_ball_type=='end of over'"><span
+                <div id="65d5bd41bddc7e5d014c0a5b" class="box-center" *ngIf="item.event=='overend'"><span
                     rel="1708506443472" class="timestamp commentary-time"></span>
                   <div class="commentary-box">
                     <div data-imp-id="over_summary_id__65d5bd41bddc7e5d014c0a5b" class="commentary-over-summary">
@@ -528,12 +545,12 @@
                       <div class="summary-players-runs">
                         <div class="over-summary-runs">
                           <div class="over-summary-bubbles">
-                            <ng-container
+                            <!-- <ng-container
                               *ngFor="let el of item.over_summary.split(' ');let i-index; trackBy:userByName">
                               <div class="run-per-ball"
                                 [class]="el=='6'?'type6':el=='4'?'type4':el=='W'?'wicket-background':''">{{el}}</div>
 
-                            </ng-container>
+                            </ng-container> -->
 
                           </div>
                           <div class="this-over-runs">
@@ -543,22 +560,22 @@
                         </div>
                         <div class="players-in-over">
                           <div class="batsmen-list">
-                            <div class="single-player-row" *ngFor="let player of item.batsmen"><img
+                            <div class="single-player-row" *ngFor="let player of item.bats;let i = index" ><img
                                 src="../../assets/commentary-bat-icon.svg"
                                 alt="cricket bat icon" class="role-icon"><span
-                                class="player-value">{{player.name}}</span><span *ngIf="player.is_playing==true"
+                                class="player-value">batsman{{i+1}}</span><span *ngIf="player.is_playing==true"
                                 class="batsman-active">*</span>
                               <div class="player-score"><span class="player-score-part-one">{{player.runs}}</span><span
-                                  class="player-score-part-two"> ({{player.balls}})</span></div>
+                                  class="player-score-part-two"> ({{player.balls_faced}})</span></div>
                             </div>
 
                           </div>
                           <div class="separator"></div>
                           <div class="bowlers-list">
-                            <div class="single-player-row" *ngFor="let player of item.bowlers"><img
+                            <div class="single-player-row" *ngFor="let player of item.bowls; let i=index"><img
                                 src="../../assets/commentary-ball-icon.svg"
                                 alt="cricket ball icon" class="role-icon"><span
-                                class="player-value">{{player.name}}</span>
+                                class="player-value">Bowler{{i+1}}</span>
                               <div class="player-score"><span
                                   class="player-score-part-one">{{player.wickets}}</span><span
                                   class="player-score-part-two"> /{{player.runs_conceded}}</span></div>

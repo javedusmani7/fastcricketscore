@@ -24,7 +24,7 @@ interface BowlingPlayer {
 })
 export class LiveComponent implements OnInit, OnDestroy{
   @ViewChild("widgetsContent", { static: false , read: ElementRef}) widgetsContent:any;
-
+  commentaryList:any
   rightScrollCount = 0;
   liveScoreList:any
   PlayingXI:boolean=false
@@ -79,6 +79,9 @@ export class LiveComponent implements OnInit, OnDestroy{
       this.matchId=this.route.snapshot.paramMap.get('id');
     })
 
+   this.getCommentary(this.matchId)
+
+
     this.socket.connectSocket()
     this.getLiveCricketScores()
     this.socket.setLiveScore(this.matchId)
@@ -105,7 +108,7 @@ export class LiveComponent implements OnInit, OnDestroy{
       this.prediction_pollArr = Object.values(this.scorelist?.prediction_poll?.options);
       this.sum_of_vote_count= this.prediction_pollArr.reduce((total:any, option:any) => total + option.vote_count, 0);
       if(this.commentryLoading==true){
-        this.commentrayList=this.scorelist?.commentary
+        this.commentrayList=this.commentaryList
         // console.log(this.commentrayList,"this.commentrayList+++");
       }
 
@@ -144,7 +147,7 @@ export class LiveComponent implements OnInit, OnDestroy{
       this.liveScoreList=res.data?.score_strip
 
       this.scorelist=res.data
-
+      console.log("ye hai scorelist " , this.scorelist )
       this.pitchReport=res.data?.pitch
       this.weatherReport=res.data?.weather
       this.datetimeconvart(this.scorelist.datetime)
@@ -162,7 +165,7 @@ export class LiveComponent implements OnInit, OnDestroy{
       this.blowings=res.data?.now_bowling
       const reversed=res.data?.overs_timeline_v2.reverse()
       this.overstimeline_v2=reversed
-      this.commentrayList=this.scorelist?.commentary
+      this.commentrayList=this.commentaryList
 
       this.prediction_pollArr = Object.values(this.scorelist?.prediction_poll?.options);
       this.sum_of_vote_count= this.prediction_pollArr.reduce((total:any, option:any) => total + option.vote_count, 0);
@@ -340,5 +343,15 @@ getcommentraykeys(obj:any){
   isScrollingDown(): boolean {
     const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
     return currentScrollPosition > this.previousScrollPosition;
+  }
+
+  getCommentary(match_id:any){
+
+    this.apiservic.getCommentary(this.matchId).subscribe((res:any)=>{
+      this.commentaryList = res.data.commentaries.reverse();
+      console.log("this is live list" , this.commentaryList)
+})
+
+
   }
 }
