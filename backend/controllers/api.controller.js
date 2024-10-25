@@ -249,8 +249,11 @@ exports.getCompetetionList = async (req, res) => {
     // // Making an api call from Entity sports and then saving into our database
     try {
 
-        const filter = {}
+        const competetionDaysWise = await getCompetetionDaysWise();
 
+
+        // add filter
+        const filter = {}
         if(req.params.category){
             filter.category = req.query.category;
         }
@@ -350,6 +353,7 @@ exports.getCompetetionList = async (req, res) => {
             status: 200,
             message: "Competetions retrieved successfully.",
             data: result,
+            days: competetionDaysWise,
             category:category
         }
         
@@ -454,3 +458,42 @@ exports.getPlayerStatstic = async (req, res) => {
 }
 
 
+
+// Private function
+const getCompetetionDaysWise = async () => {
+    console.log("getCompetetionDaysWise:::Step1:::");
+    
+    try{
+        const competetionDaysRows = await Competetion.aggregate([
+            {
+                $lookup: {
+                    from: 'matches', // Join with matches collection
+                    localField: '_id', // The field from the Competetion collection
+                    foreignField: 'cid', // The field from the match collection
+                    as: 'matches' // Output field to add
+                }
+            },
+            {
+                $unwind: "$matches" // Deconstructs the array field from the previous stage
+            },
+            {
+                $match: { "matches.status_str": "Live" } // Filter for live matches
+            },
+            {
+                $project: { // Optional: Specify fields to include or exclude in the output
+                    _id: 1,
+                    title: 1,
+                    match_format: 1,
+                    matches: 1 // Include match details in the output
+                }
+            }
+        ]);
+
+        // return response
+        return competetionDaysRows;
+    }
+    catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from getCompetetionDaysWise private function' });
+    }
+};
