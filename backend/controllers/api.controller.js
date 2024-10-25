@@ -230,7 +230,7 @@ exports.getMatchFantasy = async (req, res) => {
         // Send the response
         return res.status(200).json({
             status: 200,
-            message: 'match_id not found',
+            message: "MatchFantasy details retrieved successfully.",
             data: matchFantasyRow
         });
     } 
