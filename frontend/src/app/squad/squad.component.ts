@@ -32,6 +32,7 @@ imageLoaded = true;
 formattedDate2:any
 formattedTime:any
 matchSquads:any;
+loader=false;
 
   // voteCount: number = 8074;
   totalCount: number = 10000;
@@ -153,9 +154,10 @@ userByName(index: any) {
 }
 
 getTeamSquards() {
+  this.loader =true
   this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
-    this.matchSquads = res.data;
-
+    this.matchSquads = res.data[0];
+    this.loader =false
   })
 }
 getInfoCricketScores() {

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, PreloadingStrategy, RouterModule, Routes } from '@angular/router';
 // import { FindComponent } from './find/find.component';
 import { HomeComponent } from './home/home.component';
+import { FantasyComponent } from './fantasy/fantasy.component';
 
 
 const routes: Routes = [
@@ -26,9 +27,10 @@ const routes: Routes = [
   {path:"live-cricket-score/:id" ,loadChildren:()=> import('./mobile/allscorsdata/allScoreData.module').then(el => el.AllScoreDataModule)},
   {path:"iccRanking/:rankingName",loadChildren:()=>import('./icc-ranking/icc-ranking.module').then(el => el.IccRankingModule)},
   {path:"about-us",loadChildren:()=>import('./about-us/about-us.module').then(el => el.AboutUsModule)},
-  {path:"player/:playerName",loadChildren:()=>import('./player/player.module').then(el => el.PlayerModule)},
+  {path:"player/:playerId",loadChildren:()=>import('./player/player.module').then(el => el.PlayerModule)},
   {path:"ranking/:rankingName",loadChildren:()=>import('./mobile/mobile-ranking/mobile-ranking.module').then(el => el.MobileRankingModule)},
-  {path:"cricket-news/:link",loadChildren:()=>import('./news-detail/news-detail.module').then(el => el.NewsDetailModule)}
+  {path:"cricket-news/:link",loadChildren:()=>import('./news-detail/news-detail.module').then(el => el.NewsDetailModule)},
+  { path: "fantasy/:id", component: FantasyComponent },
 
 ];
 

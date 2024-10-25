@@ -123,6 +123,10 @@ export class ServiceService {
     return this.http.get(`${this.baseUrl}/competetionMatches?token=${environment.token}&match_id=${matchId}`)
    
   }
+  getFantasyData(matchId: any) {
+    return this.http.get(`${this.baseUrl}/matchFantasy?token=${environment.token}&match_id=${matchId}`)
+   
+  }
   getSeriesMostRuns(tournament_slug: any) {
     return this.http.get(`${this.baseUrl}/getSeriesMostRuns/` + tournament_slug)
   }
@@ -202,10 +206,16 @@ export class ServiceService {
 
   // http://192.46.214.33:3000/api/data/getPlayerInfo/shubman-gill
 
-  getPlayerInfo(name:any){
-    return this.http.get(`${this.baseUrl}/getPlayerInfo/${name}`)
+  getPlayerInfo(id: any) {
+    return this.http.get(
+      `${this.baseUrl}/playerProfile?token=${environment.token}&pid=${id}`
+    );
   }
-
+  getPlayerStats(id: any) {
+    return this.http.get(
+      `${this.baseUrl}/playerStatstic?token=${environment.token}&pid=${id}`
+    );
+  }
 
   // http://192.46.214.33:3000/api/data/getIccRanking/icc-odi-ranking
   getIccRankingapis(name:any){
@@ -219,10 +229,7 @@ export class ServiceService {
     this.callCommon.next(data)
   }
 
-  getPlayerStats(name:any){
-    // console.log(name);
-    return this.http.get(`${this.baseUrl}/getPlayerStats/${name}`)
-  }
+
 
   getTeamInfo(name:any){
     // console.log(name);
@@ -279,6 +286,8 @@ export class ServiceService {
   getSeriesPurpleCap(tournament_slug:any){
     return this.http.get(`${this.baseUrl}/getSeriesPurpleCap/${tournament_slug}`)
   }
+
+
 
 }
 

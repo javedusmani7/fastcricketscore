@@ -29,6 +29,7 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
   formattedTime:any
   teamDefaultImg="../../assets/team-default.png";
   matchSquads:any;
+  loader=true;
 
   constructor(private datePipe: DatePipe,private apiservic:ServiceService, private route:ActivatedRoute,private router:Router,private socket:SocketServiceService){}
 
@@ -180,9 +181,11 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
   }
 
   getMatchSquads() {
+    this.loader =true
     this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
-          this.matchSquads = res.data;
-   this.playerImages=""
+          this.matchSquads = res.data[0];
+   this.playerImages="";
+   this.loader =false
     })
 
   }
