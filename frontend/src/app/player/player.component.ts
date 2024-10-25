@@ -22,33 +22,37 @@ export class PlayerComponent implements OnInit{
   loader=true
   loader2=false
   teamOptionsId:any
-
+  playerId:any;
   playerews:any
+  playerData:any;
+  playerstats:any;
+  batBowData:any;
 
   constructor(private apiservice: ServiceService, private route: ActivatedRoute, private router: Router) { }
   ngOnInit(): void {
 
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.playerName = this.route.snapshot.paramMap.get('playerName');
+      this.playerId = this.route.snapshot.paramMap.get('playerId');
     })
 
-    this.overviewdata()
-
-    this.filterplayer(this.teamId)
+    this.playerStata('stats');
+    // this.overviewdata()
+    // this.filterplayer(this.teamId)
   }
 
   overviewdata(){
-    this.playerStatsTab=''
-    this.apiservice.getPlayerInfo(this.playerName).subscribe((res:any)=>{
-      this.loader=false
-      this.playerList=res.data
-      this.mostRecentMatches=res.data?.tables
-      this.popularPlayers=res.data?.popularPlayers
-      this.popularPlayerFilter=this.popularPlayers?.players?.[0]
-      this.teamOptionsId=this.popularPlayers?.teamOptions[0]?.teamId
+    this.playerStatsTab='';
+    // this.apiservice.getPlayerInfo(this.playerId).subscribe((res:any)=>{
+    //   this.loader=false
+    //   console.log("res",res.data)
+    //   // this.playerList=res.data
+    //   // this.mostRecentMatches=res.data?.tables
+    //   // this.popularPlayers=res.data?.popularPlayers
+    //   // this.popularPlayerFilter=this.popularPlayers?.players?.[0]
+    //   // this.teamOptionsId=this.popularPlayers?.teamOptions[0]?.teamId
 
 
-    })
+    // })
 
   }
   filterplayer(teamId:any){
@@ -63,11 +67,16 @@ export class PlayerComponent implements OnInit{
   // getPlayerNews
   playerStata(data:any){
     this.playerStatsTab=data
-    this.apiservice.getPlayerStats(this.playerName).subscribe((res:any)=>{
-      this.playerStatsList=res.data
-      console.log(this.playerStatsList,"this.playerStatsList");
+    this.apiservice.getPlayerStats(this.playerId).subscribe((res:any)=>{
+      console.log('res',res.data)
+      this.playerstats= res.data
+     this.playerData = res.data.player;
+     this.batBowData = [{ type:'Batting' ,data:res.data.batting }, {type:'Bowling',data:res.data.bowling}]
+      this.playerStatsList=[]
+      this.loader =false
+      // console.log(this.playerStatsList,"this.playerStatsList");
 
-      this.tournamentStatsData=res.data['Tournament Stats']
+      // this.tournamentStatsData=res.data['Tournament Stats']
     })
 
   }
@@ -107,4 +116,8 @@ export class PlayerComponent implements OnInit{
     const parts = link.split('/');
     return parts[parts.length - 1];
   }
+
+  typeKeys(obj:any){
+    return Object?.keys(obj)
+    }
 }

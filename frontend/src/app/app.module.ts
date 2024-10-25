@@ -11,6 +11,7 @@ import { MobilenavComponent } from './mobile/mobilenav/mobilenav.component';
 import { HomeComponent } from './home/home.component';
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
+import { FantasyComponent } from './fantasy/fantasy.component';
 // import { NewsDetailComponent } from './news-detail/news-detail.component';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { CommonModule } from '@angular/common';
     MobilefooterComponent,
     MobilenavComponent,
     HomeComponent,
+    FantasyComponent,
     // NewsDetailComponent,
   ],
   imports: [

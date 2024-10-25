@@ -12,7 +12,7 @@
           <a routerLink="/">Cricket </a>
         </li>
         <li>
-          <span>{{playerName}}</span>
+          <span>{{playerData.first_name}}</span>
         </li>
       </ul>
     </div>
@@ -37,12 +37,12 @@
         <div class="left">
           <div class="player-details" >
             <div class="player-img">
-              <img [src]="playerList?.img || '../../assets/team-default.png'" width="134" height="134" alt="Paul Stirling" class=""
+              <img [src]="playerData?.logo_url || '../../assets/team-default.png'" width="134" height="134" alt="Paul Stirling" class=""
                 data-img-params="?w=268">
             </div>
             <div class="player-info">
               <div class="row1">
-                <h1 class="player-name">{{playerList?.name}}</h1>
+                <h1 class="player-name">{{playerData.first_name}}</h1>
                 <div class="taxonomy-share">
 
 
@@ -57,7 +57,7 @@
                 </div>
               </div>
               <div class="row1 meta cricket">
-                <span>{{playerList?.meta}}</span>
+                <span>{{playerData?.twitter_profile}}</span>
                 <!-- <span>•</span> -->
                 <!-- <span>
                   Right Handed Bat
@@ -71,34 +71,34 @@
           <img class="spin cricket-ball" src="../../assets/cricket_ball (1).svg"
             alt="loader" style="transform: rotate(7500deg);">
         </div>
-
+<!-- 
         <div class="right">
-          <div class="tournament-info" *ngIf="playerList?.worldcup.Mat">
+          <div class="tournament-info" *ngIf="playerData?.worldcup.Mat">
             <div class="tournament-heading">WORLD CUP ALL TIME STATS</div>
             <div class="tournament-stats">
               <div class="single-stats ">
-                <span class="value">{{playerList?.worldcup.Mat}}</span>
+                <span class="value">{{playerData?.worldcup.Mat}}</span>
                 <span class=" text">Mat</span>
               </div>
               <div class="single-stats ">
-                <span class="value">{{playerList?.worldcup.Runs}}</span>
+                <span class="value">{{playerData?.worldcup.Runs}}</span>
                 <span class=" text">Runs</span>
               </div>
               <div class="single-stats ">
-                <span class="value">{{playerList?.worldcup['S/R']}}</span>
+                <span class="value">{{playerData?.worldcup['S/R']}}</span>
                 <span class=" text">S/R</span>
               </div>
               <div class="single-stats ">
-                <span class="value">{{playerList?.worldcup.Avg}}</span>
+                <span class="value">{{playerData?.worldcup.Avg}}</span>
                 <span class=" text">Avg</span>
               </div>
               <div class="single-stats ">
-                <span class="value">{{playerList?.worldcup['H/S']}}</span>
+                <span class="value">{{playerData?.worldcup['H/S']}}</span>
                 <span class=" text">H/S</span>
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -124,11 +124,11 @@
 
   <div class="player-details">
   <div class="player-img">
-  <img src="{{playerList?.img || '../../../../assets/team-default.png'}}" width="134" height="134" alt="Colin Munro" class="" data-img-params="?w=268">
+  <img src="{{playerData?.img || '../../../../assets/team-default.png'}}" width="134" height="134" alt="Colin Munro" class="" data-img-params="?w=268">
   </div>
   <div class="player-info">
   <div class="row1">
-  <h1 class="player-name">{{playerList?.name}}</h1>
+  <h1 class="player-name">{{playerData?.first_name}}</h1>
   <div class="taxonomy-share">
 
 
@@ -141,7 +141,7 @@
   </div>
   </div>
   <div class="row1 meta cricket">
-  <span>{{playerList?.meta}}</span>
+  <span>{{playerData?.twitter_profile}}</span>
   <!-- <span>•</span>
   <span>
   Left Handed Bat
@@ -150,8 +150,8 @@
   </div>
   </div>
   </div>
-  <div class="right">
-  </div>
+  <!-- <div class="right">
+  </div> -->
   </div>
   </div>
   </div>
@@ -186,7 +186,7 @@
       <section class="layout-wrapper">
         <div class="content-container">
 
-          <div class="right">
+          <!-- <div class="right">
             <div class="sidebar-container">
 
               <aside class="sidebar">
@@ -205,14 +205,13 @@
                 </div>
               </aside>
             </div>
-          </div>
+          </div> -->
           <div class="left">
-
 
             <section class="pinned-stories" *ngIf="playerStatsTab==='news'">
               <div class="panel">
               <header class="panel-header">
-              <h1 class="panel-heading">{{playerList?.name}} News</h1>
+              <h1 class="panel-heading">{{playerData?.first_name}} News</h1>
               </header>
 
               <div class="panel-body no-padding">
@@ -258,32 +257,7 @@
               </section>
 
             <ng-container *ngIf="playerStatsTab!=='news'">
-              <div class="tournament-info" id="mobile"  *ngIf="playerList?.worldcup.Mat">
-                <div class="tournament-heading">IPL ALL TIME STATS</div>
-                <div class="tournament-stats">
-                  <div class="single-stats ">
-                    <span class="value">{{playerList?.worldcup.Mat}}</span>
-                    <span class=" text">Mat</span>
-                  </div>
-                  <div class="single-stats ">
-                    <span class="value">{{playerList?.worldcup.Runs}}</span>
-                    <span class=" text">Runs</span>
-                  </div>
-                  <div class="single-stats ">
-                    <span class="value">{{playerList?.worldcup['S/R']}}</span>
-                    <span class=" text">S/R</span>
-                  </div>
-                  <div class="single-stats ">
-                    <span class="value">{{playerList?.worldcup.Avg}}</span>
-                    <span class=" text">Avg</span>
-                  </div>
-                  <div class="single-stats ">
-                    <span class="value">{{playerList?.worldcup['H/S']}}</span>
-                    <span class=" text">H/S</span>
-                  </div>
-                </div>
-                </div>
-              <section class="player-bio"  *ngIf="playerList?.personalInfo && personalKeys(playerList?.personalInfo).length > 0">
+              <section class="player-bio"  *ngIf="playerData">
                 <div class="panel" *ngIf="!loader">
                   <header class="panel-header" >
                     <h2 class="panel-heading">Personal Information</h2>
@@ -294,14 +268,33 @@
                       <table class="personal-info-table team-personal-info-table">
 
                           <tbody class="team-personal-info-items main-info-items">
-                            <tr class="row item-details" *ngFor="let keyValuePair of playerList?.personalInfo | keyvalue">
-                              <td class="column left">{{ keyValuePair.key }}</td>
-                              <td class="column right">{{ keyValuePair.value }}</td>
+                            <tr class="row item-details">
+                              <td class="column left">Name</td>
+                              <td class="column right">{{ playerData.first_name}}</td>
                             </tr>
+                            <tr class="row item-details">
+                              <td class="column left">Birth Date & Birth Place</td>
+                              <td class="column right">{{ playerData.birthdate}} {{ playerData.birthplace}}</td>
+                            </tr>
+                            <tr class="row item-details">
+                              <td class="column left">Bowling Style</td>
+                              <td class="column right">{{ playerData.bowling_style}}</td>
+                            </tr>
+                            <tr class="row item-details">
+                              <td class="column left">Nationality</td>
+                              <td class="column right">{{ playerData.nationality}}</td>
+                            </tr>
+                            <tr class="row item-details">
+                              <td class="column left">Playing Role</td>
+                              <td class="column right">{{ playerData.playing_role}}</td>
+                            </tr>
+                            <tr class="row item-details">
+                              <td class="column left">Name</td>
+                              <td class="column right">{{ playerData.first_name}}</td>
+                            </tr>
+                          
 
                           </tbody>
-
-                        <!-- </tbody> -->
                       </table>
 
                     </div>
@@ -310,59 +303,91 @@
                 </div>
               </section>
               <div class="section-separator"></div>
-              <!-- <section class="sk-widget ">
-
-                <div class="vidazoo-player-container">
-                  <div id="video-player-container--"></div>
-
-                </div>
-              </section> -->
               <div class="section-separator "></div>
               <section class="stats-table-section">
-                <div class="panel" *ngIf="!loader">
+                <div *ngFor="let list of batBowData">
                   <header class="panel-header">
-                    <h2 class="panel-heading">{{mostRecentMatches[0]?.heading}}</h2>
+                    <h2 class="panel-heading">{{list?.type}}</h2>
                   </header>
-                  <div class="panel-body no-padding-d">
-
-                    <table class="stats-table">
-                      <tbody>
-                        <tr>
-                          <th title="Match" class="headcol">Match</th>
-                          <th title="Runs" class="secondcol">R</th>
-                          <th title="Balls Faced">BF</th>
-                          <th title="Fours">4s</th>
-                          <th title="Sixes">6s</th>
-                          <th title="Strike Rate">S/R</th>
-                          <th title="Overs Bowled" class="batting-bowling-separator-over">O</th>
-                          <th title="Runs Conceded">R</th>
-                          <th title="Wickets Taken">W</th>
-                          <th title="Economy">E/R</th>
-                        </tr>
-                        <tr *ngFor="let item of mostRecentMatches[0]?.data">
-                          <td class="headcol">
-                            <a >{{item.Match}}</a>
-                          </td>
-                          <td class="secondcol">
-                            8</td>
-                          <td>{{item.BF}}</td>
-                          <td>{{item['4s']}}</td>
-                          <td>{{item['6s']}}</td>
-                          <td>{{item['S/R']}}</td>
-                          <td class="batting-bowling-separator-over">
-                            {{item.O}}</td>
-                          <td>{{item.R}} </td>
-                          <td>{{item.W}}</td>
-                          <td>{{item['E/R']}}</td>
-                        </tr>
-
-                      </tbody>
-                    </table>
+                  <div class="panel" *ngFor="let item of typeKeys(list.data)">
+                    <header class="panel-header">
+                      <h2 class="panel-heading">{{item | uppercase}}</h2>
+                    </header>
+                    <div class="panel-body no-padding-d">
+  
+                      <table class="stats-table" *ngIf="list?.type == 'Batting'">
+                        <tbody>
+                          <tr>
+                            <th title="Match" class="headcol" >Match</th>
+                            <th title="Runs" class="secondcol">R</th>
+                            <th title="Innings">Inn</th>
+                            <th title="High Score">H</th>
+                            <th title="Fours">4s</th>
+                            <th title="Sixes">6s</th>
+                            <th title="Strike Rate">S/R</th>
+                            <th title="Hundreds">100s</th>
+                            <th title="Fifties">50s</th>
+                            <th title="Not outs">NO</th>
+                            <th title="Balls Faced">BF</th>
+                          </tr>
+                          <tr>
+                            <td class="headcol">
+                              <a >{{list.data[item].matches?list.data[item].matches:0}}</a>
+                            </td>
+                            <td class="secondcol">
+                              {{list.data[item].runs?list.data[item].runs:0}}</td>
+                              <td>{{list.data[item].innings?list.data[item].innings:0}}</td>
+                            <td>{{list.data[item].highest?list.data[item].highest:0}}</td>
+                            <td>{{list.data[item].run4?list.data[item].run4:0}}</td>
+                            <td>{{list.data[item].run6?list.data[item].run6:0}}</td>
+                            <td>{{list.data[item].strike?list.data[item].strike:0}}</td>
+                            <td>{{list.data[item].run100?list.data[item].run100:0}}</td>
+                            <td>{{list.data[item].run50?list.data[item].run50:0}}</td>
+                            <td>{{list.data[item].notout?list.data[item].notout:0}}</td>
+                            <td>{{list.data[item].balls?list.data[item].balls:0}}</td>
+                          </tr>
+  
+                        </tbody>
+                      </table>
+                      <table class="stats-table"  *ngIf="list?.type == 'Bowling'">
+                        <tbody>
+                          <tr>
+                            <th title="Match" class="headcol" >Match</th>
+                            <th title="Innings">Inn</th>
+                            <th title="Balls Faced">BF</th>
+                            <th title="Overs Bowled" class="batting-bowling-separator-over">O</th>
+                            <th title="Runs Conceded">R</th>
+                            <th title="Wickets Taken">W</th>
+                            <th title="Economy">E/R</th>
+                            <th title="Average">Avg</th>
+                            <th title="Five-Wicket Hauls">5w</th>
+                            <th title="Ten-Wicket Hauls">10w</th>
+                          </tr>
+                          <tr>
+                            <td class="headcol">
+                              <a >{{list.data[item].matches?list.data[item].matches:0}}</a>
+                            </td>
+                            <td>{{list.data[item].innings?list.data[item].innings:0}}</td>
+                            <td>{{list.data[item].bestmatch?list.data[item].bestmatch:0}}</td>
+                            <td class="batting-bowling-separator-over">
+                              {{list.data[item].overs? list.data[item].overs:0}}</td>
+                            <td>{{list.data[item].runs?list.data[item].runs:0}} </td>
+                            <td>{{list.data[item].wickets? list.data[item].wickets:0}}</td>
+                            <td>{{list.data[item].econ?list.data[item].econ:0}}</td>
+                            <td>{{list.data[item].average?list.data[item].average:0}}</td>
+                            <td>{{list.data[item].wicket5i?list.data[item].wicket5i:0}}</td>
+                            <td>{{list.data[item].wicket10m?list.data[item].wicket10m:0}}</td>
+                          </tr>
+  
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
+          
               </section>
               <div class="section-separator"></div>
-              <section class="stats-table-section">
+              <!-- <section class="stats-table-section">
                 <div class="panel" *ngIf="!loader">
                   <header class="panel-header">
                     <h2 class="panel-heading">{{mostRecentMatches[1]?.heading}}</h2>
@@ -413,9 +438,9 @@
                     </table>
                   </div>
                 </div>
-              </section>
+              </section> -->
               <div class="section-separator"></div>
-              <section class="stats-table-section">
+              <!-- <section class="stats-table-section">
                 <div class="panel" *ngIf="!loader">
                   <header class="panel-header">
                     <h2 class="panel-heading">{{mostRecentMatches[2]?.heading}}</h2>
@@ -458,9 +483,9 @@
                     </table>
                   </div>
                 </div>
-              </section>
+              </section> -->
               <div class="section-separator"></div>
-              <section class="popular-players-panel">
+              <!-- <section class="popular-players-panel">
                 <div class="panel">
                   <header class="panel-header">
                     <div class="panel-heading">
@@ -520,7 +545,7 @@
 
                   </div>
                 </div>
-              </section>
+              </section> -->
               <div class="section-separator"></div>
             </ng-container>
 
@@ -545,8 +570,92 @@
 
 <!-- for stats page ============================================================= -->
 <section class="wrapper-container" *ngIf="playerStatsTab=='stats'">
+  <!-- <h1 class="player-stats-main-heading">{{playerData?.first_name}} Stats</h1> -->
   <div class="fragment-container">
-    <h1 class="player-stats-main-heading">{{playerList?.name}} Stats</h1>
+ 
+    <section class="stats-table-section">
+      <div *ngFor="let list of batBowData">
+        <header class="panel-header">
+          <h2 class="panel-heading">{{list?.type}}</h2>
+        </header>
+        <div class="panel" *ngFor="let item of typeKeys(list.data)">
+          <header class="panel-header">
+            <h2 class="panel-heading">{{item | uppercase}}</h2>
+          </header>
+          <div class="panel-body no-padding-d">
+    
+            <table class="stats-table" *ngIf="list?.type == 'Batting'">
+              <tbody>
+                <tr>
+                  <th title="Match" class="headcol" >Match</th>
+                  <th title="Runs" class="secondcol">R</th>
+                  <th title="Innings">Inn</th>
+                  <th title="High Score">H</th>
+                  <th title="Fours">4s</th>
+                  <th title="Sixes">6s</th>
+                  <th title="Strike Rate">S/R</th>
+                  <th title="Hundreds">100s</th>
+                  <th title="Fifties">50s</th>
+                  <th title="Not outs">NO</th>
+                  <th title="Balls Faced">BF</th>
+                </tr>
+                <tr>
+                  <td class="headcol">
+                    <a >{{list.data[item].matches?list.data[item].matches:0}}</a>
+                  </td>
+                  <td class="secondcol">
+                    {{list.data[item].runs?list.data[item].runs:0}}</td>
+                    <td>{{list.data[item].innings?list.data[item].innings:0}}</td>
+                  <td>{{list.data[item].highest?list.data[item].highest:0}}</td>
+                  <td>{{list.data[item].run4?list.data[item].run4:0}}</td>
+                  <td>{{list.data[item].run6?list.data[item].run6:0}}</td>
+                  <td>{{list.data[item].strike?list.data[item].strike:0}}</td>
+                  <td>{{list.data[item].run100?list.data[item].run100:0}}</td>
+                  <td>{{list.data[item].run50?list.data[item].run50:0}}</td>
+                  <td>{{list.data[item].notout?list.data[item].notout:0}}</td>
+                  <td>{{list.data[item].balls?list.data[item].balls:0}}</td>
+                </tr>
+    
+              </tbody>
+            </table>
+            <table class="stats-table"  *ngIf="list?.type == 'Bowling'">
+              <tbody>
+                <tr>
+                  <th title="Match" class="headcol" >Match</th>
+                  <th title="Innings">Inn</th>
+                  <th title="Balls Faced">BF</th>
+                  <th title="Overs Bowled" class="batting-bowling-separator-over">O</th>
+                  <th title="Runs Conceded">R</th>
+                  <th title="Wickets Taken">W</th>
+                  <th title="Economy">E/R</th>
+                  <th title="Average">Avg</th>
+                  <th title="Five-Wicket Hauls">5w</th>
+                  <th title="Ten-Wicket Hauls">10w</th>
+                </tr>
+                <tr>
+                  <td class="headcol">
+                    <a >{{list.data[item].matches?list.data[item].matches:0}}</a>
+                  </td>
+                  <td>{{list.data[item].innings?list.data[item].innings:0}}</td>
+                  <td>{{list.data[item].bestmatch?list.data[item].bestmatch:0}}</td>
+                  <td class="batting-bowling-separator-over">
+                    {{list.data[item].overs? list.data[item].overs:0}}</td>
+                  <td>{{list.data[item].runs?list.data[item].runs:0}} </td>
+                  <td>{{list.data[item].wickets? list.data[item].wickets:0}}</td>
+                  <td>{{list.data[item].econ?list.data[item].econ:0}}</td>
+                  <td>{{list.data[item].average?list.data[item].average:0}}</td>
+                  <td>{{list.data[item].wicket5i?list.data[item].wicket5i:0}}</td>
+                  <td>{{list.data[item].wicket10m?list.data[item].wicket10m:0}}</td>
+                </tr>
+    
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    
+    </section>
+    <!-- <h1 class="player-stats-main-heading">{{playerData?.first_name}} Stats</h1>
     <div class="player-stats-detail-holder">
       <div class="player-stats-section-holder" *ngIf="playerStatsList?.['VS Team Stats']?.length > 0">
         <div class="player-stats-menu-holder">
@@ -618,7 +727,6 @@
                      >{{item[''].name}}</a>
                   </td>
                   <td class="secondcol cric-secondcol">{{item.Inn}} </td>
-                  <!-- <td>1</td> -->
                   <td>{{item.NO}}</td>
                   <td class="highlight-column">{{item.R}}</td>
                   <td>{{item.BF}}</td>
@@ -662,7 +770,6 @@
                     >{{item[''].name}}</a>
                   </td>
                   <td class="secondcol cric-secondcol">{{item.Inn}} </td>
-                  <!-- <td>1</td> -->
                   <td>{{item.NO}}</td>
                   <td class="highlight-column">{{item.R}}</td>
                   <td>{{item.BF}}</td>
@@ -711,7 +818,6 @@
                      >{{item[''].name}}</a>
                   </td>
                   <td class="secondcol cric-secondcol">{{item.Inn}} </td>
-                  <!-- <td>1</td> -->
                   <td>{{item.NO}}</td>
                   <td class="highlight-column">{{item.R}}</td>
                   <td>{{item.BF}}</td>
@@ -769,12 +875,10 @@
                 <td>{{ getTotal('5w') }}</td>
                 <td>{{ getTotal('10w') }}</td>
                 <td>{{ getTotal('Avg') }}</td>
-                <!-- <td>{{ getTotal('W') }}</td> -->
               </tr>
 
               <tr class="detailed-team-stats" *ngFor="let item of playerStatsList['VS Team Stats']?.[1].tables[0]?.data">
                 <td class="headcol cric-headcol">
-                  <!-- <span class="d-none">{{listadata1(item)}}</span> -->
 
                   <span class="team-stats-flag-text">vs</span>
                   <img class="team-image battting img-with-fallbacks"
@@ -831,7 +935,6 @@
                 <td>{{ getTotal('5w') }}</td>
                 <td>{{ getTotal('10w') }}</td>
                 <td>{{ getTotal('Avg') }}</td>
-                <!-- <td>{{ getTotal('W') }}</td> -->
               </tr>
 
 
@@ -893,13 +996,11 @@
                 <td>{{ getTotal('5w') }}</td>
                 <td>{{ getTotal('10w') }}</td>
                 <td>{{ getTotal('Avg') }}</td>
-                <!-- <td>{{ getTotal('W') }}</td> -->
               </tr>
 
 
               <tr class="detailed-team-stats" *ngFor="let item of playerStatsList['VS Team Stats']?.[1].tables[2]?.data">
                 <td class="headcol cric-headcol">
-                  <!-- <span class="d-none">{{listadata1(item)}}</span> -->
 
                   <span class="team-stats-flag-text">vs</span>
                   <img class="team-image battting img-with-fallbacks"
@@ -1016,8 +1117,6 @@
                 <td>{{item.Avg}} </td>
 
                 <td>{{item['S/R']}} </td>
-                <!-- <td>{{item.Avg}} </td>
-                <td>{{item.H}} </td> -->
               </tr>
             </tbody>
           </table>
@@ -1107,7 +1206,8 @@
     </div>
     <div class="sk-ads-taboola-container sk-ads-taboola-playerpage">
       <div id="taboola-below-article-thumbnails"></div>
-    </div>
+    </div> -->
   </div>
 </section>
+
 

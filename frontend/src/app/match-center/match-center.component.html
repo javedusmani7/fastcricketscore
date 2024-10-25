@@ -127,9 +127,9 @@
                 <div class="cmc-section-tab preview-tab header-hovered">
                   Info</div>
               </div>
-              <!-- <div class="fantasy-header cmc-scrollable-tab" onclick="toggleFantasy(this)">
-                <div class="cmc-section-tab fantasy-tab ">Fantasy</div>
-              </div> -->
+              <div class="fantasy-header cmc-scrollable-tab" routerLink="/fantasy/{{matchId}}">
+                <div class="cmc-section-tab fantasy-tab">Fantasy</div>
+              </div>
               <div class="commentary-tab-header cmc-scrollable-tab" routerLink="/live/{{matchId}}">
                 <div class="cmc-section-tab commentary-tab ">Live</div>
               </div>
@@ -371,38 +371,38 @@
 
                     <div id="squad-team-card-holder"
                       class="players-data preview-card-holder playing-content playing-content-open">
-                      <div class="preview-card-content team-card">
+                      <div class="preview-card-content team-card" *ngIf="loader==false">
                         <div class="team-holder" *ngIf="infoData?.status_str!=='Live'">
                           <span>
                             <img width="48"
-                            height="38" alt="team-logo" [src]="matchSquads?.teams[1]?.logo_url || teamDefaultImg"
+                            height="38" alt="team-logo" [src]="matchSquads?.teams[0]?.logo_url || teamDefaultImg"
                             class="team-flag img-with-fallbacks"
                             id="team-flag-IND">
-                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[1]?.abbr}}">{{matchSquads?.teams[1]?.abbr}}</a>
+                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[0]?.abbr}}">{{matchSquads?.teams[0]?.abbr}}</a>
                           </span>
                           <span>vs</span>
                           <span>
-                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[0]?.abbr}}">{{matchSquads?.teams[0]?.abbr}}</a>
+                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[1]?.abbr}}">{{matchSquads?.teams[1]?.abbr}}</a>
                             <img width="48"
-                                height="38" alt="team-logo" [src]="matchSquads?.teams[0]?.logo_url || teamDefaultImg"
+                                height="38" alt="team-logo" [src]="matchSquads?.teams[1]?.logo_url || teamDefaultImg"
                                 class="team-flag img-with-fallbacks" id="team-flag-ENG">
                           </span>
                         </div>
                         <div class="team-holder" *ngIf="infoData?.status_str=='Live'">
                           <span>
-                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[1]?.abbr}}">{{matchSquads?.teams[1]?.abbr}}
+                            <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[0]?.abbr}}">{{matchSquads?.teams[0]?.abbr}}
                             </a><img width="48"
-                            height="38" alt="team-logo" [src]="matchSquads?.teams[1]?.logo_url || teamDefaultImg"
+                            height="38" alt="team-logo" [src]="matchSquads?.teams[0]?.logo_url || teamDefaultImg"
                             class="team-flag img-with-fallbacks"
                             id="team-flag-IND">
                           </span>
                           <span>vs</span>
                           <span>
                             <img width="48"
-                                height="38" alt="team-logo" [src]="matchSquads?.teams[0]?.logo_url || teamDefaultImg"
+                                height="38" alt="team-logo" [src]="matchSquads?.teams[1]?.logo_url || teamDefaultImg"
                                 class="team-flag img-with-fallbacks" id="team-flag-ENG">
                             <a class="team-flag-anchor"
-                              routerLink="/team/{{matchSquads?.teams[0]?.slug}}">{{matchSquads?.teams[0]?.abbr}}</a>
+                              routerLink="/team/{{matchSquads?.teams[1]?.slug}}">{{matchSquads?.teams[1]?.abbr}}</a>
                           </span>
                         </div>
                         <div class="squads-holder">
@@ -556,6 +556,11 @@
                             data-lazy="/assets/arrow-icon.svg">
                         </button> -->
                       </div>
+                      <div class="keeda_widget_loader" style="display: block; text-align: center; margin-top: 10%;"
+                      *ngIf="loader==true">
+                      <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+                        alt="loader" style="transform: rotate(7500deg);">
+                    </div>
                     </div>
 
                   </div>

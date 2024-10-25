@@ -75,9 +75,9 @@
             <div class="cmc-section-tab preview-tab">
               Info</div>
           </div>
-          <!-- <div class="fantasy-header cmc-scrollable-tab" routerLink="/livecricket-score/{{matchId}}">
+          <div class="fantasy-header cmc-scrollable-tab" routerLink="/fantasy/{{matchId}}">
             <div class="cmc-section-tab fantasy-tab">Fantasy</div>
-          </div> -->
+          </div>
           <div class="commentary-tab-header cmc-scrollable-tab" routerLink="/live/{{matchId}}">
             <div class="cmc-section-tab commentary-tab">Live</div>
           </div>
@@ -101,10 +101,10 @@
 
 
 
-    <div id="squad-data" class="squad-data squad-cmc">
+    <div id="squad-data" class="squad-data squad-cmc" >
       <div class="playing-xi-sections" id="playing-xi-players">
         <div id="squad-team-card-holder" class="players-data preview-card-holder playing-content playing-content-open">
-          <div class="preview-card-content team-card">
+          <div class="preview-card-content team-card" *ngIf="!loader">
             <div class="team-holder" *ngIf="scorelist?.status_str!=='Live'">
               <span>
                 <a class="team-flag-anchor" routerLink="/team/india-national-cricket-team">
@@ -136,7 +136,7 @@
               <span>
                 <a class="team-flag-anchor" routerLink="/team/{{matchSquads?.teams[1]?.abbr}}">
                   {{matchSquads?.teams[1]?.abbr}}
-                  <img width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-ENG"[src]="matchSquads?.teams[0]?.logo_url || teamDefaultImg"
+                  <img width="48" height="38" alt="team-logo" class="team-flag" id="team-flag-ENG"[src]="matchSquads?.teams[1]?.logo_url || teamDefaultImg"
                    >
                 </a>
               </span>
@@ -329,7 +329,9 @@
               </div>
             </div>
           </div>
+      
         </div>
+   
         <div class="preview-card-holder no-squad-announce playing-content playing-content-close hidden">
           <div class="preview-card-content team-card">
             <span class="announced">Not available for this match</span>
@@ -337,8 +339,13 @@
         </div>
       </div>
 
-    </div>
 
+    </div>
+    <div class="keeda_widget_loader" style="display: block; text-align: center; margin-top: 15%;"
+    *ngIf="loader">
+    <img class="spin cricket-ball" src="../../assets/cricket_ball.svg"
+      alt="loader" style="transform: rotate(7500deg);">
+  </div>
   </div>
 
 </div>
