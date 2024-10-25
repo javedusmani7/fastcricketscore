@@ -211,6 +211,10 @@
                             <span>{{ player.role === 'wk' ? 'Bat & WK' : player.role === 'all' ? 'All' : player.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
       
                           </p>
+                          <p class="player-role">
+                            <span>Point :{{player.point}}</span>,
+                            <span>Rating :{{player.rating}}</span>
+                          </p>
                         </div>
                       </div>
       
@@ -225,6 +229,10 @@
                           <p class="player-role">
                             <span>{{ player.role === 'wk' ? 'Bat & WK' : player.role === 'all' ? 'All' : player.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
       
+                          </p>
+                          <p class="player-role">
+                            <span>Point :{{player.point}}</span>,
+                            <span>Rating :{{player.rating}}</span>
                           </p>
                         </div>
                         <div class="player-img-anchor"><img class="player-img"
@@ -255,6 +263,10 @@
                               <span>{{ bnplayer.role === 'wk' ? 'Bat & WK' : bnplayer.role === 'all' ? 'All' : bnplayer.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
       
                             </p>
+                            <p class="player-role">
+                                <span>Point :{{bnplayer.point}}</span>,
+                                <span>Rating :{{bnplayer.rating}}</span>
+                              </p>
                           </div>
                         </div>
       
@@ -270,6 +282,10 @@
                               <!-- <span>{{bnplayer.role}}</span> -->
                               <span>{{ bnplayer.role === 'wk' ? 'Bat & WK' : bnplayer.role === 'all' ? 'All' : bnplayer.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
                             </p>
+                            <p class="player-role">
+                                <span>Point :{{bnplayer.point}}</span>,
+                                <span>Rating :{{bnplayer.rating}}</span>
+                              </p>
                           </div>
                           <div class="player-img-anchor"><img class="player-img"
                               [src]="getPlayerImage(bnplayer.pid) || '../../assets/team-default.png'" alt="player-img"
