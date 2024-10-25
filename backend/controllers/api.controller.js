@@ -241,16 +241,55 @@ exports.getMatchFantasy = async (req, res) => {
 }
 
 
+exports.getCompetetionDays = async (req, res) => {
+    
+    console.log("Inside getCompetetionDays API call");
+
+    try {
+        const competetionDaysRows = await Competetion.aggregate([
+            {
+                $lookup: {
+                    from: 'matches', // Join with matches collection
+                    localField: '_id', // The field from the Competetion collection
+                    foreignField: 'cid', // The field from the match collection
+                    as: 'matches' // Output field to add
+                }
+            },
+            {
+                $unwind: "$matches" // Deconstructs the array field from the previous stage
+            },
+            {
+                $match: { "matches.status_str": "Live" } // Filter for live matches
+            },
+            {
+                $project: { // Optional: Specify fields to include or exclude in the output
+                    _id: 1,
+                    title: 1,
+                    match_format: 1,
+                    matches: 1 // Include match details in the output
+                }
+            }
+        ]);
+        
+        // returning response
+        return res.status(200).json({
+            status: 200,
+            message: "Competetions retrieved successfully.",
+            data: competetionDaysRows
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from getCompetetionDays API' });
+    }
+}
 
 // this function will make an API call on our competetionlist according to sport and season
 
 exports.getCompetetionList = async (req, res) => {
-    console.log("Inside getCompetetions API call");
     // // Making an api call from Entity sports and then saving into our database
-    try {
-
+    try {        
         const filter = {}
-
         if(req.params.category){
             filter.category = req.query.category;
         }
@@ -452,5 +491,3 @@ exports.getPlayerStatstic = async (req, res) => {
         res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
     }
 }
-
-
