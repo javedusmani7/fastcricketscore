@@ -40,6 +40,9 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
   selectedTabIndex = 0;
   teamDefaultImg = '../../assets/team-default.png'
   convertedDateTimes:any
+ 
+  public scoreArray: any[] = [];
+
 
 
 
@@ -49,9 +52,13 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.matchId = this.route.snapshot.paramMap.get('id');
     })
+
+      // Assuming scorelist is an object
+  // this.scoreArray = Object.values(this.scorelist);
+  // console.log(this.scoreArray)
     // this.socketService.connectSocket()
     // this.getLiveCricketScores();
-    this.getLiveCricketScores() ;
+    this.getLiveCricketScores() 
     this.getInfoCricketScores()// for info
     // this.socketService.setLiveScore(this.matchId)
     // this.socketService.getLiveScore(this.matchId)
@@ -72,6 +79,9 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     //     this.hide=false
     //   }
     // })
+
+      // Assuming scorelist is an object
+
   
 
   }
@@ -83,6 +93,8 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
       this.liveScoreList = res.data
       console.log("livescorelist" , res)
       this.scorelist = res.data
+      this.scoreArray = Object.values(this.scorelist);
+      console.log("scorearray ",this.scoreArray)
       this.pitchReport = res.data.pitch
       this.weatherReport = res.data.weather
       // this.datetimeconvart(this.scorelist.datetime)

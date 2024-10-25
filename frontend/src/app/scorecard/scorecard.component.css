@@ -52,7 +52,7 @@ table {
 .score {
   font-weight: bold;
   /* margin-right: 10px; */
-  margin-left: auto;
+  margin-left: -70px;
 }
 
 h6 {
@@ -3662,7 +3662,7 @@ a.comments-article-container {
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
-  color: #474747;
+  color: #017010;
   margin-bottom: 0px;
 }
 
@@ -26610,7 +26610,7 @@ display: none;
 
 .info-squad-data .cmc-squad-players {
   overflow: hidden;
-  -webkit-mask-image: unset;
+  /* -webkit-mask-image: unset; */
   width: 100%;
 }
 

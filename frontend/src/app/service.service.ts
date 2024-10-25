@@ -73,6 +73,10 @@ export class ServiceService {
     return this.http.get(`${this.baseUrl}/getLiveMatches/`)
   }
 
+  getCommentary(match_id:any){
+    return this.http.get(`${this.baseUrl}/matchLive/token=${this.token}&match_id=${match_id}`)
+  }
+
   getUpcomingMatches() {
     return this.http.get(`${this.baseUrl}/getUpcomingMatches/`)
   }
