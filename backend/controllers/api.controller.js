@@ -15,6 +15,7 @@ const Matchsquad = require('../models/Matchsquad');
 const Matchlive = require('../models/Matchlive');
 const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
+const MatchFantasy = require('../models/MatchFantasy');
 
 
 
@@ -203,6 +204,35 @@ exports.getMatchLive = async (req, res) => {
             data: matchliveRow
         }
         res.json(response);
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
+    }
+}
+
+// this function will make an API call to the MatchLive Table and return the response
+// token: for authenticate token
+// match_id: match_id so that we can fetch the scorecard bases of match_id
+exports.getMatchFantasy = async (req, res) => {
+
+    // check if the match_id exists or not
+    const match_id = parseInt(req.query.match_id) || false;  // Default to 10 items per page
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id not found' });
+    }
+
+    // // Making an api call to get the details frm collection
+    try {
+        // Fetch the item
+        const matchFantasyRow = await MatchFantasy.findOne({match_id: match_id});
+
+        // Send the response
+        return res.status(200).json({
+            status: 200,
+            message: 'match_id not found',
+            data: matchFantasyRow
+        });
     } 
     catch (error) {
         console.error(error);

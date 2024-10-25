@@ -16,6 +16,7 @@ const { fetchEntitySportData, fetchEntitySportPlayersProfile } = require('../uti
 const Matchlive = require('../models/Matchlive');
 const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
+const MatchFantasy = require('../models/MatchFantasy');
 
 // predefine constant values
 const ENTITYSPORT_API_URL = process.env.ENTITYSPORT_API_URL;
@@ -613,6 +614,76 @@ exports.syncCompetetion = async (req, res) => {
 }
 
 
+// this function will make an API call to the ENTITYSPORT and get matche Fantasy details
+// token: for authenticate token
+// match_id: match_id so that we can fetch the scorecard bases of match_id
+exports.syncMatchFantasy = async (req, res) => {
+
+    // get parameters and check for the required validation
+    let dataToSave = [];
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    const token = req.query.token;
+    const match_id = req.query.match_id;
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it are required.' });
+    }    
+    
+    // Making an api call from Entity sports and then saving into our database
+    try {
+        // first we are checking match exist on the Match Table or not
+        let matchRow = await Match.findOne({match_id: match_id});
+        if (!matchRow) {
+            // Send response
+            return res.status(200).json({
+                status: 200,
+                message: "Match does not exist for this match_id",
+                data: [] 
+            });
+        }
+
+        let matchFantasyRow = await MatchFantasy.findOne({match_id: match_id});
+        if (matchFantasyRow) {
+            // Send response
+            return res.status(200).json({
+                status: 200,
+                message: "Match Fantasy Sync Successfully.",
+                data: matchFantasyRow 
+            });
+        }
+        else{
+            const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/newpoint2/';
+            const response = await fetchEntitySportData(token, url);
+            const apiData = response.response;
+            if(apiData !== undefined && response.status === "ok" ) {
+                
+                // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+                const additionalFields = {
+                    sport_id: sport_primary_key,
+                    source_id: source_primary_key,
+                    match: matchRow._id,
+                    match_id: match_id,
+                };
+                dataToSave = { ...apiData, ...additionalFields };
+                
+                // Step 2: Create a new record
+                matchFantasyRow = new MatchFantasy(dataToSave);
+                await matchFantasyRow.save();
+            }
+            
+            // Send response
+            return res.status(200).json({
+                status: 200,
+                message: "Player Profile Statistic Sync Successfully.",
+                data: dataToSave 
+            });            
+        }
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    }
+}
 
 
 // this function will make an API call to the ENTITYSPORT and get Players Profile data

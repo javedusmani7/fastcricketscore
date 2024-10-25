@@ -1,5 +1,5 @@
 const express = require('express');
-const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic} = require('../controllers/sync.controller');
+const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy} = require('../controllers/sync.controller');
 
 
 const router = express.Router();
@@ -14,6 +14,7 @@ router.get('/competetionMatch', syncCompetetionMatches);
 router.get('/matchScorecard', syncMatchScoreCard);
 router.get('/matchSquads', syncMatchSquads);
 router.get('/matchLive', syncMatchLive);
+router.get('/matchFantasy', syncMatchFantasy);
 
 
 // router.get('/players', syncPlayersProfile);
