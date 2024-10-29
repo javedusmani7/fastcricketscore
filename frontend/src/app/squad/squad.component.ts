@@ -157,6 +157,22 @@ getTeamSquards() {
   this.loader =true
   this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
     this.matchSquads = res.data[0];
+    console.log("this.matchSquads.teama.team_id",this.matchSquads.teama.team_id)
+    let arrangeTeams = this.matchSquads.teams;
+    console.log("this.matchSquads.teams",this.matchSquads.teams)
+    if(arrangeTeams.length == 2){
+        let data : any=[];
+        for (let j = 0; j < arrangeTeams.length; j++) {
+        if(this.matchSquads.teama.team_id == arrangeTeams[j].tid){
+          data[0] = arrangeTeams[j]
+        }else{
+          data[1] = arrangeTeams[j]
+        }
+          
+        } 
+        this.matchSquads.teams =  data
+    }
+    console.log("this.matchSquads.teams",this.matchSquads.teams)
     this.loader =false
   })
 }
