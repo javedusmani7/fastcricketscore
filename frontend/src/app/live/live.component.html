@@ -563,7 +563,7 @@
                             <div class="single-player-row" *ngFor="let player of item.bats;let i = index" ><img
                                 src="../../assets/commentary-bat-icon.svg"
                                 alt="cricket bat icon" class="role-icon"><span
-                                class="player-value">batsman{{i+1}}</span><span *ngIf="player.is_playing==true"
+                                class="player-value">{{getPlayer(player.batsman_id).title}}</span><span *ngIf="player.is_playing==true"
                                 class="batsman-active">*</span>
                               <div class="player-score"><span class="player-score-part-one">{{player.runs}}</span><span
                                   class="player-score-part-two"> ({{player.balls_faced}})</span></div>
@@ -575,7 +575,7 @@
                             <div class="single-player-row" *ngFor="let player of item.bowls; let i=index"><img
                                 src="../../assets/commentary-ball-icon.svg"
                                 alt="cricket ball icon" class="role-icon"><span
-                                class="player-value">Bowler{{i+1}}</span>
+                                class="player-value">{{getPlayer(player.bowler_id).title}}</span>
                               <div class="player-score"><span
                                   class="player-score-part-one">{{player.wickets}}</span><span
                                   class="player-score-part-two"> /{{player.runs_conceded}}</span></div>

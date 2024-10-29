@@ -59,7 +59,7 @@ export class ServiceService {
   }
 
   getCricketMenus() {
-    return this.http.get(`${this.baseUrl}/getCricketMenu/`)
+    return this.http.get(`${this.baseUrl}/getCricketMenu?token=${this.token}`)
   }
 
 

@@ -74,7 +74,7 @@ loader=false;
   }
   getLiveCricketScores(){
     this.apiservic.getLiveCricketScore(this.matchId).subscribe((res:any)=>{
-      this.liveScoreList=res.data.score_strip
+      this.liveScoreList=res.data
       this.scorelist=res.data
       this.pitchReport=res.data.pitch
       this.weatherReport=res.data.weather

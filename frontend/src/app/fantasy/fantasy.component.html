@@ -4,7 +4,7 @@
             <div class="top-score-section-v2">
               <div class="top-score-title">
                 <div class="cricket-match-card-header-secondary-text">
-                  <span class="cricket-match-card--match-type">{{scorelist?.result}}</span>
+                  <span class="cricket-match-card--match-type">{{scorelist?.title}}</span>
                   <span>•</span>
                   <span class="cricket-match-card--match-venue">{{scorelist?.venue.name}}</span>
                   <span>•</span>
@@ -14,12 +14,12 @@
               <div class="score-primary-partition " [ngClass]="scorelist?.status_str=='Live'?' unset-box-shadow':''">
                 <div class="match-teams">
                   <div class="team-1-score-strip-baseline"></div>
-                  <div class="score-strip team1-score-strip" *ngFor="let el of liveScoreList">
-                    <div class="flag-country "  [class]="el.status=='post'?'flag-countrys':''">
-                      <img  [src]="el.team_flag" (error)="el.team_flag = teamDefaultImg" width="48" height="38" alt="team-logo" class="flag bind"
+                  <div class="score-strip team1-score-strip" >
+                    <div class="flag-country "  [class]="scorelist.status_str=='post'?'flag-countrys':''">
+                      <img  [src]="scorelist.teama.logo_url" (error)="scorelist.teama.logo_url= teamDefaultImg" width="48" height="38" alt="team-logo" class="flag bind"
                         data="data.score_strip.0.team_flag" data-img-params="?w=192">
                       <span class="country bind" data="data.score_strip.0.name">
-                        <a routerLink="/team/{{el.slug}}" aria-label="team-redirect" > {{el.name}} </a>
+                        <a routerLink="/team/{{scorelist.abbr}}" aria-label="team-redirect" > {{scorelist.teama.name}} </a>
                       </span>
                     </div>
                     <div class="score-over ">
@@ -28,7 +28,25 @@
                         <i></i>
                         <span class="power-play-label team1 hidden"></span>
                       </div>
-                      <span class="score bind" data="data.score_strip.0.score_wickets_info">{{el.score}}</span>
+                      <span class="score bind" data="data.score_strip.0.score_wickets_info">{{scorelist.teama.scores_full}}</span>
+                      <!-- <span class="overs-info bind" data="data.score_strip.0.overs_info">(78.3)</span> -->
+                    </div>
+                  </div>
+                  <div class="score-strip team1-score-strip" >
+                    <div class="flag-country "  [class]="scorelist.status_str=='post'?'flag-countrys':''">
+                      <img  [src]="scorelist.teamb.logo_url" (error)="scorelist.teamb.logo_url= teamDefaultImg" width="48" height="38" alt="team-logo" class="flag bind"
+                        data="data.score_strip.0.team_flag" data-img-params="?w=192">
+                      <span class="country bind" data="data.score_strip.0.name">
+                        <a routerLink="/team/{{scorelist.abbr}}" aria-label="team-redirect" > {{scorelist.teamb.name}} </a>
+                      </span>
+                    </div>
+                    <div class="score-over ">
+                      <div class="powerplay-tooltip">
+                        <div class="bottom powerplay-tooltip-1"> </div>
+                        <i></i>
+                        <span class="power-play-label team1 hidden"></span>
+                      </div>
+                      <span class="score bind" data="data.score_strip.0.score_wickets_info">{{scorelist.teamb.scores_full}}</span>
                       <!-- <span class="overs-info bind" data="data.score_strip.0.overs_info">(78.3)</span> -->
                     </div>
                   </div>
@@ -43,7 +61,7 @@
                 <div class="match_info cricket-block">
                   <div>
                     <span class="bind match-info match-result " [class]="scorelist?.status_str=='post'?'win':''">
-                      {{scorelist?.info}}<span class="win-margin"></span>
+                      {{scorelist?.status_note}}<span class="win-margin"></span>
                     </span>
                   </div>
                 </div>

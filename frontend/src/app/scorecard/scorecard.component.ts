@@ -60,6 +60,7 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     // this.getLiveCricketScores();
     this.getLiveCricketScores() 
     this.getInfoCricketScores()// for info
+
     // this.socketService.setLiveScore(this.matchId)
     // this.socketService.getLiveScore(this.matchId)
     // this.socketService.getLiveScoreData().subscribe((res:any)=>{
@@ -238,5 +239,27 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
   getSum(a:any,b:any){
 return Number(a) + Number(b);
   }
+
+  get_fours(i:any){
+      
+    let fours=0;
+    for(let batter of this.Innings[i].batsmen){
+
+      fours+= Number(batter.fours);
+    }
+    return fours;
+  }
+  
+  get_sixes(i:any){
+      
+    let sixes=0;
+    for(let batter of this.Innings[i].batsmen){
+
+      sixes+= Number(batter.sixes);
+    }
+    return sixes;
+  }
+
+  
 
 }

@@ -225,7 +225,7 @@ ul {
 }
 
 ul.cricket-top-menu {
-  float: left;
+  /* float: left; */
   padding-left: 10px;
   display: inline-block;
   margin: 0px;
@@ -2436,7 +2436,7 @@ textarea:disabled {
 .comment-options {
   text-align: right;
   display: inline-block;
-  float: right;
+  /* float: right; */
   cursor: pointer;
 }
 
@@ -3490,7 +3490,7 @@ a.comments-article-container {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  /* -webkit-line-clamp: 3; */
   -webkit-box-orient: vertical;
   min-height: auto;
 }
@@ -3854,7 +3854,7 @@ a.comments-article-container {
     border-bottom: none;
     border-top: 1px solid #F5F5F5;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
+    /* -webkit-line-clamp: 1; */
     -webkit-box-orient: vertical;
   }
 
@@ -4980,7 +4980,7 @@ a.comments-article-container {
 
 .info-squad-data .cmc-squad-players {
   overflow: hidden;
-  -webkit-mask-image: unset;
+  /* -webkit-mask-image: unset; */
   width: 100%;
 }
 
@@ -6365,7 +6365,7 @@ a.comments-article-container {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  /* -webkit-line-clamp: 3; */
   -webkit-box-orient: vertical;
 }
 
@@ -6517,7 +6517,7 @@ a.comments-article-container {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    /* -webkit-line-clamp: 3; */
     -webkit-box-orient: vertical;
     font-weight: 500;
     font-size: 14px;
@@ -11059,7 +11059,7 @@ span.country.bind a {
   border-radius: 4px;
 }
 
-<style type="text/css">.share-bottom-holder {
+.share-bottom-holder {
   display: flex;
   justify-content: space-between;
   padding: 8px 16px 8px 0;
@@ -11269,7 +11269,7 @@ span.country.bind a {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  /* -webkit-line-clamp: 2; */
   -webkit-box-orient: vertical;
   max-height: 54px;
   color: #2D2D2D;
@@ -11594,7 +11594,7 @@ button[data-liked="true"] span {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    /* -webkit-line-clamp: 3; */
     -webkit-box-orient: vertical;
     min-height: auto;
     max-height: 72px;
@@ -11694,7 +11694,7 @@ button[data-liked="true"] span {
     gap: unset;
   }
 
-  .social-story-wrapper .block-story-title {}
+  /* .social-story-wrapper .block-story-title {} */
 }
 
 
@@ -11736,7 +11736,7 @@ button[data-liked="true"] span {
 .line-clamp {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  /* -webkit-line-clamp: 2; */
   overflow: hidden;
 }
 
@@ -12896,7 +12896,7 @@ body .editor-width-100-pc {
   }
 
   ul.cricket-top-menu {
-    float: left;
+    /* float: left; */
     padding-left: 10px;
     display: inline-block;
     margin: 0px;
@@ -15097,7 +15097,7 @@ body .editor-width-100-pc {
   .comment-options {
     text-align: right;
     display: inline-block;
-    float: right;
+    /* float: right; */
     cursor: pointer;
   }
 
@@ -16137,7 +16137,7 @@ body .editor-width-100-pc {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    /* -webkit-line-clamp: 3; */
     -webkit-box-orient: vertical;
     min-height: auto;
   }
@@ -16499,7 +16499,7 @@ body .editor-width-100-pc {
       border-bottom: none;
       border-top: 1px solid #F5F5F5;
       display: -webkit-box;
-      -webkit-line-clamp: 1;
+      /* -webkit-line-clamp: 1; */
       -webkit-box-orient: vertical;
     }
 
@@ -17624,7 +17624,7 @@ body .editor-width-100-pc {
 
   .info-squad-data .cmc-squad-players {
     overflow: hidden;
-    -webkit-mask-image: unset;
+    /* -webkit-mask-image: unset; */
     width: 100%;
   }
 
@@ -19009,7 +19009,7 @@ body .editor-width-100-pc {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    /* -webkit-line-clamp: 3; */
     -webkit-box-orient: vertical;
   }
 
@@ -19161,7 +19161,7 @@ body .editor-width-100-pc {
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      /* -webkit-line-clamp: 3; */
       -webkit-box-orient: vertical;
       font-weight: 500;
       font-size: 14px;
@@ -23690,7 +23690,7 @@ body .editor-width-100-pc {
     border-radius: 4px;
   }
 
-  <style type="text/css">.share-bottom-holder {
+  .share-bottom-holder {
     display: flex;
     justify-content: space-between;
     padding: 8px 16px 8px 0;
@@ -23900,7 +23900,7 @@ body .editor-width-100-pc {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    /* -webkit-line-clamp: 2; */
     -webkit-box-orient: vertical;
     max-height: 54px;
     color: #2D2D2D;
@@ -24225,7 +24225,7 @@ body .editor-width-100-pc {
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      /* -webkit-line-clamp: 3; */
       -webkit-box-orient: vertical;
       min-height: auto;
       max-height: 72px;
@@ -24325,7 +24325,7 @@ body .editor-width-100-pc {
       gap: unset;
     }
 
-    .social-story-wrapper .block-story-title {}
+    /* .social-story-wrapper .block-story-title {} */
   }
 
 
@@ -24367,7 +24367,7 @@ body .editor-width-100-pc {
   .line-clamp {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    /* -webkit-line-clamp: 2; */
     overflow: hidden;
   }
 
@@ -25349,7 +25349,7 @@ padding: 0 !important;
 }
 .info-squad-data .cmc-squad-players {
 overflow: hidden;
--webkit-mask-image: unset;
+/* -webkit-mask-image: unset; */
 width: 100%;
 }
 .info-cmc .preview-sections {

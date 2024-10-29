@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SocketServiceService } from '../socket-service.service';
 import { DatePipe } from '@angular/common';
 import { Subscription, debounceTime, filter, fromEvent, timestamp } from 'rxjs';
+import { AnonymousSubject } from 'rxjs/internal/Subject';
 interface BowlingStats {
   runs: string;
   balls: string;
@@ -351,7 +352,15 @@ getcommentraykeys(obj:any){
       this.commentaryList = res.data.commentaries.reverse();
       console.log("this is live list" , this.commentaryList)
 })
-
+ 
 
   }
+
+  getPlayer(id:any){
+
+    const player = this.scorelist.players.find((p:any)=> p.pid===id)
+ 
+    return player;
+  }
+ 
 }

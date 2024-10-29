@@ -209,6 +209,30 @@
               </div>
             </div>
           </div>
+          <div class="match-player-div" id="man-of-match">
+            <a class="match-player-link player-cta" id="mom-player-link" aria-label="match-player"
+              routerLink="/player/{{scorelist?.man_of_the_match.name}}"></a>
+            <div class="left-section">
+              <div class="match-player-img">
+                <img class="player-img" id="match-player-img" height="58" width="58" alt="player-img"
+                  src='../../assets/team-default.png'>
+              </div>
+            </div>
+            <div class="right-section">
+              <div class="player-stats-div">
+                <div class="player-name-div">
+                  <span class="match-palyer">Player of the Series</span>
+                  <span class="match-player-name" id="player-of-match"><span
+                      class="player-link">{{scorelist?.man_of_the_match.name}}</span></span>
+                </div>
+                <div class="match-player-score">
+                  <div id="batting-stat" class="player-stats-runs hidden">
+                  </div>
+                  <div id="bowling-stat" class="player-stats-runs"> 150(35)</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
         <div class="inning-tabs-wrapper post" *ngIf="Innings && Innings.length > 0">
@@ -255,7 +279,7 @@
                           <div class="innings-table-row inning-bat">
                             <div class="innings-batsman">
                               <span class="batsman-name">
-                                <a class="player-cta" routerLink="/player/{{el.name}}">
+                                <a class="player-cta" routerLink="/player/{{el.batsman_id}}">
                                   {{el.name}}
                                 </a>
                               </span>
@@ -299,8 +323,8 @@
                       </div>
                       <div class="innings-total-runs bold text-center">{{item.equations.runs}}/{{item.equations.wickets}}</div>
                       <div class="innings-balls"></div>
-                      <div class="innings-total-fours text-center">{{item.fours}}</div>
-                      <div class="innings-total-sixes text-center">{{item.sixes}}</div>
+                      <div class="innings-total-fours text-center">{{get_fours(i)}}</div>
+                      <div class="innings-total-sixes text-center">{{get_sixes(i)}}</div>
                       <div class="innings-strike-rate"></div>
                     </div>
                   </div>
