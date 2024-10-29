@@ -124,33 +124,33 @@
                           </div>
 
                           <div class="cricket-day-schedule">
-                            <div class="keeda_widget_loader" style="display: block;" *ngIf="loaderlive">
+                            <!-- <div class="keeda_widget_loader" style="display: block;" *ngIf="loaderlive">
                               <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
                                 alt="loader" style="transform: rotate(7500deg);">
-                            </div>
+                            </div> -->
                             <div class="cricket-schedule-tournament-groups">
-                              <ng-container *ngFor="let key of livematches; let i=index ,trackBy:userByName">
+                              <ng-container *ngFor="let item of livematches; let i=index ,trackBy:userByName">
                                 <div class="cricket-tournament-container" data-cid="127693"
-                                  *ngIf="matchseriesname1=='All' || matchseriesname1==livematches[key][0].event_slug">
-                                  <div class="cricket-tournament-title">
+                                  >
+                                  <!-- <div class="cricket-tournament-title">
                                     <a routerLink="/child-shedule/{{livematches[key][0].event_slug}}/upcoming">{{key}}</a>
-                                  </div>
+                                  </div> -->
                                   <div class="cricket-tournament-matches">
-                                    <div class="cricket-match-card-container live" *ngFor="let item of livematches[key]; let i=index ,trackBy:userByName"
+                                    <div class="cricket-match-card-container live" 
                                       data-match-slug="australia-vs-west-indies-match-2-25-january-2024"
                                       data-match-t1="17" data-match-t2="5" data-match-cid="127693">
-                                      <a class="d-none">{{liveevent_slugs(item.event_slug)}}</a>
-                                      <a class="cricket-match-card-cta" (click)="getrouteandCheckwidth('/live','/live-cricket-score',item.id)"
+                                      <!-- <a class="d-none">{{liveevent_slugs(item.event_slug)}}</a> -->
+                                      <a class="cricket-match-card-cta" (click)="getrouteandCheckwidth('/live','/live-cricket-score',item.matches.match_id)"
                                         ></a>
                                       <header class="cricket-match-card-header">
-                                        <div class="cricket-match-card-live-indicator">{{item.status  | uppercase}}</div>
+                                        <div class="cricket-match-card-live-indicator">{{item.matches.status_str  | uppercase}}</div>
                                         <div class="cricket-match-card-header-primary-text hidden"
                                           data-utc-date-time="2024-01-25T04:00:00+00:00"
                                           data-format="ddd, mmm d - h:ss TT">Thu, Jan 25 - 9:30 AM</div>
                                         <div class="cricket-match-card-header-secondary-text">
-                                          <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}} {{item.format | titlecase}}</span>
+                                          <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.matches.match_number)}} {{item.matches.format_str | titlecase}}</span>
                                           <span>•</span>
-                                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                                          <span class="cricket-match-card--match-venue">{{item.matches.venue.name}}</span>
                                         </div>
                                       </header>
                                       <div class="cricket-match-card-content">
@@ -158,13 +158,13 @@
                                           <div class="cricket-match-card-score-item" data-team-id="17">
                                             <div class="cricket-match-card-team-info">
                                               <img class="cricket-match-card-team-logo img-with-fallbacks" width="27"
-                                                height="19" alt="team logo" [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg">
-                                              <div class="cricket-match-card-team-name">{{item.t1_key}}</div>
+                                                height="19" alt="team logo" [src]="item.matches.teama.logo_url" (error)="item.teama.matches.logo_url = teamDefaultImg">
+                                              <div class="cricket-match-card-team-name">{{item.matches.teama.short_name}}</div>
                                             </div>
                                             <div class="cricket-match-card-team-score">
 
-                                              <div class="cricket-match-card-team-live-score"  *ngIf="livescorefromapi">{{item.t1_score}}</div>
-                                              <div class="cricket-match-card-team-live-score"   *ngIf="!livescorefromapi">{{getScoreForMatch(item.id, item.t1_key) || item.t1_score}}</div>
+                                              <div class="cricket-match-card-team-live-score"  >{{item.matches.teama.scores_full}}</div>
+                                              <!-- <div class="cricket-match-card-team-live-score"   *ngIf="!livescorefromapi">{{getScoreForMatch(item.id, item.t1_key) || item.t1_score}}</div> -->
 
 
                                             </div>
@@ -172,13 +172,13 @@
                                           <div class="cricket-match-card-score-item" data-team-id="5">
                                             <div class="cricket-match-card-team-info">
                                               <img class="cricket-match-card-team-logo img-with-fallbacks" width="27"
-                                                height="19" alt="team logo" [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg"
+                                                height="19" alt="team logo" [src]="item.matches.teamb.logo_url" (error)="item.matches.teamb.logo_url = teamDefaultImg"
                                                 data-img-params="?w=54">
-                                              <div class="cricket-match-card-team-name">{{item.t2_key}}</div>
+                                              <div class="cricket-match-card-team-name">{{item.matches.teamb.short_name}}</div>
                                             </div>
                                             <div class="cricket-match-card-team-score">
-                                              <div class="cricket-match-card-team-live-score"  *ngIf="livescorefromapi">{{item.t2_score}}</div>
-                                              <div class="cricket-match-card-team-live-score"    *ngIf="!livescorefromapi">{{ getScoreForMatch(item.id, item.t2_key) || item.t2_score}}</div>
+                                              <div class="cricket-match-card-team-live-score">{{item.matches.teamb.scores_full}}</div>
+                                              <!-- <div class="cricket-match-card-team-live-score"    *ngIf="!livescorefromapi">{{ getScoreForMatch(item.id, item.t2_key) || item.t2_score}}</div> -->
 
                                               <!-- <div class="cricket-match-card-team-live-overs">(2.2 ov)</div> -->
                                             </div>
@@ -186,7 +186,7 @@
                                         </div>
                                       </div>
                                       <footer class="cricket-match-card-footer">
-                                        <div class="cricket-match-card-footer-primary-text">{{item.result}}</div>
+                                        <div class="cricket-match-card-footer-primary-text">{{item.matches?.result}}</div>
                                       </footer>
                                     </div>
                                   </div>
