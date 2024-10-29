@@ -1,3 +1,10 @@
+<div id="keeda_widget_loader" *ngIf="loader==true" >
+  <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+    alt="loader" >
+</div>
+
+
+
 <div class="wrapper-container editor-width-100-pc">
   <div class="fragments-container">
     <div class="cricket-top-section-v2" id="cricket-top-section-v2">
@@ -15,7 +22,7 @@
           <div class="match-teams">
             <div class="team-1-score-strip-baseline"></div>
             <div class="score-strip team1-score-strip" >
-              <div class="flag-country  pre-match-team-info " [class]="scorelist.status_str=='completed'?'flag-countrys':''">
+              <div class="flag-country  pre-match-team-info " [class]="scorelist.status_str=='Completed'?'flag-countrys':''">
                 <img [src]="scorelist.teama.logo_url" (error)="scorelist.teama.logo_url = teamDefaultImg" width="48" height="38"
                   alt="team-logo" class="flag bind" data="data.score_strip.0.team_flag" data-img-params="?w=192">
                 <span class="country bind" data="data.score_strip.0.name"><a
@@ -32,7 +39,7 @@
                 <span class="overs-info bind" data="data.score_strip.0.overs_info"></span>
               </div>
             </div> <div class="score-strip team1-score-strip" >
-              <div class="flag-country  pre-match-team-info " [class]="scorelist.status_str=='completed'?'flag-countrys':''">
+              <div class="flag-country  pre-match-team-info " [class]="scorelist.status_str=='Completed'?'flag-countrys':''">
                 <img [src]="scorelist.teamb.logo_url" (error)="scorelist.teamb.logo_url = teamDefaultImg" width="48" height="38"
                   alt="team-logo" class="flag bind" data="data.score_strip.0.team_flag" data-img-params="?w=192">
                 <span class="country bind" data="data.score_strip.0.name"><a
@@ -52,10 +59,10 @@
             
             <div class="team-2-score-strip-baseline"></div>
           </div>
-          <div class="match-scorecard-time " id="match-scorecard-time">
+          <!-- <div class="match-scorecard-time " id="match-scorecard-time">
             <span class="match-date" *ngIf="scorelist.status_str=='Live'">{{convertedDateTime.split(",")[0]}} </span>
             <span class="match-time" *ngIf="scorelist.status_str=='Live'"> {{convertedDateTime.split(",")[1]}} </span>
-          </div>
+          </div> -->
           
           <div class="scorecard-countdown-timer hidden" id="scorecard-countdown-timer">
             <div class="line-ups">Lineups Out</div>
@@ -110,15 +117,15 @@
         <div class="score-secondary-partition">
           <div class="match_info cricket-block">
             <div>
-              <span class="bind match-info match-result " data="data.info" *ngIf="scorelist?.status_str=='pre'">Match
+              <span class="bind match-info match-result " data="data.info" *ngIf="scorelist?.status_str=='Scheduled'">Match
                 yet to start</span>
-              <span class="bind match-info match-result " [class]="scorelist?.status_str=='completed'?'win':'white'"
-                *ngIf="scorelist?.status_str!=='pre'">
+              <span class="bind match-info match-result " [class]="scorelist?.status_str=='Completed'?'win':'white'"
+                *ngIf="scorelist?.status_str!=='Scheduled'">
                 {{scorelist?.result}} <span class="win-margin"></span>
               </span>
             </div>
           </div>
-          <div class="vertical-partition" data="data.info" *ngIf="scorelist?.status_str=='live'">
+          <div class="vertical-partition" data="data.info" *ngIf="scorelist?.status_str=='Live'">
             <div class="run-rate-div current-run-rate-div p-l-0">
               <span class="run-rate-label">CRR:</span>
               <span class="run-rate-value current-run-rate">{{liveScoreList[0]?.run_rate_numeric ||
@@ -156,12 +163,12 @@
             <div class="cmc-section-tab scorecard-tab header-hovered">
               Scorecard</div>
           </div>
-          <div class="scorecard-header cmc-scrollable-tab" *ngIf="scorelist?.status_str=='pre'"
+          <div class="scorecard-header cmc-scrollable-tab" *ngIf="scorelist?.status_str=='Scheduled'"
             routerLink="/squad/{{matchId}}">
             <div class="cmc-section-tab scorecard-tab ">
               Squad</div>
           </div>
-          <div class="match-squad-header cmc-scrollable-tab " *ngIf="scorelist?.status_str!=='pre'"
+          <div class="match-squad-header cmc-scrollable-tab " *ngIf="scorelist?.status_str!=='Scheduled'"
             routerLink="/squad/{{matchId}}">
             <div class="cmc-section-tab squad-tab">
               <span id="squad-tab-title">Squad</span>
@@ -173,7 +180,7 @@
     </div>
 
     <div class="innings-master-container scorecard-section-v2">
-      <div class="empty-state-holder scorecard-pre-div innings-empty-state " *ngIf="scorelist?.status_str=='scheduled'">
+      <div class="empty-state-holder scorecard-pre-div innings-empty-state " *ngIf="scorelist?.status_str=='Scheduled'">
         <div class="empty-state-msg">
           <!-- <p>{{scorelist?.status_str}}pppppppppppppppp</p> -->
 
@@ -184,7 +191,7 @@
 
       </div>
       <div class="all-innings-parent-div scorecard-cmc">
-        <div id="match-players-section" class="match-players-section" *ngIf="scorelist?.status_str=='Completed'">
+        <div id="match-players-section" class="match-players-section" *ngIf="scorelist?.status_str!='Scheduled'">
           <div class="match-player-div" id="man-of-match">
             <a class="match-player-link player-cta" id="mom-player-link" aria-label="match-player"
               routerLink="/player/{{scorelist?.man_of_the_match.name}}"></a>
@@ -208,13 +215,13 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> 
           <div class="match-player-div" id="man-of-match">
             <a class="match-player-link player-cta" id="mom-player-link" aria-label="match-player"
               routerLink="/player/{{scorelist?.man_of_the_match.name}}"></a>
             <div class="left-section">
               <div class="match-player-img">
-                <img class="player-img" id="match-player-img" height="58" width="58" alt="player-img"
+                <img class="player-img" id="match-player-img" height="58" width="58" alt="img"
                   src='../../assets/team-default.png'>
               </div>
             </div>
@@ -236,6 +243,7 @@
 
         </div>
         <div class="inning-tabs-wrapper post" *ngIf="Innings && Innings.length > 0">
+          
           <div class="inning-tab" id="innings-name-0" *ngFor="let tab of Innings;let i=index ;trackBy:userByName"
             (click)="selectTab(i)" [class.active]="selectedTabIndex === i">
             {{tab.short_name.slice(0)}}

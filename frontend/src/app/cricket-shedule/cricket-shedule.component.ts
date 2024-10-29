@@ -69,7 +69,7 @@ export class CricketSheduleComponent implements OnInit ,OnDestroy{
     })
     // this.getmeatches("live")
     this.getCompetitionByDay();
-
+    this.live = true
   }
 
   getCompetitionByDay(){

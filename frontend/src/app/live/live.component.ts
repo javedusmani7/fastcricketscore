@@ -26,6 +26,7 @@ interface BowlingPlayer {
 export class LiveComponent implements OnInit, OnDestroy{
   @ViewChild("widgetsContent", { static: false , read: ElementRef}) widgetsContent:any;
   commentaryList:any
+  loader:any=false
   rightScrollCount = 0;
   liveScoreList:any
   PlayingXI:boolean=false
@@ -79,7 +80,8 @@ export class LiveComponent implements OnInit, OnDestroy{
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.matchId=this.route.snapshot.paramMap.get('id');
     })
-
+ 
+    this.loader=true
    this.getCommentary(this.matchId)
 
 
@@ -149,6 +151,7 @@ export class LiveComponent implements OnInit, OnDestroy{
 
       this.scorelist=res.data
       console.log("ye hai scorelist " , this.scorelist )
+      this.loader=false
       this.pitchReport=res.data?.pitch
       this.weatherReport=res.data?.weather
       this.datetimeconvart(this.scorelist.datetime)
@@ -351,7 +354,9 @@ getcommentraykeys(obj:any){
     this.apiservic.getCommentary(this.matchId).subscribe((res:any)=>{
       this.commentaryList = res.data.commentaries.reverse();
       console.log("this is live list" , this.commentaryList)
+      this.loader=false
 })
+
  
 
   }

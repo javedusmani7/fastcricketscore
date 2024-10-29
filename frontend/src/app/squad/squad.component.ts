@@ -68,6 +68,7 @@ loader=false;
 
 
     // })
+    this.loader=true
   }
   ngOnDestroy(): void {
     this.socket.destorySocket()
@@ -154,7 +155,7 @@ userByName(index: any) {
 }
 
 getTeamSquards() {
-  this.loader =true
+ 
   this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
     this.matchSquads = res.data[0];
     let arrangeTeams = this.matchSquads.teams;

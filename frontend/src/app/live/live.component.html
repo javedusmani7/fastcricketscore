@@ -11,7 +11,11 @@
             <span class="cricket-match-card--match-venue">{{scorelist?.venue.location}}</span>
           </div>
         </div>
-        <div class="score-primary-partition" [ngClass]="scorelist?.match_status=='Scheduled'?' unset-box-shadow':''">
+        <div id="keeda_widget_loader" *ngIf="loader==true" >
+          <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
+            alt="loader" >
+        </div>
+        <div class="score-primary-partition" [ngClass]="scorelist?.match_status=='Scheduled'?' unset-box-shadow':''" *ngIf="loader==true">
           <div class="match-teams">
             <div class="team-1-score-strip-baseline"></div>
             <div class="score-strip team2-score-strip " style="left: 209.6px;">

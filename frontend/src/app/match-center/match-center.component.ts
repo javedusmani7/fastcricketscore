@@ -29,7 +29,7 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
   formattedTime:any
   teamDefaultImg="../../assets/team-default.png";
   matchSquads:any;
-  loader=true;
+  loader=false;
 
   constructor(private datePipe: DatePipe,private apiservic:ServiceService, private route:ActivatedRoute,private router:Router,private socket:SocketServiceService){}
 
@@ -181,10 +181,11 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
   }
 
   getMatchSquads() {
-    this.loader =true
+    // this.loader =true
     this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
       this.matchSquads = res.data[0];
       let arrangeTeams = this.matchSquads.teams;
+      this.loader =true
       if(arrangeTeams.length == 2){
           let data : any=[];
           for (let j = 0; j < arrangeTeams.length; j++) {
@@ -197,10 +198,11 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
           } 
           this.matchSquads.teams =  data;
       }
-  
+      this.loader =false
    this.playerImages="";
-   this.loader =false
+ 
     })
+
 
   }
 

@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./scorecard.component.css']
 })
 export class ScorecardComponent implements OnInit ,OnDestroy{
+  loader:any=false
   liveScoreList: any
   PlayingXI: boolean = false
   scorelist: any
@@ -58,8 +59,10 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
   // console.log(this.scoreArray)
     // this.socketService.connectSocket()
     // this.getLiveCricketScores();
+    this.loader=true
     this.getLiveCricketScores() 
     this.getInfoCricketScores()// for info
+
 
     // this.socketService.setLiveScore(this.matchId)
     // this.socketService.getLiveScore(this.matchId)
@@ -119,8 +122,10 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
       }else{
         this.hide=false
       }
-
+        this.loader=false
     })
+
+  
 
   }
   datetimeconvart(data: any) {
@@ -218,7 +223,7 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
      this.scorelist = res.data[0];
      console.log("scorelist " , this.scorelist)
      this.datetimeconvartNew(this.scorelist?.timestamp_start)
-
+this.loader =false;
     })
 
   }

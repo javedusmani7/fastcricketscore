@@ -25,8 +25,9 @@ formattedTime:any
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.matchId=this.route.snapshot.paramMap.get('id');
     })
-
+    this.loader=true
     this.getFantasyData()
+   
 
   }
 
@@ -35,6 +36,8 @@ formattedTime:any
       this.scorelist = res.data;
       this.matchSquads = res.data.points;
       this.playerImages=""
+       this.liveScoreList =[]
+      this.loader=false;
      })
   }
 
