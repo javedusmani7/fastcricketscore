@@ -67,7 +67,7 @@ export class CricketSheduleComponent implements OnInit ,OnDestroy{
     this.apiservice.getCricketMainTabs().subscribe((res: any) => {
       this.CricketMainTabs = res.data
     })
-    this.getmeatches("live")
+    // this.getmeatches("live")
     this.getCompetitionByDay();
 
   }

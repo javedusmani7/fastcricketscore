@@ -51,22 +51,29 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private apiservice: ServiceService, private socket: SocketServiceService,private router:Router) {
   }
   ngOnInit(): void {
-    this.socket.connectSocket()
-    this.getCricketMatches(this.slug, 0)
-    this.getIccRankingData(this.selectedRanking)
+    // this.socket.connectSocket()
+    // this.getCricketMatches(this.slug, 0)
+    // this.getIccRankingData(this.selectedRanking)
     this.loader = true
-    this.apiservice.getCricketMainTabs().subscribe((res: any) => {
-      this.CricketMainTabs = res.data
-    })
-    this.getnews()
-    this.getHomeSidebarNewData('latest')
-    this.getPointsTableData()
-    this.getHomeSidebarStats()
-    this.getCricketSeries()
+    this.getCompetitionByDay()
+    // this.getnews()
+    // this.getHomeSidebarNewData('latest')
+    // this.getPointsTableData()
+    // this.getHomeSidebarStats()
+    // this.getCricketSeries()
+    // this.loader = false
   }
 
   ngOnDestroy() {
     this.socket.destorySocket()
+  }
+
+  getCompetitionByDay(){
+    this.apiservice.getCompetitionByDay().subscribe((res:any)=>{
+      console.log("resres",res.data)
+      this.matchList = res.data
+      this.loader =false;
+    })
   }
 
 
@@ -170,13 +177,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getMatchStatus(id:string,status:any){
-    if(status=="live"){
+    if(status=="Live"){
       // let url:=`/live/${encodedId}`
-      let url: string = `/live/${id.replace(/\(/g, '%28').replace(/\)/g, '%29')}`;
+      let url: string = `/live/${id}`;
       this.router.navigateByUrl(url)
     }else{
       // let url= `/livecricket-score/${encodedId}`
-      let url: string = `/livecricket-score/${id.replace(/\(/g, '%28').replace(/\)/g, '%29')}`;
+      let url: string = `/livecricket-score/${id}`;
       this.router.navigateByUrl(url)
     }
   }

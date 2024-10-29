@@ -195,7 +195,7 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
           }
             
           } 
-          this.matchSquads.teams =  data
+          this.matchSquads.teams =  data;
       }
   
    this.playerImages="";

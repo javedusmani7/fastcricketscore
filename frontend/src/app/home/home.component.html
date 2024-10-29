@@ -240,51 +240,51 @@
                         <div class="keeda_cricket_match_list live">
                           <div class="keeda_widget_info cricket">
                             <div class="cricket-match-card-header-secondary-text marquee-strip">
-                              <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}</span>
+                              <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.matches.match_number)}}</span>
                               <span>•</span>
-                              <span class="cricket-match-card--match-type">{{item.format | titlecase}}</span>
+                              <span class="cricket-match-card--match-type">{{item.matches.format_str | titlecase}}</span>
                               <span>•</span>
-                              <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
-                              <span *ngIf="item.status==='post'">•</span>
-                              <span class="cricket-match-card--match-venue" *ngIf="item.status==='post'">
-                                {{convertDate(item.datetime) }}</span>
+                              <span class="cricket-match-card--match-venue">{{item.matches.venue.name}}</span>
+                              <span *ngIf="item.status_str==='Completed'">•</span>
+                              <span class="cricket-match-card--match-venue" *ngIf="item.matches.status_str==='Completed'">
+                                {{convertDate(item.matches.timestamp_start) }}</span>
 
                             </div>
-                            <div class="keeda_widget_live_info" *ngIf="item.status==='live'">LIVE</div>
+                            <div class="keeda_widget_live_info" *ngIf="item.matches.status_str==='Live'">LIVE</div>
                           </div>
                           <div class="keeda_widget_match_detail">
                             <div class="keeda_widget_team_group">
                               <div class="keeda_widget_team " data-team-name="SC-19">
-                                <img [src]="item.t1_flag" (error)="item.t1_flag = teamDefaultImg" width="54" height="38"
+                                <img [src]="item.matches.teama.logo_url" (error)="item.matches.teama.logo_url = teamDefaultImg" width="54" height="38"
                                   alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
-                                <span class="keeda_widget_team_name cricket">{{item.t1_key}}</span>
-                                <ng-container *ngIf="item.in_play !==true && item.status=='pre'">
+                                <span class="keeda_widget_team_name cricket">{{item.matches.teama.short_name}}</span>
+                                <ng-container *ngIf=" item.matches.status_str=='Scheduled'">
                                   <span class="keeda_widget_score cricket">
-                                    {{convertDate(item.datetime) }}</span>
+                                    {{convertDate(item.matches.timestamp_start) }}</span>
                                 </ng-container>
                                 <span class="keeda_widget_score cricket"
-                                  *ngIf="item.in_play !==true && item.status=='post'">{{item.t1_score}}</span>
+                                  *ngIf=" item.matches.status_str=='Completed'">{{item.matches.teama.scores_full}}</span>
                                 <span class="keeda_widget_score cricket"
-                                  *ngIf="item.in_play==true || item.status=='live'">{{liveData[item.id]?.score_strip?.[0]?.score
-                                  || item.t1_score}}</span>
+                                  *ngIf=" item.matches.status_str=='Live'">{{liveData[item.id]?.score_strip?.[0]?.score
+                                  || item.matches.teama.scores_full}}</span>
 
                               </div>
                               <div class="keeda_widget_team " data-team-name="NAM-19">
-                                <img [src]="item.t2_flag" (error)="item.t2_flag = teamDefaultImg" width="54" height="38"
+                                <img [src]="item.matches.teamb.logo_url" (error)="item.matches.teamb.logo_url = teamDefaultImg" width="54" height="38"
                                   alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
-                                <span class="keeda_widget_team_name cricket">{{item.t2_key}}</span>
-                                <ng-container *ngIf="item.in_play==false && item.status=='pre'">
-                                  <span class="keeda_widget_score cricket" id="time">{{item.datetime |
+                                <span class="keeda_widget_team_name cricket">{{item.matches.teamb.short_name}}</span>
+                                <ng-container *ngIf="item.matches.in_play==false && item.matches.status_str=='Scheduled'">
+                                  <span class="keeda_widget_score cricket" id="time">{{item.matches.timestamp_start |
                                     date:"shortTime"}}</span>
                                 </ng-container>
                                 <span class="keeda_widget_score cricket"
-                                  *ngIf="item.in_play !==true && item.status=='post'">{{item.t2_score}}</span>
+                                  *ngIf=" item.matches.status_str=='Completed'">{{item.matches.teamb.scores_full}}</span>
                                 <span class="keeda_widget_score cricket"
-                                  *ngIf="item.in_play==true || item.status=='live'">{{liveData[item.id]?.score_strip?.[1].score
-                                  || item.t2_score}}</span>
+                                  *ngIf=" item.matches.status_str=='Live'">{{liveData[item.id]?.score_strip?.[1].score
+                                  || item.matches.teamb.scores_full}}</span>
                               </div>
                             </div>
-                            <ng-container *ngIf="item.in_play==false && item.status=='pre'" class="hidden">
+                            <ng-container *ngIf="item.matches.in_play==false && item.matches.status_str=='Scheduled'" class="hidden">
                               <div class="scorecard-countdown-timer  toss-info hidden" id="scorecard-countdown-timer"
                                 id="time" *ngIf="!showTimer">
                                 <div class="countdown-timer-title ">
@@ -307,31 +307,31 @@
                               </div>
                             </ng-container>
                           </div>
-                          <div class="keeda_widget_result_info " *ngIf="item.in_play !==true && item.status !=='live'"
-                            [class]="item.result.length > 35? 'marquee-container':''">
+                          <div class="keeda_widget_result_info " *ngIf=" item.matches.status_str !=='Live'"
+                            [class]="item.matches.result.length > 35? 'marquee-container':''">
                             <div class="marquee-strip">{{item.result}}</div>
                           </div>
-                          <div class="keeda_widget_result_info live" *ngIf="item.in_play==true || item.status=='live'"
-                            [class]="liveData?.info?.length < 30? 'marquee-container':'' || item?.result?.length > 35? 'marquee-container':''">
-                            <div class="marquee-strip">{{liveData?.info || item.result}}</div>
+                          <div class="keeda_widget_result_info live" *ngIf=" item.matches.status_str=='Live'"
+                            [class]="liveData?.info?.length < 30? 'marquee-container':'' || item?.matches.result?.length > 35? 'marquee-container':''">
+                            <div class="marquee-strip">{{liveData?.info || item.matches.result}}</div>
                           </div>
                         </div>
                         <div class="keeda-cricket-widget--carousel-footer">
 
-                          <a class="hover-translucent" routerLink="/pointTable/{{item.event_slug}}">
+                          <a class="hover-translucent" routerLink="/pointTable/{{item.matches.match_id}}">
                             <span>{{item.has_table==true?"Points Table":null}}</span>
                             <img *ngIf="item.has_table==true"
                               src="/assets/ic-chevron-right.svg" width="16" height="16"
                               alt="ic-right">
                           </a>
-                          <a class="hover-translucent" routerLink="/child-shedule/{{item.event_slug}}/upcoming">
+                          <a class="hover-translucent" routerLink="/child-shedule/{{item.matches.match_id}}/upcoming">
                             <span>{{item.has_schedule==true?"Schedule":null}}</span>
                             <img src="/assets/ic-chevron-right.svg" width="16" height="16"
                               alt="ic-right">
                           </a>
                         </div>
-                        <a class="keeda_cricket_match_link" (click)="getMatchStatus(item.id,item.status)"
-                          routerLink="/live/{{item.id}}" title="{{item.t1}} VS {{item.t2}} live score">
+                        <a class="keeda_cricket_match_link" (click)="getMatchStatus(item.matches.match_id,item.matches.status_str)"
+                          routerLink="/live/{{item.matches.id}}" title="{{item.matches.t1}} VS {{item.matches.t2}} live score">
                           </a>
                       </div>
                     </ng-container>
@@ -822,7 +822,7 @@
                           <span>•</span>
                           <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
                         </div>
-                        <div class="keeda_widget_live_info" *ngIf="item.status==='live'">LIVE</div>
+                        <div class="keeda_widget_live_info" *ngIf="item.status==='Live'">LIVE</div>
 
                       </div>
                       <div class="keeda_widget_match_detail">
@@ -836,7 +836,7 @@
                             <span class="keeda_widget_score cricket"
                               *ngIf="item.in_play !==true && item.status=='post'">{{item.t1_score}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item.in_play==true || item.status=='live'">{{liveData[item.id]?.score_strip?.[0]?.score
+                              *ngIf="item.in_play==true || item.status=='Live'">{{liveData[item.id]?.score_strip?.[0]?.score
                               || item.t1_score}}</span>
 
                           </div>
@@ -850,7 +850,7 @@
                             <span class="keeda_widget_score cricket"
                               *ngIf="item.in_play !==true && item.status=='post'">{{item.t2_score}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item.in_play==true || item.status=='live'">{{liveData[item.id]?.score_strip?.[1]?.score
+                              *ngIf="item.in_play==true || item.status=='Live'">{{liveData[item.id]?.score_strip?.[1]?.score
                               || item.t2_score}}</span>
 
                           </div>
@@ -875,11 +875,11 @@
                         </div>
                       </div>
                       <div class="keeda_widget_result_info pre marquee-container"
-                        *ngIf="item.in_play !==true && item.status !=='live'"
+                        *ngIf="item.in_play !==true && item.status !=='Live'"
                         [class]="liveData?.info?.length < 30? 'marquee-container':''">
                         <div class="marquee-strip">{{item.result}}</div>
                       </div>
-                      <div class="keeda_widget_result_info live" *ngIf="item.in_play==true || item.status=='live'"
+                      <div class="keeda_widget_result_info live" *ngIf="item.in_play==true || item.status=='Live'"
                         [class]="liveData?.result?.length < 25? 'marquee-container':''">
                         <div class="marquee-strip">{{liveData?.info || item.result}}</div>
                       </div>
@@ -887,14 +887,14 @@
                       </div>
                     </div>
                     <div class="keeda-cricket-widget--carousel-footer">
-                      <a class="hover-translucent" routerLink="/pointTable/{{item.event_slug}}">
+                      <!-- <a class="hover-translucent" routerLink="/pointTable/{{item.match_id}}">
                         <span>{{item.has_table==true?"Points Table":null}}</span>
                         <img *ngIf="item.has_table==true"
                           src="../../assets/ic-chevron-right.svg" width="16" height="16"
                           alt="ic-right">
-                      </a>
+                      </a> -->
 
-                      <a class="hover-translucent" routerLink="/child-shedule/{{item.event_slug}}/upcoming">
+                      <a class="hover-translucent" routerLink="/child-shedule/{{item.match_id}}/upcoming">
                         <span>{{item.has_schedule==true?"Schedule":null}}</span>
                         <img src="/assets/ic-chevron-right.svg" width="16" height="16"
                           alt="ic-right">

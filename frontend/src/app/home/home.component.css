@@ -1019,7 +1019,7 @@
   background-color: #ffffff;
   position: relative;
   padding: 0;
-  width: 240px;
+  /* width: 240px; */
   height: 140px;
   vertical-align: top;
   margin-right: 12px;
