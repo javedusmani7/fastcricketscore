@@ -8,7 +8,7 @@
           <div class="top-score-section-v2">
             <div class="top-score-title">
               <div class="cricket-match-card-header-secondary-text">
-                <span class="cricket-match-card--match-type">{{infoData?.result}}</span>
+                <span class="cricket-match-card--match-type">{{infoData?.title}}</span>
                 <span>•</span>
                 <span class="cricket-match-card--match-venue">{{infoData?.venue.name}}</span>
                 <span>•</span>
@@ -17,15 +17,15 @@
             </div>
 
 
-            <!-- <div class="score-primary-partition unset-box-shadow">
+            <div class="score-primary-partition unset-box-shadow">
               <div class="match-teams">
                 <div class="team-1-score-strip-baseline"></div>
-                <div class="score-strip team1-score-strip" *ngFor="let item of matchesDtata">
-                  <div class="flag-country  pre-match-team-info " [class]="item.status=='post'?'flag-countrys':''">
-                    <img [src]="item.team_flag" (error)="item.team_flag = '../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
+                <div class="score-strip team1-score-strip" >
+                  <div class="flag-country  pre-match-team-info " [class]="infoData.status_str=='post'?'flag-countrys':''">
+                    <img [src]="infoData.teama.logo_url"(error)="infoData.teama.logo_url = '../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
                       data="data.teams.0.team_flag" data-img-params="?w=192">
                     <span class="country bind" data="data.teams.0.name"><a
-                        routerLink="/team/{{item.slug}}">{{item.name}}</a></span>
+                        routerLink="/team/{{infoData.abbr}}">{{infoData.teamb.name}}</a></span>
                   </div>
                   <div class="score-over">
                     <div class="powerplay-tooltip">
@@ -33,16 +33,41 @@
                       <i></i>
                       <span class="power-play-label team1 hidden"></span>
                     </div>
-                    <span class="score bind" data="data.teams.0.score_wickets_info">{{item.score}}</span>
+                    <span class="score bind" data="data.teams.0.score_wickets_info">{{infoData.teama.scores_full}}</span>
+                  </div>
+                </div>
+                <div class="score-strip team1-score-strip" >
+                  <div class="flag-country  pre-match-team-info " [class]="infoData.status_str=='post'?'flag-countrys':''">
+                    <img [src]="infoData.teamb.logo_url"(error)="infoData.teama.logo_url = '../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
+                      data="data.teams.0.team_flag" data-img-params="?w=192">
+                    <span class="country bind" data="data.teams.0.name"><a
+                        routerLink="/team/{{infoData.abbr}}">{{infoData.teama.name}}</a></span>
+                  </div>
+                  <div class="score-over">
+                    <div class="powerplay-tooltip">
+                      <div class="bottom powerplay-tooltip-1"> </div>
+                      <i></i>
+                      <span class="power-play-label team1 hidden"></span>
+                    </div>
+                    <span class="score bind" data="data.teams.0.score_wickets_info">{{infoData.teamb.scores_full}}</span>
                   </div>
                 </div>
                 <div class="team-2-score-strip-baseline"></div>
+
+                <div class="match_info cricket-block">
+                  <div>
+                    <span class="bind match-info match-result " [class]="infoData?.status_str=='Completed'?'win':''">
+                      {{infoData?.status_note}}<span class="win-margin"></span>
+                    </span>
+                  </div>
 
               </div>
               <div class="match-scorecard-time " id="match-scorecard-time">
                 <span class="match-date" *ngIf="infoData?.status_str=='pre'">{{formattedDate2}} </span>
                 <span class="match-time" *ngIf="infoData?.status_str=='pre'">{{formattedTime}} </span>
               </div>
+
+          </div> 
               <div class="scorecard-countdown-timer hidden" id="scorecard-countdown-timer">
                 <div class="line-ups">Lineups Out</div>
                 <div class="countdown-timer-title">
@@ -62,7 +87,7 @@
                   </div>
                 </div>
               </div>
-            </div> -->
+            </div>
 
 
 

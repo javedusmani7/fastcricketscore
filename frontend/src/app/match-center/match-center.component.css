@@ -3691,6 +3691,7 @@ a.comments-article-container {
 .cricket-top-section-v2 .flag-country.pre-match-team-info {
   flex: 0 0 100%;
   max-width: 100%;
+  margin-right: -174px;
 }
 
 .cricket-top-section-v2 .score-over {
@@ -3726,7 +3727,7 @@ a.comments-article-container {
   font-weight: 500;
   line-height: 20px;
   color: #2D2D2D;
-  margin-right: 0px;
+  margin-right: -174px;
 }
 
 .cricket-top-section-v2 .score-strip .overs-info {
@@ -3777,7 +3778,7 @@ a.comments-article-container {
 
 .cricket-top-section-v2 .run-rate-div .match-info,
 .cricket-top-section-v2 .match-info.match-result {
-  padding-left: 20px;
+  padding-left: 8px;
 }
 
 .cricket-top-section-v2 .match-info.match-result.win {

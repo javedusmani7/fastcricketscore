@@ -74,14 +74,14 @@
             <span class="match-time" *ngIf="scorelist?.status_str=='Live'">{{formattedTime}} </span>
           </div>
         </div>
-        <div class="score-secondary-partition" >
+       <div class="score-secondary-partition" >
           <div class="match_info cricket-block">
             <div>
               <span class="bind match-info match-result " [class]="scorelist?.status_str=='Completed'?'win':''">
                 {{scorelist?.status_note}}<span class="win-margin"></span>
               </span>
             </div>
-          </div>
+          </div> 
           <div class="vertical-partition" *ngIf="scorelist?.status_str=='Live'">
             <div class="run-rate-div current-run-rate-div p-l-0" >
               <span class="run-rate-label">CRR:</span>
