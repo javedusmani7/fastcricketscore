@@ -45,6 +45,9 @@ export class ServiceService {
     let competition = this.http.get(`${this.baseUrl}/competetions?token=${this.token}`);
     return competition
   }
+  getCompetitionByDay() : Observable<any>{
+    return this.http.get(`${this.baseUrl}/competetionsdays?token=${this.token}`);
+  }
 
   getSportData_OLD(): Observable<any>{
     let resultTest=  this.http.get(`${this.baseUrl}/seasons?token=${this.token}`);

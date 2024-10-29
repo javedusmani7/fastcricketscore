@@ -183,7 +183,21 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
   getMatchSquads() {
     this.loader =true
     this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
-          this.matchSquads = res.data[0];
+      this.matchSquads = res.data[0];
+      let arrangeTeams = this.matchSquads.teams;
+      if(arrangeTeams.length == 2){
+          let data : any=[];
+          for (let j = 0; j < arrangeTeams.length; j++) {
+          if(this.matchSquads.teama.team_id == arrangeTeams[j].tid){
+            data[0] = arrangeTeams[j]
+          }else{
+            data[1] = arrangeTeams[j]
+          }
+            
+          } 
+          this.matchSquads.teams =  data
+      }
+  
    this.playerImages="";
    this.loader =false
     })

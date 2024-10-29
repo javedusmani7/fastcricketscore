@@ -68,38 +68,48 @@ export class CricketSheduleComponent implements OnInit ,OnDestroy{
       this.CricketMainTabs = res.data
     })
     this.getmeatches("live")
+    this.getCompetitionByDay();
 
   }
+
+  getCompetitionByDay(){
+    this.apiservice.getCompetitionByDay().subscribe((res:any)=>{
+      console.log("series data",res.data)
+      this.livematches =res.data
+   })
+  }
+
+
   getmeatches(matches: any) {
     if (matches == "live") {
       this.live = true
       this.upcoming = false
       this.result = false
       this.apiservice.getLiveMatches().subscribe((res: any) => {
-        this.livematches = res.data?.matches
+        this.livematches = res.data
         this.tabs1 = res.data?.tabs
         this.loaderlive=false
         this.livescorefromapi=true
 
       })
-      this.socket.connectSocket()
-      this.socket.setLiveMatchesDta('LiveMatches')
-      this.socket.getLiveMatchesDta('LiveMatches')
-      this.socket.getLiveMatchesUpdatedData().subscribe((res: any) => {
-        this.livematches = res.message?.matches?.matches
-        this.allData = res.message?.livedata
-        this.loaderlive=false
+      // this.socket.connectSocket()
+      // this.socket.setLiveMatchesDta('LiveMatches')
+      // this.socket.getLiveMatchesDta('LiveMatches')
+      // this.socket.getLiveMatchesUpdatedData().subscribe((res: any) => {
+      //   this.livematches = res.message?.matches?.matches
+      //   this.allData = res.message?.livedata
+      //   this.loaderlive=false
 
-        this.liveData = this.allData?.reduce((acc: any, dt: any) => {
-          acc[dt.id] = dt;
-          return acc;
-        }, {})
-        this.livescorefromapi=false
-        this.loaderlive=false
+      //   this.liveData = this.allData?.reduce((acc: any, dt: any) => {
+      //     acc[dt.id] = dt;
+      //     return acc;
+      //   }, {})
+      //   this.livescorefromapi=false
+      //   this.loaderlive=false
 
 
-        this.tabs1 = res.message?.matches?.tabs
-      })
+      //   this.tabs1 = res.message?.matches?.tabs
+      // })
     } else if (matches == "upcoming") {
       this.live = false
       this.upcoming = true

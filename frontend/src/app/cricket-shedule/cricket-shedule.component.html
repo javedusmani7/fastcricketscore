@@ -129,7 +129,7 @@
                                 alt="loader" style="transform: rotate(7500deg);">
                             </div>
                             <div class="cricket-schedule-tournament-groups">
-                              <ng-container *ngFor="let key of getKeysWithArrayValue(livematches); let i=index ,trackBy:userByName">
+                              <ng-container *ngFor="let key of livematches; let i=index ,trackBy:userByName">
                                 <div class="cricket-tournament-container" data-cid="127693"
                                   *ngIf="matchseriesname1=='All' || matchseriesname1==livematches[key][0].event_slug">
                                   <div class="cricket-tournament-title">
