@@ -266,7 +266,6 @@ exports.cronjobForCompletedMatches = async (req, res) => {
     // first; we will get the primaryID details for the sport, source and competetion table 
     // so that we can pass these references to the match tables
     try {
-        console.log("cronjobForcompletedMatched::::step2");
         // check if the sports exists or not
         const sportRow = await Sport.findOne({sport_id: sport_id});
         if (!sportRow) {
@@ -287,20 +286,22 @@ exports.cronjobForCompletedMatches = async (req, res) => {
     }
 
     // Second; we are synching the competetions matches one by one
-    try {
-        console.log("cronjobForcompletedMatched::::step3");
-            
+    try {            
         // Step 1: we will get the competetion those status=result(Means it has completed and only sync single time)
         let Competetion_Matches_Mapping_Completed_Row = await Competetion_Matches_Mapping.findOne({active: 1, status: "result"});
+        console.log("cronjobForcompletedMatched::::step2", Competetion_Matches_Mapping_Completed_Row.cid);
         if (Competetion_Matches_Mapping_Completed_Row) {
             const cid = Competetion_Matches_Mapping_Completed_Row.cid;
             // once match os sync now we are updating mapping table so that it would not sync again
             const url = api_url + 'sync/competetionMatch?token=' + ENTITYSPORT_API_KEY + "&cid=" + cid;
             const response = await axios.get(url);
-            if(response?.data?.length > 0){
-                console.log("step4-resp-if", cid);
-                const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: 0 } });
-            }
+            const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: 0 } });
+            // // console.log("cronjobForcompletedMatched::::step3", response);
+            // // if(response?.data?.length > 0){
+            // if(response.status === "ok"){
+            //     console.log("step4-resp-if", cid);
+            //     const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: 0 } });
+            // }
         }
         
         console.log("cronjobForcompletedMatched::::step12");
