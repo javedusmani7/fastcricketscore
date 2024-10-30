@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Matchsquad = new mongoose.Schema({
     sport_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Sport', default: null },
     source_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Source', default: null },
+    match: { type: mongoose.Schema.Types.ObjectId, ref: 'Match' },
     match_id: { type: Number,  unique: true },
     teama: {
       team_id: { type: Number },

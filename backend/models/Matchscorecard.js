@@ -4,6 +4,7 @@ const Matchscorecard = new mongoose.Schema({
     sport_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Sport', default: null },
     source_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Source', default: null },
     // cid: { type: mongoose.Schema.Types.ObjectId, ref: 'Competetion', default: null },
+    match: { type: mongoose.Schema.Types.ObjectId, ref: 'Match' },
     match_id: { type: Number,  unique: true },
     title: { type: String },
     short_title: { type: String },
