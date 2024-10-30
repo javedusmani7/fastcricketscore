@@ -1,3 +1,6 @@
-ENTITYSPORT_API_KEY=token-key-from-entitysport
-MONGODB_URI=mongodb-url-of-your-machine
+ENTITYSPORT_API_KEY=ad3749cfdb0cceb518412cf46ef9e44a
+MONGODB_URI=mongodb://localhost:27017/mydatabase
 ENTITYSPORT_API_URL=https://rest.entitysport.com/v2/
+ENTITYSPORT_API_SOURCE_ID=1
+CRICKET_SPORT_ID=4
+BACKEND_API_URL=http://localhost:3000/
