@@ -13,7 +13,7 @@ import { filter } from 'rxjs';
 export class MatchCenterComponent implements OnInit,OnDestroy{
   showtTable:any
   pionteTableData:any
-  infoData:any
+  infoData:any={};
   matchId:any
   matchesDtata:any
   convertedDateTimes:any
@@ -201,6 +201,8 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
       this.loader =false
    this.playerImages="";
  
+    },(err)=>{
+      console.log("Error", err)
     })
 
 
@@ -208,10 +210,18 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
 
 
   getBenchPlayers(list:any){
+    if(list != null && list.length > 0 ){
        return list.filter((item:any)=> item.playing11 == 'false')
+    }else{
+      return []
+    }
   }
   getPlayingXIPlayers(list:any){
+    if( list != null && list.length > 0){
     return list.filter((item:any)=> item.playing11 == 'true')
+  }else{
+    return []
+  }
 }
   }
 

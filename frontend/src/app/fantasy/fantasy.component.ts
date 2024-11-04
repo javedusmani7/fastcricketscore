@@ -11,7 +11,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 export class FantasyComponent  {
   matchSquads:any;
   loader=false;
-  scorelist:any;
+  scorelist:any ={};
   matchId:any;
   teamDefaultImg = '../../assets/team-default.png'
   imageUrl = '../../assets/team-default.png';
@@ -33,11 +33,16 @@ formattedTime:any
 
   getFantasyData(){
     this.apiservic.getFantasyData(this.matchId).subscribe((res: any) => {
-      this.scorelist = res.data;
-      this.matchSquads = res.data.points;
-      this.playerImages=""
-       this.liveScoreList =[]
-      this.loader=false;
+      if(res.data == null){
+       this.router.navigateByUrl(`/livecricket-score/${this.matchId}`)
+      }else{
+        this.scorelist = res.data;
+        this.matchSquads = res.data.points;
+        this.playerImages=""
+         this.liveScoreList =[]
+        this.loader=false;
+      }
+   
      })
   }
 
