@@ -16,9 +16,9 @@
               <div class="cricket-match-card-header-secondary-text">
                 <span class="cricket-match-card--match-type">{{infoData?.title}}</span>
                 <span>•</span>
-                <span class="cricket-match-card--match-venue">{{infoData?.venue.name}}</span>
+                <span class="cricket-match-card--match-venue">{{infoData?.venue?.name}}</span>
                 <span>•</span>
-                <span class="cricket-match-card--match-venue">{{infoData?.venue.location}}</span>
+                <span class="cricket-match-card--match-venue">{{infoData?.venue?.location}}</span>
               </div>
             </div>
 
@@ -27,11 +27,11 @@
               <div class="match-teams">
                 <div class="team-1-score-strip-baseline"></div>
                 <div class="score-strip team1-score-strip" >
-                  <div class="flag-country  pre-match-team-info " [class]="infoData.status_str=='post'?'flag-countrys':''">
-                    <img [src]="infoData.teama.logo_url"(error)="infoData.teama.logo_url = '../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
+                  <div class="flag-country  pre-match-team-info " [class]="infoData?.status_str=='post'?'flag-countrys':''">
+                    <img [src]="infoData?.teama?.logo_url" (error)="infoData?.teama?.logo_url ? infoData?.teama?.logo_url:'../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
                       data="data.teams.0.team_flag" data-img-params="?w=192">
                     <span class="country bind" data="data.teams.0.name"><a
-                        routerLink="/team/{{infoData.abbr}}">{{infoData.teamb.name}}</a></span>
+                        routerLink="/team/{{infoData?.abbr}}">{{infoData?.teamb?.name}}</a></span>
                   </div>
                   <div class="score-over">
                     <div class="powerplay-tooltip">
@@ -39,15 +39,15 @@
                       <i></i>
                       <span class="power-play-label team1 hidden"></span>
                     </div>
-                    <span class="score bind" data="data.teams.0.score_wickets_info">{{infoData.teama.scores_full}}</span>
+                    <span class="score bind" data="data.teams.0.score_wickets_info">{{infoData?.teama?.scores_full}}</span>
                   </div>
                 </div>
                 <div class="score-strip team1-score-strip" >
-                  <div class="flag-country  pre-match-team-info " [class]="infoData.status_str=='post'?'flag-countrys':''">
-                    <img [src]="infoData.teamb.logo_url"(error)="infoData.teama.logo_url = '../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
+                  <div class="flag-country  pre-match-team-info " [class]="infoData?.status_str=='post'?'flag-countrys':''">
+                    <img [src]="infoData?.teamb?.logo_url"(error)="infoData?.teama?.logo_url ? infoData?.teama?.logo_url:'../../assets/team-default.png'" width="48" height="38" alt="team-logo" class="flag bind"
                       data="data.teams.0.team_flag" data-img-params="?w=192">
                     <span class="country bind" data="data.teams.0.name"><a
-                        routerLink="/team/{{infoData.abbr}}">{{infoData.teama.name}}</a></span>
+                        routerLink="/team/{{infoData.abbr}}">{{infoData?.teama?.name}}</a></span>
                   </div>
                   <div class="score-over">
                     <div class="powerplay-tooltip">
@@ -55,7 +55,7 @@
                       <i></i>
                       <span class="power-play-label team1 hidden"></span>
                     </div>
-                    <span class="score bind" data="data.teams.0.score_wickets_info">{{infoData.teamb.scores_full}}</span>
+                    <span class="score bind" data="data.teams.0.score_wickets_info">{{infoData?.teamb?.scores_full}}</span>
                   </div>
                 </div>
                 <div class="team-2-score-strip-baseline"></div>
@@ -219,7 +219,7 @@
                       Venue
                     </div>
                     <div class="match-detail-info">
-                      {{infoData?.venue.name}}
+                      {{infoData?.venue?.name}}
                     </div>
                   </div>
                   <div class="match-detail-row">
@@ -268,7 +268,7 @@
                       Toss
                     </div>
                     <div class="match-detail-info">
-                      <div class="cmc-toss-info preview-info-msg">{{ infoData?.toss.text ? infoData?.toss?.text:'Toss yet to take Place'}}</div>
+                      <div class="cmc-toss-info preview-info-msg">{{ infoData?.toss?.text ? infoData?.toss?.text:'Toss yet to take Place'}}</div>
                     </div>
                   </div>
                 </div>
@@ -323,7 +323,7 @@
               </div>
             </div>
           </div>
-          <div class="panel " *ngIf="infoData?.status_str!=='Completed' && infoData?.weather.length >0">
+          <div class="panel " *ngIf="infoData?.status_str!=='Completed' && infoData?.weather?.length >0">
             <div class="panel-heading">
               <div class="panel-heading-text">Weather Update</div>
             </div>
@@ -332,7 +332,7 @@
               <div class="weather-update-section " id="weather-info-tab" data-parent-id="weather-info-tab">
                 <div class="weather-update-heading">
                   <div class="heading-title">
-                    <span>{{infoData?.weather[0].weather}}</span>
+                    <span>{{infoData?.weather[0]?.weather}}</span>
                   </div>
                 </div>
                 <div class="weather-update">
@@ -341,8 +341,8 @@
                       <div class="detail-card">
                         <div class="location">
                           <div class="marquee-strip">
-                            <span class="city">{{infoData?.venue.location}}</span>
-                            <span>{{infoData?.venue.country}}</span>
+                            <span class="city">{{infoData?.venue?.location}}</span>
+                            <span>{{infoData?.venue?.country}}</span>
                           </div>
                         </div>
                         <div class="last-updated">
@@ -352,14 +352,14 @@
                       <div class="detail-card">
                         <div class="weather-img"></div>
                         <div>
-                          <div class="weather-detail"><span class="temperature">{{infoData?.weather[0].temp}}</span><span
-                              class="separator-dot"></span><span class="weather-type">{{infoData?.weather[0].weather}}</span></div>
-                          <div class="weather-description">{{infoData?.weather[0].weather_desc}}</div>
+                          <div class="weather-detail"><span class="temperature">{{infoData?.weather[0]?.temp}}</span><span
+                              class="separator-dot"></span><span class="weather-type">{{infoData?.weather[0]?.weather}}</span></div>
+                          <div class="weather-description">{{infoData?.weather[0]?.weather_desc}}</div>
                         </div>
                       </div>
                     </div>
                     <div class="detail-card" id="clouds-container">
-                      <div class="clouds-percentage">{{infoData?.weather[0].clouds}}%</div>
+                      <div class="clouds-percentage">{{infoData?.weather[0]?.clouds}}%</div>
                       <div class="clouds">Clouds</div>
                     </div>
                     <!-- <div class="detail-card " id="rain-container">
@@ -367,11 +367,11 @@
                       <div class="rain">Rain %</div>
                     </div> -->
                     <div class="detail-card hidden" id="humidity-container">
-                      <div class="humidity-percentage">{{infoData?.weather[0].humidity}}%</div>
+                      <div class="humidity-percentage">{{infoData?.weather[0]?.humidity}}%</div>
                       <div class="humidity">Humidity</div>
                     </div>
                     <div class="detail-card">
-                      <div class="wind-details"><span class="wind-value">{{infoData?.weather[0].wind_speed | number:'1.2-2'}}</span> kmph</div>
+                      <div class="wind-details"><span class="wind-value">{{infoData?.weather[0]?.wind_speed | number:'1.2-2'}}</span> kmph</div>
                       <div class="wind">Wind</div>
                     </div>
                   </div>
@@ -380,7 +380,7 @@
 
             </div>
           </div>
-          <div class="panel playing-xi " *ngIf="infoData?.status_str !=='Scheduled'">
+          <div class="panel playing-xi " *ngIf="infoData?.status_str !=='Scheduled' && matchSquads">
             <div class="panel-heading">
               <div class="panel-heading-text">
                 <span>Playing XI</span><span class="lineups-text">Lineups Out</span>
@@ -498,12 +498,12 @@
                             <div class="player-role-info"
                               *ngFor="let player of getPlayingXIPlayers(matchSquads?.teama?.squads);let i=index;">
                               <div class="player-img-anchor" ><img class="player-img"
-                                  [src]="getPlayerImage(player.player_id) || '../../assets/team-default.png'"
+                                  [src]="getPlayerImage(player?.player_id) || '../../assets/team-default.png'"
                                   alt="player-img" height="40" width="40"></div>
-                              <div class="squad-player left-info" ><a class="player-cta" routerLink="/player/{{player.player_id}}" [class]="player.player_id==''?'blck':''"><span
-                                    class="player-name" [class]="player.player_id==''?'blck':''">{{player.name}}</span><span class="role-icon" *ngIf="player.role_str=='(C)'">(C)</span><span class="player-delta-in left" *ngIf="player.delta==1"><span></span></span></a>
+                              <div class="squad-player left-info" ><a class="player-cta" routerLink="/player/{{player?.player_id}}" [class]="player?.player_id==''?'blck':''"><span
+                                    class="player-name" [class]="player?.player_id==''?'blck':''">{{player.name}}</span><span class="role-icon" *ngIf="player?.role_str=='(C)'">(C)</span><span class="player-delta-in left" *ngIf="player?.delta==1"><span></span></span></a>
                                 <p class="player-role">
-                                  <span>{{ player.role === 'wk' ? 'Bat & WK' : player.role === 'all' ? 'All' : player.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
+                                  <span>{{ player?.role === 'wk' ? 'Bat & WK' : player?.role === 'all' ? 'All' : player?.role === 'bowl' ? 'Bowl' : 'Bat' }}</span>
 
                                 </p>
                               </div>
