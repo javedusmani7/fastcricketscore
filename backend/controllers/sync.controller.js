@@ -77,7 +77,8 @@ exports.syncSports = async (req, res) => {
 // Dammy API for inserting records in sources table
 exports.syncSources = async (req, res) => {
 
-    const result = await Source.insertMany([  
+     // Sample data to insert or update
+     const records = [  
         { 
             source_id: 1,
             name:"Entitydasdadadsport", 
@@ -94,7 +95,19 @@ exports.syncSources = async (req, res) => {
             create_date:new Date(Date.now()), 
             update_date:new Date(Date.now())
         }
-    ]);
+    ];
+
+    // Prepare bulk write operations
+    const operations = records.map(record => ({
+        updateOne: {
+            filter: { source_id: record.source_id }, // Specify the filter condition
+            update: { $set: record }, // Specify the fields to update
+            upsert: true // Create the document if it does not exist
+        }
+    }));
+
+    // const result = await Source.insertMany();
+    const result = await Source.bulkWrite(operations);
 
     // Send the response with pagination info
     const response = {

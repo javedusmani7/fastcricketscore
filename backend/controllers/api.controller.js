@@ -1,5 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
+const redis = require('../config/redisClient');
 // mongoose.set('debug', true);
 require('dotenv').config();
 
@@ -20,6 +21,72 @@ const MatchFantasy = require('../models/MatchFantasy');
 
 
 
+
+// this function will make an API call on our seasons table and get all available seasons
+exports.getSources = async (req, res) => {
+    console.log("Inside getSeasons API call");
+    // const cacheKey = `api:sources`;
+
+    
+
+    // Check if data is in Redis
+    const cacheKey = `key`;
+    const cachedData = await redis.get(cacheKey);
+    console.log('Value from Rediswwwwww:', cachedData);
+    if (cachedData) {
+        console.log('Value from Rediswwwwww1:', cachedData);
+        return res.status(200).json({status: 200, message: cachedData });
+    }
+    else{
+        console.log('Value from Rediswwwwww2:', cachedData);
+        return res.status(404).json({status: 404, message: 'No cache key exist' });
+    }
+
+    // // Example: Get the value from Redis
+    // // Example: Setting a value
+    // redis.set('key', 'value', 'EX', 3600);
+    // const jvd = redis.get('key', (err, result) => {
+    //     if (err) {
+    //         console.error('Error fetching from Redis:', err);
+    //     } else {
+    //         console.log('Value from Redis:', result);
+    //     }
+    // });
+
+    
+    // const response = {
+    //     status: 200,
+    //     message: "Seasons retrieved successfully.",
+    //     data: jvd
+    // }
+    // res.json(response);
+
+     // Check if data is in Redis
+    //  const cachedData = await redis.get(cacheKey);
+    //  if (cachedData) {
+    //      return JSON.parse(cachedData);
+    //  }
+    //  else{
+    //     return res.status(404).json({status: 404, message: 'No cache key exist' });
+    //  }
+
+    // // Making an api call from Entity sports and then saving into our database
+    // try {
+    //     const sportsRows = await Sport.find(); // Fetch all users
+
+    //     // json data for returning response
+    //     const response = {
+    //         status: 200,
+    //         message: "Seasons retrieved successfully.",
+    //         data: result
+    //     }
+    //     res.json(response);
+    // } 
+    // catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    // }
+}
 
 // this function will make an API call on our seasons table and get all available seasons
 exports.getSeasons = async (req, res) => {

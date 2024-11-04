@@ -13,6 +13,17 @@ const api_url = process.env.BACKEND_API_URL;
 
 // this is automatic run function which is used to call itself automatically
 // this function will make an API call to the ENTITYSPORT and get all available matches
+const syncSeasonsData = async () => {
+    try {
+        const url = api_url + 'sync/seasons?token=' + ENTITYSPORT_API_KEY;
+        const response = await axios.get(url);
+    } catch (error) {
+        console.error('Error syncSeasonsData Cronjob:', error);
+    }
+};
+
+// this is automatic run function which is used to call itself automatically
+// this function will make an API call to the ENTITYSPORT and get all available matches
 const syncLiveMatchesDataForCompetetions = async () => {
 
   try {
@@ -114,6 +125,10 @@ const syncSquadsDataForLiveMatches = async () => {
 };
 
 console.log('Cron job scheduled: Syncing data.');
+
+// // Schedule the task to run every 3 months once a time
+syncSeasonsData();
+cron.schedule('0 0 1 1,7 *', syncSeasonsData);
 
 // // Schedule the task to run every 3 months once a time
 syncCompetetionsData();

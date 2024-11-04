@@ -1,8 +1,9 @@
 const express = require('express');
-const { getSeasons , getCompetetionList, getCompetetionMatches, getMatchScoreCard, getMatchSquads, getMatchLive, getPlayersProfile, getPlayerStatstic, getMatchFantasy, getCompetetionDays } = require('../controllers/api.controller');
+const { getSeasons , getCompetetionList, getCompetetionMatches, getMatchScoreCard, getMatchSquads, getMatchLive, getPlayersProfile, getPlayerStatstic, getMatchFantasy, getCompetetionDays, getSources } = require('../controllers/api.controller');
 const router = express.Router();
 
 
+router.get('/sources', getSources);
 router.get('/seasons', getSeasons);
 router.get('/competetions', getCompetetionList);
 router.get('/competetionsdays', getCompetetionDays);
