@@ -17,6 +17,7 @@ const Matchlive = require('../models/Matchlive');
 const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
+const Competetion_Standing = require('../models/Competetion_Standing');
 
 
 
@@ -148,6 +149,39 @@ exports.getCompetetionMatches = async (req, res) => {
             data: items
         }
         res.json(response);
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from getCompetetionMatches API' });
+    }
+}
+
+// this function will make an API call to the Competetion_Standing Table and return the response
+exports.getCompetetionStanding = async (req, res) => {
+
+    // validation
+    const cid = req.query.cid;
+    if (!cid) {
+        return res.status(404).json({status: 404, message: 'cid not found.' });
+    }
+
+    //  we are checking competetion exist on the competetions Table or not
+    let competetionRow = await Competetion.findOne({cid: cid});
+    if (!competetionRow) {
+        return res.status(404).json({ status: 404, message: "competetion does not exist for this cid", data: [] });
+    }
+
+    // Making an api call on Competetion_Standing table and return response
+    try {
+        // Fetch the item
+        const Competetion_Standing_Row = await Competetion_Standing.findOne({cid: cid});
+
+        // Send the response
+        return res.status(200).json({
+            status: 200,
+            message: "Competetion Standing retrieved successfully.",
+            data: Competetion_Standing_Row
+        });
     } 
     catch (error) {
         console.error(error);

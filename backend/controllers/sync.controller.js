@@ -18,6 +18,7 @@ const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
 const Competetion_Matches_Mapping = require('../models/Competetion_Matches_Mapping');
+const Competetion_Standing = require('../models/Competetion_Standing');
 
 // predefine constant values
 const ENTITYSPORT_API_KEY = process.env.ENTITYSPORT_API_KEY;
@@ -684,6 +685,31 @@ exports.syncCompetetionList = async (req, res) => {
         
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+}
+
+//Competition standings API provides standing table for all of the round or groups for the specified competition.
+exports.syncCompetetionStandings = async (req, res) => {
+    const cid = req.query.cid;
+    if (!cid) {
+        return res.status(404).json({status: 404, message: 'cid not found.' });
+    }
+
+    //  we are checking competetion exist on the competetions Table or not
+    let competetionRow = await Competetion.findOne({cid: cid});
+    if (!competetionRow) {
+        return res.status(404).json({ status: 404, message: "competetion does not exist for this cid", data: [] });
+    }
+    
+    try {
+        // calling supportive api for accessing tournament standings
+        saveCompetetionStandingsDataForLiveMatch(req, res, cid);
+        // retrun response
+        return res.status(200).json({status: 200, message: 'Sync Successfully.'});
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
     }
 }
 
@@ -1494,5 +1520,39 @@ const saveSquadsDataForLiveMatch = async (req, res, match_id = false) => {
         
         // Step 2: Check if the record already exists and insert or update the record accordingly
         const result = await Matchsquad.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
+    }
+};
+
+const saveCompetetionStandingsDataForLiveMatch = async (req, res, cid = false) => {
+    
+    // check for the required validation
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    if (!cid || !sport_primary_key || !source_primary_key ) {
+        return res.status(404).json({status: 404, message: 'cid and sport_primary_key and source_primary_key not found' });
+    }
+
+    //  we are checking competetion exist on the competetions Table or not
+    let competetionRow = await Competetion.findOne({cid: cid});
+    if (!competetionRow) {
+        return res.status(404).json({ status: 404, message: "competetion does not exist for this cid", data: [] });
+    }
+    
+    // calling api
+    const url = ENTITYSPORT_API_URL + 'competitions/' + cid + '/standings/';
+    const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
+    const apiData = response.response;
+    if(apiData !== undefined && response.status === "ok" ) {
+        // STEP 1: Additional fields, we want to include on the database
+        const additionalFields = {
+            sport_id: sport_primary_key,
+            source_id: source_primary_key,
+            competetion: competetionRow._id,
+            cid: cid
+        };
+        const dataToSave = { ...apiData, ...additionalFields };
+        
+        // Step 2: Check if the record already exists and insert or update the record accordingly
+        const result = await Competetion_Standing.updateOne({cid: cid}, { $set: dataToSave}, { upsert: true });
     }
 };

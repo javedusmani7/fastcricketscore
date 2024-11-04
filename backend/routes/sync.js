@@ -1,5 +1,5 @@
 const express = require('express');
-const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy, syncCompetetionMatchesMapping, cronjobForCompetetion, cronjobForcompletedMatched, cronjobForCompletedMatched, cronjobForCompletedMatches, cronjobForLiveMatches, cronjobForUpcomingMatches, cronjobFantasyDataForLiveMatches, cronjobLiveDataForLiveMatches, cronjobScorecardDataForLiveMatches, cronjobSquadsDataForLiveMatches} = require('../controllers/sync.controller');
+const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy, syncCompetetionMatchesMapping, cronjobForCompetetion, cronjobForcompletedMatched, cronjobForCompletedMatched, cronjobForCompletedMatches, cronjobForLiveMatches, cronjobForUpcomingMatches, cronjobFantasyDataForLiveMatches, cronjobLiveDataForLiveMatches, cronjobScorecardDataForLiveMatches, cronjobSquadsDataForLiveMatches, syncCompetetionStandings} = require('../controllers/sync.controller');
 
 
 const router = express.Router();
@@ -9,9 +9,13 @@ router.get('/sources', syncSources);
 router.get('/sports', syncSports);
 router.get('/seasons', syncSeason);
 
+
+// routes for the syncing competetions data
 router.get('/competetions', syncCompetetionList);
-// router.get('/competetionDetail', syncCompetetion);
 router.get('/competetionMatch', syncCompetetionMatches);
+router.get('/competetion_standings', syncCompetetionStandings);
+
+// router.get('/competetionDetail', syncCompetetion);
 router.get('/matchScorecard', syncMatchScoreCard);
 router.get('/matchSquads', syncMatchSquads);
 router.get('/matchLive', syncMatchLive);
