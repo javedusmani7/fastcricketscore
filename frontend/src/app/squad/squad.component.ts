@@ -33,8 +33,6 @@ formattedDate2:any
 formattedTime:any
 matchSquads:any;
 loader=false;
-squadMessage='';
-squadError = false;
 
   // voteCount: number = 8074;
   totalCount: number = 10000;
@@ -159,7 +157,7 @@ userByName(index: any) {
 getTeamSquards() {
  
   this.apiservic.getMatchSquads(this.matchId).subscribe((res: any) => {
-    this.matchSquads = res?.data[0] || [];
+    this.matchSquads = res.data[0];
     let arrangeTeams = this.matchSquads.teams;
     if(arrangeTeams.length == 2){
         let data : any=[];
@@ -173,15 +171,8 @@ getTeamSquards() {
         } 
         this.matchSquads.teams =  data
         this.liveScoreList =[]
-        this.squadError = false
     }
     this.loader =false
-  },(err)=>{
-    this.loader =false;
-    if(err?.error?.status == 404 && err?.error?.data ){
-      this.router.navigateByUrl(`/livecricket-score/${this.matchId}`)
-    }
-
   })
 }
 getInfoCricketScores() {
@@ -193,18 +184,10 @@ getInfoCricketScores() {
 }
 
 getBenchPlayers(list:any){
-  if(list != null && list.length > 0 ){
-     return list.filter((item:any)=> item.playing11 == 'false')
-  }else{
-    return []
-  }
+  return list.filter((item:any)=> item.playing11 == 'false')
 }
 getPlayingXIPlayers(list:any){
-  if( list != null && list.length > 0){
-  return list.filter((item:any)=> item.playing11 == 'true')
-}else{
-  return []
-}
+return list.filter((item:any)=> item.playing11 == 'true')
 }
 
 }

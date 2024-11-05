@@ -18,18 +18,18 @@
             <span class="cricket-match-card--match-venue">{{scorelist?.venue?.location}}</span>
           </div>
         </div>
-        <div class="score-primary-partition " [ngClass]="scorelist?.status_str=='Completed'?' unset-box-shadow':''">
+        <div class="score-primary-partition " >
           <div class="match-teams">
             <div class="team-1-score-strip-baseline"></div>
             <div class="score-strip team1-score-strip" >
-              <div class="flag-country "  [class]="scorelist?.status_str=='Completed'?'flag-countrys':''">
+              <div class="flag-country "  [class]="scorelist?.status_str!='Scheduled'?'flag-countrys':''">
                 <img  [src]="scorelist?.teama?.logo_url" (error)="scorelist?.teama?.logo_url?scorelist?.teama?.logo_url : teamDefaultImg" width="48" height="38" alt="team-logo" class="flag bind"
                   data="data.score_strip.0.team_flag" data-img-params="?w=192">
                 <span class="country bind" data="data.score_strip.0.name">
                   <a routerLink="/team/{{scorelist?.abbr}}" aria-label="team-redirect" > {{scorelist?.teama?.name}} </a>
                 </span>
               </div>
-              <div class="score-over ">
+              <div class="score-over">
                 <div class="powerplay-tooltip">
                   <div class="bottom powerplay-tooltip-1"> </div>
                   <i></i>
@@ -49,18 +49,18 @@
             <span class="match-time" *ngIf="scorelist?.status_str=='Live'">{{formattedTime}} </span>
           </div>
         </div>
-        <div class="score-primary-partition " [ngClass]="scorelist?.status_str=='Completed'?' unset-box-shadow':''">
+        <div class="score-primary-partition " [ngClass]="scorelist?.status_str!='Scheduled'?' unset-box-shadow':''">
           <div class="match-teams">
             <div class="team-1-score-strip-baseline"></div>
             <div class="score-strip team1-score-strip" >
-              <div class="flag-country "  [class]="scorelist?.status_str=='Completed'?'flag-countrys':''">
+              <div class="flag-country "  [class]="scorelist?.status_str!='Scheduled'?'flag-countrys':''">
                 <img  [src]="scorelist?.teamb?.logo_url" (error)="scorelist?.teama?.logo_url?scorelist?.teama?.logo_url : teamDefaultImg" width="48" height="38" alt="team-logo" class="flag bind"
                   data="data.score_strip.0.team_flag" data-img-params="?w=192">
                 <span class="country bind" data="data.score_strip.0.name">
                   <a routerLink="/team/{{scorelist?.abbr}}" aria-label="team-redirect" > {{scorelist?.teamb?.name}} </a>
                 </span>
               </div>
-              <div class="score-over ">
+              <div class="score-over">
                 <div class="powerplay-tooltip">
                   <div class="bottom powerplay-tooltip-1"> </div>
                   <i></i>
@@ -83,7 +83,7 @@
        <div class="score-secondary-partition" >
           <div class="match_info cricket-block">
             <div>
-              <span class="bind match-info match-result " [class]="scorelist?.status_str=='Completed'?'win':''">
+              <span class="bind match-info match-result " [class]="scorelist?.status_str!='Completed'?'win':''">
                 {{scorelist?.status_note}}<span class="win-margin"></span>
               </span>
             </div>
@@ -91,7 +91,7 @@
           <div class="vertical-partition" *ngIf="scorelist?.status_str=='Live'">
             <div class="run-rate-div current-run-rate-div p-l-0" >
               <span class="run-rate-label">CRR:</span>
-              <span class="run-rate-value current-run-rate">{{liveScoreList[0]?.run_rate_numeric || liveScoreList[1]?.run_rate_numeric}}</span>
+              <span class="run-rate-value current-run-rate">3.2</span>
             </div>
             <div class="run-rate-div required-run-rate-div hidden">
               <span class="run-rate-label">RRR:</span>

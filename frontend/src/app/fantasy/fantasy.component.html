@@ -18,7 +18,7 @@
                   <span class="cricket-match-card--match-venue">{{scorelist?.venue?.location}}</span>
                 </div>
               </div>
-              <div class="score-primary-partition " [ngClass]="scorelist?.status_str=='Live'?' unset-box-shadow':''">
+              <div class="score-primary-partition " [ngClass]="scorelist?.status_str!='Scheduled'?' unset-box-shadow':''">
                 <div class="match-teams">
                   <div class="team-1-score-strip-baseline"></div>
                   <div class="score-strip team1-score-strip" >
@@ -29,7 +29,7 @@
                         <a routerLink="/team/{{scorelist?.abbr}}" aria-label="team-redirect" > {{scorelist?.teama?.name}} </a>
                       </span>
                     </div>
-                    <div class="score-over ">
+                    <div class="score-over">
                       <div class="powerplay-tooltip">
                         <div class="bottom powerplay-tooltip-1"> </div>
                         <i></i>
@@ -47,7 +47,7 @@
                         <a routerLink="/team/{{scorelist?.abbr}}" aria-label="team-redirect" > {{scorelist?.teamb?.name}} </a>
                       </span>
                     </div>
-                    <div class="score-over ">
+                    <div class="score-over">
                       <div class="powerplay-tooltip">
                         <div class="bottom powerplay-tooltip-1"> </div>
                         <i></i>
@@ -67,7 +67,7 @@
               <div class="score-secondary-partition" >
                 <div class="match_info cricket-block">
                   <div>
-                    <span class="bind match-info match-result " [class]="scorelist?.status_str=='post'?'win':''">
+                    <span class="bind match-info match-result " [class]="scorelist?.status_str!='Scheduled'?'win':''">
                       {{scorelist?.status_note}}<span class="win-margin"></span>
                     </span>
                   </div>
