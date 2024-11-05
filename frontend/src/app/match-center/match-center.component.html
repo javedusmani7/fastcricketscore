@@ -229,18 +229,18 @@
                     <div class="match-detail-info">
                       {{addOrdinalSuffix(infoData?.match_number)}} {{infoData?.format_str}} ,
                       <div>
-                        <a style="text-decoration:underline" routerLink="/go/{{infoData?.series_keeda_slug}}"> {{infoData?.series}}</a>
+                        <a style="text-decoration:underline" routerLink="/go/{{infoData?.title}}"> {{infoData?.series}}</a>
                       </div>
                       <div class="match-links">
-                        <a class="match-link" routerLink="/pointTable/{{infoData?.series_keeda_slug}}">
+                        <a class="match-link" routerLink="/pointTable/{{cid}}">
                           <div class="link-item">Point Table<img alt="arrow-icon" height="6" width="10"
                               src="/assets/right-arrow-0B65F0.svg"></div>
                         </a>
-                        <a class="match-link" routerLink="/child-shedule/{{infoData?.series_keeda_slug}}/upcoming">
+                        <a class="match-link" routerLink="/child-shedule/{{infoData?.title}}/upcoming">
                           <div class="link-item">Schedule<img alt="arrow-icon" height="6" width="10"
                               src="/assets/right-arrow-0B65F0.svg"></div>
                         </a>
-                        <a class="match-link" routerLink="/stats/{{infoData?.series_keeda_slug}}">
+                        <a class="match-link" routerLink="/stats/{{infoData?.title}}">
                           <div class="link-item">Stats<img alt="arrow-icon" height="6" width="10"
                               src="/assets/right-arrow-0B65F0.svg"></div>
                         </a>

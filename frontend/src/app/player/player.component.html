@@ -12,7 +12,7 @@
           <a routerLink="/">Cricket </a>
         </li>
         <li>
-          <span>{{playerData.first_name}}</span>
+          <span>{{playerData?.first_name}}</span>
         </li>
       </ul>
     </div>
@@ -42,7 +42,7 @@
             </div>
             <div class="player-info">
               <div class="row1">
-                <h1 class="player-name">{{playerData.first_name}}</h1>
+                <h1 class="player-name">{{playerData?.first_name}}</h1>
                 <div class="taxonomy-share">
 
 
@@ -270,27 +270,27 @@
                           <tbody class="team-personal-info-items main-info-items">
                             <tr class="row item-details">
                               <td class="column left">Name</td>
-                              <td class="column right">{{ playerData.first_name}}</td>
+                              <td class="column right">{{ playerData?.first_name}}</td>
                             </tr>
                             <tr class="row item-details">
                               <td class="column left">Birth Date & Birth Place</td>
-                              <td class="column right">{{ playerData.birthdate}} {{ playerData.birthplace}}</td>
+                              <td class="column right">{{ playerData?.birthdate}} {{ playerData?.birthplace}}</td>
                             </tr>
                             <tr class="row item-details">
                               <td class="column left">Bowling Style</td>
-                              <td class="column right">{{ playerData.bowling_style}}</td>
+                              <td class="column right">{{ playerData?.bowling_style}}</td>
                             </tr>
                             <tr class="row item-details">
                               <td class="column left">Nationality</td>
-                              <td class="column right">{{ playerData.nationality}}</td>
+                              <td class="column right">{{ playerData?.nationality}}</td>
                             </tr>
                             <tr class="row item-details">
                               <td class="column left">Playing Role</td>
-                              <td class="column right">{{ playerData.playing_role}}</td>
+                              <td class="column right">{{ playerData?.playing_role}}</td>
                             </tr>
                             <tr class="row item-details">
                               <td class="column left">Name</td>
-                              <td class="column right">{{ playerData.first_name}}</td>
+                              <td class="column right">{{ playerData?.first_name}}</td>
                             </tr>
                           
 

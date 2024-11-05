@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceService } from '../service.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-player',
@@ -28,7 +29,7 @@ export class PlayerComponent implements OnInit{
   playerstats:any;
   batBowData:any;
 
-  constructor(private apiservice: ServiceService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private apiservice: ServiceService, private route: ActivatedRoute, private router: Router,private _location: Location) { }
   ngOnInit(): void {
 
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -68,11 +69,15 @@ export class PlayerComponent implements OnInit{
   playerStata(data:any){
     this.playerStatsTab=data
     this.apiservice.getPlayerStats(this.playerId).subscribe((res:any)=>{
-      console.log('res',res.data)
+      console.log('res',res.data,this._location)
+      if(res.data != null){
       this.playerstats= res.data
      this.playerData = res.data.player;
      this.batBowData = [{ type:'Batting' ,data:res.data.batting }, {type:'Bowling',data:res.data.bowling}]
       this.playerStatsList=[]
+      }else{
+        this._location.back()
+      }
       this.loader =false
       // console.log(this.playerStatsList,"this.playerStatsList");
 
