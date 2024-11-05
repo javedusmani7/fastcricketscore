@@ -13,7 +13,7 @@
           <span>Cricket ></span>
         </li>
         <li>
-          <span routerLink="/go/{{eventgrupname}}">{{seriesInfo?.title}}</span>
+          <span routerLink="/go/{{eventgrupname}}">{{seriesInfo?.name}}</span>
           </li>
           <li>
             <span>{{pageName}}</span>
@@ -24,15 +24,15 @@
 </section>
 <section class="hero-section">
 
-  <div class="hero-container" data-imp-id="page_primary_hero">
+  <div class="hero-container" data-imp-id="page_primary_hero" >
     <div class="wrapper-container">
 
       <div class="hero-content ">
         <div class="left">
           <div class="hero-h1-container">
-            <h1 class="hero-h1">{{seriesInfo?.title}}  Points Table</h1>
+            <h1 class="hero-h1">{{seriesInfo?.name}}  Points Table</h1>
           </div>
-          <div class="hash-tagline">{{seriesInfo?.dates}}</div>
+          <div class="hash-tagline" *ngIf="seriesInfo">{{updateDate(seriesInfo?.datestart)}} to  {{updateDate(seriesInfo?.dateend)}}</div>
         </div>
         <div class="right">
           <div class="hero-img">
@@ -102,7 +102,7 @@
             <div class="subpage-container">
 
               <section class="cricket-points-table-container">
-                <div class="panel" *ngIf="data.length <= 0">
+                <div class="panel" *ngIf="data?.length <= 0">
                   <div class="panel-body">
                   <div class="page-empty-state">
                   <img width="70" height="67" alt="speaker" src="../../assets/cmc-pre-live-icon.svg" class="lazy-img-bg">
@@ -110,9 +110,9 @@
                   </div>
                   </div>
                   </div>
-                <div class="panel cricket-points-table-panel" *ngFor="let item of pointsRes">
+                <div class="panel cricket-points-table-panel" *ngFor="let item of data">
                   <div class="panel-header">
-                    <div class="panel-heading">{{item.group_name}}</div>
+                    <div class="panel-heading">{{item?.round?.name}}</div>
                   </div>
                   <div class="panel-body">
 
@@ -149,34 +149,34 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr *ngFor="let el of item.group">
+                              <tr *ngFor="let el of pointTablePostion(item.standings);let i=index ">
                                 <td>
-                                  <div class="ta-c">{{el.position}}</div>
+                                  <div class="ta-c">{{i+1}}</div>
                                 </td>
                                 <td>
                                   <div class="points-table-team"><img width="24" height="24" alt="team-flag"
-                                       [src]="el.team_flag" (error)="el.team_flag = '../../assets/team-default.png'" class=""
+                                       [src]="el?.team?.logo_url" (error)="el?.team?.logo_url ? el?.team?.logo_url: '../../assets/team-default.png'" class=""
                                      >
-                                    <div class="points-table-team-name">{{el.team_name}}</div>
+                                    <div class="points-table-team-name">{{el?.team?.title}}</div>
                                   </div>
                                 </td>
                                 <td>
-                                  <div class="ta-c">{{el.played}}</div>
+                                  <div class="ta-c">{{el?.played}}</div>
                                 </td>
                                 <td>
-                                  <div class="ta-c">{{el.won}}</div>
+                                  <div class="ta-c">{{el?.win}}</div>
                                 </td>
                                 <td>
-                                  <div class="ta-c">{{el.lost}}</div>
+                                  <div class="ta-c">{{el?.loss}}</div>
                                 </td>
                                 <td>
-                                  <div class="ta-c">{{el.tied}}</div>
+                                  <div class="ta-c">{{el?.draw}}</div>
                                 </td>
                                 <td class="selected">
-                                  <div class="ta-c" id="boldselected" style="font-weight: 600;">{{el.points}}</div>
+                                  <div class="ta-c" id="boldselected" style="font-weight: 600;">{{el?.points}}</div>
                                 </td>
                                 <td>
-                                  <div class="ta-c">{{el.nrr}}</div>
+                                  <div class="ta-c">{{el?.netrr}}</div>
                                 </td>
                               </tr>
                             </tbody>

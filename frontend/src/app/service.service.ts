@@ -88,8 +88,8 @@ export class ServiceService {
   getResultMatches() {
     return this.http.get(`${this.baseUrl}/getResultMatches/`)
   }
-  getPointsTable(data: any) {
-    return this.http.get(`${this.baseUrl}/getPointsTable/` + data)
+  getPointsTable(cid: any) {
+    return this.http.get(`${this.baseUrl}/competetionStandings?token=${environment.token}&cid=${cid}`)
   }
   getUpcomingMatchesbyseries(data: any) {
     // console.log(data, "getUpcomingMatchesbyseries");
