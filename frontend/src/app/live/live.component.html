@@ -15,20 +15,20 @@
           <img class="spin cricket-ball" src="/assets/cricket_ball.svg"
             alt="loader" >
         </div>
-        <div class="score-primary-partition" [ngClass]="scorelist?.match_status=='Scheduled'?' unset-box-shadow':''" *ngIf="loader==true">
+        <div class="score-primary-partition" [ngClass]="scorelist?.match_status!='Scheduled'?' unset-box-shadow':''" >
           <div class="match-teams">
             <div class="team-1-score-strip-baseline"></div>
             <div class="score-strip team2-score-strip " style="left: 209.6px;">
-              <div class="flag-country " [class]="scorelist.status_str=='Completed'?'flag-countrys':''">
-                <img [src]="scorelist.teama.logo_url" (error)="scorelist.teama.logo_url = '../../assets/team-default.png'" width="48"
+              <div class="flag-country " [class]="scorelist?.status_str!='Scheduled'?'flag-countrys':''">
+                <img [src]="scorelist?.teama.logo_url"  width="48"
                   height="38" alt="team-logo" class="flag bind " data="data.score_strip.0.team_flag"
                   data-img-params="?w=192">
                 <span class="country bind" data="data.score_strip.0.name"><a
-                    routerLink="/team/{{scorelist.teama.name}}">{{scorelist.teama.name}}</a></span>
+                    routerLink="/team/{{scorelist?.teama?.name}}">{{scorelist?.teama?.name}}</a></span>
               </div>
               <div class="score-over">
 
-                <span class="score bind" data="data.score_strip.0.score_wickets_info">{{scorelist.teama.scores_full}}</span>
+                <span class="score bind" data="data.score_strip.0.score_wickets_info">{{scorelist?.teama?.scores_full}}</span>
 
               </div>
             </div>
@@ -36,22 +36,25 @@
             <div class="match-teams">
               <div class="team-1-score-strip-baseline"></div>
               <div class="score-strip team2-score-strip " style="left: 209.6px;">
-                <div class="flag-country " [class]="scorelist.status_str=='Completed'?'flag-countrys':''">
-                  <img [src]="scorelist.teamb.logo_url" (error)="scorelist.teamb.logo_url = '../../assets/team-default.png'" width="48"
+                <div class="flag-country " [class]="scorelist?.status_str=='Completed'?'flag-countrys':''">
+                  <img [src]="scorelist?.teamb?.logo_url" (error)="scorelist?.teamb.logo_url = '../../assets/team-default.png'" width="48"
                     height="38" alt="team-logo" class="flag bind " data="data.score_strip.0.team_flag"
                     data-img-params="?w=192">
                   <span class="country bind" data="data.score_strip.0.name"><a
-                      routerLink="/team/{{scorelist.teamb.name}}">{{scorelist.teamb.name}}</a></span>
+                      routerLink="/team/{{scorelist?.teamb?.name}}">{{scorelist?.teamb?.name}}</a></span>
                 </div>
                 <div class="score-over">
   
-                  <span class="score bind" data="data.score_strip.0.score_wickets_info">{{scorelist.teamb.scores_full}}</span>
+                  <span class="score bind" data="data.score_strip.0.score_wickets_info">{{scorelist?.teamb?.scores_full}}</span>
   
                 </div>
               </div>
   
 
           </div>
+           <div [class]="scorelist?.match_status!='Scheduled'?'green':''">
+              <span class="bind match-info match-result classgreen" data="data.info">{{scorelist?.status_note}}</span>
+            </div>
 
           <div class="match-scorecard-time " id="match-scorecard-time">
             <span class="match-date" *ngIf="scorelist?.match_status=='pre'">{{formattedDate2}} </span>
@@ -79,12 +82,10 @@
         </div>
         <div class="score-secondary-partition">
           <div class="match_info cricket-block">
-            <span class="bind match-info match-result " data="data.info" *ngIf="scorelist?.match_status=='pre'">Match
+            <span class="bind match-info match-result " data="data.info" *ngIf="scorelist?.match_status=='Scheduled'">Match
               yet to start</span>
 
-            <div [class]="scorelist?.match_status=='Scheduled'?'green':''">
-              <span class="bind match-info match-result classgreen" data="data.info">{{scorelist?.status_note}}</span>
-            </div>
+           
           </div>
           <div class="vertical-partition" *ngIf="scorelist?.match_status=='live'">
             <div class="run-rate-div current-run-rate-div p-l-0" *ngIf="liveScoreList[1]?.run_rate_numeric !==null">
@@ -156,10 +157,11 @@
           <p class="poll-count">{{sum_of_vote_count}} votes</p>
         </div>
         <div class="prediction-poll-content preview-card-content poll-card-content" style="text-align: center;">
-          <div class="poll-option has-winner text-center"><span class="poll-option-color"
-              [style.width.%]="calculatePercentage(scorelist?.prediction_poll.options?.opt1.vote_count)"></span>
+          <div class="poll-option has-winner text-center">
+            <span class="poll-option-color"
+              [style.width.%]="calculatePercentage(scorelist?.prediction_poll?.options?.opt1?.vote_count)"></span>
             <p class="poll-option-text polls-text ">{{scorelist?.score_strip[0]?.short_name}} :
-              {{calculatePercentage(scorelist?.prediction_poll.options?.opt1.vote_count) | number:'1.0-0'}}%</p>
+              {{calculatePercentage(scorelist?.prediction_poll.options?.opt1?.vote_count) | number:'1.0-0'}}%</p>
 
             <!-- <p class="poll-option-text polls-text"  *ngIf="infoData?.match_status=='pre'">{{item.text.split(' ')[0].slice(0,1)+item.text.split(' ')[1].slice(0,1)}}</p> -->
 
@@ -567,7 +569,7 @@
                             <div class="single-player-row" *ngFor="let player of item.bats;let i = index" ><img
                                 src="../../assets/commentary-bat-icon.svg"
                                 alt="cricket bat icon" class="role-icon"><span
-                                class="player-value">{{getPlayer(player.batsman_id).title}}</span><span *ngIf="player.is_playing==true"
+                                class="player-value">{{getPlayer(player?.batsman_id).title}}</span><span *ngIf="player?.is_playing==true"
                                 class="batsman-active">*</span>
                               <div class="player-score"><span class="player-score-part-one">{{player.runs}}</span><span
                                   class="player-score-part-two"> ({{player.balls_faced}})</span></div>

@@ -3546,7 +3546,7 @@ a.comments-article-container {
 }
 
 .cricket-top-section-v2 .unset-box-shadow .match-teams {
-  width: 70%;
+  width: 100%;
 }
 
 .cricket-top-section-v2 .unset-box-shadow .match-scorecard-time {
@@ -3639,7 +3639,7 @@ a.comments-article-container {
   font-weight: 500;
   line-height: 22px;
   color: #2D2D2D;
-  margin-right: -210px;
+  margin-right: -10px;
 }
 
 .cricket-top-section-v2 .score-strip .overs-info {

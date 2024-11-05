@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SocketServiceService } from '../socket-service.service';
 import { DatePipe } from '@angular/common';
 
+
 @Component({
   selector: 'app-scorecard',
   templateUrl: './scorecard.component.html',

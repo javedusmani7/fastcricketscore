@@ -158,9 +158,9 @@ export class LiveComponent implements OnInit, OnDestroy{
       this.squadData=res.data?.squad
       this.playerImages=res.data?.player_images
       this.prediction_poll=res.data?.prediction_poll
-      this.prediction_pollsData1=this.prediction_poll.options?.opt1
-      this.prediction_pollsData2=this.prediction_poll.options?.opt2
-      this.prediction_pollsData3=this.prediction_poll.options?.opt3
+      this.prediction_pollsData1=this.prediction_poll?.options?.opt1
+      this.prediction_pollsData2=this.prediction_poll?.options?.opt2
+      this.prediction_pollsData3=this.prediction_poll?.options?.opt3
       this.Innings=res.data?.innings
       this.formattedDate2 = this.formatDate(this.scorelist?.datetime);
       this.formattedTime = this.formatTime(this.scorelist?.datetime);
@@ -352,7 +352,7 @@ getcommentraykeys(obj:any){
   getCommentary(match_id:any){
 
     this.apiservic.getCommentary(this.matchId).subscribe((res:any)=>{
-      this.commentaryList = res.data.commentaries.reverse();
+      this.commentaryList = res.data?.commentaries?.reverse();
       console.log("this is live list" , this.commentaryList)
       this.loader=false
 })
