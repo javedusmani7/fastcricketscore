@@ -36,7 +36,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   selectedRanking="icc-t20-international-rankings"
   remainingTime: any;
   showTimer: boolean = false;
-  lestesNewsList:any
   showEventName = false;
   newsList:any
   selectedNewsTab="latest"
@@ -46,7 +45,27 @@ export class HomeComponent implements OnInit, OnDestroy {
   serieslist:any=[]
   flattenedArray: any = [];
   uniqueSeries:any=[]
-
+  lestesNewsList:any = [
+    {
+      title: "Josh Inglis to lead Australia in AUS vs PAK 2024 T20I series",
+      link: "https://www.sportskeeda.com/cricket/news-josh-inglis-lead-australia-aus-vs-pak-2024-t20i-series"
+    },
+    {
+      title: '"What he said is not wrong" - Aakash Chopra on Sunil Gavaskar asking for Jasprit Bumrah to be made captain instead of Rohit Sharma for BGT 2024-25',
+      link: "https://www.sportskeeda.com/cricket/news-what-said-wrong-aakash-chopra-sunil-gavaskar-asking-jasprit-bumrah-made-captain-instead-rohit-sharma-bgt-2024-25"
+    },
+    {
+      title: '"I think they’ve obviously squashed it as fast as they could" - David Warner on ball-tampering allegations levelled against India A ',
+      link: "https://www.sportskeeda.com/cricket/news-i-think-they-ve-obviously-squashed-fast-could-david-warner-ball-tampering-allegations-levelled-india-a"
+    },
+    {
+      title: '"Forget that you travel in big cars and flights and that you may not get VIP treatment"- Mohammad Kaif urges Indian batters to play Ranji before BGT',
+      link: "https://www.sportskeeda.com/cricket/news-forget-travel-big-cars-flights-may-get-vip-treatment-mohammad-kaif-urges-indian-batters-play-ranji-bgt"
+    },
+    {
+      title: '"Means a lot to me" - David Warner returns as Sydney Thunder captain ahead of BBL 2024-25',
+      link: "https://www.sportskeeda.com/cricket/news-forget-travel-big-cars-flights-may-get-vip-treatment-mohammad-kaif-urges-indian-batters-play-ranji-bgt" }
+    ]
 
   constructor(private apiservice: ServiceService, private socket: SocketServiceService,private router:Router) {
   }
