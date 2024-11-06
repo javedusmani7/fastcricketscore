@@ -701,20 +701,23 @@
                   <div class="content">
                     <div class="news-items latest_popular_news_widget__cricket__news_latest"
                       *ngIf="selectedNewsTab=='latest'">
-                      <a *ngFor="let newsitem of lestesNewsList?.latest;let i=index"
-                        routerLink="/cricket-news/{{newsitem.link}}" class="news-item" data-sequence="1"
+                      <a *ngFor="let newsitem of lestesNewsList;let i=index"
+                         class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
+                        [href]="newsitem.link" 
                         data-section="">
                         <div class="news-sequence">{{i+1}}</div>
                         <div class="news-content">
                           <div class="news-title">{{newsitem.title}}</div>
                         </div>
                       </a>
+                    <!-- remove routerlink from a tab but will be required for future -->
 
                     </div>
                     <div class="news-items latest_popular_news_widget__cricket__news_popular "
                       *ngIf="selectedNewsTab=='popular'">
-                      <a *ngFor="let newsitem of lestesNewsList?.popular;let i=index;"
-                        routerLink="/cricket-news/{{newsitem.link}}" class="news-item" data-sequence="6"
+                      <a *ngFor="let newsitem of lestesNewsList;let i=index;"
+                      class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
+                      [href]="newsitem.link" 
                         data-section="">
                         <div class="news-sequence">{{i+1}}</div>
                         <div class="news-content">
@@ -953,20 +956,23 @@
                   <div class="content">
                     <div class="news-items latest_popular_news_widget__cricket__news_latest"
                       *ngIf="selectedNewsTab=='latest'">
-                      <a *ngFor="let newsitem of lestesNewsList?.latest;let i=index"
-                        routerLink="/cricket-news/{{newsitem.link}}" class="news-item" data-sequence="1"
+                      <a *ngFor="let newsitem of lestesNewsList;let i=index"
+                         class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
+                        [href]="newsitem.link" 
                         data-section="">
                         <div class="news-sequence">{{i+1}}</div>
                         <div class="news-content">
                           <div class="news-title">{{newsitem.title}}</div>
                         </div>
                       </a>
+                    <!-- remove routerlink from a tab but will be required for future -->
 
                     </div>
                     <div class="news-items latest_popular_news_widget__cricket__news_popular "
                       *ngIf="selectedNewsTab=='popular'">
-                      <a *ngFor="let newsitem of lestesNewsList?.popular;let i=index;"
-                        routerLink="/cricket-news/{{newsitem.link}}" class="news-item" data-sequence="6"
+                      <a *ngFor="let newsitem of lestesNewsList;let i=index;"
+                      class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
+                      [href]="newsitem.link" 
                         data-section="">
                         <div class="news-sequence">{{i+1}}</div>
                         <div class="news-content">
