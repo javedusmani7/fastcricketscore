@@ -3928,11 +3928,11 @@ a.comments-article-container {
 
   .cricket-top-section-v2 .run-rate-div .match-info,
   .cricket-top-section-v2 .match-info.match-result {
-    padding-left: 0px;
+    padding-left: 20px;
     font-weight: 400;
     font-size: 12px;
     line-height: 18px;
-    color: #474747;
+    color: #2e7d32;
   }
 
   .cricket-top-section-v2 .vertical-partition {
