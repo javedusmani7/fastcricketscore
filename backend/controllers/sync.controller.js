@@ -1378,7 +1378,8 @@ const saveCompetitionMatches = async (req, res, cid = false) => {
     
     // calling api
     competetion_primary_key = competetionRow._id;
-    const url = ENTITYSPORT_API_URL + 'competitions/' + cid + '/matches/';
+    competetion_cid = competetionRow.cid;
+    const url = ENTITYSPORT_API_URL + 'competitions/' + competetion_cid + '/matches/';
     const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
     const apiData = response.response;
     if(apiData !== undefined && response.status === "ok" ) {
@@ -1388,7 +1389,7 @@ const saveCompetitionMatches = async (req, res, cid = false) => {
         const updatedItems = items.map(item => {
             return {
                 ...item,         // Spread existing properties
-                cid: cid,  // Add a new cid property
+                cid: competetion_cid,  // Add a new cid property
                 competetion: competetion_primary_key,  // Add a new competetion property
                 sport_id: sport_primary_key,  // Add a new sport_id property
                 source_id: source_primary_key // Add a new source_id property
