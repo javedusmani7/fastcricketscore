@@ -371,6 +371,7 @@ exports.getCompetetionDays = async (req, res) => {
                 $project: { // Optional: Specify fields to include or exclude in the output
                     _id: 1,
                     title: 1,
+                    cid: 1,
                     match_format: 1,
                     matches: 1 // Include match details in the output
                 }
@@ -481,6 +482,7 @@ exports.getCompetetionList = async (req, res) => {
             result[monthYear].push({
                 id: competition._id,
                 title: competition.title,
+                cid: competition.cid,
                 category: competition.category,
                 matches:matchesData,
                 formats: formatCountResult,
