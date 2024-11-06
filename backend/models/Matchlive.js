@@ -153,9 +153,9 @@ const Matchlive = new mongoose.Schema({
     did_not_bat: {type : []},
     max_over: { type: String },
     target: { type: String },
-    recent_scores: { type: String },
-    last_five_overs: { type: String },
-    last_ten_overs: { type: String },
+    recent_scores: {type : []},
+    last_five_overs: {type : []},
+    last_ten_overs: {type : []},
   },
   teams: {type : [{
     tid: { type: Number },

@@ -139,30 +139,21 @@ exports.getCompetetionMatches = async (req, res) => {
 
         // Get the total count of items for the total pages
         const totalCount = await Match.countDocuments({ match_id: match_id });
-
-        
-
-        // We are getting competetion_id for this match_id and pass it with response
-        let cid = 0;
-        if(items.length > 0){
-            let competetionRow = await Competetion.findOne({_id: items[0].cid});
-            if (competetionRow) {
-                cid = competetionRow.cid;
-            }
-        }
         
 
         // Send the response with pagination info
         const response = {
             status: 200,
             message: "Matches retrieved successfully.",
-            cid: cid,
             totalCount,
             totalPages: Math.ceil(totalCount / limit),
             currentPage: page,
             data: items
         }
         res.json(response);
+
+        
+        // return res.status(200).json({status: 200, message: 'ajavasvvssvvsvs not found' });
     } 
     catch (error) {
         console.error(error);
