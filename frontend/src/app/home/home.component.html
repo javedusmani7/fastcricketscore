@@ -183,7 +183,7 @@
         </section>
 
       </div>
-      <div class="sc-fqkvVR iGqHmj">
+      <!-- <div class="sc-fqkvVR iGqHmj">
         <div elevation=",2" class="sc-fqkvVR jeeaPw">
           <div color="onSurface.nLv1" class="sc-gFqAkR jHSgcL">Tournaments</div>
           <div class="sc-fqkvVR hBElRe">
@@ -199,7 +199,7 @@
            </ng-container>
           </div>
         </div>
-      </div>
+      </div> -->
     </section>
     <section class="wrapper-container1" id="desktopview" style="width:50%">
       <div class="fragment-container">
@@ -318,13 +318,13 @@
                         </div>
                         <div class="keeda-cricket-widget--carousel-footer">
 
-                          <a class="hover-translucent" routerLink="/pointTable/{{item.matches.match_id}}">
+                          <a class="hover-translucent" routerLink="/pointTable/{{item?.cid}}">
                             <span>{{item.has_table==true?"Points Table":null}}</span>
                             <img *ngIf="item.has_table==true"
                               src="/assets/ic-chevron-right.svg" width="16" height="16"
                               alt="ic-right">
                           </a>
-                          <a class="hover-translucent" routerLink="/child-shedule/{{item.matches.match_id}}/upcoming">
+                          <a class="hover-translucent" routerLink="/child-shedule/{{item.match_id}}/upcoming">
                             <span>{{item.has_schedule==true?"Schedule":null}}</span>
                             <img src="/assets/ic-chevron-right.svg" width="16" height="16"
                               alt="ic-right">
@@ -556,16 +556,12 @@
       </div>
     </section>
     <section class="right-wrapper-container" style="width:23%">
-      <div elevation=",2" class="sc-fqkvVR jeeaPw">
+      <!-- <div elevation=",2" class="sc-fqkvVR jeeaPw">
 
         <section class="sk-widget points-table">
           <div class="panel ">
             <header class="panel-header ">
               <h2 class="panel-heading" routerLink="/pointTable/ipl">IPL 2024 Points Table</h2>
-              <!-- <h2 class="panel-heading" routerLink="/pointTable/ipl">IPL 2024</h2> -->
-              <!-- <a class="view-more-cta" routerLink="/pointTable/ipl" data-section="points-table">
-                <span></span>
-              </a> -->
             </header>
             <div class="panel-body no-padding">
               <div class="widget--tournament-points-table">
@@ -580,9 +576,6 @@
                         <table class="keeda-data-table">
                           <thead>
                             <tr>
-                              <!-- <th>
-                                <div class="ta-c">Pos</div>
-                              </th> -->
                               <th class="column-team">
                                 <div class="ta-l">Teams</div>
                               </th>
@@ -608,9 +601,6 @@
                           </thead>
                           <tbody *ngFor="let item of pionteTableData;">
                             <tr *ngFor="let el of item.group?.slice(0,5)">
-                              <!-- <td>
-                                <div class="ta-c">{{el.position}}</div>
-                              </td> -->
                               <td>
                                 <div class="points-table-team"><img width="24" height="24" alt="team-flag"
                                     [src]="el.team_flag" (error)="el.team_flag = '../../assets/team-default.png'"
@@ -648,15 +638,12 @@
             </div>
           </div>
         </section>
-      </div>
-      <div elevation=",2" class="sc-fqkvVR jeeaPw" style="margin-top: 12px;">
+      </div> -->
+      <!-- <div elevation=",2" class="sc-fqkvVR jeeaPw" style="margin-top: 12px;">
         <section class="sk-widget tournament-stats">
           <div class="panel ">
             <header class="panel-header ">
               <h2 class="panel-heading" routerLink="/stats/ipl">IPL 2024 Leaders</h2>
-              <!-- <a class="view-more-cta" routerLink="/stats/ipl" data-section="tournament-stats">
-                <span>All Stats</span>
-              </a> -->
             </header>
             <div class="panel-body ">
               <div class="widget--tournament-stats-condensed" data-imp-id="widget_tournament_stats_condensed__0">
@@ -676,7 +663,6 @@
                     <footer class="tournament-stats-item--footer">
                       <div class="tournament-stats-item--stat-value">
                         <span>{{item.value}} </span>
-                        <!-- <span>Runs</span> -->
                       </div>
                       <div class="tournament-stats-item--stat-label">{{item.label}}</div>
                     </footer>
@@ -687,12 +673,12 @@
           </div>
         </section>
 
-      </div>
-      <div  elevation=",3" class="sc-fqkvVR dJjecO" >
+      </div> -->
+      <!-- <div  elevation=",3" class="sc-fqkvVR dJjecO" >
         <div label="Advertisement" class="sc-3df62f2a-0 bxiFqS"></div>
         <div label="Advertisement" id="div-gpt-ad-1680079501010-0" class="sc-3df62f2a-1 eRcWyt"
           style="min-height: 250px;"></div>
-      </div>
+      </div> -->
 
       <div elevation=",2" class="sc-fqkvVR jeeaPw" style="margin-top: 12px;">
         <div class="right">
@@ -816,42 +802,42 @@
                     <div class="keeda_cricket_match_list pre">
                       <div class="keeda_widget_info cricket">
                         <div class="cricket-match-card-header-secondary-text marquee-strip">
-                          <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.match_number)}}</span>
+                          <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item?.matches?.match_number)}}</span>
                           <span>•</span>
-                          <span class="cricket-match-card--match-type">{{item.format | titlecase}}</span>
+                          <span class="cricket-match-card--match-type">{{item?.match_format | titlecase}}</span>
                           <span>•</span>
-                          <span class="cricket-match-card--match-venue">{{item.venue_location}}</span>
+                          <span class="cricket-match-card--match-venue">{{item?.matches?.venue?.name}}</span>
                         </div>
-                        <div class="keeda_widget_live_info" *ngIf="item.status==='Live'">LIVE</div>
+                        <div class="keeda_widget_live_info" *ngIf="item.status_str==='Live'">LIVE</div>
 
                       </div>
                       <div class="keeda_widget_match_detail">
                         <div class="keeda_widget_team_group">
                           <div class="keeda_widget_team " data-team-name="IND">
-                            <img src="{{item.t1_flag || '../../../../assets/team-default.png'}}" width="54" height="38"
+                            <img src="{{item?.matches?.teama?.logo_url || '../../../../assets/team-default.png'}}" width="54" height="38"
                               alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
-                            <span class="keeda_widget_team_name cricket">{{item.t1_key}}</span>
+                            <span class="keeda_widget_team_name cricket">{{item.matches?.teama?.short_name}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item.in_play==false && item.status=='pre'">{{convertDate(item.datetime)}}</span>
+                              *ngIf="item?.matches?.status_str=='Scheduled'">{{convertDate(item?.matches?.date_start)}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item.in_play !==true && item.status=='post'">{{item.t1_score}}</span>
+                              *ngIf="item?.matches?.status_str=='Completed'">{{item?.matches?.teama?.scores_full}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item.in_play==true || item.status=='Live'">{{liveData[item.id]?.score_strip?.[0]?.score
-                              || item.t1_score}}</span>
+                              *ngIf="item?.matches?.status_str=='Live'">{{liveData[item.id]?.score_strip?.[0]?.score
+                              || item?.matches?.teama?.scores_full}}</span>
 
                           </div>
                           <div class="keeda_widget_team " data-team-name="ENG">
-                            <img src="{{item.t2_flag || '../../../../assets/team-default.png'}}" width="54" height="38"
+                            <img src="{{item?.matches?.teamb?.logo_url || '../../../../assets/team-default.png'}}" width="54" height="38"
                               alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
-                            <span class="keeda_widget_team_name cricket">{{item.t2_key}}</span>
+                            <span class="keeda_widget_team_name cricket">{{item.matches?.teamb?.short_name}}</span>
                             <span class="keeda_widget_score cricket" id="time"
-                              *ngIf="item.in_play==false && item.status=='pre'">{{item.datetime
+                            *ngIf="item?.matches?.status_str=='Scheduled'">{{item?.matches?.date_start
                               |date:"shortTime"}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item.in_play !==true && item.status=='post'">{{item.t2_score}}</span>
+                              *ngIf="item?.matches?.status_str=='Completed'">{{item?.matches?.teama?.scores_full}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item.in_play==true || item.status=='Live'">{{liveData[item.id]?.score_strip?.[1]?.score
-                              || item.t2_score}}</span>
+                              *ngIf="item.in_play==true || item?.matches?.status_str=='Live'">{{liveData[item.id]?.score_strip?.[1]?.score
+                              || item?.matches?.teamb?.scores_full}}</span>
 
                           </div>
                         </div>
@@ -875,11 +861,11 @@
                         </div>
                       </div>
                       <div class="keeda_widget_result_info pre marquee-container"
-                        *ngIf="item.in_play !==true && item.status !=='Live'"
+                        *ngIf="item?.in_play !==true && item?.status_str !=='Live'"
                         [class]="liveData?.info?.length < 30? 'marquee-container':''">
                         <div class="marquee-strip">{{item.result}}</div>
                       </div>
-                      <div class="keeda_widget_result_info live" *ngIf="item.in_play==true || item.status=='Live'"
+                      <div class="keeda_widget_result_info live" *ngIf="item?.in_play==true || item?.status_str=='Live'"
                         [class]="liveData?.result?.length < 25? 'marquee-container':''">
                         <div class="marquee-strip">{{liveData?.info || item.result}}</div>
                       </div>
@@ -895,12 +881,12 @@
                       </a> -->
 
                       <a class="hover-translucent" routerLink="/child-shedule/{{item.match_id}}/upcoming">
-                        <span>{{item.has_schedule==true?"Schedule":null}}</span>
+                        <span>{{item.status_str==true?"Schedule":null}}</span>
                         <img src="/assets/ic-chevron-right.svg" width="16" height="16"
                           alt="ic-right">
                       </a>
                     </div>
-                    <a class="keeda_cricket_match_link" routerLink="/live-cricket-score/{{item.id}}"
+                    <a class="keeda_cricket_match_link" routerLink="/live-cricket-score/{{item.match_id}}"
                       title="{{item.t1}} VS {{item.t2}}">India vs England preview</a>
                   </div>
                   <div class="keeda_cricket_single_match match-carousel-ad"
@@ -1008,7 +994,7 @@
           <div class="section-separator "></div>
 
           <section class="sk-widget points-table">
-            <div class="panel ">
+            <!-- <div class="panel ">
               <header class="panel-header ">
                 <h2 class="panel-heading">IPL 2024 Points Table</h2>
                 <a class="view-more-cta" routerLink="/pointTable/ipl" data-section="points-table">
@@ -1094,7 +1080,7 @@
                 </div>
 
               </div>
-            </div>
+            </div> -->
           </section>
 
 
