@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { ScorecardComponent } from "./scorecard.component";
+import { ScoreBoxModule } from "../score-box/score-box.module";
 // import { ScoreBoxComponent } from "../score-box/score-box.component";
 
 
@@ -14,9 +15,10 @@ const scorecardRoute=[{
   declarations:[
     ScorecardComponent
   ],
-  imports:[
+  imports: [
     CommonModule,
-    RouterModule.forChild(scorecardRoute)
-  ]
+    RouterModule.forChild(scorecardRoute),
+    ScoreBoxModule
+]
 })
 export class ScorecardModule{}

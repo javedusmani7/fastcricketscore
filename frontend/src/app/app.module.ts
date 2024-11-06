@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FantasyComponent } from './fantasy/fantasy.component';
+import { ScoreBoxModule } from "./score-box/score-box.module";
 // import { NewsDetailComponent } from './news-detail/news-detail.component';
 
 @NgModule({
@@ -31,7 +32,8 @@ import { FantasyComponent } from './fantasy/fantasy.component';
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
-  ],
+    ScoreBoxModule
+],
   providers: [
     DatePipe
   ],

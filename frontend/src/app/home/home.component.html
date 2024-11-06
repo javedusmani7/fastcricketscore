@@ -715,7 +715,7 @@
                     </div>
                     <div class="news-items latest_popular_news_widget__cricket__news_popular "
                       *ngIf="selectedNewsTab=='popular'">
-                      <a *ngFor="let newsitem of lestesNewsList;let i=index;"
+                      <a *ngFor="let newsitem of lestesNewsList.reverse();let i=index;"
                       class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
                       [href]="newsitem.link" 
                         data-section="">

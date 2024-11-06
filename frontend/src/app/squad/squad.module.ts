@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { SquadComponent } from "./squad.component";
+import { ScoreBoxModule } from "../score-box/score-box.module";
 const     SquadRoute=[{
   path:"",component:SquadComponent
 }]
@@ -11,9 +12,10 @@ const     SquadRoute=[{
   declarations:[
     SquadComponent
   ],
-  imports:[
+  imports: [
     CommonModule,
-    RouterModule.forChild(SquadRoute)
-  ]
+    RouterModule.forChild(SquadRoute),
+    ScoreBoxModule
+]
 })
 export class     SquadModule{}

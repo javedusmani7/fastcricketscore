@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { LiveComponent } from "./live.component";
+import { ScoreBoxModule } from "../score-box/score-box.module";
 
 
 const liveRoute=[{
@@ -13,9 +14,10 @@ const liveRoute=[{
   declarations:[
     LiveComponent
   ],
-  imports:[
+  imports: [
     CommonModule,
-    RouterModule.forChild(liveRoute)
-  ]
+    RouterModule.forChild(liveRoute),
+    ScoreBoxModule
+]
 })
 export class LiveModule{}
