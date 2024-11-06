@@ -1057,7 +1057,7 @@ exports.cronjobForCompletedCompetitions = async (req, res) => {
             // check if the Competetion exists or not
             const cid = Competetion_Matches_Mapping_Completed_Row.cid;
             if(cid){
-                saveCompetitionMatches(req, res, cid);
+                await saveCompetitionMatches(req, res, cid);
             }
 
             // update the Competetion_Matches_Mapping table because this competation match has been sync
@@ -1069,6 +1069,7 @@ exports.cronjobForCompletedCompetitions = async (req, res) => {
     } 
     catch (error) {
         // console.error(error);
+        console.log("cronjobForCompletedCompetitions API run Successfully");
         res.status(500).json({ message: 'Error on cronjobForCompletedCompetitions API', data: error.message });
     }
 }
@@ -1085,7 +1086,7 @@ exports.cronjobForLiveCompetitions = async (req, res) => {
         for (const row of competetionRecordsRows) {
             try {
                 if(row.cid){
-                    saveCompetitionMatches(req, res, row.cid);
+                   await saveCompetitionMatches(req, res, row.cid);
                 }
             } catch (apiError) {
                 console.error('cronjobForLiveCompetitions::: Error inside for each:', apiError.message);
@@ -1093,6 +1094,7 @@ exports.cronjobForLiveCompetitions = async (req, res) => {
         }
 
         // return response
+        console.log("cronjobForLiveCompetitions API run Successfully");
         return res.status(200).json({status: 200, message: 'Sync Successfully.' });
     } 
     catch (error) {

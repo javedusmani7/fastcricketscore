@@ -132,9 +132,9 @@ cron.schedule('0 0 1 1,7 *', syncSeasonsData);
 syncCompetetionsData();
 cron.schedule('0 0 1 1,4,7,10 *', syncCompetetionsData);
 
-// // Schedule the task to run every 5 minutes and sync all completed matches data
-cron.schedule('*/10 * * * * *', syncCompletedCompetitionData);
-cron.schedule('*/10 * * * * *', syncLiveCompetitionData);
+// // Schedule the task to run every 1 second and sync all completed matches data
+cron.schedule('* * * * * *', syncCompletedCompetitionData);
+cron.schedule('* * * * * *', syncLiveCompetitionData);
 
 // // Schedule the task to run at midnight every day for syncing scheduled matches data
 // cron.schedule('0 0 * * *', syncUpcomingMatchesDataForCompetetions);

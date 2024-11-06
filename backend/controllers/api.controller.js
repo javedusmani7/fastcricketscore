@@ -419,7 +419,7 @@ exports.getCompetetionList = async (req, res) => {
                 $lookup: {
                     from: 'matches', // Join with Customers collection
                     localField: '_id', // The field from the Orders collection
-                    foreignField: 'cid', // The field from the Customers collection
+                    foreignField: 'competetion', // The field from the Customers collection
                     as: 'matchData' // Output field to add
                 }
             },
