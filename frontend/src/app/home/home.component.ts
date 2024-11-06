@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild("widgetsContent", { static: false , read: ElementRef}) widgetsContent:any;
   uniqueTitlesMap: { title: string, slug: string }[] = [];
-
+  categoryWiseData:any
+  tab: string = 't20';
   rightScrollCount = 0;
   CricketMainTabs: any;
   activeIndex: number = 0;
@@ -66,13 +67,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       title: '"Means a lot to me" - David Warner returns as Sydney Thunder captain ahead of BBL 2024-25',
       link: "https://www.sportskeeda.com/cricket/news-forget-travel-big-cars-flights-may-get-vip-treatment-mohammad-kaif-urges-indian-batters-play-ranji-bgt" }
     ]
+    t20s:any = { batsmen: [], bowlers: [], teams: [], allRounders: [] };
+    odis:any = { batsmen: [], bowlers: [], teams: [], allRounders: [] };
+    tests:any = { batsmen: [], bowlers: [], teams: [], allRounders: [] };
+    // allRounders = { batsmen: [], bowlers: [], teams: [], allRounders: [] };
 
   constructor(private apiservice: ServiceService, private socket: SocketServiceService,private router:Router) {
   }
   ngOnInit(): void {
     // this.socket.connectSocket()
     // this.getCricketMatches(this.slug, 0)
-    // this.getIccRankingData(this.selectedRanking)
+    this.getIccRankingData(this.selectedRanking)
     this.loader = true
     this.getCompetitionByDay()
     // this.getnews()
@@ -209,23 +214,34 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getIccRankingData(data:any){
     this.selectedRanking=data
-    this.apiservice.getIccRankingapis(data).subscribe((res:any)=>{
+    this.apiservice.getIccRankingapis().subscribe((res:any)=>{
       this.rankingListAll=res.data
       if(data=='icc-t20-international-rankings'){
-
-        this.rankingList= this.rankingListAll
-        console.log( this.rankingList," this.rankingList");
+        
+        this.iccRankingCategory("t20s")
+        this.rankingList= this.t20s
+        this.tab="t20s"
+        this.getCategory(data)
+        console.log("t20 ranks " , this.t20s)
+            // console.log("rankinglist it this",this.rankingList)
 
         this.rankingByTabs='team'
 
       }else if(data=='icc-odi-ranking'){
-        this.rankingList= this.rankingListAll
+        this.iccRankingCategory("odis")
+        this.rankingList= this.odis
+        this.tab="odis"
+        this.getCategory(data)
         this.rankingByTabs='team'
+        console.log("odi ranks " , this.odis)
 
       }
       else if(data=='icc-test-ranking'){
-        this.rankingList= this.rankingListAll
+        this.iccRankingCategory("tests")
+        this.rankingList= this.tests
         this.rankingByTabs='team'
+        this.tab="tests"
+        this.getCategory(data)
 
       }  console.log("ranking list ",this.rankingList)
 
@@ -355,6 +371,56 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.flattenedArray.map((event:any) => titlesSet.add(event.title));
     this.uniqueSeries = Array.from(titlesSet);
     // console.log(this.uniqueSeries,"this.flattenedArray");
+
+  }
+
+  iccRankingCategory(category: string) {
+    switch (category) {
+      case 't20s':
+        this.t20s.batsmen = this.rankingListAll.ranks.batsmen.t20s || [];
+        this.t20s.bowlers = this.rankingListAll.ranks.bowlers.t20s || [];
+        this.t20s.teams = this.rankingListAll.ranks.teams.t20s || [];
+        this.t20s.allRounders = this.rankingListAll.ranks?.['all-rounders'].t20s || [];
+        break;
+
+      case 'odis':
+        this.odis.batsmen = this.rankingListAll.ranks.batsmen.odis || [];
+        this.odis.bowlers = this.rankingListAll.ranks.bowlers.odis || [];
+        this.odis.teams = this.rankingListAll.ranks.teams.odis || [];
+        this.odis.allRounders = this.rankingListAll.ranks?.["all-rounders"].odis || [];
+        break;
+  
+      case 'tests':
+        this.tests.batsmen = this.rankingListAll.ranks.batsmen.tests || [];
+        this.tests.bowlers = this.rankingListAll.ranks.bowlers.tests || [];
+        this.tests.teams = this.rankingListAll.ranks.teams.tests || [];
+        this.tests.allRounders = this.rankingListAll.ranks?.["all-rounders"].tests || [];
+        break;
+  
+      // case 'all-rounders':
+      //   this.allRounders.batsmen = this.rankingListAll.ranks.batsmen.allRounders || [];
+      //   this.allRounders.bowlers = this.rankingListAll.ranks.bowlers.allRounders || [];
+      //   this.allRounders.teams = this.rankingListAll.ranks.teams.allRounders || [];
+      //   this.allRounders.allRounders = this.rankingListAll.ranks?.['all-rounders'].allRounders || [];
+      //   break;
+  
+      default:
+        console.warn('Invalid category');
+    }
+  }
+  
+  getCategory(category:string){
+
+    if(category=="icc-t20-international-rankings"){
+
+      this.categoryWiseData=this.t20s
+    }
+    else if(category=="icc-odi-ranking"){
+            this.categoryWiseData= this.odis
+    }
+      else{
+               this.categoryWiseData=this.tests
+      }
 
   }
 }

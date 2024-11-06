@@ -29,15 +29,15 @@
           <div class="panel ">
             <header class="panel-header ">
               <h2 class="panel-heading" routerLink="/iccRanking/icc-odi-ranking">ICC Rankings</h2>
-              <!-- <a class="view-more-cta" routerLink="/iccRanking/icc-odi-ranking" data-section="icc-ranking">
+              <a class="view-more-cta" routerLink="/iccRanking/icc-odi-ranking" data-section="icc-ranking">
                 <span>View All</span>
-              </a> -->
+              </a>
             </header>
             <div class="panel-body p-b-0">
               <div class="widget--icc-ranking">
                 <div class="icc-ranking-container">
                   <div class="primary-control-tabs">
-                    <!-- <div class="primary-tab-switcher-wrapper" (click)="getIccRankingData('icc-t20-international-rankings')">
+                    <div class="primary-tab-switcher-wrapper" (click)="getIccRankingData('icc-t20-international-rankings')">
                       <label class="primary-tab-switcher"
                         [class]="selectedRanking==='icc-t20-international-rankings'?'selectranking':''">
                         <span>T20 Ranking</span>
@@ -76,7 +76,7 @@
                       <label class="secondary-tab-switcher" [class]="rankingByTabs==='All-Rounde'?'activeTabs':''">
                         <span>All-Rounder</span>
                       </label>
-                    </div> -->
+                    </div>
                   </div>
                   <div class="ranking-content-wrapper">
                     <div class="ranking-content" *ngIf="rankingByTabs==='team'">
@@ -85,21 +85,21 @@
                         <div class="player-team-kind">Team</div>
                         <div class="player-team-rating">Rating</div>
                       </div>
-                      <!-- <div class="ranking-item team" *ngFor="let item of rankingList[0]?.data;let i=index">
-                        <div class="player-team-rank">{{item.POS}}</div>
+                      <div class="ranking-item team" *ngFor="let item of categoryWiseData?.teams;let i=index">
+                        <div class="player-team-rank">{{item.rank}} </div>
                         <div class="player-team-info">
                           <div class="player-team-thumb">
-                            <img src="{{item.img}}" class="" width="35" height="25" alt="India"
+                            <img src="{{item.logo_url}}" class="" width="35" height="25" alt="India"
                               data-img-params="?h=50">
                           </div>
                           <div class="">
                             <div class="player-team-name">
-                              <a class="player-team-name-primary" routerLink="/team">{{item.TEAM}}</a>
+                              <a class="player-team-name-primary" routerLink="/team">{{item.team}}</a>
                             </div>
                           </div>
                         </div>
-                        <div class="player-team-rating">{{item.RATING}}</div>
-                      </div> -->
+                        <div class="player-team-rating">{{item.points}}</div>
+                      </div>
 
                     </div>
                     <div class="ranking-content" *ngIf="rankingByTabs==='batting'">
@@ -108,22 +108,22 @@
                         <div class="player-team-kind">Player</div>
                         <div class="player-team-rating">Rating</div>
                       </div>
-                      <!-- <div class="ranking-item player" *ngFor="let item of rankingList[1]?.data;let i=index">
-                        <div class="player-team-rank">{{item.POS}}</div>
+                      <div class="ranking-item player" *ngFor="let item of categoryWiseData?.batsmen;let i=index">
+                        <div class="player-team-rank">{{item.rank}}</div>
                         <div class="player-team-info">
                           <div class="player-team-thumb">
-                            <img class="img-with-fallbacks" width="35" height="35" alt="Suryakumar Yadav"
-                              src="{{item.img}}">
+                            <img class="img-with-fallbacks" width="35" height="35" alt="player"
+                              src='../../assets/team-default.png'>
                           </div>
                           <div class="">
                             <div class="player-team-name">
-                              <a class="player-team-name-primary" >{{item.PLAYER}}</a>
-                              <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                              <a class="player-team-name-primary" >{{item.player}}</a>
+                              <div class="player-team-name-secondary">{{item.team}}</div>
                             </div>
                           </div>
                         </div>
-                        <div class="player-team-rating">{{item.RATING}}</div>
-                      </div> -->
+                        <div class="player-team-rating">{{item.rating}}</div>
+                      </div>
                     </div>
                     <div class="ranking-content" *ngIf="rankingByTabs=='Bowling'">
                       <div class="ranking-item-header">
@@ -131,21 +131,21 @@
                         <div class="player-team-kind">Player</div>
                         <div class="player-team-rating">Rating</div>
                       </div>
-                      <div class="ranking-item player" *ngFor="let item of rankingList[2]?.data;let i=index">
-                        <div class="player-team-rank">{{item.POS}}</div>
+                      <div class="ranking-item player" *ngFor="let item of categoryWiseData.bowlers;let i=index">
+                        <div class="player-team-rank">{{item.rank}}</div>
                         <div class="player-team-info">
-                          <!-- <div class="player-team-thumb">
-                            <img class="img-with-fallbacks" width="35" height="35" alt="Adil Rashid"
-                              src="{{item.img}}">
-                          </div> -->
+                          <div class="player-team-thumb">
+                            <img class="img-with-fallbacks" width="35" height="35" alt="player"
+                              src='../../assets/team-default.png'>
+                          </div>
                           <div class="">
                             <div class="player-team-name">
-                              <a class="player-team-name-primary" routerLink="/player">{{item.PLAYER}}</a>
-                              <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                              <a class="player-team-name-primary" routerLink="/player">{{item.player}}</a>
+                              <div class="player-team-name-secondary">{{item.team}}</div>
                             </div>
                           </div>
                         </div>
-                        <div class="player-team-rating">{{item.RATING}}</div>
+                        <div class="player-team-rating">{{item.rating}}</div>
                       </div>
 
                     </div>
@@ -155,23 +155,23 @@
                         <div class="player-team-kind">Player</div>
                         <div class="player-team-rating">Rating</div>
                       </div>
-                      <!-- <div class="ranking-item player"
-                        *ngFor="let item of rankingList[3]?.data;let i=index">
-                        <div class="player-team-rank">{{item.POS}}</div>
+                      <div class="ranking-item player"
+                        *ngFor="let item of categoryWiseData?.allRounders;let i=index">
+                        <div class="player-team-rank">{{item.rank}}</div>
                         <div class="player-team-info">
                           <div class="player-team-thumb">
-                            <img class="img-with-fallbacks" width="35" height="35" alt="Shakib Al Hasan"
-                              src="{{item.img}}">
+                            <img class="img-with-fallbacks" width="35" height="35" alt="player"
+                              src='../../assets/team-default.png'>
                           </div>
                           <div class="">
                             <div class="player-team-name">
-                              <a class="player-team-name-primary" >{{item.PLAYER}}</a>
-                              <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                              <a class="player-team-name-primary" >{{item.player}}</a>
+                              <div class="player-team-name-secondary">{{item.team}}</div>
                             </div>
                           </div>
                         </div>
-                        <div class="player-team-rating">{{item.RATING}}</div>
-                      </div>-->
+                        <div class="player-team-rating">{{item.rating}}</div>
+                      </div>
                     </div>
 
                   </div> 

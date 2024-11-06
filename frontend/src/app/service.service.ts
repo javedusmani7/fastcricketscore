@@ -223,10 +223,12 @@ export class ServiceService {
   }
 
   // http://192.46.214.33:3000/api/data/getIccRanking/icc-odi-ranking
-  getIccRankingapis(name:any){
+  getIccRankingapis(){
     // console.log(name);
-
-    return this.http.get(`${this.baseUrl}/getIccRanking/${name}`)
+   
+   
+    // return this.http.get(`${this.baseUrl}/getIccRanking/${name}`)
+    return this.http.get(`${this.baseUrl}/rankings?token=${this.token}`)
   }
 
 

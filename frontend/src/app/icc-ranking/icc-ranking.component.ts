@@ -14,7 +14,7 @@ export class IccRankingComponent implements OnInit{
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.rankingname=this.route.snapshot.paramMap.get('rankingName');
-      this.apiservice.getIccRankingapis(this.rankingname).subscribe((res:any)=>{
+      this.apiservice.getIccRankingapis().subscribe((res:any)=>{
         this.rankinglist=res.data
 
       })
