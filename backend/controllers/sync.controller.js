@@ -19,6 +19,7 @@ const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
 const Competetion_Matches_Mapping = require('../models/Competetion_Matches_Mapping');
 const Competetion_Standing = require('../models/Competetion_Standing');
+const RankingModel = require('../models/Ranking');
 
 // predefine constant values
 const ENTITYSPORT_API_KEY = process.env.ENTITYSPORT_API_KEY;
@@ -1006,117 +1007,96 @@ exports.syncPlayerStatstic = async (req, res) => {
     }
 }
 
-// START: CronJob Methods START from Here
-
-// this function will make an API call to the ENTITYSPORT and get all available matched based on competetionId and those status="result(completed)"
-exports.cronjobForCompletedMatches = async (req, res) => {
-    console.log("cronjobForcompletedMatched::::step1");
+// this function will make an API call to the ENTITYSPORT and get Rankings data
+exports.syncRankings = async (req, res) => {
+    const token = req.query.token;
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
     
-    // get parameters and check for the required validation
-    let sport_primary_key = false;
-    let source_primary_key = false;
-    let competetion_primary_key = false;
-
-    // first; we will get the primaryID details for the sport, source and competetion table 
-    // so that we can pass these references to the match tables
     try {
-        // check if the sports exists or not
-        const sportRow = await Sport.findOne({sport_id: sport_id});
-        if (!sportRow) {
-            return res.status(404).json({status: 404, message: 'Sport not found' });
-        }
-        sport_primary_key = sportRow._id;
-
-        // check if the source exists or not
-        const sourceRow = await Source.findOne({source_id: source_id});
-        if (!sourceRow) {
-            return res.status(404).json({status: 404, message: 'Source not found' });
-        }
-        source_primary_key = sourceRow._id;
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
-    }
-
-    // Second; we are synching the competetions matches one by one
-    try {            
-        // Step 1: we will get the competetion those status=result(Means it has completed and only sync single time)
-        let Competetion_Matches_Mapping_Completed_Row = await Competetion_Matches_Mapping.findOne({active: 1, status: "result"});
-        console.log("cronjobForcompletedMatched::::step2", Competetion_Matches_Mapping_Completed_Row.cid);
-        if (Competetion_Matches_Mapping_Completed_Row) {
-            const cid = Competetion_Matches_Mapping_Completed_Row.cid;
-            // once match os sync now we are updating mapping table so that it would not sync again
-            const url = api_url + 'sync/competetionMatch?token=' + ENTITYSPORT_API_KEY + "&cid=" + cid;
-            const response = await axios.get(url);
-            const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: 0 } });
-            // // console.log("cronjobForcompletedMatched::::step3", response);
-            // // if(response?.data?.length > 0){
-            // if(response.status === "ok"){
-            //     console.log("step4-resp-if", cid);
-            //     const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: 0 } });
-            // }
+        
+        // Making an api call from Entity sports and then saving into our database
+        const url = ENTITYSPORT_API_URL + 'iccranks/';
+        const response = await fetchEntitySportData(token, url);
+        const apiData = response.response;
+        if(apiData !== undefined && response.status === "ok" ) {
+            
+            // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+            const additionalFields = {
+                sport_id: sport_primary_key,
+                source_id: source_primary_key
+            };
+            const dataToSave = { ...apiData, ...additionalFields };
+        
+            // Step 2: Check if the record already exists and insert or update the record accordingly
+            const result = await RankingModel.updateOne({sport_id: sport_primary_key}, { $set: dataToSave}, { upsert: true });
         }
         
-        console.log("cronjobForcompletedMatched::::step12");
-        return res.status(200).json({status: 200, message: 'Sync Successfully.' });
-    } 
+        // Send response
+        return res.status(200).json({
+            status: 200,
+            message: "Player Ranking Sync Successfully."
+        });
+    }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+        res.status(500).json({ message: 'Error fetching data from syncPlayersProfile. ', error });
     }
 }
 
-// this function will make an API call to the ENTITYSPORT and get all available matched based on competetionId and those status="live"
-exports.cronjobForLiveMatches = async (req, res) => {
-    console.log("cronjobForLiveMatches::::step1");
-    
-    // get parameters and check for the required validation
-    let sport_primary_key = false;
-    let source_primary_key = false;
-    let competetion_primary_key = false;
+// START: CronJob Methods START from Here
 
-    // first; we will get the primaryID details for the sport, source and competetion table 
-    // so that we can pass these references to the match tables
-    try {
-        console.log("cronjobForLiveMatches::::step2");
-        // check if the sports exists or not
-        const sportRow = await Sport.findOne({sport_id: sport_id});
-        if (!sportRow) {
-            return res.status(404).json({status: 404, message: 'Sport not found' });
+// this function will make an API call to the ENTITYSPORT and get all available matched based on competetionId and those status="result(completed)"
+exports.cronjobForCompletedCompetitions = async (req, res) => {
+
+    try {            
+        // Step 1: we will get the competetion those status=result(Means, competeion has been completed)
+        let Competetion_Matches_Mapping_Completed_Row = await Competetion_Matches_Mapping.findOne({active: true, status: "result"});
+        if (Competetion_Matches_Mapping_Completed_Row) {
+
+            // check if the Competetion exists or not
+            const cid = Competetion_Matches_Mapping_Completed_Row.cid;
+            if(cid){
+                saveCompetitionMatches(req, res, cid);
+            }
+
+            // update the Competetion_Matches_Mapping table because this competation match has been sync
+            const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: false } });
         }
-        sport_primary_key = sportRow._id;
-
-        // check if the source exists or not
-        const sourceRow = await Source.findOne({source_id: source_id});
-        if (!sourceRow) {
-            return res.status(404).json({status: 404, message: 'Source not found' });
-        }
-        source_primary_key = sourceRow._id;
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
-    }
-
-    // Second; we are synching the competetions matches one by one
-    try {
-        console.log("cronjobForLiveMatches::::step3");       
-            
-        // We will get the competetion those status!=Live(Means it has running now)
-        const competetionRecordsRows = await Competetion_Matches_Mapping.find({ active: 1, status: "live" });
         
-        const finalResponse = await Promise.all(competetionRecordsRows.map(async (row) => {
-            const url = api_url + 'sync/competetionMatch?token=' + ENTITYSPORT_API_KEY + "&cid=" + row.cid;
-            const response = await axios.get(url);
-        }));
-        
-        console.log("cronjobForLiveMatches::::step12");
+        // return response
         return res.status(200).json({status: 200, message: 'Sync Successfully.' });
     } 
     catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+        // console.error(error);
+        res.status(500).json({ message: 'Error on cronjobForCompletedCompetitions API', data: error.message });
+    }
+}
+
+
+// this function will make an API call to the ENTITYSPORT and get all available matched based on competetionId and those status="live"
+exports.cronjobForLiveCompetitions = async (req, res) => {
+
+    try {            
+        // We will get the competetion those status=Live(Means it has running now)
+        const competetionRecordsRows = await Competetion_Matches_Mapping.find({status: "live" });
+
+        // second, Iterate through each record and will sync their fantasy point
+        for (const row of competetionRecordsRows) {
+            try {
+                if(row.cid){
+                    saveCompetitionMatches(req, res, row.cid);
+                }
+            } catch (apiError) {
+                console.error('cronjobForLiveCompetitions::: Error inside for each:', apiError.message);
+            }
+        }
+
+        // return response
+        return res.status(200).json({status: 200, message: 'Sync Successfully.' });
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'Error on cronjobForLiveCompetitions API', data: error.message });
     }
 }
 
@@ -1380,6 +1360,55 @@ exports.cronjobSquadsDataForLiveMatches = async (req, res) => {
 
 
 // Private function
+
+const saveCompetitionMatches = async (req, res, cid = false) => {
+    
+    // check for the required validation
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    if (!cid || !sport_primary_key || !source_primary_key ) {
+        return res.status(404).json({status: 404, message: 'cid and sport_primary_key and source_primary_key not found' });
+    }
+
+    //  we are checking competition exist on the Table or not
+    const competetionRow = await Competetion.findOne({cid: cid});
+    if (!competetionRow) {
+        return res.status(404).json({status: 404, message: 'Competetion not found' });
+    }
+    
+    // calling api
+    competetion_primary_key = competetionRow._id;
+    const url = ENTITYSPORT_API_URL + 'competitions/' + cid + '/matches/';
+    const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
+    const apiData = response.response;
+    if(apiData !== undefined && response.status === "ok" ) {
+    
+        // updating new items on the response so that we may have sport & sourceId on each items
+        const items = response.response.items;
+        const updatedItems = items.map(item => {
+            return {
+                ...item,         // Spread existing properties
+                cid: cid,  // Add a new cid property
+                competetion: competetion_primary_key,  // Add a new competetion property
+                sport_id: sport_primary_key,  // Add a new sport_id property
+                source_id: source_primary_key // Add a new source_id property
+            };
+        });
+
+        // Prepare bulk operations
+        const bulkOps = updatedItems.map(item => ({
+            updateOne: {
+                filter: { match_id: item.match_id }, 
+                update: { $set: item }, 
+                upsert: true // Insert if not found
+            }
+        }));
+
+        // Execute bulk operations
+        const result = await Match.bulkWrite(bulkOps);
+    }
+};
+
 const saveFantasyDataForLiveMatch = async (req, res, match_id = false) => {
     
     // check for the required validation

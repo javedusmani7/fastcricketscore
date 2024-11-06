@@ -1,5 +1,5 @@
 const express = require('express');
-const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy, syncCompetetionMatchesMapping, cronjobForCompetetion, cronjobForcompletedMatched, cronjobForCompletedMatched, cronjobForCompletedMatches, cronjobForLiveMatches, cronjobForUpcomingMatches, cronjobFantasyDataForLiveMatches, cronjobLiveDataForLiveMatches, cronjobScorecardDataForLiveMatches, cronjobSquadsDataForLiveMatches, syncCompetetionStandings} = require('../controllers/sync.controller');
+const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy, syncCompetetionMatchesMapping, cronjobForCompetetion, cronjobForcompletedMatched, cronjobForCompletedMatched, cronjobForCompletedMatches, cronjobForLiveMatches, cronjobForUpcomingMatches, cronjobFantasyDataForLiveMatches, cronjobLiveDataForLiveMatches, cronjobScorecardDataForLiveMatches, cronjobSquadsDataForLiveMatches, syncCompetetionStandings, cronjobForCompletedCompetetions, cronjobForLiveCompetitions, cronjobForCompletedCompetitions, syncRankings} = require('../controllers/sync.controller');
 
 
 const router = express.Router();
@@ -25,12 +25,15 @@ router.get('/matchFantasy', syncMatchFantasy);
 // router.get('/players', syncPlayersProfile);
 router.get('/playerProfile', syncPlayersProfile);
 router.get('/playerStatstic', syncPlayerStatstic);
+router.get('/rankings', syncRankings);
 
 
 // routes for the CronJob competetions
 router.get('/cronjob_for_competetion', cronjobForCompetetion);
-router.get('/cronjob_for_completed_matches', cronjobForCompletedMatches);
-router.get('/cronjob_for_live_matches', cronjobForLiveMatches);
+router.get('/cronjob_for_completed_competitions', cronjobForCompletedCompetitions);
+router.get('/cronjob_for_live_competitions', cronjobForLiveCompetitions);
+
+
 router.get('/cronjob_for_upcoming_matches', cronjobForUpcomingMatches);
 // router.get('/cronjob_for_live_match', cronjobForLiveMatch);
 // router.get('/competetionMatchesMapping', syncCompetetionMatchesMapping);

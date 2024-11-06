@@ -9,7 +9,7 @@ const Competetion_Matches_Mapping = new mongoose.Schema({
     datestart: { type: String },
     dateend: { type: String },
     status: { type: String },
-    active: { type: Boolean, default: 1},
+    active: { type: Boolean, default: true},
     },{
     timestamps: true
   });

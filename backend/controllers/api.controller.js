@@ -1,6 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-const redis = require('../config/redisClient');
+// const redis = require('../config/redisClient');
 // mongoose.set('debug', true);
 require('dotenv').config();
 
@@ -18,6 +18,7 @@ const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
 const Competetion_Standing = require('../models/Competetion_Standing');
+const Ranking = require('../models/Ranking');
 
 
 
@@ -598,6 +599,27 @@ exports.getPlayerStatstic = async (req, res) => {
             status: 200,
             message: "Player Profile Statistic retrieved Successfully",
             data: playerstatisticRow
+        });
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
+    }
+}
+
+// this function will make an API call to the rankings Table and return the response
+exports.getRankings = async (req, res) => {
+
+    // // Making an api call from database and return data
+    try {
+        // Fetch the item
+        const RankingRow = await Ranking.find(); // Fetch all Rankings
+
+        // Send the response
+        return res.status(200).json({
+            status: 200,
+            message: "Ranking retrieved Successfully.",
+            data: RankingRow[0]
         });
     } 
     catch (error) {

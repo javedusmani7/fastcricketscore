@@ -23,18 +23,6 @@ const syncSeasonsData = async () => {
 };
 
 // this is automatic run function which is used to call itself automatically
-// this function will make an API call to the ENTITYSPORT and get all available matches
-const syncLiveMatchesDataForCompetetions = async () => {
-
-  try {
-      const url = api_url + 'sync/cronjob_for_live_matches?token=' + ENTITYSPORT_API_KEY;
-      const response = await axios.get(url);
-  } catch (error) {
-      console.error('Error syncing data:', error);
-  }
-};
-
-// this is automatic run function which is used to call itself automatically
 // this function will make an API call to the ENTITYSPORT and get all upcoming matches
 const syncUpcomingMatchesDataForCompetetions = async () => {
 
@@ -59,12 +47,22 @@ const syncCompetetionsData = async () => {
     }
 };
 
+// this is automatic run function which is used to call itself automatically
+// this function will make an API call to the ENTITYSPORT and get all available matches
+const syncCompletedCompetitionData = async () => {
+  try {
+      const url = api_url + 'sync/cronjob_for_completed_competitions?token=' + ENTITYSPORT_API_KEY;
+      const response = await axios.get(url);
+  } catch (error) {
+      console.error('Error syncing data:', error);
+  }
+};
 
 // this is automatic run function which is used to call itself automatically
 // this function will make an API call to the ENTITYSPORT and get all available matches
-const syncCompletedMatchesDataForCompetetions = async () => {
+const syncLiveCompetitionData = async () => {
   try {
-      const url = api_url + 'sync/cronjob_for_completed_matches?token=' + ENTITYSPORT_API_KEY;
+      const url = api_url + 'sync/cronjob_for_live_competitions?token=' + ENTITYSPORT_API_KEY;
       const response = await axios.get(url);
   } catch (error) {
       console.error('Error syncing data:', error);
@@ -135,14 +133,11 @@ syncCompetetionsData();
 cron.schedule('0 0 1 1,4,7,10 *', syncCompetetionsData);
 
 // // Schedule the task to run every 5 minutes and sync all completed matches data
-cron.schedule('*/10 * * * * *', syncCompletedMatchesDataForCompetetions);
-
-
-// // Schedule the task to run every 5 minutes and sync all live matches data
-cron.schedule('*/10 * * * * *', syncLiveMatchesDataForCompetetions);
+cron.schedule('*/10 * * * * *', syncCompletedCompetitionData);
+cron.schedule('*/10 * * * * *', syncLiveCompetitionData);
 
 // // Schedule the task to run at midnight every day for syncing scheduled matches data
-cron.schedule('0 0 * * *', syncUpcomingMatchesDataForCompetetions);
+// cron.schedule('0 0 * * *', syncUpcomingMatchesDataForCompetetions);
 
 
 // Schedule the task to run every 5 second and sync data for the live match
