@@ -20,7 +20,7 @@ export class PointsTableComponent implements OnInit {
   latestNewsList: any
   popularNewsList: any;
   selectedNewsTab = "latest"
-
+  cid:any;
 
   constructor(private apiservice: ServiceService, private route: ActivatedRoute) { }
 
@@ -40,6 +40,7 @@ export class PointsTableComponent implements OnInit {
     this.apiservice.getPointsTable(cid).subscribe((res: any) => {
       if(res.data !=null){
       this.data = res.data.standings;
+      this.cid =res.cid;
       // this.pointsRes = res.data.standings[0].standings;
       this.seriesInfo = res.data.standings[0].round
       }else{

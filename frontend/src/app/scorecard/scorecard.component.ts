@@ -42,7 +42,7 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
   selectedTabIndex = 0;
   teamDefaultImg = '../../assets/team-default.png'
   convertedDateTimes:any
- 
+  cid:any;
   public scoreArray: any[] = [];
 
 
@@ -222,6 +222,7 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     this.apiservic.getInfoCricketScores(this.matchId).subscribe((res: any) => {
     
      this.scorelist = res.data[0];
+     this.cid =res.cid;
      console.log("scorelist " , this.scorelist)
      this.datetimeconvartNew(this.scorelist?.timestamp_start)
 this.loader =false;
