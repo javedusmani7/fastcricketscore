@@ -366,7 +366,7 @@ exports.getCompetetionDays = async (req, res) => {
                 $lookup: {
                     from: 'matches', // Join with matches collection
                     localField: '_id', // The field from the Competetion collection
-                    foreignField: 'cid', // The field from the match collection
+                    foreignField: 'competetion', // The field from the match collection
                     as: 'matches' // Output field to add
                 }
             },
