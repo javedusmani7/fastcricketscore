@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./series.component.css']
 })
 export class SeriesComponent implements OnInit{
-  serieslist: any;
+  serieslist: any=[]
   currentRoute: any;
   Tempdata:any;
   // selectedSeries=null;
@@ -19,6 +19,7 @@ export class SeriesComponent implements OnInit{
     { label: 'Women', value: 'women' },
     { label: 'Domestic', value: 'domestic' }
   ];
+   months=['January','February','March','April','May','June','July','August','September','October','November','December']
 
   // Variable to track the currently active category
   activeCategory: string = '';
@@ -41,9 +42,17 @@ export class SeriesComponent implements OnInit{
   getKeysData(serieslist: any): string[] {
     // Return keys where there are filtered matches
     return Object.keys(serieslist).filter(key => {
+      console.log("keys",serieslist)
       const filteredMatches = this.filterMatches(serieslist[key]);
-      console.log("filtered matches ",this.filterMatches(serieslist[key]))
+      
       return filteredMatches && filteredMatches.length > 0;
+    }).sort((a:any,b:any)=>{
+      if(a.split(' ')[1] != b.split(' ')[1]){
+        return a.split(' ')[1] - b.split(' ')[1]
+      }else{
+        return this.months.indexOf(a.split(' ')[0]) - this.months.indexOf(b.split(' ')[0]);
+      }
+     
     });
   }
 

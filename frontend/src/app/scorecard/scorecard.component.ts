@@ -222,10 +222,9 @@ export class ScorecardComponent implements OnInit ,OnDestroy{
     this.apiservic.getInfoCricketScores(this.matchId).subscribe((res: any) => {
     
      this.scorelist = res.data[0];
-     this.cid =res.cid;
-     console.log("scorelist " , this.scorelist)
+     this.cid =res?.data[0]?.cid;
      this.datetimeconvartNew(this.scorelist?.timestamp_start)
-this.loader =false;
+     this.loader =false;
     })
 
   }

@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
   slugs: any;
   mainheader=true
   activeSlugsName=2
+  cid:any;
   constructor(private apiservice: ServiceService, private router: Router, private route: ActivatedRoute) {
 
     this.router.events.subscribe((event) => {
@@ -98,6 +99,10 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.getCricketMenu()
     this.slugs=this.evenSlug2 || this.evenSlug
+    let data = JSON.parse(localStorage.getItem('seriesMatchData')|| '');
+    if (Object.keys(data).length > 0 && data != null) {
+        this.cid = data.cid
+    }
     // this.getStoreData()
 
   }
