@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   serieslist:any=[]
   flattenedArray: any = [];
   uniqueSeries:any=[]
+  interval:any;
   lestesNewsList:any = [
     {
       title: "Josh Inglis to lead Australia in AUS vs PAK 2024 T20I series",
@@ -86,10 +87,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     // this.getHomeSidebarStats()
     // this.getCricketSeries()
     // this.loader = false
+    this.interval =  setInterval(()=>{
+this.getCompetitionByDay();
+    },20000)
   }
 
   ngOnDestroy() {
     this.socket.destorySocket()
+    if (this.interval) {
+      clearInterval(this.interval);
+   }
   }
 
   getCompetitionByDay(){

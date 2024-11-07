@@ -67,9 +67,7 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
   }
   getinfoData(){
     this.apiservic.getLiveCricketScore(this.matchId).subscribe((res:any)=>{
-      this.infoData=res?.data
-      this.cid =res.cid
-      console.log("fvmkfnv",this.cid)
+      this.infoData=res?.data;
       this.matchesDtata=res.data?.score_strip
       this.datetimeconvart(this.infoData?.datetime)
       // this.playerImages=res.data?.player_images
@@ -167,7 +165,7 @@ export class MatchCenterComponent implements OnInit,OnDestroy{
   getInfoCricket() {
     this.apiservic.getInfoCricket(this.matchId).subscribe((res: any) => {
       this.infoData = res.data[0];
-      this.cid =res.cid
+      this.cid =res?.data[0]?.cid
      this.matchesDtata = res.data[0];
      this.datetimeconvart(this.infoData?.timestamp_start)
      // this.playerImages=res.data?.player_images

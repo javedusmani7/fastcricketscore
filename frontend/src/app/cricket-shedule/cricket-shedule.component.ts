@@ -47,7 +47,7 @@ export class CricketSheduleComponent implements OnInit ,OnDestroy{
   loaderlive=true
   loaderUpcoming=true
   loaderResult=true
-
+  interval:any;
 
 
 
@@ -58,7 +58,10 @@ export class CricketSheduleComponent implements OnInit ,OnDestroy{
     })
   }
   ngOnDestroy(): void {
-    this.socket.destorySocket()
+    this.socket.destorySocket();
+    if (this.interval) {
+      clearInterval(this.interval);
+   }
   }
   private extractSegment(url: string): string {
     // Remove the leading slash if it exists
@@ -68,7 +71,9 @@ export class CricketSheduleComponent implements OnInit ,OnDestroy{
       this.CricketMainTabs = res.data
     })
     // this.getmeatches("live")
-    this.getCompetitionByDay();
+    this.interval = setInterval(()=>{
+      this.getCompetitionByDay();
+          },20000)
     this.live = true
   }
 

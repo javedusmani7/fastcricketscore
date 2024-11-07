@@ -318,8 +318,8 @@
                         </div>
                         <div class="keeda-cricket-widget--carousel-footer">
 
-                          <a class="hover-translucent" routerLink="/pointTable/{{item?.cid}}">
-                            <span>{{item.has_table==true?"Points Table":null}}</span>
+                          <a class="hover-translucent" routerLink="/pointTable/{{item?.matches?.cid}}">
+                            <span>{{item?.matches?.cid?"Points Table":null}}</span>
                             <img *ngIf="item.has_table==true"
                               src="/assets/ic-chevron-right.svg" width="16" height="16"
                               alt="ic-right">
@@ -1296,7 +1296,7 @@
             </div>
           </section>
           <div class="section-separator"></div>
-          <section class="feed-stories">
+          <!-- <section class="feed-stories">
             <div class="panel">
               <div class="panel-body">
                 <div class="feed-items linear">
@@ -1367,13 +1367,13 @@
                   </div>
                 </div>
               </div>
-              <!-- <footer class="panel-footer">
+              <footer class="panel-footer">
                 <a class="panel-cta-button view-more-cta" routerLink="/cricket/news" data-section="news">
                   <span>More Cricket News</span>
                 </a>
-              </footer> -->
+              </footer>
             </div>
-          </section>
+          </section> -->
 
           <div class="section-separator "></div>
           <section class="page-info">
