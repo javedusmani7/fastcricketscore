@@ -170,7 +170,7 @@ cron.schedule('0 0 1 1,4,7,10 *', syncCompetetionsData);
 // cron.schedule('0/5 * * * * *', () => {
 //     executeJobBasedOnTime();
 // });
-setInterval(executeJobBasedOnTime, 500);
+setInterval(executeJobBasedOnTime, 1000);
 
 // // Schedule the task to run at midnight every day for syncing scheduled matches data
 // cron.schedule('0 0 * * *', syncUpcomingMatchesDataForCompetetions);

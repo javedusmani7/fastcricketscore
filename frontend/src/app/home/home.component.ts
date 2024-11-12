@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   convertedDate: any;
   teamDefaultImg = '../../assets/team-default.png'
   rankingList: any;
-  rankingListAll: any;
+  rankingListAll: any={};
   rankingByTabs='team'
   selectedRanking="icc-t20-international-rankings"
   remainingTime: any;
@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // this.loader = false
     this.interval =  setInterval(()=>{
 this.getCompetitionByDay();
-    },20000)
+    },1000)
   }
 
   ngOnDestroy() {
