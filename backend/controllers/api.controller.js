@@ -346,6 +346,61 @@ exports.getMatchFantasy = async (req, res) => {
     }
 }
 
+exports.getCompetetionDaysNew = async (req, res) => {
+    try {
+        const matchesRows = await Match.aggregate([
+            {
+                // Stage 1: Match documents with status = 'live'
+                $match: { "status_str": "Live" } // Filter for live matches
+                // $match: { status: 'live' }
+            },
+            {
+                // Stage 2: Lookup to join with competition collection
+                $lookup: {
+                    from: "competetions", // The name of the competition collection
+                    localField: "competetion", // The field from the match collection
+                    foreignField: "_id", // The field from the competition collection
+                    as: "competitionDetails" // The name of the new array field to add
+                }
+            },
+            {
+                // Stage 3: Unwind competitionDetails to de-normalize the data
+                $unwind: "$competitionDetails"
+            },
+            {
+                // Stage 4: Project the fields you want
+                $project: {
+                    match: "$$ROOT",
+                    _id: "$competitionDetails._id", // Include competition name
+                    cid: "$competition.cid", // Include competition details
+                    match_format: "$competition.match_format", // Include competition details
+                    title: "$competition.title", // Include competition details
+                }
+            },
+            {
+                // Stage 5: Optional - Reshape the final output if you want
+                $replaceRoot: {
+                    newRoot: {
+                        $mergeObjects: ["$matchData", {
+                            _id: "$_id",
+                            cid: "$cid",
+                            match_format: "$match_format",
+                            title: "$title",
+                            matches: "$match",
+                        }]
+                    }
+                }
+            }
+        ]);
+        
+        // retrun response
+        return res.status(200).json({status: 200, message: 'Competetions retrieved successfully.', data: matchesRows});
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    }
+}
 
 exports.getCompetetionDays = async (req, res) => {
     

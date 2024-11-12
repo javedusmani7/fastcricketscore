@@ -1076,7 +1076,6 @@ exports.cronjobForCompletedCompetitions = async (req, res) => {
 
 // this function will make an API call to the ENTITYSPORT and get all available matched based on competetionId and those status="live"
 exports.cronjobForLiveCompetitions = async (req, res) => {
-
     try {
         // Step 1: we will get the competetion those status=result(Means, competeion has been completed)
         let Competetion_Matches_Mapping_Completed_Row = await Competetion_Matches_Mapping.findOne({active: true, status: "live"});
@@ -1248,6 +1247,10 @@ exports.cronjobForCompetetion = async (req, res) => {
                         return {
                             cid: item.cid,         // Spread existing properties
                             status: item.status,         // Spread existing properties
+                            fantasy_status: true,         // Spread existing properties
+                            live_status: true,         // Spread existing properties
+                            scorecard_status: true,         // Spread existing properties
+                            squad_status: true,         // Spread existing properties
                             datestart: item.datestart,         // Spread existing properties
                             dateend: item.dateend,         // Spread existing properties
                             sport_id: sport_primary_key,  // Add a new property
@@ -1287,13 +1290,15 @@ exports.cronjobFantasyDataForLiveMatches = async (req, res) => {
         const matchesRows = await Match.find({ status_str: "Live" });
 
         // second, Iterate through each record and will sync their fantasy point
-        for (const row of matchesRows) {
+        const results = await Promise.all(matchesRows.map(async (row) => {
             try {
-                saveFantasyDataForLiveMatch(req, res, row.match_id); // Call the private function to save fantasy
-            } catch (apiError) {
-                console.error('Error calling API for record:', 'Error:', apiError.message);
+                await saveFantasyDataForLiveMatch(req, res, row.match_id); // Call the private function to save fantasy
+            } 
+            catch (apiError) {
+                console.error('Error calling cronjobFantasyDataForLiveMatches API', apiError.message);
             }
-        }
+        }));
+        
         // retrun response
         return res.status(200).json({status: 200, message: 'Sync Successfully.' });
     } 
@@ -1312,7 +1317,7 @@ exports.cronjobLiveDataForLiveMatches = async (req, res) => {
         // second, Iterate through each record and will sync their fantasy point
         for (const row of matchesRows) {
             try {
-                saveLiveDataForLiveMatch(req, res, row.match_id); // Call the private function to save fantasy
+                await saveLiveDataForLiveMatch(req, res, row.match_id); // Call the private function to save fantasy
             } catch (apiError) {
                 console.error('Error calling API for record:', 'Error:', apiError.message);
             }
@@ -1336,7 +1341,7 @@ exports.cronjobScorecardDataForLiveMatches = async (req, res) => {
         // second, Iterate through each record and will sync their fantasy point
         for (const row of matchesRows) {
             try {
-                saveScorecardDataForLiveMatch(req, res, row.match_id); // Call the private function to save fantasy
+                await saveScorecardDataForLiveMatch(req, res, row.match_id); // Call the private function to save fantasy
             } catch (apiError) {
                 console.error('Error calling API for record:', 'Error:', apiError.message);
             }
@@ -1358,13 +1363,15 @@ exports.cronjobSquadsDataForLiveMatches = async (req, res) => {
         const matchesRows = await Match.find({ status_str: "Live" });
 
         // second, Iterate through each record and will sync their fantasy point
-        for (const row of matchesRows) {
+        const results = await Promise.all(matchesRows.map(async (row) => {
             try {
-                saveSquadsDataForLiveMatch(req, res, row.match_id); // Call the private function to save fantasy
-            } catch (apiError) {
-                console.error('Error calling API for record:', 'Error:', apiError.message);
+                // console.log(row.match_id);
+                await saveSquadsDataForLiveMatch(req, res, row.match_id);  // Call the private function to save squads
+            } 
+            catch (apiError) {
+                console.error('Error calling cronjobFantasyDataForLiveMatches API', apiError.message);
             }
-        }
+        }));
         
         // return response
         return res.status(200).json({status: 200, message: 'Sync Successfully.' });
@@ -1382,7 +1389,6 @@ exports.cronjobSquadsDataForLiveMatches = async (req, res) => {
 // Private function
 
 const saveCompetitionMatches = async (req, res, cid = false) => {
-    
     // check for the required validation
     const sport_primary_key = req.query.sport_primary_key;
     const source_primary_key = req.query.source_primary_key;
@@ -1444,25 +1450,29 @@ const saveFantasyDataForLiveMatch = async (req, res, match_id = false) => {
     if (!matchRow) {
         return res.status(200).json({ status: 200, message: "Match does not exist for this match_id", data: [] });
     }
-    
-    // calling api    
-    const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/newpoint2/';
-    const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
-    const apiData = response.response;
-    
-    if(apiData !== undefined && response.status === "ok" ) {
-        // STEP 1: Additional source_id and sport_id fields, we want to include on the database
-        const additionalFields = {
-            sport_id: sport_primary_key,
-            source_id: source_primary_key,
-            match: matchRow._id,
-            match_id: match_id
-        };
-        const dataToSave = { ...apiData, ...additionalFields };
+
+    //  we are also checking FantasyData exist for this Match or not; if not sync it else leave                
+    const matchFantasyRow = await MatchFantasy.findOne({match_id: match_id});
+    if (!matchFantasyRow) {
+        // calling api    
+        const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/newpoint2/';
+        const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
+        const apiData = response.response;
         
-        // Step 2: Check if the record already exists
-        // insert or update the record accordingly
-        const result = await MatchFantasy.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
+        if(apiData !== undefined && response.status === "ok" ) {
+            // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+            const additionalFields = {
+                sport_id: sport_primary_key,
+                source_id: source_primary_key,
+                match: matchRow._id,
+                match_id: match_id
+            };
+            const dataToSave = { ...apiData, ...additionalFields };
+            
+            // Step 2: Check if the record already exists
+            // insert or update the record accordingly
+            const result = await MatchFantasy.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
+        }
     }
 };
 
@@ -1552,24 +1562,27 @@ const saveSquadsDataForLiveMatch = async (req, res, match_id = false) => {
     if (!matchRow) {
         return res.status(200).json({ status: 200, message: "Match does not exist for this match_id", data: [] });
     }
-    
-    // calling api
-    const match = matchRow._id;
-    const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/squads/';
-    const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
-    const apiData = response.response;
-    if(apiData !== undefined && response.status === "ok" ) {
-        // STEP 1: Additional source_id and sport_id fields, we want to include on the database
-        const additionalFields = {
-            sport_id: sport_primary_key,
-            source_id: source_primary_key,
-            match: matchRow._id,
-            match_id: match_id
-        };
-        const dataToSave = { ...apiData, ...additionalFields };
-        
-        // Step 2: Check if the record already exists and insert or update the record accordingly
-        const result = await Matchsquad.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
+
+    //  we are also checking squadData exist for this Match or not; if not sync it else leave
+    const matchsquadRow = await Matchsquad.findOne({match_id: match_id});
+    if (!matchsquadRow) {
+        // calling api    
+        const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/squads/';
+        const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
+        const apiData = response.response;
+        if(apiData !== undefined && response.status === "ok" ) {
+            // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+            const additionalFields = {
+                sport_id: sport_primary_key,
+                source_id: source_primary_key,
+                match: matchRow._id,
+                match_id: match_id
+            };
+            const dataToSave = { ...apiData, ...additionalFields };
+            
+            // Step 2: Check if the record already exists and insert or update the record accordingly
+            const result = await Matchsquad.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
+        }
     }
 };
 

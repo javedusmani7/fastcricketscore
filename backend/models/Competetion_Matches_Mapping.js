@@ -9,6 +9,10 @@ const Competetion_Matches_Mapping = new mongoose.Schema({
     datestart: { type: String },
     dateend: { type: String },
     status: { type: String },
+    fantasy_status: {type: Boolean, default: true },
+    live_status: { type: Boolean, default: true},
+    scorecard_status: {type: Boolean, default: true },
+    squad_status: {type: Boolean, default: true},
     active: { type: Boolean, default: true},
     },{
     timestamps: true
