@@ -170,7 +170,7 @@ cron.schedule('0 0 1 1,4,7,10 *', syncCompetetionsData);
 // cron.schedule('0/5 * * * * *', () => {
 //     executeJobBasedOnTime();
 // });
-setInterval(executeJobBasedOnTime, 1000);
+setInterval(executeJobBasedOnTime, 50000);
 
 // // Schedule the task to run at midnight every day for syncing scheduled matches data
 // cron.schedule('0 0 * * *', syncUpcomingMatchesDataForCompetetions);
@@ -179,7 +179,7 @@ setInterval(executeJobBasedOnTime, 1000);
 // Schedule the task to run every 5 second and sync data for the live match
 cron.schedule('*/30 * * * * *', syncFantasyDataForLiveMatches);
 cron.schedule('*/10 * * * * *', syncLiveDataForLiveMatches);
-cron.schedule('*/20 * * * * *', syncScorecardDataForLiveMatches);
+cron.schedule('* * * * * *', syncScorecardDataForLiveMatches);
 cron.schedule('*/40 * * * * *', syncSquadsDataForLiveMatches);
 
 

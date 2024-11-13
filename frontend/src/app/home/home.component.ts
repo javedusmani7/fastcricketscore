@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // this.loader = false
     this.interval =  setInterval(()=>{
 this.getCompetitionByDay();
-    },1000)
+    },500)
   }
 
   ngOnDestroy() {
@@ -103,6 +103,7 @@ this.getCompetitionByDay();
     this.apiservice.getCompetitionByDay().subscribe((res:any)=>{
       console.log("resres",res.data)
       this.matchList = res.data
+      console.log("this is matchlist " , this.matchList)
       this.loader =false;
     })
   }
@@ -429,5 +430,10 @@ this.getCompetitionByDay();
                this.categoryWiseData=this.tests
       }
 
+  }
+
+
+  updateArray(data:any){
+    return Object.keys(data);
   }
 }

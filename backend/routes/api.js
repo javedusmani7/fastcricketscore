@@ -9,7 +9,7 @@ router.get('/seasons', getSeasons);
 
 // routes for getting competetions data
 router.get('/competetions', getCompetetionList);
-router.get('/competetionsdays', getCompetetionDaysNew);
+router.get('/competetionsdays', getCompetetionDays);
 // router.get('/competetionsdaysnew', getCompetetionDaysNew);
 router.get('/competetionMatches', getCompetetionMatches);
 router.get('/competetionStandings', getCompetetionStanding);

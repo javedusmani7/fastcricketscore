@@ -1,5 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
+const redis = require('../config/redisClient');
 // mongoose.set('debug', true);
 require('dotenv').config();
 
@@ -1538,6 +1539,7 @@ const saveScorecardDataForLiveMatch = async (req, res, match_id = false) => {
         const additionalFields = {
             sport_id: sport_primary_key,
             source_id: source_primary_key,
+            cid: matchRow.cid,
             match: matchRow._id,
             match_id: match_id
         };
@@ -1545,6 +1547,34 @@ const saveScorecardDataForLiveMatch = async (req, res, match_id = false) => {
         
         // Step 2: Check if the record already exists and insert or update the record accordingly
         const result = await Matchscorecard.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
+
+
+        
+        const key = 'cronjob_scorecard_data_for_live_matches';  // Redis key
+        let myObject = {};
+        myObject[apiData.match_id] = dataToSave;
+
+        // Retrieve the JSON from Redis (parse the string back into an object)
+        const redisResult = await redis.get(key);
+        if (redisResult) {
+            // Step 2: Parse the existing JSON object
+            const existingData = JSON.parse(redisResult);
+    
+            // Step 3: Update the necessary key-value pairs
+            Object.keys(myObject).forEach(userKey => {
+                existingData[userKey] = myObject[userKey]; // Update or add user data
+            });
+    
+            // Step 4: Store the updated JSON object back in Redis
+            await redis.set(key, JSON.stringify(existingData));
+            console.log('Updated data stored in Redis:');
+    
+          } else {
+            console.log('No data found for key:', key);
+            redis.del(key);
+            // Store JSON in Redis (serialize the object to a string)
+            await redis.set(key, JSON.stringify(myObject));
+        }
     }
 };
 

@@ -1,6 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-// const redis = require('../config/redisClient');
+const redis = require('../config/redisClient');
 // mongoose.set('debug', true);
 require('dotenv').config();
 
@@ -27,22 +27,74 @@ const Ranking = require('../models/Ranking');
 // this function will make an API call on our seasons table and get all available seasons
 exports.getSources = async (req, res) => {
     console.log("Inside getSeasons API call");
+    
+    // const key = 'cronjob_scorecard_data_for_live_matches';  // Redis key
+    // const result = await redis.get(key);
+    // if (result) {
+    //     // Step 2: Parse the existing JSON object
+    //     const existingData = JSON.parse(result);
+
+    //     // Step 4: Store the updated JSON object back in Redis
+    //     await redis.set(key, JSON.stringify(existingData));
+    //     console.log('Updated data stored in Redis:', existingData);
+    //     return res.status(200).json({status: 200, message: existingData });
+
+    //   } else {
+    //     console.log('No data found for key:', key);
+    // }
+
     // const cacheKey = `api:sources`;
+    // const key = 'user:1234';  // Redis key
+
+    // // const myObject = {
+    // //     user1: { name: 'John Doe', age: 30, occupation: 'Engineer' },
+    // //     user2: { name: 'Jane Smith', age: 28, occupation: 'Designer' },
+    // //     user3: { name: 'Mike Johnson', age: 35, occupation: 'Manager' },
+    // //     user2: { name: 'javed Usmani', age: 33, occupation: 'Engineer' }
+    // //   };
 
     
+    // const myObject = {
+    //     user5: { name: 'Innovation Doe', age: 40, occupation: 'testing' }
+    //   };
 
-    // Check if data is in Redis
-    const cacheKey = `key`;
-    const cachedData = await redis.get(cacheKey);
-    console.log('Value from Rediswwwwww:', cachedData);
-    if (cachedData) {
-        console.log('Value from Rediswwwwww1:', cachedData);
-        return res.status(200).json({status: 200, message: cachedData });
-    }
-    else{
-        console.log('Value from Rediswwwwww2:', cachedData);
-        return res.status(404).json({status: 404, message: 'No cache key exist' });
-    }
+    // // Retrieve the JSON from Redis (parse the string back into an object)
+    // const result = await redis.get(key);
+    // if (result) {
+    //     // Step 2: Parse the existing JSON object
+    //     const existingData = JSON.parse(result);
+
+    //     // Step 3: Update the necessary key-value pairs
+    //     Object.keys(myObject).forEach(userKey => {
+    //         existingData[userKey] = myObject[userKey]; // Update or add user data
+    //     });
+
+    //     // Step 4: Store the updated JSON object back in Redis
+    //     await redis.set(key, JSON.stringify(existingData));
+    //     console.log('Updated data stored in Redis:', existingData);
+    //     return res.status(200).json({status: 200, message: existingData });
+
+    //   } else {
+    //     console.log('No data found for key:', key);
+    //     redis.del(key);
+    //     // Store JSON in Redis (serialize the object to a string)
+    //     await redis.set(key, JSON.stringify(myObject));
+    // }
+
+    // return res.status(200).json({status: 200, message: "cachedData" });
+
+    // // Check if data is in Redis
+    // const cacheKey = `key`;
+    // const cachedData = await redis.get(cacheKey);
+    // console.log('Value from Rediswwwwww:', cachedData);
+    // if (cachedData) {
+    //     console.log('Value from Rediswwwwww1:', cachedData);
+    //     return res.status(200).json({status: 200, message: cachedData });
+    // }
+    // else{
+    //     console.log('Value from Rediswwwwww2:', cachedData);
+    //     return res.status(404).json({status: 404, message: 'No cache key exist' });
+    // }
 
     // // Example: Get the value from Redis
     // // Example: Setting a value
@@ -407,38 +459,31 @@ exports.getCompetetionDays = async (req, res) => {
     console.log("Inside getCompetetionDays API call");
 
     try {
-        const competetionDaysRows = await Competetion.aggregate([
-            {
-                $lookup: {
-                    from: 'matches', // Join with matches collection
-                    localField: '_id', // The field from the Competetion collection
-                    foreignField: 'competetion', // The field from the match collection
-                    as: 'matches' // Output field to add
-                }
-            },
-            {
-                $unwind: "$matches" // Deconstructs the array field from the previous stage
-            },
-            {
-                $match: { "matches.status_str": "Live" } // Filter for live matches
-            },
-            {
-                $project: { // Optional: Specify fields to include or exclude in the output
-                    _id: 1,
-                    title: 1,
-                    cid: 1,
-                    match_format: 1,
-                    matches: 1 // Include match details in the output
-                }
-            }
-        ]);
         
-        // returning response
-        return res.status(200).json({
-            status: 200,
-            message: "Competetions retrieved successfully.",
-            data: competetionDaysRows
-        });
+        const key = 'cronjob_scorecard_data_for_live_matches';  // Redis key
+        const result = await redis.get(key);
+        if (result) {
+            // Step 2: Parse the existing JSON object
+            const existingData = JSON.parse(result);
+
+            // Step 4: Store the updated JSON object back in Redis
+            await redis.set(key, JSON.stringify(existingData));
+            
+            // returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Competetions retrieved successfully.",
+                data: existingData
+            });
+
+        } else {
+            // returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Competetions retrieved successfully.",
+                data: []
+            });
+        }
     }
     catch (error) {
         console.error(error);

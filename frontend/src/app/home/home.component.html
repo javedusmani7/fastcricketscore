@@ -188,10 +188,10 @@
           <div color="onSurface.nLv1" class="sc-gFqAkR jHSgcL">Tournaments</div>
           <div class="sc-fqkvVR hBElRe">
            <ng-container *ngFor="let item of uniqueTitlesMap;">
-             <a routerLink="/child-shedule/{{item.slug}}/upcoming" *ngIf="item.slug!==''">
+             <a routerLink="/child-shedule/{{matchList[item].slug}}/upcoming" *ngIf="matchList[item].slug!==''">
               <div display="flex" class="sc-fqkvVR sc-dcJsrY dLLBMg fFmCDf"><img src="../../assets/seriesimg.png"
                   alt="Afghanistan" width="24" height="24" class="sc-feUZmu gkxErY">
-                <div class="sc-fqkvVR bTVzoW"><span class="sc-gFqAkR fmzmiI">{{item.title}}</span></div>
+                <div class="sc-fqkvVR bTVzoW"><span class="sc-gFqAkR fmzmiI">{{matchList[item].title}}</span></div>
 
               </div>
             </a>
@@ -221,7 +221,7 @@
                   <div class="keeda_carousel_tab_container">
                     <span class="keeda_carousel_tab_item active" [ngClass]="{ 'active': i === activeIndex }"
                       *ngFor="let item of CricketMainTabs; let i=index" (click)="getCricketMatches(item,i)">
-                      {{item.name}}
+                      {{matchList[item].name}}
                     </span>
                   </div>
 
@@ -233,58 +233,58 @@
                 <div class="keeda_widget keeda-widget-tab-carousel">
                   <div class="keeda_widget_match_listing" #widgetsContent>
                     <ng-container *ngIf="!loader">
-                      <div class="keeda_cricket_single_match " [ngClass]="item.is_next_match==true?'next-game':''"
+                      <div class="keeda_cricket_single_match " 
                         (click)="getCricketMatches(item,i)"
                         id="namibia-under-19s-vs-scotland-under-19s-b4-vs-c4-super-six-01-february-2024"
-                        *ngFor="let item of matchList;let i=index ,trackBy:userByName">
+                        *ngFor="let item of updateArray(matchList);let i=index ,trackBy:userByName">
                         <div class="keeda_cricket_match_list live">
                           <div class="keeda_widget_info cricket">
                             <div class="cricket-match-card-header-secondary-text marquee-strip">
-                              <span class="cricket-match-card--match-type">{{addOrdinalSuffix(item.matches.match_number)}}</span>
+                              <span class="cricket-match-card--match-type">{{addOrdinalSuffix(matchList[item].match_number)}}</span>
                               <span>•</span>
-                              <span class="cricket-match-card--match-type">{{item.matches.format_str | titlecase}}</span>
+                              <span class="cricket-match-card--match-type">{{matchList[item].format_str | titlecase}}</span>
                               <span>•</span>
-                              <span class="cricket-match-card--match-venue">{{item.matches.venue.name}}</span>
-                              <span *ngIf="item.status_str==='Completed'">•</span>
-                              <span class="cricket-match-card--match-venue" *ngIf="item.matches.status_str==='Completed'">
-                                {{convertDate(item.matches.timestamp_start) }}</span>
+                              <span class="cricket-match-card--match-venue">{{matchList[item].venue.name}}</span>
+                              <span *ngIf="matchList[item].status_str==='Completed'">•</span>
+                              <span class="cricket-match-card--match-venue" *ngIf="matchList[item].status_str==='Completed'">
+                                {{convertDate(matchList[item].timestamp_start) }}</span>
 
                             </div>
-                            <div class="keeda_widget_live_info" *ngIf="item.matches.status_str==='Live'">LIVE</div>
+                            <div class="keeda_widget_live_info" *ngIf="matchList[item].status_str==='Live'">LIVE</div>
                           </div>
                           <div class="keeda_widget_match_detail">
                             <div class="keeda_widget_team_group">
                               <div class="keeda_widget_team " data-team-name="SC-19">
-                                <img [src]="item.matches.teama.logo_url" (error)="item.matches.teama.logo_url = teamDefaultImg" width="54" height="38"
+                                <img [src]="matchList[item].teama.logo_url" (error)="matchList[item].teama.logo_url = teamDefaultImg" width="54" height="38"
                                   alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
-                                <span class="keeda_widget_team_name cricket">{{item.matches.teama.short_name}}</span>
-                                <ng-container *ngIf=" item.matches.status_str=='Scheduled'">
+                                <span class="keeda_widget_team_name cricket">{{matchList[item].teama.short_name}}</span>
+                                <ng-container *ngIf=" matchList[item].status_str=='Scheduled'">
                                   <span class="keeda_widget_score cricket">
-                                    {{convertDate(item.matches.timestamp_start) }}</span>
+                                    {{convertDate(matchList[item].timestamp_start) }}</span>
                                 </ng-container>
                                 <span class="keeda_widget_score cricket"
-                                  *ngIf=" item.matches.status_str=='Completed'">{{item.matches.teama.scores_full}}</span>
+                                  *ngIf=" matchList[item].status_str=='Completed'">{{matchList[item].teama.scores_full}}</span>
                                 <span class="keeda_widget_score cricket"
-                                  *ngIf=" item.matches.status_str=='Live'">{{liveData[item.id]?.score_strip?.[0]?.score
-                                  || item.matches.teama.scores_full}}</span>
+                                  *ngIf=" matchList[item].status_str=='Live'">{{liveData[matchList[item].id]?.score_strip?.[0]?.score
+                                  || matchList[item].teama.scores_full}}</span>
 
                               </div>
                               <div class="keeda_widget_team " data-team-name="NAM-19">
-                                <img [src]="item.matches.teamb.logo_url" (error)="item.matches.teamb.logo_url = teamDefaultImg" width="54" height="38"
+                                <img [src]="matchList[item].teamb.logo_url" (error)="matchList[item].teamb.logo_url = teamDefaultImg" width="54" height="38"
                                   alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
-                                <span class="keeda_widget_team_name cricket">{{item.matches.teamb.short_name}}</span>
-                                <ng-container *ngIf="item.matches.in_play==false && item.matches.status_str=='Scheduled'">
-                                  <span class="keeda_widget_score cricket" id="time">{{item.matches.timestamp_start |
+                                <span class="keeda_widget_team_name cricket">{{matchList[item].teamb.short_name}}</span>
+                                <ng-container *ngIf="matchList[item].in_play==false && matchList[item].status_str=='Scheduled'">
+                                  <span class="keeda_widget_score cricket" id="time">{{matchList[item].timestamp_start |
                                     date:"shortTime"}}</span>
                                 </ng-container>
                                 <span class="keeda_widget_score cricket"
-                                  *ngIf=" item.matches.status_str=='Completed'">{{item.matches.teamb.scores_full}}</span>
+                                  *ngIf=" matchList[item].status_str=='Completed'">{{matchList[item].teamb.scores_full}}</span>
                                 <span class="keeda_widget_score cricket"
-                                  *ngIf=" item.matches.status_str=='Live'">{{liveData[item.id]?.score_strip?.[1].score
-                                  || item.matches.teamb.scores_full}}</span>
+                                  *ngIf=" matchList[item].status_str=='Live'">{{liveData[matchList[item].id]?.score_strip?.[1].score
+                                  || matchList[item].teamb.scores_full}}</span>
                               </div>
                             </div>
-                            <ng-container *ngIf="item.matches.in_play==false && item.matches.status_str=='Scheduled'" class="hidden">
+                            <ng-container *ngIf="matchList[item].in_play==false && matchList[item].status_str=='Scheduled'" class="hidden">
                               <div class="scorecard-countdown-timer  toss-info hidden" id="scorecard-countdown-timer"
                                 id="time" *ngIf="!showTimer">
                                 <div class="countdown-timer-title ">
@@ -307,31 +307,31 @@
                               </div>
                             </ng-container>
                           </div>
-                          <div class="keeda_widget_result_info " *ngIf=" item.matches.status_str !=='Live'"
-                            [class]="item.matches.result.length > 35? 'marquee-container':''">
-                            <div class="marquee-strip">{{item.result}}</div>
+                          <div class="keeda_widget_result_info " *ngIf=" matchList[item].status_str !=='Live'"
+                            [class]="matchList[item].result.length > 35? 'marquee-container':''">
+                            <div class="marquee-strip">{{matchList[item].result}}</div>
                           </div>
-                          <div class="keeda_widget_result_info live" *ngIf=" item.matches.status_str=='Live'"
-                            [class]="liveData?.info?.length < 30? 'marquee-container':'' || item?.matches.result?.length > 35? 'marquee-container':''">
-                            <div class="marquee-strip">{{liveData?.info || item.matches.result}}</div>
+                          <div class="keeda_widget_result_info live" *ngIf=" matchList[item].status_str=='Live'"
+                            [class]="liveData?.info?.length < 30? 'marquee-container':''">
+                            <div class="marquee-strip">{{liveData?.info || matchList[item].result}}</div>
                           </div>
                         </div>
                         <div class="keeda-cricket-widget--carousel-footer">
 
-                          <a class="hover-translucent" routerLink="/pointTable/{{item?.matches?.cid}}">
-                            <span>{{item?.matches?.cid?"Points Table":null}}</span>
-                            <img *ngIf="item.has_table==true"
+                          <a class="hover-translucent" routerLink="/pointTable/{{matchList[item]?.cid}}">
+                            <span>{{matchList[item]?.cid?"Points Table":null}}</span>
+                            <img *ngIf="matchList[item].has_table==true"
                               src="/assets/ic-chevron-right.svg" width="16" height="16"
                               alt="ic-right">
                           </a>
-                          <a class="hover-translucent" routerLink="/child-shedule/{{item.match_id}}/upcoming">
-                            <span>{{item.has_schedule==true?"Schedule":null}}</span>
+                          <a class="hover-translucent" routerLink="/child-shedule/{{matchList[item].match_id}}/upcoming">
+                            <span>{{matchList[item].has_schedule==true?"Schedule":null}}</span>
                             <img src="/assets/ic-chevron-right.svg" width="16" height="16"
                               alt="ic-right">
                           </a>
                         </div>
-                        <a class="keeda_cricket_match_link" (click)="getMatchStatus(item.matches.match_id,item.matches.status_str)"
-                          routerLink="/live/{{item.matches.id}}" title="{{item.matches.t1}} VS {{item.matches.t2}} live score">
+                        <a class="keeda_cricket_match_link" (click)="getMatchStatus(matchList[item].match_id,matchList[item].status_str)"
+                          routerLink="/live/{{matchList[item].id}}" title="{{matchList[item].t1}} VS {{matchList[item].t2}} live score">
                           </a>
                       </div>
                     </ng-container>
@@ -358,34 +358,34 @@
                     <div class="panel-body no-padding-d">
                       <div class="feed-items">
                         <ng-container *ngFor="let item of newsList; let i=index;">
-                          <div class="sport-feed-item-primary" *ngIf="item.type=='primary'">
+                          <div class="sport-feed-item-primary" *ngIf="matchList[item].type=='primary'">
                             <div class="sports-feed-item-primary-element">
-                              <a class="feed-item-cta" *ngIf="item.isLiveNews==true"
-                                routerLink="/cricket-schedule">{{item.title}}</a>
-                              <a class="feed-item-cta" *ngIf="item.isLiveNews!==true"
-                                routerLink="/cricket-news/{{item.link}}">{{item.title}}</a>
+                              <a class="feed-item-cta" *ngIf="matchList[item].isLiveNews==true"
+                                routerLink="/cricket-schedule">{{matchList[item].title}}</a>
+                              <a class="feed-item-cta" *ngIf="matchList[item].isLiveNews!==true"
+                                routerLink="/cricket-news/{{matchList[item].link}}">{{matchList[item].title}}</a>
                               <img width="334" height="200"
                                 alt="&quot;Can't wait to get my hands on him in this squad&quot; - Daren Sammy on Shamar Joseph playing white-ball cricket for West Indies"
-                                src="{{item.img}}" class="lazy-img-bg">
+                                src="{{matchList[item].img}}" class="lazy-img-bg">
                               <div class="sports-feed-item-element-meta">
-                                <div class="live-indicator" *ngIf="item.isLiveNews==true">
+                                <div class="live-indicator" *ngIf="matchList[item].isLiveNews==true">
                                   <div class="blob white"></div>Live
                                 </div>
-                                <div class="sports-primary-title">{{item.title}}</div>
-                                <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                                <div class="sports-primary-title">{{matchList[item].title}}</div>
+                                <div class="sports-feed-item-primary-modified-time">{{matchList[item].time}}</div>
                               </div>
                             </div>
                           </div>
-                          <div class="feed-item-secondary" *ngIf="item.type=='secondary'">
+                          <div class="feed-item-secondary" *ngIf="matchList[item].type=='secondary'">
                             <div class="sports-feed-item-secondary-element">
-                              <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="2"
-                                data-section="">{{item.link}}</a>
+                              <a class="feed-item-cta" routerLink="/cricket-news/{{matchList[item].link}}" data-sequence="2"
+                                data-section="">{{matchList[item].link}}</a>
                               <img class="feed-element-img" width="82" height="83"
                                 alt="“Koi tension nahi hai, 4-1 karenge” – Chetan Sharma backs India to win five-match Test series against England ahead of Vizag Test"
-                                src="{{item.img}}">
+                                src="{{matchList[item].img}}">
                               <div class="sports-feed-item-secondary-meta">
-                                <div class="sports-item-title">{{item.title}}</div>
-                                <div class="sports-feed-item-secondary-modified-time">{{item.time}}</div>
+                                <div class="sports-item-title">{{matchList[item].title}}</div>
+                                <div class="sports-feed-item-secondary-modified-time">{{matchList[item].time}}</div>
                               </div>
                             </div>
                           </div>
@@ -600,7 +600,7 @@
                             </tr>
                           </thead>
                           <tbody *ngFor="let item of pionteTableData;">
-                            <tr *ngFor="let el of item.group?.slice(0,5)">
+                            <tr *ngFor="let el of matchList[item].group?.slice(0,5)">
                               <td>
                                 <div class="points-table-team"><img width="24" height="24" alt="team-flag"
                                     [src]="el.team_flag" (error)="el.team_flag = '../../assets/team-default.png'"
@@ -649,22 +649,22 @@
               <div class="widget--tournament-stats-condensed" data-imp-id="widget_tournament_stats_condensed__0">
                 <div class="tournament-stats-container">
                   <div class="tournament-stats-item" *ngFor="let item of statLeaders;let i=index">
-                    <a class="tournament-stats-item-cta" routerLink="/goo/ipl/{{item.link}}">/go/ipl/orange-cap</a>
+                    <a class="tournament-stats-item-cta" routerLink="/goo/ipl/{{matchList[item].link}}">/go/ipl/orange-cap</a>
                     <div class="tournament-stats-item--content">
                       <div class="tournament-stats-item--image">
-                        <img src="{{item.img || teamDefaultImg}}"
+                        <img src="{{matchList[item].img || teamDefaultImg}}"
                           width="36" height="36" alt="player image" class="" data-img-params="?h=72">
                       </div>
                       <div class="tournament-stats-item--info">
-                        <div class="tournament-stats-item--info-primary">{{item.name}}</div>
-                        <div class="tournament-stats-item--info-secondary">{{item.team}}</div>
+                        <div class="tournament-stats-item--info-primary">{{matchList[item].name}}</div>
+                        <div class="tournament-stats-item--info-secondary">{{matchList[item].team}}</div>
                       </div>
                     </div>
                     <footer class="tournament-stats-item--footer">
                       <div class="tournament-stats-item--stat-value">
-                        <span>{{item.value}} </span>
+                        <span>{{matchList[item].value}} </span>
                       </div>
-                      <div class="tournament-stats-item--stat-label">{{item.label}}</div>
+                      <div class="tournament-stats-item--stat-label">{{matchList[item].label}}</div>
                     </footer>
                   </div>
                 </div>
@@ -698,35 +698,34 @@
                       <h2>Most Popular</h2>
                     </button>
                   </div>
-                  <div class="content">
+                  <!-- <div class="content">
                     <div class="news-items latest_popular_news_widget__cricket__news_latest"
                       *ngIf="selectedNewsTab=='latest'">
                       <a *ngFor="let newsitem of lestesNewsList;let i=index"
                          class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
-                        [href]="newsitem.link" 
+                        [href]="newsmatchList[item].link" 
                         data-section="">
                         <div class="news-sequence">{{i+1}}</div>
                         <div class="news-content">
-                          <div class="news-title">{{newsitem.title}}</div>
+                          <div class="news-title">{{newsmatchList[item].title}}</div>
                         </div>
                       </a>
-                    <!-- remove routerlink from a tab but will be required for future -->
 
                     </div>
                     <div class="news-items latest_popular_news_widget__cricket__news_popular "
                       *ngIf="selectedNewsTab=='popular'">
                       <a *ngFor="let newsitem of lestesNewsList.reverse();let i=index;"
                       class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
-                      [href]="newsitem.link" 
+                      [href]="newsmatchList[item].link" 
                         data-section="">
                         <div class="news-sequence">{{i+1}}</div>
                         <div class="news-content">
-                          <div class="news-title">{{newsitem.title}}</div>
+                          <div class="news-title">{{newsmatchList[item].title}}</div>
                         </div>
                       </a>
 
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -787,7 +786,7 @@
                 <div class="keeda_widget_drop_down_menu_listing" style="display: block;" *ngIf="toggleMenubtn">
                   <div class="keeda_widget_drop_down_menu_list" data-event-slug="featured_v2" data-event-name="Featured"
                     *ngFor="let item of CricketMainTabs; let i=index" (click)="getCricketMatches(item,i)">
-                    {{item.name}}
+                    {{matchList[item].name}}
                   </div>
                 </div>
                 <span class="keeda_carousel_all_scores">
@@ -800,7 +799,7 @@
               </div>
               <div class="keeda_widget keeda-widget-tab-carousel">
                 <div class="keeda_widget_match_listing">
-                  <div class="keeda_cricket_single_match" [ngClass]="item.is_next_match==true?'next-game':''"
+                  <div class="keeda_cricket_single_match" [ngClass]="matchList[item].is_next_match==true?'next-game':''"
                     *ngFor="let item  of matchList;let i=index">
                     <div class="keeda_cricket_match_list pre">
                       <div class="keeda_widget_info cricket">
@@ -811,7 +810,7 @@
                           <span>•</span>
                           <span class="cricket-match-card--match-venue">{{item?.matches?.venue?.name}}</span>
                         </div>
-                        <div class="keeda_widget_live_info" *ngIf="item.status_str==='Live'">LIVE</div>
+                        <div class="keeda_widget_live_info" *ngIf="matchList[item].status_str==='Live'">LIVE</div>
 
                       </div>
                       <div class="keeda_widget_match_detail">
@@ -819,27 +818,27 @@
                           <div class="keeda_widget_team " data-team-name="IND">
                             <img src="{{item?.matches?.teama?.logo_url || '../../../../assets/team-default.png'}}" width="54" height="38"
                               alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
-                            <span class="keeda_widget_team_name cricket">{{item.matches?.teama?.short_name}}</span>
+                            <span class="keeda_widget_team_name cricket">{{matchList[item].matches?.teama?.short_name}}</span>
                             <span class="keeda_widget_score cricket"
                               *ngIf="item?.matches?.status_str=='Scheduled'">{{convertDate(item?.matches?.date_start)}}</span>
                             <span class="keeda_widget_score cricket"
                               *ngIf="item?.matches?.status_str=='Completed'">{{item?.matches?.teama?.scores_full}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item?.matches?.status_str=='Live'">{{liveData[item.id]?.score_strip?.[0]?.score
+                              *ngIf="item?.matches?.status_str=='Live'">{{liveData[matchList[item].id]?.score_strip?.[0]?.score
                               || item?.matches?.teama?.scores_full}}</span>
 
                           </div>
                           <div class="keeda_widget_team " data-team-name="ENG">
                             <img src="{{item?.matches?.teamb?.logo_url || '../../../../assets/team-default.png'}}" width="54" height="38"
                               alt="team-flag" class="keeda_widget_cricket_flag" data-img-params="?w=108">
-                            <span class="keeda_widget_team_name cricket">{{item.matches?.teamb?.short_name}}</span>
+                            <span class="keeda_widget_team_name cricket">{{matchList[item].matches?.teamb?.short_name}}</span>
                             <span class="keeda_widget_score cricket" id="time"
                             *ngIf="item?.matches?.status_str=='Scheduled'">{{item?.matches?.date_start
                               |date:"shortTime"}}</span>
                             <span class="keeda_widget_score cricket"
                               *ngIf="item?.matches?.status_str=='Completed'">{{item?.matches?.teama?.scores_full}}</span>
                             <span class="keeda_widget_score cricket"
-                              *ngIf="item.in_play==true || item?.matches?.status_str=='Live'">{{liveData[item.id]?.score_strip?.[1]?.score
+                              *ngIf="matchList[item].in_play==true || item?.matches?.status_str=='Live'">{{liveData[matchList[item].id]?.score_strip?.[1]?.score
                               || item?.matches?.teamb?.scores_full}}</span>
 
                           </div>
@@ -866,31 +865,31 @@
                       <div class="keeda_widget_result_info pre marquee-container"
                         *ngIf="item?.in_play !==true && item?.status_str !=='Live'"
                         [class]="liveData?.info?.length < 30? 'marquee-container':''">
-                        <div class="marquee-strip">{{item.result}}</div>
+                        <div class="marquee-strip">{{matchList[item].result}}</div>
                       </div>
                       <div class="keeda_widget_result_info live" *ngIf="item?.in_play==true || item?.status_str=='Live'"
                         [class]="liveData?.result?.length < 25? 'marquee-container':''">
-                        <div class="marquee-strip">{{liveData?.info || item.result}}</div>
+                        <div class="marquee-strip">{{liveData?.info || matchList[item].result}}</div>
                       </div>
                       <div class="keeda_widget_result_info pre  hidden ">
                       </div>
                     </div>
                     <div class="keeda-cricket-widget--carousel-footer">
-                      <!-- <a class="hover-translucent" routerLink="/pointTable/{{item.match_id}}">
-                        <span>{{item.has_table==true?"Points Table":null}}</span>
-                        <img *ngIf="item.has_table==true"
+                      <!-- <a class="hover-translucent" routerLink="/pointTable/{{matchList[item].match_id}}">
+                        <span>{{matchList[item].has_table==true?"Points Table":null}}</span>
+                        <img *ngIf="matchList[item].has_table==true"
                           src="../../assets/ic-chevron-right.svg" width="16" height="16"
                           alt="ic-right">
                       </a> -->
 
-                      <a class="hover-translucent" routerLink="/child-shedule/{{item.match_id}}/upcoming">
-                        <span>{{item.status_str==true?"Schedule":null}}</span>
+                      <a class="hover-translucent" routerLink="/child-shedule/{{matchList[item].match_id}}/upcoming">
+                        <span>{{matchList[item].status_str==true?"Schedule":null}}</span>
                         <img src="/assets/ic-chevron-right.svg" width="16" height="16"
                           alt="ic-right">
                       </a>
                     </div>
-                    <a class="keeda_cricket_match_link" routerLink="/live-cricket-score/{{item.match_id}}"
-                      title="{{item.t1}} VS {{item.t2}}">India vs England preview</a>
+                    <a class="keeda_cricket_match_link" routerLink="/live-cricket-score/{{matchList[item].match_id}}"
+                      title="{{matchList[item].t1}} VS {{matchList[item].t2}}">India vs England preview</a>
                   </div>
                   <div class="keeda_cricket_single_match match-carousel-ad"
                     style="padding: 3px 0px; margin: 0px; width: 0px; transition: width 1s ease-in-out; background: transparent;">
@@ -922,14 +921,14 @@
                 <div class="feed-items">
                   <div class="sport-feed-item-primary" *ngFor="let item of newsList?.slice(0,1);">
                     <div class="sports-feed-item-primary-element">
-                      <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="1"
-                        data-section="">{{item.link}}</a>
+                      <a class="feed-item-cta" routerLink="/cricket-news/{{matchList[item].link}}" data-sequence="1"
+                        data-section="">{{matchList[item].link}}</a>
                       <img width="334" height="200"
                         alt="No James Anderson as England name a spin-dominant bowling attack for first Test against India"
-                        src="{{item.img}}" class="lazy-img-bg">
+                        src="{{matchList[item].img}}" class="lazy-img-bg">
                       <div class="sports-feed-item-element-meta">
-                        <div class="sports-primary-title">{{item.title}}</div>
-                        <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                        <div class="sports-primary-title">{{matchList[item].title}}</div>
+                        <div class="sports-feed-item-primary-modified-time">{{matchList[item].time}}</div>
                       </div>
                     </div>
                   </div>
@@ -953,35 +952,34 @@
                       <h2>Most Popular</h2>
                     </button>
                   </div>
-                  <div class="content">
+                  <!-- <div class="content">
                     <div class="news-items latest_popular_news_widget__cricket__news_latest"
                       *ngIf="selectedNewsTab=='latest'">
                       <a *ngFor="let newsitem of lestesNewsList;let i=index"
                          class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
-                        [href]="newsitem.link" 
+                        [href]="newsmatchList[item].link" 
                         data-section="">
                         <div class="news-sequence">{{i+1}}</div>
                         <div class="news-content">
-                          <div class="news-title">{{newsitem.title}}</div>
+                          <div class="news-title">{{newsmatchList[item].title}}</div>
                         </div>
                       </a>
-                    <!-- remove routerlink from a tab but will be required for future -->
 
                     </div>
                     <div class="news-items latest_popular_news_widget__cricket__news_popular "
                       *ngIf="selectedNewsTab=='popular'">
                       <a *ngFor="let newsitem of lestesNewsList;let i=index;"
                       class="news-item" data-sequence="1"  target="_blank"  rel="noopener noreferrer"
-                      [href]="newsitem.link" 
+                      [href]="newsmatchList[item].link" 
                         data-section="">
                         <div class="news-sequence">{{i+1}}</div>
                         <div class="news-content">
-                          <div class="news-title">{{newsitem.title}}</div>
+                          <div class="news-title">{{newsmatchList[item].title}}</div>
                         </div>
                       </a>
 
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -1047,7 +1045,7 @@
                               </tr>
                             </thead>
                             <tbody *ngFor="let item of pionteTableData;">
-                              <tr *ngFor="let el of item.group?.slice(0,6)">
+                              <tr *ngFor="let el of matchList[item].group?.slice(0,6)">
                                 <td>
                                   <div class="ta-c">{{el.position}}</div>
                                 </td>
@@ -1153,19 +1151,19 @@
                           <div class="player-team-rating">Rating</div>
                         </div>
                         <div class="ranking-item team" *ngFor="let item of rankingList[0]?.data;let i=index">
-                          <div class="player-team-rank">{{item.POS}}</div>
+                          <div class="player-team-rank">{{matchList[item].POS}}</div>
                           <div class="player-team-info">
                             <!-- <div class="player-team-thumb">
-                              <img src="{{item.img}}" class="" width="35" height="25" alt="India"
+                              <img src="{{matchList[item].img}}" class="" width="35" height="25" alt="India"
                                 data-img-params="?h=50">
                             </div> -->
                             <div class="">
                               <div class="player-team-name">
-                                <a class="player-team-name-primary" routerLink="/team">{{item.TEAM}}</a>
+                                <a class="player-team-name-primary" routerLink="/team">{{matchList[item].TEAM}}</a>
                               </div>
                             </div>
                           </div>
-                          <div class="player-team-rating">{{item.RATING}}</div>
+                          <div class="player-team-rating">{{matchList[item].RATING}}</div>
                         </div>
 
                       </div>
@@ -1176,20 +1174,20 @@
                           <div class="player-team-rating">Rating</div>
                         </div>
                         <div class="ranking-item player" *ngFor="let item of rankingList[1]?.data;let i=index">
-                          <div class="player-team-rank">{{item.POS}}</div>
+                          <div class="player-team-rank">{{matchList[item].POS}}</div>
                           <div class="player-team-info">
                             <!-- <div class="player-team-thumb">
                               <img class="img-with-fallbacks" width="35" height="35" alt="Suryakumar Yadav"
-                                src="{{item.img}}">
+                                src="{{matchList[item].img}}">
                             </div> -->
                             <div class="">
                               <div class="player-team-name">
-                                <a class="player-team-name-primary" >{{item.PLAYER}}</a>
-                                <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                                <a class="player-team-name-primary" >{{matchList[item].PLAYER}}</a>
+                                <div class="player-team-name-secondary">{{matchList[item].TEAM}}</div>
                               </div>
                             </div>
                           </div>
-                          <div class="player-team-rating">{{item.RATING}}</div>
+                          <div class="player-team-rating">{{matchList[item].RATING}}</div>
                         </div>
                       </div>
                       <div class="ranking-content" *ngIf="rankingByTabs=='Bowling'">
@@ -1199,20 +1197,20 @@
                           <div class="player-team-rating">Rating</div>
                         </div>
                         <div class="ranking-item player" *ngFor="let item of rankingList[2]?.data;let i=index">
-                          <div class="player-team-rank">{{item.POS}}</div>
+                          <div class="player-team-rank">{{matchList[item].POS}}</div>
                           <div class="player-team-info">
                             <!-- <div class="player-team-thumb">
                               <img class="img-with-fallbacks" width="35" height="35" alt="Adil Rashid"
-                                src="{{item.img}}">
+                                src="{{matchList[item].img}}">
                             </div> -->
                             <div class="">
                               <div class="player-team-name">
-                                <a class="player-team-name-primary" routerLink="/player">{{item.PLAYER}}</a>
-                                <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                                <a class="player-team-name-primary" routerLink="/player">{{matchList[item].PLAYER}}</a>
+                                <div class="player-team-name-secondary">{{matchList[item].TEAM}}</div>
                               </div>
                             </div>
                           </div>
-                          <div class="player-team-rating">{{item.RATING}}</div>
+                          <div class="player-team-rating">{{matchList[item].RATING}}</div>
                         </div>
 
                       </div>
@@ -1224,20 +1222,20 @@
                         </div>
                         <div class="ranking-item player"
                           *ngFor="let item of rankingList[3]?.data;let i=index">
-                          <div class="player-team-rank">{{item.POS}}</div>
+                          <div class="player-team-rank">{{matchList[item].POS}}</div>
                           <div class="player-team-info">
                             <!-- <div class="player-team-thumb">
                               <img class="img-with-fallbacks" width="35" height="35" alt="Shakib Al Hasan"
-                                src="{{item.img}}">
+                                src="{{matchList[item].img}}">
                             </div> -->
                             <div class="">
                               <div class="player-team-name">
-                                <a class="player-team-name-primary" >{{item.PLAYER}}</a>
-                                <div class="player-team-name-secondary">{{item.TEAM}}</div>
+                                <a class="player-team-name-primary" >{{matchList[item].PLAYER}}</a>
+                                <div class="player-team-name-secondary">{{matchList[item].TEAM}}</div>
                               </div>
                             </div>
                           </div>
-                          <div class="player-team-rating">{{item.RATING}}</div>
+                          <div class="player-team-rating">{{matchList[item].RATING}}</div>
                         </div>
 
                       </div>
@@ -1258,35 +1256,35 @@
               <div class="panel-body">
                 <div class="feed-items linear">
                   <ng-container *ngFor="let item of newsList?.slice(1)">
-                    <div class="sport-feed-item-primary" *ngIf="item.type=='primary'">
+                    <div class="sport-feed-item-primary" *ngIf="matchList[item].type=='primary'">
                       <div class="sports-feed-item-primary-element">
-                        <a class="feed-item-cta" *ngIf="item.isLiveNews==true"
-                          routerLink="/cricket-schedule">{{item.title}}</a>
-                        <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="5"
-                          data-section="">{{item.link}}</a>
+                        <a class="feed-item-cta" *ngIf="matchList[item].isLiveNews==true"
+                          routerLink="/cricket-schedule">{{matchList[item].title}}</a>
+                        <a class="feed-item-cta" routerLink="/cricket-news/{{matchList[item].link}}" data-sequence="5"
+                          data-section="">{{matchList[item].link}}</a>
                         <img width="334" height="200"
                           alt="Suryakumar Yadav named the ICC Men's T20I cricketer of the year for 2023"
-                          src="{{item.img}}" class="lazy-img-bg">
+                          src="{{matchList[item].img}}" class="lazy-img-bg">
                         <div class="sports-feed-item-element-meta">
-                          <div class="live-indicator" *ngIf="item.isLiveNews==true">
+                          <div class="live-indicator" *ngIf="matchList[item].isLiveNews==true">
                             <div class="blob white"></div>Live
                           </div>
 
-                          <div class="sports-primary-title">{{item.title}}</div>
-                          <div class="sports-feed-item-primary-modified-time">{{item.time}}</div>
+                          <div class="sports-primary-title">{{matchList[item].title}}</div>
+                          <div class="sports-feed-item-primary-modified-time">{{matchList[item].time}}</div>
                         </div>
                       </div>
                     </div>
-                    <div class="feed-item-secondary" *ngIf="item.type=='secondary'">
+                    <div class="feed-item-secondary" *ngIf="matchList[item].type=='secondary'">
                       <div class="sports-feed-item-secondary-element">
-                        <a class="feed-item-cta" routerLink="/cricket-news/{{item.link}}" data-sequence="6"
-                          data-section="">{{item.link}}</a>
+                        <a class="feed-item-cta" routerLink="/cricket-news/{{matchList[item].link}}" data-sequence="6"
+                          data-section="">{{matchList[item].link}}</a>
                         <img class="feed-element-img lazy-img-bg" width="82" height="83"
                           alt="India's 5 all-time highest run-scorers vs England in Tests ft. Sachin Tendulkar"
-                          src="{{item.img}}">
+                          src="{{matchList[item].img}}">
                         <div class="sports-feed-item-secondary-meta">
-                          <div class="sports-item-title">{{item.title}}</div>
-                          <div class="sports-feed-item-secondary-modified-time">{{item.time}}</div>
+                          <div class="sports-item-title">{{matchList[item].title}}</div>
+                          <div class="sports-feed-item-secondary-modified-time">{{matchList[item].time}}</div>
                         </div>
                       </div>
                     </div>
