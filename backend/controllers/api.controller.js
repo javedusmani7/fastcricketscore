@@ -44,44 +44,44 @@ exports.getSources = async (req, res) => {
     // }
 
     // const cacheKey = `api:sources`;
-    // const key = 'user:1234';  // Redis key
+    const key = 'user:12345';  // Redis key
 
-    // // const myObject = {
-    // //     user1: { name: 'John Doe', age: 30, occupation: 'Engineer' },
-    // //     user2: { name: 'Jane Smith', age: 28, occupation: 'Designer' },
-    // //     user3: { name: 'Mike Johnson', age: 35, occupation: 'Manager' },
-    // //     user2: { name: 'javed Usmani', age: 33, occupation: 'Engineer' }
-    // //   };
+    const myObject = {
+        user1: { name: 'John Doe', age: 30, occupation: 'Engineer' },
+        user2: { name: 'Jane Smith', age: 28, occupation: 'Designer' },
+        user3: { name: 'Mike Johnson', age: 35, occupation: 'Manager' },
+        user2: { name: 'javed Usmani', age: 33, occupation: 'Engineer' }
+      };
 
     
     // const myObject = {
     //     user5: { name: 'Innovation Doe', age: 40, occupation: 'testing' }
     //   };
 
-    // // Retrieve the JSON from Redis (parse the string back into an object)
-    // const result = await redis.get(key);
-    // if (result) {
-    //     // Step 2: Parse the existing JSON object
-    //     const existingData = JSON.parse(result);
+    // Retrieve the JSON from Redis (parse the string back into an object)
+    const result = await redis.get(key);
+    if (result) {
+        // Step 2: Parse the existing JSON object
+        const existingData = JSON.parse(result);
 
-    //     // Step 3: Update the necessary key-value pairs
-    //     Object.keys(myObject).forEach(userKey => {
-    //         existingData[userKey] = myObject[userKey]; // Update or add user data
-    //     });
+        // Step 3: Update the necessary key-value pairs
+        Object.keys(myObject).forEach(userKey => {
+            existingData[userKey] = myObject[userKey]; // Update or add user data
+        });
 
-    //     // Step 4: Store the updated JSON object back in Redis
-    //     await redis.set(key, JSON.stringify(existingData));
-    //     console.log('Updated data stored in Redis:', existingData);
-    //     return res.status(200).json({status: 200, message: existingData });
+        // Step 4: Store the updated JSON object back in Redis
+        await redis.set(key, JSON.stringify(existingData), 'EX', 60);
+        console.log('Updated data stored in Redis:', existingData);
+        return res.status(200).json({status: 200, message: existingData });
 
-    //   } else {
-    //     console.log('No data found for key:', key);
-    //     redis.del(key);
-    //     // Store JSON in Redis (serialize the object to a string)
-    //     await redis.set(key, JSON.stringify(myObject));
-    // }
+      } else {
+        console.log('No data found for key:', key);
+        // redis.del(key);
+        // Store JSON in Redis (serialize the object to a string)
+        // await redis.set(key, JSON.stringify(myObject), 'EX', 60);
+    }
 
-    // return res.status(200).json({status: 200, message: "cachedData" });
+    return res.status(200).json({status: 200, message: "cachedData" });
 
     // // Check if data is in Redis
     // const cacheKey = `key`;
@@ -455,38 +455,56 @@ exports.getCompetetionDaysNew = async (req, res) => {
 }
 
 exports.getCompetetionDays = async (req, res) => {
-    
-    console.log("Inside getCompetetionDays API call");
 
     try {
-        
-        const key = 'cronjob_scorecard_data_for_live_matches';  // Redis key
+        // Step 1: Get Redis data and check data is present or not
+        const key = process.env.matches_scorecard_redis_key;
+        const key_expiration_time = process.env.matches_scorecard_redis_key_expiration_time;
         const result = await redis.get(key);
         if (result) {
+            console.log('getCompetetionDays API: Retrieving data from redis cache');
             // Step 2: Parse the existing JSON object
             const existingData = JSON.parse(result);
-
-            // Step 4: Store the updated JSON object back in Redis
-            await redis.set(key, JSON.stringify(existingData));
             
-            // returning response
+            // Step 3: returning response
             return res.status(200).json({
                 status: 200,
                 message: "Competetions retrieved successfully.",
                 data: existingData
             });
 
-        } else {
+        }
+        else {
+            console.log('getCompetetionDays API: Putting data in redis cache from Database:');
+            // If this code run means there is no redis cache for this key; we have to handle it and add some rows in redis cache
+            // Step 1: we are getting those scorecard matches which is either "Live OR Completed" and filter it with last 5 matches
+            const MatchscorecardRows = await Matchscorecard.aggregate([
+                { $match: { status_str: "Completed" } }, // Filter by status
+                { $sort: { timestamp_end: -1 } },   // Sort by timestamp_end (descending)
+                { $limit: 5 }                   // Limit to 5 results
+            ]);
+
+            // Step 2: we are getting creating an object which we will push to the redis cache
+            let myObject = {};
+            if(MatchscorecardRows.length > 0){
+                const matchIdsArray = MatchscorecardRows.map((match) =>{
+                    myObject[match.match_id] = match
+                });
+            }
+    
+            // Step 3: Store the updated JSON object in Redis cache
+            await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
+
             // returning response
             return res.status(200).json({
                 status: 200,
                 message: "Competetions retrieved successfully.",
-                data: []
+                data: myObject
             });
         }
     }
     catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ message: 'Error fetching data from getCompetetionDays API' });
     }
 }

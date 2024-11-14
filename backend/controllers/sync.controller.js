@@ -1549,8 +1549,9 @@ const saveScorecardDataForLiveMatch = async (req, res, match_id = false) => {
         const result = await Matchscorecard.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
 
 
-        
-        const key = 'cronjob_scorecard_data_for_live_matches';  // Redis key
+        // Step 3: Putting Data into the redis
+        const key = process.env.matches_scorecard_redis_key;
+        const key_expiration_time = process.env.matches_scorecard_redis_key_expiration_time;
         let myObject = {};
         myObject[apiData.match_id] = dataToSave;
 
@@ -1566,14 +1567,14 @@ const saveScorecardDataForLiveMatch = async (req, res, match_id = false) => {
             });
     
             // Step 4: Store the updated JSON object back in Redis
-            await redis.set(key, JSON.stringify(existingData));
-            console.log('Updated data stored in Redis:');
+            await redis.set(key, JSON.stringify(existingData), 'EX', key_expiration_time);
+            console.log('Updated data stored in Redis:', key_expiration_time);
     
           } else {
             console.log('No data found for key:', key);
-            redis.del(key);
-            // Store JSON in Redis (serialize the object to a string)
-            await redis.set(key, JSON.stringify(myObject));
+            // redis.del(key);
+            // // Store JSON in Redis (serialize the object to a string)
+            await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
         }
     }
 };
