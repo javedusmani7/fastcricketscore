@@ -350,22 +350,72 @@ exports.getMatchLive = async (req, res) => {
         return res.status(404).json({status: 404, message: 'match_id not found' });
     }
 
-    // // Making an api call from Entity sports and then saving into our database
     try {
-        // Fetch the item
-        const matchliveRow = await Matchlive.findOne({match_id: match_id});
+        // Step 1: Get Redis data and check data is present or not
+        const key = process.env.commentry_data_for_live_matches_redis_key;
+        const key_expiration_time = process.env.commentry_data_for_live_matches_redis_key_expiration_time;
+        const result = await redis.get(key);
+        if (result) {
+            console.log('getMatchLive API: Retrieving data from redis cache');
+            // Step 2: Parse the existing JSON object
+            let matchIdData = [];   
+            const existingData = JSON.parse(result);
+            
+            // Step 3: check required match_id exist in existingRedis cache or not; 
+            // if exits return it else make a call and update the redis for this missing match_id data
+            if (match_id in existingData) {
+                matchIdData = existingData[match_id];
+            }
+            else {
+                
+                // Step 3A: Fetch the item
+                const matchLiveRow = await Matchlive.findOne({match_id: match_id});
+                matchIdData = matchLiveRow;
 
-        // Send the response
-        const response = {
-            status: 200,
-            message: "MatchLive details retrieved successfully.",
-            data: matchliveRow
+                // Step 3AB: checking match_id data exist in database or not; if not return empty else set the rediscache
+                let newRedisObject = {};
+                if (matchLiveRow && matchLiveRow.match_id) {
+                    newRedisObject[matchLiveRow.match_id] = matchLiveRow;
+
+                    //  Step 3AB-A: Store the updated JSON object in Redis cache
+                    await redis.set(key, JSON.stringify(newRedisObject), 'EX', key_expiration_time);
+                }
+            }
+            
+            // Step 4: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "MatchLive details retrieved successfully.",
+                data: matchIdData
+            });
+
         }
-        res.json(response);
-    } 
+        else {
+            console.log('getMatchLive API: Putting data in redis cache from Database:');
+            // If this code run means there is no redis cache for this key; we have to handle it and add match commentry in redis cache
+            // Step 1: Fetch the item
+            const matchLiveRow = await Matchlive.findOne({match_id: match_id});
+
+            // Step 2: fetched item will be pushed to the redis so that next time it will available on the redis cache
+            let newRedisObject = {};
+            if (matchLiveRow && matchLiveRow.match_id) {
+                newRedisObject[matchLiveRow.match_id] = matchLiveRow;
+    
+                // Step 3: Store the updated JSON object in Redis cache
+                await redis.set(key, JSON.stringify(newRedisObject), 'EX', key_expiration_time);
+            }
+
+            // returning response
+            return res.status(200).json({
+                status: 200,
+                message: "MatchLive details sssretrieved successfully.",
+                data: matchLiveRow
+            });
+        }
+    }
     catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
+        // console.error(error);
+        res.status(500).json({ message: 'Error on syncMatchScoreCard API:::::' + error.message });
     }
 }
 
@@ -465,8 +515,32 @@ exports.getCompetetionDays = async (req, res) => {
             console.log('getCompetetionDays API: Retrieving data from redis cache');
             // Step 2: Parse the existing JSON object
             const existingData = JSON.parse(result);
+
+            // Step 3: before sending response, we are also deleting older data from the cache(we will kept 30 records in cache)
+            const existingDataKeys = Object.keys(existingData);
+            if(existingDataKeys.length > 30){
+                
+                // here we are finding those matches which are either "Live or complted recently"
+                const currentTimestampMillis = Math.floor(Date.now() / 1000);
+                const MatchscorecardRows = await Matchscorecard.find(
+                    {$or: [{ status_str: "Live" }, { timestamp_end: { $gt: currentTimestampMillis } }]},
+                    {match_id: 1, timestamp_end: 1, timestamp_start: 1, status_str: 1}
+                );
+                const matchIdsArray = MatchscorecardRows.map(match => match.match_id);
+
+                // Iterate over the keys of existingData and delete those not in matchIdsArray
+                // by this older data will be deleted from the chache
+                for (const existingDataItem in existingData) {
+                    if (!matchIdsArray.includes(Number(existingDataItem))) {
+                        delete existingData[existingDataItem]; // Delete key-value pair if the key is not in matchIdsArray
+                    }
+                }
+
+                // Step 4: Store the updated JSON object in Redis cache
+                await redis.set(key, JSON.stringify(existingData), 'EX', key_expiration_time);
+            }
             
-            // Step 3: returning response
+            // Step 5: returning response
             return res.status(200).json({
                 status: 200,
                 message: "Competetions retrieved successfully.",
@@ -505,7 +579,7 @@ exports.getCompetetionDays = async (req, res) => {
     }
     catch (error) {
         // console.error(error);
-        res.status(500).json({ message: 'Error fetching data from getCompetetionDays API' });
+        res.status(500).json({ message: error.message });
     }
 }
 

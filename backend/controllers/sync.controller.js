@@ -1501,6 +1501,7 @@ const saveLiveDataForLiveMatch = async (req, res, match_id = false) => {
     if(apiData !== undefined && response.status === "ok" ) {
         // STEP 1: Additional source_id and sport_id fields, we want to include on the database
         const additionalFields = {
+            cid: matchRow.cid,
             sport_id: sport_primary_key,
             source_id: source_primary_key,
             match: matchRow._id,
@@ -1511,6 +1512,34 @@ const saveLiveDataForLiveMatch = async (req, res, match_id = false) => {
         // Step 2: Check if the record already exists
         // insert or update the record accordingly
         const result = await Matchlive.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
+
+
+        // Step 3: Putting Data into the redis
+        const redis_key = process.env.commentry_data_for_live_matches_redis_key;
+        const redis_key_expiration_time = process.env.commentry_data_for_live_matches_redis_key_expiration_time;
+        let newRedisObject = {};
+        newRedisObject[apiData.mid] = dataToSave;
+
+        // Retrieve the JSON from Redis (parse the string back into an object)
+        const redisResult = await redis.get(redis_key);
+        if (redisResult) {
+            // Step 2: Parse the existing JSON object
+            const existingRedisObject = JSON.parse(redisResult);
+    
+            // Step 3: Update the necessary key-value pairs
+            Object.keys(newRedisObject).forEach(userKey => {
+                existingRedisObject[userKey] = newRedisObject[userKey]; // Update or add user data
+            });
+    
+            // Step 4: Store the updated JSON object back in Redis
+            await redis.set(redis_key, JSON.stringify(existingRedisObject), 'EX', redis_key_expiration_time);
+            console.log('Updated data stored in Redis:', redis_key_expiration_time);
+    
+        } else {
+            console.log('No data found for key:', redis_key);
+            // // Store JSON in Redis (serialize the object to a string)
+            await redis.set(redis_key, JSON.stringify(newRedisObject), 'EX', redis_key_expiration_time);
+        }
     }
 };
 
