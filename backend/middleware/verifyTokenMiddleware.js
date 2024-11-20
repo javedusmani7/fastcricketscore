@@ -60,6 +60,14 @@ const verifyTokenMiddleware = async (req, res, next) => {
         //     const response = await axios.get(temp_apiURL + 'sync/playerStatstic?token=' + temp_token + "&pid=" + pid);
         // }
 
+        // temp code that will remove later
+        // using this code we are calling the competetionStandings api so that data may be store in the database
+        if(req._parsedUrl.pathname == "/api/competetionStandings"){
+            const cid = parseInt(req.query.cid) || false;
+            if (!cid) { return res.status(404).json({status: 404, message: 'cid not found' });}
+            const response = await axios.get(temp_apiURL + 'sync/competetion_standings?token=' + temp_token + "&cid=" + cid);
+        }
+
         // STEP 1: check if API Request has token parameter or not; 
         // if not present, return an error otherwise it goes to the routes action
         const token = req.query.token

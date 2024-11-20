@@ -5,6 +5,7 @@ const MatchSchema = new mongoose.Schema({
     source_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Source', required: true },
     competetion: { type: mongoose.Schema.Types.ObjectId, ref: 'Competetion', required: true},
     cid: { type: String},
+    tej_match_id : { type: String},
     match_id: { type: Number,  unique: true },
     title: { type: String },
     short_title: { type: String },

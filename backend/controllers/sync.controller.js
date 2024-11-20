@@ -1414,8 +1414,10 @@ const saveCompetitionMatches = async (req, res, cid = false) => {
         // updating new items on the response so that we may have sport & sourceId on each items
         const items = response.response.items;
         const updatedItems = items.map(item => {
+            const tez_id = competetion_cid + "-" + item.match_id;
             return {
                 ...item,         // Spread existing properties
+                tej_match_id : tez_id,  // Add a new tej_match_id property
                 cid: competetion_cid,  // Add a new cid property
                 competetion: competetion_primary_key,  // Add a new competetion property
                 sport_id: sport_primary_key,  // Add a new sport_id property
@@ -1461,12 +1463,14 @@ const saveFantasyDataForLiveMatch = async (req, res, match_id = false) => {
         const apiData = response.response;
         
         if(apiData !== undefined && response.status === "ok" ) {
+            const tez_id = matchRow.cid + "-" + match_id;
             // STEP 1: Additional source_id and sport_id fields, we want to include on the database
             const additionalFields = {
                 sport_id: sport_primary_key,
                 source_id: source_primary_key,
                 match: matchRow._id,
-                match_id: match_id
+                match_id: match_id,
+                tej_match_id: tez_id
             };
             const dataToSave = { ...apiData, ...additionalFields };
             
@@ -1499,13 +1503,16 @@ const saveLiveDataForLiveMatch = async (req, res, match_id = false) => {
     const apiData = response.response;
     
     if(apiData !== undefined && response.status === "ok" ) {
+        const tez_id = matchRow.cid + "-" + match_id;
+        console.log(tez_id);
         // STEP 1: Additional source_id and sport_id fields, we want to include on the database
         const additionalFields = {
             cid: matchRow.cid,
             sport_id: sport_primary_key,
             source_id: source_primary_key,
             match: matchRow._id,
-            match_id: match_id
+            match_id: match_id,
+            tej_match_id: tez_id
         };
         const dataToSave = { ...apiData, ...additionalFields };
         
@@ -1564,13 +1571,16 @@ const saveScorecardDataForLiveMatch = async (req, res, match_id = false) => {
     const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
     const apiData = response.response;
     if(apiData !== undefined && response.status === "ok" ) {
+        const tez_id = matchRow.cid + "-" + match_id;
+        console.log(tez_id);
         // STEP 1: Additional source_id and sport_id fields, we want to include on the database
         const additionalFields = {
             sport_id: sport_primary_key,
             source_id: source_primary_key,
             cid: matchRow.cid,
             match: matchRow._id,
-            match_id: match_id
+            match_id: match_id,
+            tej_match_id: tez_id
         };
         const dataToSave = { ...apiData, ...additionalFields };
         
@@ -1631,12 +1641,15 @@ const saveSquadsDataForLiveMatch = async (req, res, match_id = false) => {
         const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
         const apiData = response.response;
         if(apiData !== undefined && response.status === "ok" ) {
+            const tez_id = matchRow.cid + "-" + match_id;
+            console.log(tez_id);
             // STEP 1: Additional source_id and sport_id fields, we want to include on the database
             const additionalFields = {
                 sport_id: sport_primary_key,
                 source_id: source_primary_key,
                 match: matchRow._id,
-                match_id: match_id
+                match_id: match_id,
+                tej_match_id: tez_id
             };
             const dataToSave = { ...apiData, ...additionalFields };
             
