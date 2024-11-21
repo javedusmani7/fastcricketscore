@@ -818,7 +818,7 @@ exports.getRankings = async (req, res) => {
 exports.getArticles = async (req, res) => {
 
     // check if the match_id exists or not
-    const limit = parseInt(req.query.limit) || 10;  // Default to 10 items per page
+    const limit = parseInt(req.query.limit) || 20;  // Default to 10 items per page
     try {
         // Step 1: Get Redis data and check data is present or not
         const key = process.env.news_redis_key;
@@ -832,7 +832,7 @@ exports.getArticles = async (req, res) => {
             // Step 3: returning response
             return res.status(200).json({
                 status: 200,
-                message: "Article retrieved successfully.",
+                message: "Articles retrieved successfully.",
                 data: existingData
             });
 
@@ -841,22 +841,24 @@ exports.getArticles = async (req, res) => {
             console.log('getArticles API: Putting data in redis cache from Database:');
             // If this code run means there is no redis cache for this key; we have to handle it and add some rows in redis cache
             
-            // Get the current date and Format the date to 'YYYY-MM-DD'
-            const currentDate = new Date();
-            const currentFormattedDate = currentDate.toISOString().split('T')[0]; // check if this formattedDate data already sync or not // Convert the date string to a Date object
-            const date = new Date(currentFormattedDate); // e.g., '2024-11-19'
+            // // Get the current date and Format the date to 'YYYY-MM-DD'
+            // const currentDate = new Date();
+            // const currentFormattedDate = currentDate.toISOString().split('T')[0]; // check if this formattedDate data already sync or not // Convert the date string to a Date object
+            // const date = new Date(currentFormattedDate); // e.g., '2024-11-19'
     
-            // Get the start and end of the day for the given date
-            const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // 2024-11-19T00:00:00.000Z
-            const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // 2024-11-19T23:59:59.999Z
+            // // Get the start and end of the day for the given date
+            // const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // 2024-11-19T00:00:00.000Z
+            // const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // 2024-11-19T23:59:59.999Z
 
-            // Step 2: Query the database for records in the given date range 
-            const articles = await Article.find({createdAt: { $gte: startOfDay, $lte: endOfDay,}}).limit(limit);
-            if (articles.length === 0) {
-                // Second query: Fetch the most recent articles
-                console.log('No records found for the given date. Fetching the most recent articles...');
-                articles = await Article.find({}).sort({ createdAt: -1 }).limit(10);
-            }
+            // // Step 2: Query the database for records in the given date range 
+            // const articles = await Article.find({createdAt: { $gte: startOfDay, $lte: endOfDay,}}).limit(limit);
+            // if (articles.length === 0) {
+            //     // Second query: Fetch the most recent articles
+            //     console.log('No records found for the given date. Fetching the most recent articles...');
+            //     articles = await Article.find({}).sort({ createdAt: -1 }).limit(10);
+            // }
+            //Step 2: Query the database for records in the given date range 
+            const articles = await Article.find({}).sort({ createdAt: -1 }).limit(limit);
     
             //  Step 3: push to the redis cache        
             let myObject = {};
@@ -872,7 +874,7 @@ exports.getArticles = async (req, res) => {
             // returning response
             return res.status(200).json({
                 status: 200,
-                message: "Article retrieved successfully.",
+                message: "Articles retrieved successfully.",
                 data: myObject
             });
         }

@@ -24,20 +24,6 @@ const syncSeasonsData = async () => {
 };
 
 // this is automatic run function which is used to call itself automatically
-// this function will make an API call to the ENTITYSPORT and get all upcoming matches
-const syncUpcomingMatchesDataForCompetetions = async () => {
-
-  try {
-      const url = api_url + 'sync/cronjob_for_upcoming_matches?token=' + ENTITYSPORT_API_KEY;
-      const response = await axios.get(url);
-  } catch (error) {
-      console.error('Error syncing data:', error);
-  }
-};
-
-
-
-// this is automatic run function which is used to call itself automatically
 // this function will make an API call to the ENTITYSPORT and get all available matches
 const syncCompetetionsData = async () => {
     try {
@@ -64,6 +50,16 @@ const syncCompletedCompetitionData = async () => {
 const syncLiveCompetitionData = async () => {
   try {
       const url = api_url + 'sync/cronjob_for_live_competitions?token=' + ENTITYSPORT_API_KEY;
+      const response = await axios.get(url);
+  } catch (error) {
+      console.error('Error syncing data:', error);
+  }
+};
+// this is automatic run function which is used to call itself automatically
+// this function will make an API call to the ENTITYSPORT and get all available matches
+const syncUpcomingCompetitionData = async () => {
+  try {
+      const url = api_url + 'sync/cronjob_for_upcoming_competitions?token=' + ENTITYSPORT_API_KEY;
       const response = await axios.get(url);
   } catch (error) {
       console.error('Error syncing data:', error);
@@ -124,18 +120,12 @@ const syncSquadsDataForLiveMatches = async () => {
 };
 
 // A function to check current time and decide which cron job to run
-function executeJobBasedOnTime() {
-    const currentTime = Date.now();
-    const elapsed = currentTime - lastRunTime;
-    // console.log(`Job running at: ${new Date(currentTime).toISOString()}`);
-    // console.log(`Elapsed time since last run: ${elapsed} ms`);
-    lastRunTime = currentTime;
-
-    
+function executeJobBasedOnTime() {    
     const currentHour = new Date().getHours(); // Get current hour (0-23)
     if (currentHour >= 0 && currentHour < 6) {
         // console.log('Running Cron Job 1 (0:00 - 6:00)');
         // syncCompletedCompetitionData();
+        syncUpcomingCompetitionData();
     } else {
         // console.log('Running Cron Job 2 (6:00 - 23:59)');
         syncLiveCompetitionData();
@@ -177,10 +167,10 @@ setInterval(executeJobBasedOnTime, 50000);
 
 
 // Schedule the task to run every 5 second and sync data for the live match
-cron.schedule('*/30 * * * * *', syncFantasyDataForLiveMatches);
-cron.schedule('*/10 * * * * *', syncLiveDataForLiveMatches);
+cron.schedule('0 0 * * * *', syncFantasyDataForLiveMatches);
+cron.schedule('* * * * * *', syncLiveDataForLiveMatches);
 cron.schedule('* * * * * *', syncScorecardDataForLiveMatches);
-cron.schedule('*/40 * * * * *', syncSquadsDataForLiveMatches);
+cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
 
 
 // Once a day (midnight, 00:00:00)
