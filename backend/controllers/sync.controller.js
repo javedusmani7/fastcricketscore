@@ -21,6 +21,7 @@ const MatchFantasy = require('../models/MatchFantasy');
 const Competetion_Matches_Mapping = require('../models/Competetion_Matches_Mapping');
 const Competetion_Standing = require('../models/Competetion_Standing');
 const RankingModel = require('../models/Ranking');
+const Article = require('../models/Article');
 
 // predefine constant values
 const ENTITYSPORT_API_KEY = process.env.ENTITYSPORT_API_KEY;
@@ -1380,6 +1381,86 @@ exports.cronjobSquadsDataForLiveMatches = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    }
+}
+
+// this function will be use to sync playing11 squads details for all live matches
+exports.syncArticles = async (req, res) => {
+    
+    // calling api
+    const url = 'https://newsapi.org/v2/everything';
+    const apiKey = '0fd5665c60da4b63a945902d16c70b15';
+
+    // Get the current date and Format the date to 'YYYY-MM-DD'
+    const currentDate = new Date();
+    const currentFormattedDate = currentDate.toISOString().split('T')[0];
+    currentDate.setDate(currentDate.getDate() - 1);
+    const formattedDate = currentDate.toISOString().split('T')[0];
+
+    // Define the parameters for the request
+    const params = {
+        q: 'cricket',               // Search query
+        from: formattedDate,          // Date range (from)
+        sortBy: 'publishedAt',       // Sort articles by publication date
+        apiKey: apiKey               // API key
+    };
+
+    
+    try {
+        
+        // check if this formattedDate data already sync or not // Convert the date string to a Date object
+        const date = new Date(currentFormattedDate); // e.g., '2024-11-19'
+
+        // Get the start and end of the day for the given date
+        const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // 2024-11-19T00:00:00.000Z
+        const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // 2024-11-19T23:59:59.999Z
+        // Query the database for records in the given date range
+        const result = await Article.find({
+            createdAt: {
+            $gte: startOfDay, // Greater than or equal to start of the day
+            $lte: endOfDay,   // Less than or equal to end of the day
+            }
+        });
+
+        // check if Article is already sync for this date or not; sync the Article if not
+        if (result.length < 1) {
+            
+            // Make a GET request to the API
+            const response = await axios.get(url, { params });
+        
+            // Log the response data (articles)
+            const articles = response.data.articles;
+            if (articles && articles.length > 0) {
+
+                // Loop through the articles and save each one to MongoDB
+                for (let article of articles) {
+                    const newArticle = new Article({
+                        article_source: "https://newsapi.org/",
+                        url: article.url,
+                        author: article.author,
+                        title: article.title,
+                        description: article.description,
+                        urlToImage: article.urlToImage,
+                        publishedAt: article.publishedAt,
+                        content: article.content,
+                        source: {
+                            id: article.source.id,
+                            name: article.source.name
+                        }
+                    });
+            
+                    // Save the article to the database
+                    await newArticle.save();
+                }
+            }
+        }
+
+        // return response
+        return res.status(200).json({status: 200, message: "Article Sync Successfully"});
+    } 
+    catch (error) {
+        // console.error(error);
+        res.status(500).json({ message: 'Error fetching Article', error: error.message });
     }
 }
 

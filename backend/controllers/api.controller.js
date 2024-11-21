@@ -19,6 +19,7 @@ const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
 const Competetion_Standing = require('../models/Competetion_Standing');
 const Ranking = require('../models/Ranking');
+const Article = require('../models/Article');
 
 
 
@@ -518,7 +519,7 @@ exports.getCompetetionDays = async (req, res) => {
 
             // Step 3: before sending response, we are also deleting older data from the cache(we will kept 30 records in cache)
             const existingDataKeys = Object.keys(existingData);
-            if(existingDataKeys.length > 30){
+            if(existingDataKeys.length > 20){
                 
                 // here we are finding those matches which are either "Live or complted recently"
                 const currentTimestampMillis = Math.floor(Date.now() / 1000);
@@ -810,5 +811,74 @@ exports.getRankings = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
+    }
+}
+
+// this function will make an API call to the rankings Table and return the response
+exports.getArticles = async (req, res) => {
+
+    // check if the match_id exists or not
+    const limit = parseInt(req.query.limit) || 10;  // Default to 10 items per page
+    try {
+        // Step 1: Get Redis data and check data is present or not
+        const key = process.env.news_redis_key;
+        const key_expiration_time = process.env.news_redis_key_expiration_time;
+        const result = await redis.get(key);
+        if (result) {
+            console.log('getArticles API: Retrieving data from redis cache');
+            // Step 2: Parse the existing JSON object
+            const existingData = JSON.parse(result);
+            
+            // Step 3: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Article retrieved successfully.",
+                data: existingData
+            });
+
+        }
+        else {
+            console.log('getArticles API: Putting data in redis cache from Database:');
+            // If this code run means there is no redis cache for this key; we have to handle it and add some rows in redis cache
+            
+            // Get the current date and Format the date to 'YYYY-MM-DD'
+            const currentDate = new Date();
+            const currentFormattedDate = currentDate.toISOString().split('T')[0]; // check if this formattedDate data already sync or not // Convert the date string to a Date object
+            const date = new Date(currentFormattedDate); // e.g., '2024-11-19'
+    
+            // Get the start and end of the day for the given date
+            const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // 2024-11-19T00:00:00.000Z
+            const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // 2024-11-19T23:59:59.999Z
+
+            // Step 2: Query the database for records in the given date range 
+            const articles = await Article.find({createdAt: { $gte: startOfDay, $lte: endOfDay,}}).limit(limit);
+            if (articles.length === 0) {
+                // Second query: Fetch the most recent articles
+                console.log('No records found for the given date. Fetching the most recent articles...');
+                articles = await Article.find({}).sort({ createdAt: -1 }).limit(10);
+            }
+    
+            //  Step 3: push to the redis cache        
+            let myObject = {};
+            if (articles.length > 0) {
+                const matchIdsArray = articles.map((article) =>{
+                    myObject[article._id] = article
+                });
+            }
+            
+            // Step 3: Store the updated JSON object in Redis cache
+            await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
+
+            // returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Article retrieved successfully.",
+                data: myObject
+            });
+        }
+    }
+    catch (error) {
+        // console.error(error);
+        res.status(500).json({ message: error.message });
     }
 }

@@ -68,6 +68,12 @@ const verifyTokenMiddleware = async (req, res, next) => {
             const response = await axios.get(temp_apiURL + 'sync/competetion_standings?token=' + temp_token + "&cid=" + cid);
         }
 
+        // temp code that will remove later
+        // using this code we are syncing news
+        if(req._parsedUrl.pathname == "/api/articles"){
+            const response = await axios.get(temp_apiURL + 'sync/articles?token=' + temp_token);
+        }
+
         // STEP 1: check if API Request has token parameter or not; 
         // if not present, return an error otherwise it goes to the routes action
         const token = req.query.token
