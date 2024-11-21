@@ -4,3 +4,15 @@ ENTITYSPORT_API_URL=https://rest.entitysport.com/v2/
 ENTITYSPORT_API_SOURCE_ID=1
 CRICKET_SPORT_ID=4
 BACKEND_API_URL=http://localhost:3000/
+# BACKEND_API_URL=https://api.tejscore.com/
+
+
+#Here we will create Redis Keys and their expiration time
+matches_scorecard_redis_key=cronjob_scorecard_data_for_live_matches
+matches_scorecard_redis_key_expiration_time=86400
+
+commentry_data_for_live_matches_redis_key=commentry_data_for_live_matches
+commentry_data_for_live_matches_redis_key_expiration_time=60
+
+news_redis_key=news
+news_redis_key_expiration_time=86400
