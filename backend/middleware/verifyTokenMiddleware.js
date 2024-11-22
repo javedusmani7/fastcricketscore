@@ -44,21 +44,21 @@ const verifyTokenMiddleware = async (req, res, next) => {
         //     const response = await axios.get(temp_apiURL + 'sync/matchFantasy?token=' + temp_token + "&match_id=" + match_id);
         // }
 
-        // // temp code that will remove later
-        // // using this code we are calling the playerprofile api so that data may be store in the database
-        // if(req._parsedUrl.pathname == "/api/playerProfile"){
-        //     const pid = parseInt(req.query.pid) || false;
-        //     if (!pid) { return res.status(404).json({status: 404, message: 'pid not found' });}
-        //     const response = await axios.get(temp_apiURL + 'sync/playerProfile?token=' + temp_token + "&pid=" + pid);
-        // }
+        // temp code that will remove later
+        // using this code we are calling the playerprofile api so that data may be store in the database
+        if(req._parsedUrl.pathname == "/api/playerProfile"){
+            const pid = parseInt(req.query.pid) || false;
+            if (!pid) { return res.status(404).json({status: 404, message: 'pid not found' });}
+            const response = await axios.get(temp_apiURL + 'sync/playerProfile?token=' + temp_token + "&pid=" + pid);
+        }
 
-        // // temp code that will remove later
-        // // using this code we are calling the playerprofile api so that data may be store in the database
-        // if(req._parsedUrl.pathname == "/api/playerStatstic"){
-        //     const pid = parseInt(req.query.pid) || false;
-        //     if (!pid) { return res.status(404).json({status: 404, message: 'pid not found' });}
-        //     const response = await axios.get(temp_apiURL + 'sync/playerStatstic?token=' + temp_token + "&pid=" + pid);
-        // }
+        // temp code that will remove later
+        // using this code we are calling the playerprofile api so that data may be store in the database
+        if(req._parsedUrl.pathname == "/api/playerStatstic"){
+            const pid = parseInt(req.query.pid) || false;
+            if (!pid) { return res.status(404).json({status: 404, message: 'pid not found' });}
+            const response = await axios.get(temp_apiURL + 'sync/playerStatstic?token=' + temp_token + "&pid=" + pid);
+        }
 
         // temp code that will remove later
         // using this code we are calling the competetionStandings api so that data may be store in the database

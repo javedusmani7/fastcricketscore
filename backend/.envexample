@@ -14,5 +14,13 @@ matches_scorecard_redis_key_expiration_time=86400
 commentry_data_for_live_matches_redis_key=commentry_data_for_live_matches
 commentry_data_for_live_matches_redis_key_expiration_time=60
 
+## Redis Keys and their expiration time for the competetions_upcoming_matches API
+competetions_upcoming_matches_redis_key=competetions_upcoming_matches
+competetions_upcoming_matches_redis_key_expiration_time=86400
+
+## Redis Keys and their expiration time for the competetions_completed_matches API
+competetions_completed_matches_redis_key=competetions_completed_matches
+competetions_completed_matches_redis_key_expiration_time=86400
+
 news_redis_key=news
 news_redis_key_expiration_time=86400

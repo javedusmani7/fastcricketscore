@@ -702,6 +702,130 @@ exports.getCompetetionList = async (req, res) => {
 }
 
 
+/***
+ * This API will be use to fetch upcoming matches 
+ * it will fetch next 45 days upcoming matches
+ */
+exports.getCompetetionsUpcomingMatches = async (req, res) => {
+
+    
+    try {
+        // Step 1: Get Redis data and check data is present or not
+        const key = process.env.competetions_upcoming_matches_redis_key;
+        const key_expiration_time = process.env.competetions_upcoming_matches_redis_key_expiration_time;
+        const result = await redis.get(key);
+        if (result) {
+            console.log('getCompetetionsUpcomingMatches API: Retrieving data from redis cache');
+            // Step 2: Parse the existing JSON object
+            const existingData = JSON.parse(result);
+            
+            // Step 3: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Upcoming Matches retrieved successfully.",
+                data: existingData
+            });
+
+        }
+        else {
+            console.log('getCompetetionsUpcomingMatches API: Putting data in redis cache from Database:');
+
+            // Step 2: Get current date and the date 45 days from now
+            let currentDate = new Date();
+            let currentTimestamp = Math.floor(currentDate.getTime() / 1000);  // Convert to seconds
+            let endDate = new Date();
+            endDate.setDate(currentDate.getDate() + 45);
+            let endTimestamp = Math.floor(endDate.getTime() / 1000);  // Convert to seconds
+    
+            // Step 3: MongoDB query to fetch the results
+            const matchesRows = await Match.find({ status_str: "Scheduled", timestamp_end: { $gte: currentTimestamp, $lte: endTimestamp} });
+        
+            //  Step 4: iterate the result and create an object of array        
+            let myObject = {};
+            if (matchesRows.length > 0) {
+                const matchIdsArray = matchesRows.map((match) =>{
+                    myObject[match.match_id] = match;
+                });
+            }
+            
+            // Step 5: Store the updated JSON object in Redis cache
+            await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
+
+            // returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Upcoming Matches retrieved successfully.",
+                data: myObject
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+/***
+ * This API will be use to fetch upcoming matches 
+ * it will fetch next 45 days upcoming matches
+ */
+exports.getCompetetionscompletedMatches = async (req, res) => {
+
+    
+    try {
+        // Step 1: Get Redis data and check data is present or not
+        const key = process.env.competetions_completed_matches_redis_key;
+        const key_expiration_time = process.env.competetions_completed_matches_redis_key_expiration_time;
+        const result = await redis.get(key);
+        if (result) {
+            console.log('getCompetetionscompletedMatches API: Retrieving data from redis cache');
+            // Step 2: Parse the existing JSON object
+            const existingData = JSON.parse(result);
+            
+            // Step 3: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Upcoming Matches retrieved successfully.",
+                data: existingData
+            });
+
+        }
+        else {
+            console.log('getCompetetionscompletedMatches API: Putting data in redis cache from Database:');
+
+            // Step 2: Get current date and the date 45 days from now
+            let currentDate = new Date();
+            let currentTimestamp = Math.floor(currentDate.getTime() / 1000);  // Convert to seconds
+            let startDate = new Date();
+            startDate.setDate(currentDate.getDate() - 10);
+            let startTimestamp = Math.floor(startDate.getTime() / 1000);  // Convert to seconds
+    
+            // Step 3: MongoDB query to fetch the results
+            const matchesRows = await Match.find({ status_str: "Completed", timestamp_end: { $gte: startTimestamp, $lte: currentTimestamp} });
+        
+            //  Step 4: iterate the result and create an object of array        
+            let myObject = {};
+            if (matchesRows.length > 0) {
+                const matchIdsArray = matchesRows.map((match) =>{
+                    myObject[match.match_id] = match;
+                });
+            }
+            
+            // Step 5: Store the updated JSON object in Redis cache
+            await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
+
+            // returning response
+            return res.status(200).json({
+                status: currentTimestamp,
+                message: "Complted Matches retrieved successfully.",
+                data: myObject
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 
 // this function will make an API call to the matchprofile Table and return the response
 // token: for authenticate token
@@ -722,7 +846,7 @@ exports.getPlayersProfile = async (req, res) => {
          // Send the response
          const response = {
              status: 200,
-             message: "Match Scorecard retrieved successfully.",
+             message: "Players Profile retrieved successfully.",
              data: playersprofileRow
          }
          res.json(response);
