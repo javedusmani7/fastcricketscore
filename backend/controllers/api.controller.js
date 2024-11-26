@@ -20,6 +20,8 @@ const MatchFantasy = require('../models/MatchFantasy');
 const Competetion_Standing = require('../models/Competetion_Standing');
 const Ranking = require('../models/Ranking');
 const Article = require('../models/Article');
+const TeamPlayer = require('../models/TeamPlayer');
+const Team = require('../models/Team');
 
 
 
@@ -1002,6 +1004,116 @@ exports.getArticles = async (req, res) => {
                 data: myObject
             });
         }
+    }
+    catch (error) {
+        // console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+/**
+ * This APi will be use to fetch and sync the team details by team_id
+ * @param {team_id} req 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.getTeamDetailsByTeamId = async (req, res) => {
+
+    // check if the match_id exists or not
+    const team_id = parseInt(req.query.team_id) || 0;
+    if(!team_id){
+        return res.status(200).json({status: 404, message: 'team_id not found' });
+    }
+    
+    try {
+        // Step 1: check team_id exist in teams collection or not; if exist return the response
+        const teamRow = await Team.findOne({team_id: team_id});
+        if (teamRow) {            
+            // Step 2: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Team sync successfully.",
+                data: teamRow
+            });
+        }
+        
+        // // Step 2: sync the team players details from entity sports and save into the "TeamPlayer" collection
+        const temp_token = process.env.ENTITYSPORT_API_KEY;
+        const response = await axios.get(process.env.BACKEND_API_URL + 'sync/teams?token=' + temp_token + "&team_id=" + team_id);
+
+        // Step 3: after synncing, we will again check team_id exist in teams collection or not
+        // it should exist now and return the response
+        const teamRoww = await Team.findOne({team_id: team_id});
+        if (teamRoww) {
+            return res.status(200).json({
+                status: 200,
+                message: "Team sync successfully.",
+                data: teamRoww
+            });
+        }
+        
+        // Step 4: if still not found in collection return the empty message  
+        return res.status(200).json({
+            status: 200,
+            message: "No record found for this Team.",
+            data: []
+        });
+    }
+    catch (error) {
+        // console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+/**
+ * This api will fetch and sync the teamplayers by TeamId
+ * @param {team_id} req 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.getTeamPlayerByTeamId = async (req, res) => {
+
+    // check if the match_id exists or not
+    const team_id = parseInt(req.query.team_id) || 0;
+    if(!team_id){
+        return res.status(200).json({status: 404, message: 'team_id not found' });
+    }
+    
+    try {
+        // Step 1: check team_id exist in teams collection or not; if exist return the response
+        const TeamPlayerRow = await TeamPlayer.findOne({team_id: team_id});
+        if (TeamPlayerRow) {            
+            // Step 2: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Team players sync successfully.",
+                data: TeamPlayerRow
+            });
+        }
+        
+        // Step 2: sync the team players details from entity sports and save into the "TeamPlayer" collection
+        const temp_token = process.env.ENTITYSPORT_API_KEY;
+        const response = await axios.get(process.env.BACKEND_API_URL + 'sync/teamPlayer?token=' + temp_token + "&team_id=" + team_id);
+
+        // Step 3: after synncing, we will again check team_id exist in teams collection or not
+        // it should exist now and return the response
+        const TeamPlayersRow = await TeamPlayer.findOne({team_id: team_id});
+        if (TeamPlayersRow) {
+            return res.status(200).json({
+                status: 200,
+                message: "Team players sync successfully.",
+                data: TeamPlayersRow
+            });
+        }
+        
+        // Step 4: if still not found in collection return the empty message  
+        return res.status(200).json({
+            status: 200,
+            message: "No record found for this Team.",
+            data: []
+        });
     }
     catch (error) {
         // console.error(error);

@@ -22,6 +22,8 @@ const Competetion_Matches_Mapping = require('../models/Competetion_Matches_Mappi
 const Competetion_Standing = require('../models/Competetion_Standing');
 const RankingModel = require('../models/Ranking');
 const Article = require('../models/Article');
+const TeamPlayer = require('../models/TeamPlayer');
+const Team = require('../models/Team');
 
 // predefine constant values
 const ENTITYSPORT_API_KEY = process.env.ENTITYSPORT_API_KEY;
@@ -1432,6 +1434,101 @@ exports.syncArticles = async (req, res) => {
     catch (error) {
         // console.error(error);
         res.status(500).json({ message: 'Error fetching Article', error: error.message });
+    }
+}
+
+/**
+ * this function will make an API call to the ENTITYSPORT and get team data
+ * @param {*} req 
+ * @param {team_id} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.syncTeamPlayerByTeamId = async (req, res) => {
+    let dataToSave = [];
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    const token = req.query.token;
+    const team_id = req.query.team_id;
+    if (!team_id) {
+        return res.status(404).json({status: 404, message: 'team_id paramater is missing, it is required.' });
+    }
+    
+    // first; we will get the primaryID details for the sport, source table 
+    // so that we can pass these references to the playerProfile tables
+    try {
+        
+        // Making an api call from Entity sports and then saving into our database
+        const url = ENTITYSPORT_API_URL + 'teams/' + team_id + '/player/';
+        const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
+        const apiData = response.response.items;
+        if(apiData !== undefined && response.status === "ok" && apiData.team !== null) {
+            // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+            const additionalFields = {
+                team_id: apiData.team.tid,
+                sport_id: sport_primary_key,
+                source_id: source_primary_key,
+            };
+            dataToSave = { ...apiData, ...additionalFields };
+            
+            // Step 3B: Create a new record
+            const result = await TeamPlayer.updateOne({team_id: team_id}, { $set: dataToSave}, { upsert: true });
+        }
+        
+        // Send response
+        return res.status(200).json({
+            status: 200,
+            message: "Team Players Sync Successfully.",
+            data: apiData 
+        });
+    }
+    catch (error) {
+        // console.error(error.message);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+exports.syncTeamDetailsTeamId = async (req, res) => {
+    let dataToSave = [];
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    const team_id = req.query.team_id;
+    if (!team_id) {
+        return res.status(404).json({status: 404, message: 'team_id paramater is missing, it is required.' });
+    }
+    
+    // first; we will get the primaryID details for the sport, source table 
+    // so that we can pass these references to the playerProfile tables
+    try {
+        
+        // Making an api call from Entity sports and then saving into our database
+        const url = ENTITYSPORT_API_URL + 'teams/' + team_id;
+        const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url);
+        if(response.status === "ok" && response.response !== null) {
+
+            // Step 2: Add a custom  source_id and sport_id fields to the response data, we want to include on the database
+            const apiData = response.response;
+            dataToSave = {...apiData,
+                team_id: apiData.tid,
+                sport_id: sport_primary_key,
+                source_id: source_primary_key,
+            };
+            
+            // Step 3B: Create a new record
+            const result = await Team.updateOne({team_id: team_id}, { $set: dataToSave}, { upsert: true });
+        }
+        
+        // Send response
+        return res.status(200).json({
+            status: 200,
+            message: "Team Players Sync Successfully.",
+            data: dataToSave 
+        });
+    }
+    catch (error) {
+        // console.error(error.message);
+        res.status(500).json({ message: error.message });
     }
 }
 
