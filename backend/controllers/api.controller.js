@@ -1020,7 +1020,7 @@ exports.getArticles = async (req, res) => {
  */
 exports.getTeamDetailsByTeamId = async (req, res) => {
 
-    // check if the match_id exists or not
+    // check if the team_id exists or not
     const team_id = parseInt(req.query.team_id) || 0;
     if(!team_id){
         return res.status(200).json({status: 404, message: 'team_id not found' });
@@ -1114,6 +1114,97 @@ exports.getTeamPlayerByTeamId = async (req, res) => {
             message: "No record found for this Team.",
             data: []
         });
+    }
+    catch (error) {
+        // console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+/**
+ * This API will be use to fetch team recent and upcoming matches
+ * @param {team_id} req  
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.getTeamMatchesByTeamId = async (req, res) => {
+
+    // check if the team_id exists or not
+    const team_id = parseInt(req.query.team_id) || 0;
+    if(!team_id){
+        return res.status(200).json({status: 404, message: 'team_id not found' });
+    }
+    
+    try {
+        // Step 1: Get Redis data and check data is present or not
+        const key = process.env.team_matches_redis_key;
+        const key_expiration_time = process.env.team_matches_redis_key_expiration_time;
+        const result = await redis.get(key);
+        if (result) {
+            // Step 2: Parse the existing JSON object
+            const existingData = JSON.parse(result);
+            
+            // Step 3: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Team Matches retrieved successfully.",
+                data: existingData
+            });
+
+        }
+        else {       
+            // Step 1: Get current date in timestamp and set it to 10 days before from now
+            let currentDate = new Date();
+            let startDate = new Date();
+            startDate.setDate(currentDate.getDate() - 10);
+            let startTimestamp = Math.floor(startDate.getTime() / 1000);  // Convert to seconds
+            
+            // Step 2: Get current date in timestamp and set it to next 45 days from now
+            let endDate = new Date();
+            endDate.setDate(currentDate.getDate() + 45);
+            let endTimestamp = Math.floor(endDate.getTime() / 1000);  // Convert to seconds
+           
+    
+            // Step 3: MongoDB query to fetch the results
+           const query = {$or: [ 
+               { "teama.team_id": team_id, timestamp_end: { $gte: startTimestamp, $lte: endTimestamp}  },
+               { "teamb.team_id": team_id, timestamp_end: { $gte: startTimestamp, $lte: endTimestamp}  }
+           ]};
+            const matchesRows = await Match.find(query);
+        
+            //  Step 4: iterate the result and create an object of array        
+            let myObject = {};
+            if (matchesRows.length > 0) {
+                const matchIdsArray = matchesRows.map((match) =>{
+                    // myObject[match.match_id] = match;
+                    let temp = {};
+                    temp["match_id"] = match.match_id;
+                    temp["_id"] = match._id;
+                    temp["format"] = match.format;
+                    temp["format_str"] = match.format_str;
+                    temp["status_str"] = match.status_str;
+                    temp["status_note"] = match.status_note;
+                    temp["date_start"] = match.date_start;
+                    temp["date_end"] = match.date_end;
+                    temp["teama"] = match.teama;
+                    temp["teamb"] = match.teamb;
+                    temp["venue"] = match.venue;
+                    temp["competition"] = match.competition;
+                    myObject[match.match_id] = temp;
+                });
+            }
+            
+            // Step 5: Store the updated JSON object in Redis cache
+            await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
+           
+           // Step 6: if still not found in collection return the empty message  
+           return res.status(200).json({
+                status: 200,
+                message: "Team Matches retrieved successfully.",
+                data: myObject
+           });
+        }
     }
     catch (error) {
         // console.error(error);
