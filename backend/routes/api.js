@@ -1,5 +1,5 @@
 const express = require('express');
-const { getSeasons , getCompetetionList, getCompetetionMatches, getMatchScoreCard, getMatchSquads, getMatchLive, getPlayersProfile, getPlayerStatstic, getMatchFantasy, getCompetetionDays, getSources, getCompetetionStanding, getRankings, getCompetetionDaysNew, getArticles, getCompetetionsUpcomingMatches, getCompetetionscompletedMatches, getTeamPlayerByTeamId, getTeamDetailsByTeamId, getTeamMatchesByTeamId } = require('../controllers/api.controller');
+const { getSeasons , getCompetetionList, getCompetetionMatches, getMatchScoreCard, getMatchSquads, getMatchLive, getPlayersProfile, getPlayerStatstic, getMatchFantasy, getCompetetionDays, getSources, getCompetetionStanding, getRankings, getCompetetionDaysNew, getArticles, getCompetetionsUpcomingMatches, getCompetetionscompletedMatches, getTeamPlayerByTeamId, getTeamDetailsByTeamId, getTeamMatchesByTeamId, getAninscore } = require('../controllers/api.controller');
 const router = express.Router();
 
 
@@ -37,5 +37,9 @@ router.get('/articles', getArticles);
 router.get('/teams', getTeamDetailsByTeamId);
 router.get('/team_player', getTeamPlayerByTeamId);
 router.get('/team_matches', getTeamMatchesByTeamId);
+
+
+// routes for the AninScore actions
+router.get('/aninscore', getAninscore);
 
 module.exports = router;

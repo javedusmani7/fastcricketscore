@@ -22,6 +22,7 @@ const Ranking = require('../models/Ranking');
 const Article = require('../models/Article');
 const TeamPlayer = require('../models/TeamPlayer');
 const Team = require('../models/Team');
+const Aninscore = require('../models/Aninscore');
 
 
 
@@ -1057,6 +1058,40 @@ exports.getTeamDetailsByTeamId = async (req, res) => {
         return res.status(200).json({
             status: 200,
             message: "No record found for this Team.",
+            data: []
+        });
+    }
+    catch (error) {
+        // console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+exports.getAninscore = async (req, res) => {
+
+    // check if the team_id exists or not
+    const eventId = parseInt(req.query.eventId) || 0;
+    if(!eventId){
+        return res.status(200).json({status: 404, message: 'eventId not found' });
+    }
+    
+    try {
+        // Step 1: check team_id exist in teams collection or not; if exist return the response
+        const AninscoreRow = await Aninscore.findOne({eventId: eventId});
+        if (AninscoreRow) {            
+            // Step 2: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Aninscore row retrieved successfully.",
+                data: AninscoreRow
+            });
+        }
+        
+        // Step 3: if still not found in collection return the empty message  
+        return res.status(200).json({
+            status: 200,
+            message: "No record found for this EventId.",
             data: []
         });
     }

@@ -24,6 +24,7 @@ const RankingModel = require('../models/Ranking');
 const Article = require('../models/Article');
 const TeamPlayer = require('../models/TeamPlayer');
 const Team = require('../models/Team');
+const Aninscore = require('../models/Aninscore');
 
 // predefine constant values
 const ENTITYSPORT_API_KEY = process.env.ENTITYSPORT_API_KEY;
@@ -1532,6 +1533,35 @@ exports.syncTeamDetailsTeamId = async (req, res) => {
     }
 }
 
+exports.syncAninscore = async (req, res) => {
+    try {
+        // Step 1: sync the aninscore details from 3rd party api
+        const response = await axios.get("http://13.232.88.12:3000/api/match/getEventWithScore");
+        const eventsData = response.data.result; 
+        if(eventsData.length > 0){
+            for (const event of eventsData) {
+                // Using upsert to either insert or update the event data based on eventId
+                const { eventId, scoreId, sportId } = event;
+                await Aninscore.updateOne(
+                { eventId }, // Condition to check if the event already exists
+                { eventId, scoreId, sportId }, // The data to insert or update
+                { upsert: true } // Ensure that the document is inserted if it doesn't exist
+                );
+            }
+        }
+        
+        // Send response
+        return res.status(200).json({
+            status: 200,
+            message: "Aninscore row retrieved successfully.",
+            data: [] 
+        });
+    }
+    catch (error) {
+        // console.error(error.message);
+        res.status(500).json({ message: error.message });
+    }
+}
 
 
 

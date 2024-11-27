@@ -143,14 +143,26 @@ const syncRankings = async () => {
   }
 };
 
+
+const syncAninscoreData = async () => {
+
+    try {
+        const url = api_url + 'sync/aninscore?token=' + ENTITYSPORT_API_KEY;
+        const response = await axios.get(url);
+        console.log("Aninscore Data has been successfully synced");
+    } catch (error) {
+        console.error('Error syncing Aninscore data:', error);
+    }
+  };
+
 console.log('Cron job scheduled: Syncing data.');
 
 // // Schedule the task to run every 3 months once a time
-syncSeasonsData();
+// syncSeasonsData();
 cron.schedule('0 0 1 1,7 *', syncSeasonsData);
 
 // // Schedule the task to run every 3 months once a time
-syncCompetetionsData();
+// syncCompetetionsData();
 cron.schedule('0 0 1 1,4,7,10 *', syncCompetetionsData);
 
 // // Schedule the task to run every 1 second and sync all completed matches data
@@ -174,8 +186,12 @@ cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
 
 
 // Once a day (midnight, 00:00:00)
-syncRankings();
+// syncRankings();
 cron.schedule('0 0 0 * * *', () => {
     console.log('Cron job running once a day at midnight!');
     syncRankings();
 });
+
+
+// Cron for the AninScore actions
+cron.schedule('*/10 * * * * *', syncAninscoreData);
