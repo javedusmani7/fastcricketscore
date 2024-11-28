@@ -119,6 +119,17 @@ const syncSquadsDataForLiveMatches = async () => {
   }
 };
 
+// this function will make an API call and get rankings data
+const syncRankings = async () => {
+  try {
+      const url = api_url + 'sync/rankings?token=' + ENTITYSPORT_API_KEY;
+      const response = await axios.get(url);
+      console.log("syncRankings Data has been successfully synced.");
+  } catch (error) {
+      console.error('Error syncRankings data:', error);
+  }
+};
+
 // A function to check current time and decide which cron job to run
 function executeJobBasedOnTime() {    
     const currentHour = new Date().getHours(); // Get current hour (0-23)
@@ -132,20 +143,7 @@ function executeJobBasedOnTime() {
     }
 }
 
-// this function will make an API call and get rankings data
-const syncRankings = async () => {
-  try {
-      const url = api_url + 'sync/rankings?token=' + ENTITYSPORT_API_KEY;
-      const response = await axios.get(url);
-      console.log("syncRankings Data has been successfully synced.");
-  } catch (error) {
-      console.error('Error syncRankings data:', error);
-  }
-};
-
-
 const syncAninscoreData = async () => {
-
     try {
         const url = api_url + 'sync/aninscore?token=' + ENTITYSPORT_API_KEY;
         const response = await axios.get(url);
@@ -153,30 +151,18 @@ const syncAninscoreData = async () => {
     } catch (error) {
         console.error('Error syncing Aninscore data:', error);
     }
-  };
+};
 
 console.log('Cron job scheduled: Syncing data.');
 
 // // Schedule the task to run every 3 months once a time
-// syncSeasonsData();
 cron.schedule('0 0 1 1,7 *', syncSeasonsData);
 
 // // Schedule the task to run every 3 months once a time
-// syncCompetetionsData();
 cron.schedule('0 0 1 1,4,7,10 *', syncCompetetionsData);
 
-// // Schedule the task to run every 1 second and sync all completed matches data
-// cron.schedule('* * * * * *', syncCompletedCompetitionData);
-// cron.schedule('* * * * * *', syncLiveCompetitionData);
-// Run the job every 1 second to check the current time
-// cron.schedule('0/5 * * * * *', () => {
-//     executeJobBasedOnTime();
-// });
+// // Schedule the task to run every 50 second and sync all completed matches data
 setInterval(executeJobBasedOnTime, 50000);
-
-// // Schedule the task to run at midnight every day for syncing scheduled matches data
-// cron.schedule('0 0 * * *', syncUpcomingMatchesDataForCompetetions);
-
 
 // Schedule the task to run every 5 second and sync data for the live match
 cron.schedule('0 0 * * * *', syncFantasyDataForLiveMatches);
@@ -185,12 +171,8 @@ cron.schedule('* * * * * *', syncScorecardDataForLiveMatches);
 cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
 
 
-// Once a day (midnight, 00:00:00)
-// syncRankings();
-cron.schedule('0 0 0 * * *', () => {
-    console.log('Cron job running once a day at midnight!');
-    syncRankings();
-});
+// Once a day (midnight, 00:00:00) - Cron job running once a day at midnight!
+cron.schedule('0 0 0 * * *', () => { syncRankings(); });
 
 
 // Cron for the AninScore actions

@@ -705,6 +705,58 @@ exports.getCompetetionList = async (req, res) => {
 }
 
 
+exports.getCompetetionById = async (req, res) => {
+
+    // check if the match_id exists or not
+    const cid = parseInt(req.query.cid) || false;
+    if(!cid){
+        return res.status(200).json({status: 404, message: 'cid not found' });
+    }
+    
+    try {
+        // Step 1: we are checking competetion exist on the competetions Table or not
+        let competetionRow = await Competetion.findOne({cid: cid});
+        if (!competetionRow) {
+            return res.status(404).json({ status: 404, message: "competetion does not exist for this cid", data: [] });
+        }
+
+        // Step 2: Now we wil fetch all the matches by cid
+        const matchesRows = await Match.find({ cid: cid});
+    
+        //  Step 3: iterate the result and create an object of array        
+        let myObject = {};
+        if (matchesRows.length > 0) {
+            const matchIdsArray = matchesRows.map((match) =>{
+                let temp = {};
+                temp["match_id"] = match.match_id;
+                temp["_id"] = match._id;
+                temp["format"] = match.format;
+                temp["format_str"] = match.format_str;
+                temp["status_str"] = match.status_str;
+                temp["status_note"] = match.status_note;
+                temp["date_start"] = match.date_start;
+                temp["date_end"] = match.date_end;
+                temp["teama"] = match.teama;
+                temp["teamb"] = match.teamb;
+                temp["venue"] = match.venue;
+                temp["competition"] = match.competition;
+                myObject[match.match_id] = temp;
+            });
+        }
+
+        // Step 4: if still not found in collection return the empty message  
+        return res.status(200).json({
+            status: 200,
+            message: "Competition Matches has been retrieved successfully.",
+            data: myObject
+        });
+    }
+    catch (error) {
+        // console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
 /***
  * This API will be use to fetch upcoming matches 
  * it will fetch next 45 days upcoming matches
