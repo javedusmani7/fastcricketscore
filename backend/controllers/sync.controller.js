@@ -1536,10 +1536,15 @@ exports.syncTeamDetailsTeamId = async (req, res) => {
 exports.syncAninscore = async (req, res) => {
     try {
         // Step 1: sync the aninscore details from 3rd party api
-        const response = await axios.get("http://13.232.88.12:3000/api/match/getEventWithScore");
+        const response = await axios.get("http://13.232.88.12:3000/api/match/getAllScoreId");
         const eventsData = response.data.result; 
-        if(eventsData.length > 0){
-            for (const event of eventsData) {
+
+        // Step 2: Filter out rows where scoreId is 0
+        const filteredRows = eventsData.filter(row => row.scoreId !== "0");
+
+        // Step 3: Insert or update each filtered row in MongoDB
+        if(filteredRows.length > 0){
+            for (const event of filteredRows) {
                 // Using upsert to either insert or update the event data based on eventId
                 const { eventId, scoreId, sportId } = event;
                 await Aninscore.updateOne(
@@ -1550,11 +1555,11 @@ exports.syncAninscore = async (req, res) => {
             }
         }
         
-        // Send response
+        // Step 4: Send response
         return res.status(200).json({
             status: 200,
             message: "Aninscore row retrieved successfully.",
-            data: [] 
+            data: filteredRows
         });
     }
     catch (error) {
