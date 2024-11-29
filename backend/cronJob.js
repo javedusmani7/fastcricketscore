@@ -175,5 +175,5 @@ cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
 cron.schedule('0 0 0 * * *', () => { syncRankings(); });
 
 
-// Cron for the AninScore actions
-cron.schedule('*/10 * * * * *', syncAninscoreData);
+// Cron for the AninScore actions for each every hour
+cron.schedule('0 0 * * * *', syncAninscoreData);
