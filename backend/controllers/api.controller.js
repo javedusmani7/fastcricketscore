@@ -1261,6 +1261,8 @@ exports.getTeamMatchesByTeamId = async (req, res) => {
                 temp["teama"] = match.teama;
                 temp["teamb"] = match.teamb;
                 temp["venue"] = match.venue;
+                temp["subtitle"] = match.subtitle;
+                temp["date_start_ist"] = match.date_start_ist;
                 temp["competition"] = match.competition;
                 myObject[match.match_id] = temp;
             });

@@ -768,42 +768,31 @@ exports.syncMatchFantasy = async (req, res) => {
             });
         }
 
-        let matchFantasyRow = await MatchFantasy.findOne({match_id: match_id});
-        if (matchFantasyRow) {
-            // Send response
-            return res.status(200).json({
-                status: 200,
-                message: "Match Fantasy Sync Successfully.",
-                data: matchFantasyRow 
-            });
-        }
-        else{
-            const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/newpoint2/';
-            const response = await fetchEntitySportData(token, url);
-            const apiData = response.response;
-            if(apiData !== undefined && response.status === "ok" ) {
-                
-                // STEP 1: Additional source_id and sport_id fields, we want to include on the database
-                const additionalFields = {
-                    sport_id: sport_primary_key,
-                    source_id: source_primary_key,
-                    match: matchRow._id,
-                    match_id: match_id,
-                };
-                dataToSave = { ...apiData, ...additionalFields };
-                
-                // Step 2: Create a new record
-                matchFantasyRow = new MatchFantasy(dataToSave);
-                await matchFantasyRow.save();
-            }
+        // Making an api call from Entity sports and then saving into our database
+        const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/newpoint2/';
+        const response = await fetchEntitySportData(token, url);
+        const apiData = response.response;
+        if(apiData !== undefined && response.status === "ok" ) {
             
-            // Send response
-            return res.status(200).json({
-                status: 200,
-                message: "Player Profile Statistic Sync Successfully.",
-                data: dataToSave 
-            });            
+            // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+            const additionalFields = {
+                sport_id: sport_primary_key,
+                source_id: source_primary_key,
+                match: matchRow._id,
+                match_id: match_id,
+            };
+            dataToSave = { ...apiData, ...additionalFields };
+            
+            // Step 2: Create a new record
+            const result = await MatchFantasy.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
         }
+            
+        // Send response
+        return res.status(200).json({
+            status: 200,
+            message: "Player Profile Statistic Sync Successfully.",
+            data: dataToSave 
+        });  
     } 
     catch (error) {
         console.error(error);
