@@ -1,5 +1,5 @@
 const express = require('express');
-const { getSeasons , getCompetetionList, getCompetetionMatches, getMatchScoreCard, getMatchSquads, getMatchLive, getPlayersProfile, getPlayerStatstic, getMatchFantasy, getCompetetionDays, getSources, getCompetetionStanding, getRankings, getCompetetionDaysNew, getArticles, getCompetetionsUpcomingMatches, getCompetetionscompletedMatches, getTeamPlayerByTeamId, getTeamDetailsByTeamId, getTeamMatchesByTeamId, getAninscore, getCompetetionById } = require('../controllers/api.controller');
+const { getSeasons , getCompetetionList, getCompetetionMatches, getMatchScoreCard, getMatchSquads, getMatchLive, getPlayersProfile, getPlayerStatstic, getMatchFantasy, getCompetetionDays, getSources, getCompetetionStanding, getRankings, getCompetetionDaysNew, getArticles, getCompetetionsUpcomingMatches, getCompetetionscompletedMatches, getTeamPlayerByTeamId, getTeamDetailsByTeamId, getTeamMatchesByTeamId, getAninscore, getCompetetionById, getmatchCommentary } = require('../controllers/api.controller');
 const router = express.Router();
 
 
@@ -24,6 +24,7 @@ router.get('/matchScorecard', getMatchScoreCard);
 router.get('/matchSquads', getMatchSquads);
 router.get('/matchLive', getMatchLive);
 router.get('/matchFantasy', getMatchFantasy);
+router.get('/matchCommentary', getmatchCommentary);
 
 
 

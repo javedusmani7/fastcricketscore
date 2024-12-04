@@ -17,6 +17,7 @@ const Matchlive = require('../models/Matchlive');
 const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
+const MatchCommentary = require('../models/MatchCommentary');
 const Competetion_Standing = require('../models/Competetion_Standing');
 const Ranking = require('../models/Ranking');
 const Article = require('../models/Article');
@@ -479,6 +480,72 @@ exports.getMatchFantasy = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error fetching data from syncMatchScoreCard API' });
+    }
+}
+
+
+exports.getmatchCommentary = async (req, res) => {
+
+    // check if the match_id exists or not
+    const match_id = parseInt(req.query.match_id) || false;  // Default to 10 items per page
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id not found' });
+    }
+
+    // check innining_id validation
+    const inning_id = req.query.inning_id;
+    if (!inning_id) {
+        return res.status(404).json({status: 404, message: 'inning_id paramater is missing, it is required.' });
+    }
+
+    // Making an api call to get the details frm collection
+    try {
+
+        // STEP 0:: Fetch data from matchSquad collection and check record is exis or not
+        const matchRow = await Match.findOne({ match_id: match_id })
+        if(!matchRow){
+            return res.status(404).json({status: 404, message: 'Match does not exist for this match_id.', data: []});
+        }
+
+        // STEP1:: First we will check data is already stored in database or not; if stored, Fetch the item
+        const matchCommentaryRow = await MatchCommentary.findOne({match_id: match_id, inning_id: inning_id});
+        if (matchCommentaryRow) {
+            // STEP 2:: Send the response
+            return res.status(200).json({
+                status: 200,
+                message: "MatchCommentary details retrieved successfully.",
+                data: matchCommentaryRow
+            });
+        }
+        else {
+            // STEP 3: If data is not stored, we will fetch and stored it using sync API
+            // first it will sync and then we will return the reposnse from the datbase
+            const temp_token = process.env.ENTITYSPORT_API_KEY;
+            const response = await axios.get(process.env.BACKEND_API_URL + 'sync/matchCommentary?token=' + temp_token + "&match_id=" + match_id + "&inning_id=" + inning_id);
+            if(response.data.data.status ==="error"){
+                return res.status(200).json({
+                    status: 200,
+                    message: "sss details retrieved successfully.",
+                    data: response.data.data.response
+                });
+            }
+            
+            // Step 4:: Now sync api should save the data and we can get the details from database and may return the response
+            const commentaryRow = await MatchCommentary.findOne({match_id: match_id, inning_id: inning_id});
+            if (commentaryRow) {
+                // Send the response
+                return res.status(200).json({
+                    status: 200,
+                    message: "MatchCommentary details retrieved successfully.",
+                    data: commentaryRow
+                });
+            }
+        }
+
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from matchCommentary API' });
     }
 }
 

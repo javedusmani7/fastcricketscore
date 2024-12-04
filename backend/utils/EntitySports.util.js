@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const fetchEntitySportData = async (token, url, per_page = 10, paged = 1) => {
+const fetchEntitySportData = async (token, url, per_page = 1000, paged = 1) => {
     try {
 
         // token and url validation

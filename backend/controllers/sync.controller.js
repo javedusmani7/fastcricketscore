@@ -18,6 +18,7 @@ const Matchlive = require('../models/Matchlive');
 const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
+const MatchCommentary = require('../models/MatchCommentary');
 const Competetion_Matches_Mapping = require('../models/Competetion_Matches_Mapping');
 const Competetion_Standing = require('../models/Competetion_Standing');
 const RankingModel = require('../models/Ranking');
@@ -284,7 +285,7 @@ exports.syncCompetetionMatches = async (req, res) => {
     let sport_primary_key = false;
     let source_primary_key = false;
     let competetion_primary_key = false;
-    if (!cid) { res.json({ status: 401, message: 'cid paramater is missing, it are required.' });}
+    if (!cid) { res.json({ status: 401, message: 'cid paramater is missing, it is required.' });}
 
     // first; we will get the primaryID details for the sport, source and competetion table 
     // so that we can pass these references to the match tables
@@ -368,7 +369,7 @@ exports.syncMatchScoreCard = async (req, res) => {
     const token = req.query.token;
     const match_id = req.query.match_id;
     if (!match_id) {
-        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it are required.' });
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it is required.' });
     }
     
     // first; we will get the primaryID details for the sport, source and competetion table 
@@ -445,7 +446,7 @@ exports.syncMatchSquads = async (req, res) => {
     const token = req.query.token;
     const match_id = req.query.match_id;
     if (!match_id) {
-        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it are required.' });
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it is required.' });
     }
     
     // STEP first; we will get the primaryID details for the sport, source and competetion table 
@@ -525,7 +526,7 @@ exports.syncMatchLive = async (req, res) => {
     const token = req.query.token;
     const match_id = req.query.match_id;
     if (!match_id) {
-        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it are required.' });
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it is required.' });
     }
     
     // STEP first; we will get the primaryID details for the sport, source and competetion table 
@@ -752,7 +753,7 @@ exports.syncMatchFantasy = async (req, res) => {
     const token = req.query.token;
     const match_id = req.query.match_id;
     if (!match_id) {
-        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it are required.' });
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it is required.' });
     }    
     
     // Making an api call from Entity sports and then saving into our database
@@ -792,6 +793,80 @@ exports.syncMatchFantasy = async (req, res) => {
             status: 200,
             message: "Player Profile Statistic Sync Successfully.",
             data: dataToSave 
+        });  
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    }
+}
+
+
+/**
+ * this function will make an API call to the ENTITYSPORT and get matche Commentry details
+ * @param {token} req 
+ * @param {match_id} req 
+ * @param {inning_id} req 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.syncMatchCommentary = async (req, res) => {
+
+    // get parameters and check for the required validation
+    let dataToSave = [];
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    const token = req.query.token;
+    const match_id = req.query.match_id;
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it is required.' });
+    }
+
+    // check innining_id validation
+    const inning_id = req.query.inning_id;
+    if (!inning_id) {
+        return res.status(404).json({status: 404, message: 'inning_id paramater is missing, it is required.' });
+    }
+    
+    // Making an api call from Entity sports and then saving into our database
+    try {
+        // first we are checking match exist on the Match Table or not
+        let matchRow = await Match.findOne({match_id: match_id});
+        if (!matchRow) {
+            // Send response
+            return res.status(200).json({
+                status: 200,
+                message: "Match does not exist for this match_id",
+                data: [] 
+            });
+        }
+
+        // Making an api call from Entity sports and then saving into our database
+        const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/innings/' + inning_id + '/commentary';
+        const response = await fetchEntitySportData(token, url, 100000);
+        const apiData = response.response;
+        if(apiData !== undefined && response.status === "ok" ) {
+            
+            // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+            const additionalFields = {
+                sport_id: sport_primary_key,
+                source_id: source_primary_key,
+                match: matchRow._id,
+                match_id: match_id,
+            };
+            dataToSave = { ...apiData, ...additionalFields };
+            
+            // Step 2: Create a new record
+            const filter = { match_id, inning_id };
+            const result = await MatchCommentary.updateOne(filter, { $set: dataToSave}, { upsert: true });
+        }
+            
+        // Send response
+        return res.status(200).json({
+            status: url,
+            message: "Match Commentry has been Sync Successfully.",
+            data: response 
         });  
     } 
     catch (error) {
@@ -881,7 +956,7 @@ exports.syncPlayersProfile = async (req, res) => {
     const token = req.query.token;
     const pid = req.query.pid;
     if (!pid) {
-        return res.status(404).json({status: 404, message: 'pid paramater is missing, it are required.' });
+        return res.status(404).json({status: 404, message: 'pid paramater is missing, it is required.' });
     }
     
     // first; we will get the primaryID details for the sport, source table 
@@ -953,7 +1028,7 @@ exports.syncPlayerStatstic = async (req, res) => {
     const sport_primary_key = req.query.sport_primary_key;
     const source_primary_key = req.query.source_primary_key;
     if (!pid) {
-        return res.status(404).json({status: 404, message: 'pid paramater is missing, it are required.' });
+        return res.status(404).json({status: 404, message: 'pid paramater is missing, it is required.' });
     }
     
     // we are checking, records exist for this pid or not, if exist return the data
