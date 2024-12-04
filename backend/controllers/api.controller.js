@@ -235,7 +235,37 @@ exports.getCompetetionStanding = async (req, res) => {
     // Making an api call on Competetion_Standing table and return response
     try {
         // Fetch the item
-        const Competetion_Standing_Row = await Competetion_Standing.findOne({cid: cid});
+        const Competetion_Standing_Row = await Competetion_Standing.aggregate([
+            {
+                $match: {cid: cid}
+            },{
+              $lookup: {
+                from: "competetions",               // The collection to join with
+                localField: "competetion",          // The field in competition_standing that contains the reference
+                foreignField: "_id",                // The field in competition that matches the reference
+                as: "competition_details"          // Alias for the resulting array of matching documents
+              }
+            },
+            {
+              $unwind: "$competition_details"       // To ensure you get the details as a single object
+            },
+            {
+                // Stage 4: Project the fields you want
+                $project: {
+                    _id: 1,
+                    cid: 1,
+                    competetion: 1,
+                    source_id: 1,
+                    sport_id: 1,
+                    standing_type: 1,
+                    standings: 1,
+                    "competition_details": 1, // Include competition details
+                }
+            },
+            {
+                $limit: 1                          // Limit the results to only one record
+            }
+          ]);
 
         // Send the response
         return res.status(200).json({

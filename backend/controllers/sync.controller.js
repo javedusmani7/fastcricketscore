@@ -709,7 +709,7 @@ exports.syncCompetetionStandings = async (req, res) => {
     
     try {
         // calling supportive api for accessing tournament standings
-        saveCompetetionStandingsDataForLiveMatch(req, res, cid);
+        await saveCompetetionStandingsDataForLiveMatch(req, res, cid);
         // retrun response
         return res.status(200).json({status: 200, message: 'Sync Successfully.'});
     } 
