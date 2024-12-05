@@ -19,6 +19,7 @@ const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
 const MatchCommentary = require('../models/MatchCommentary');
+// const MatchStatistic = require('../models/MatchStatistic');
 const Competetion_Matches_Mapping = require('../models/Competetion_Matches_Mapping');
 const Competetion_Standing = require('../models/Competetion_Standing');
 const RankingModel = require('../models/Ranking');
@@ -720,6 +721,80 @@ exports.syncCompetetionStandings = async (req, res) => {
     }
 }
 
+/**
+ * This API will take care when competetion status has to changed from upcoming to live &&&&& live to complted(result)
+ * Using these status, it will take care which competetion data has to be called again an again
+ * Live competetion data should be sync frequently
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.updateCompetetionStatus = async (req, res) => {
+    try {
+
+        // get current date in YYYY-MM-DD format
+        const todayDate = new Date().toISOString().split('T')[0];
+
+        try {
+            // Case 1: todayDate < datestart(in database) and status != "upcoming" then status = "upcoming"
+            const filter = {datestart: { $gt: todayDate }, status: { $ne: 'upcoming' }}
+            const mapping_row = await Competetion_Matches_Mapping.find(filter);
+            if(mapping_row.length > 0){
+                
+                // Step 1: First, Update the Competetion Table
+                const competetion_result = await Competetion.updateMany(filter, { $set: { status: 'upcoming'} }, { upsert: true });
+
+                // // Step 2: Second, Update the mapping Table
+                const mapping_result = await Competetion_Matches_Mapping.updateMany(filter, { $set: { status: 'upcoming'} }, { upsert: true });
+            }
+        }
+        catch (error) {
+            // code here
+        }
+
+
+        try {
+            // Case 2: todayDate > dateend(in database) and status != "result" then status = "result"
+            const filter = {dateend: { $lt: todayDate }, status: { $ne: 'result' }}
+            const mapping_row = await Competetion_Matches_Mapping.find(filter);
+            if(mapping_row.length > 0){
+                
+                // Step 1: First, Update the Competetion Table
+                const competetion_result = await Competetion.updateMany(filter, { $set: { status: 'result'} }, { upsert: true });
+
+                // // Step 2: Second, Update the mapping Table
+                const mapping_result = await Competetion_Matches_Mapping.updateMany(filter, { $set: { status: 'result'} }, { upsert: true });
+            }
+        }
+        catch (error) {
+            // code here
+        }
+
+
+        try {
+            // Case 3: todayDate > datestart(in database) && todayDate < dateend(in database) then status = "live"
+            const filter = { datestart: { $lt: todayDate }, dateend: { $gt: todayDate }, status: { $ne: 'live' }}
+            const mapping_row = await Competetion_Matches_Mapping.find(filter);
+            if(mapping_row.length > 0){                
+                // Step 1: First, Update the Competetion Table
+                const case1_competetion_result = await Competetion.updateMany(filter, { $set: { status: 'live'} }, { upsert: true });
+
+                // Step 2: Second, Update the mapping Table
+                const case1_mapping_result = await Competetion_Matches_Mapping.updateMany(filter, { $set: { status: 'live'} }, { upsert: true });
+            }
+        }
+        catch (error) {
+            // code here
+        }
+        
+        // retrun response
+        return res.status(200).json({status: 200, message: 'Update Competetion Status Updated Successfully.'});
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'Error on updateCompetetionStatus API', data: error.message });
+    }
+}
+
 
 exports.syncCompetetion = async (req, res) => {
     // try {
@@ -873,6 +948,71 @@ exports.syncMatchCommentary = async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Error fetching data from Entitysport API' });
     }
+}
+
+/**
+ * This API will be used to sync match statistic data from entity sports
+ * @param {match_id} req 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.syncMatchStatistics = async (req, res) => {
+
+    // get parameters and check for the required validation
+    let dataToSave = [];
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    const token = req.query.token;
+    const match_id = req.query.match_id;
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it is required.' });
+    }
+    
+    // Making an api call from Entity sports and then saving into our database
+    // try {
+    //     // first we are checking match exist on the Match Table or not
+    //     let matchRow = await Match.findOne({match_id: match_id});
+    //     if (!matchRow) {
+    //         // Send response
+    //         return res.status(200).json({
+    //             status: 200,
+    //             message: "Match does not exist for this match_id",
+    //             data: [] 
+    //         });
+    //     }
+
+    //     // Making an api call from Entity sports and then saving into our database
+    //     const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/statistics';
+    //     const response = await fetchEntitySportData(token, url, 100000);
+    //     const apiData = response.response;
+    //     if(apiData !== undefined && response.status === "ok" ) {
+            
+    //         // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+    //         const additionalFields = {
+    //             sport_id: sport_primary_key,
+    //             source_id: source_primary_key,
+    //             match: matchRow._id,
+    //             match_id: match_id,
+    //         };
+    //         dataToSave = { ...apiData, ...additionalFields };
+            
+    //         // Step 2: Create a new record
+    //         const filter = { match_id };
+    //         const result = await MatchStatistic.updateOne(filter, { $set: dataToSave}, { upsert: true });
+    //     }
+            
+    //     // Send response
+    //     return res.status(200).json({
+    //         status: url,
+    //         message: "Match Statistic has been Sync Successfully.",
+    //         data: dataToSave 
+    //     });  
+    // } 
+    // catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    // }
 }
 
 

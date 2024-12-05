@@ -36,6 +36,17 @@ const syncCompetetionsData = async () => {
 
 // this is automatic run function which is used to call itself automatically
 // this function will make an API call to the ENTITYSPORT and get all available matches
+const updateCompetetionStatus = async () => {
+    try {
+        const url = api_url + 'sync/update_competetion_status?token=' + ENTITYSPORT_API_KEY;
+        const response = await axios.get(url);
+    } catch (error) {
+        console.error('Error syncing data:', error);
+    }
+};
+
+// this is automatic run function which is used to call itself automatically
+// this function will make an API call to the ENTITYSPORT and get all available matches
 const syncCompletedCompetitionData = async () => {
   try {
       const url = api_url + 'sync/cronjob_for_completed_competitions?token=' + ENTITYSPORT_API_KEY;
@@ -160,6 +171,9 @@ cron.schedule('0 0 1 1,7 *', syncSeasonsData);
 
 // // Schedule the task to run every 3 months once a time
 cron.schedule('0 0 1 1,4,7,10 *', syncCompetetionsData);
+
+// Schedule the task to run every 12 hours
+cron.schedule('0 0 */12 * * *', updateCompetetionStatus);
 
 // // Schedule the task to run every 50 second and sync all completed matches data
 setInterval(executeJobBasedOnTime, 50000);

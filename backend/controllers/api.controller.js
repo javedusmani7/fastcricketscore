@@ -18,6 +18,7 @@ const Playersprofile = require('../models/Playersprofile');
 const Playerstatistic = require('../models/Playerstatistic');
 const MatchFantasy = require('../models/MatchFantasy');
 const MatchCommentary = require('../models/MatchCommentary');
+// const MatchStatistic = require('../models/MatchStatistic');
 const Competetion_Standing = require('../models/Competetion_Standing');
 const Ranking = require('../models/Ranking');
 const Article = require('../models/Article');
@@ -549,6 +550,71 @@ exports.getmatchCommentary = async (req, res) => {
     }
 }
 
+exports.getmatchStatistics = async (req, res) => {
+
+    // check if the match_id exists or not
+    const match_id = parseInt(req.query.match_id) || false;  // Default to 10 items per page
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id not found' });
+    }
+
+    // Making an api call to get the details frm collection
+    // try {
+
+    //     // STEP 1:: Fetch data from Match collection and check record is exist or not
+    //     const matchRow = await Match.findOne({ match_id: match_id })
+    //     if(!matchRow){
+    //         return res.status(404).json({status: 404, message: 'Match does not exist for this match_id.', data: []});
+    //     }
+
+    //     // STEP 2: first sync the latest statistic into the database
+    //     const temp_token = process.env.ENTITYSPORT_API_KEY;
+    //     const response = await axios.get(process.env.BACKEND_API_URL + 'sync/matchStatistics?token=' + temp_token + "&match_id=" + match_id);
+    //     if(response.data.data.status ==="error"){
+    //         return res.status(200).json({
+    //             status: 200,
+    //             message: "Error in Match Statistic details.",
+    //             data: response.data.data.response
+    //         });
+    //     }
+        
+    //     // Step 3:: Now sync api should save the data and we can get the details from database and may return the response
+    //     const matchStatisticRoww = await MatchStatistic.findOne({match_id: match_id});
+    //     if (!matchStatisticRoww) {
+    //         return res.status(404).json({status: 404, message: 'Match Statistic details not found' });
+    //     }
+
+    //     // step4: collect the 
+    //     const matchesBatsmen = matchStatisticRoww.innings;
+    //     return res.status(200).json({status: 200, message: matchesBatsmen });
+
+    // } 
+    // catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ message: 'Error fetching data from matchCommentary API' });
+    // }
+}
+
+function sumRunsByBatsman(matches) {
+    const runsByBatsman = {};
+  
+    // Iterate through all matches
+    matches.forEach(match => {
+      // Iterate through the batsmen in each match
+      match.batsmen.forEach(batsman => {
+        // If the batsman_id already exists in the results, add the runs
+        if (runsByBatsman[batsman.batsman_id]) {
+          runsByBatsman[batsman.batsman_id] += batsman.runs;
+        } else {
+          // If batsman_id doesn't exist, initialize it with current runs
+          runsByBatsman[batsman.batsman_id] = batsman.runs;
+        }
+      });
+    });
+  
+    return runsByBatsman;
+  }
+
 exports.getCompetetionDaysNew = async (req, res) => {
     try {
         const matchesRows = await Match.aggregate([
@@ -649,34 +715,34 @@ exports.getCompetetionDays = async (req, res) => {
             });
 
         }
-        else {
-            console.log('getCompetetionDays API: Putting data in redis cache from Database:');
-            // If this code run means there is no redis cache for this key; we have to handle it and add some rows in redis cache
-            // Step 1: we are getting those scorecard matches which is either "Live OR Completed" and filter it with last 5 matches
-            const MatchscorecardRows = await Matchscorecard.aggregate([
-                { $match: { status_str: "Completed" } }, // Filter by status
-                { $sort: { timestamp_end: -1 } },   // Sort by timestamp_end (descending)
-                { $limit: 5 }                   // Limit to 5 results
-            ]);
+        // else {
+        //     console.log('getCompetetionDays API: Putting data in redis cache from Database:');
+        //     // If this code run means there is no redis cache for this key; we have to handle it and add some rows in redis cache
+        //     // Step 1: we are getting those scorecard matches which is either "Live OR Completed" and filter it with last 5 matches
+        //     const MatchscorecardRows = await Matchscorecard.aggregate([
+        //         { $match: { status_str: "Completed" } }, // Filter by status
+        //         { $sort: { timestamp_end: -1 } },   // Sort by timestamp_end (descending)
+        //         { $limit: 5 }                   // Limit to 5 results
+        //     ]);
 
-            // Step 2: we are getting creating an object which we will push to the redis cache
-            let myObject = {};
-            if(MatchscorecardRows.length > 0){
-                const matchIdsArray = MatchscorecardRows.map((match) =>{
-                    myObject[match.match_id] = match
-                });
-            }
+        //     // Step 2: we are getting creating an object which we will push to the redis cache
+        //     let myObject = {};
+        //     if(MatchscorecardRows.length > 0){
+        //         const matchIdsArray = MatchscorecardRows.map((match) =>{
+        //             myObject[match.match_id] = match
+        //         });
+        //     }
     
-            // Step 3: Store the updated JSON object in Redis cache
-            await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
+        //     // Step 3: Store the updated JSON object in Redis cache
+        //     await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
 
-            // returning response
-            return res.status(200).json({
-                status: 200,
-                message: "Competetions retrieved successfully.",
-                data: myObject
-            });
-        }
+        //     // returning response
+        //     return res.status(200).json({
+        //         status: 200,
+        //         message: "Competetions retrieved successfully.",
+        //         data: myObject
+        //     });
+        // }
     }
     catch (error) {
         // console.error(error);

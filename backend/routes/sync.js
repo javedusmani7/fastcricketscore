@@ -1,5 +1,5 @@
 const express = require('express');
-const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy, syncCompetetionMatchesMapping, cronjobForCompetetion, cronjobForcompletedMatched, cronjobForCompletedMatched, cronjobForCompletedMatches, cronjobForLiveMatches, cronjobForUpcomingMatches, cronjobFantasyDataForLiveMatches, cronjobLiveDataForLiveMatches, cronjobScorecardDataForLiveMatches, cronjobSquadsDataForLiveMatches, syncCompetetionStandings, cronjobForCompletedCompetetions, cronjobForLiveCompetitions, cronjobForCompletedCompetitions, syncRankings, syncArticles, cronjobForUpcomingCompetitions, syncTeamPlayerByTeamId, syncTeamDetailsTeamId, syncAninscore, syncMatchCommentary} = require('../controllers/sync.controller');
+const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy, syncCompetetionMatchesMapping, cronjobForCompetetion, cronjobForcompletedMatched, cronjobForCompletedMatched, cronjobForCompletedMatches, cronjobForLiveMatches, cronjobForUpcomingMatches, cronjobFantasyDataForLiveMatches, cronjobLiveDataForLiveMatches, cronjobScorecardDataForLiveMatches, cronjobSquadsDataForLiveMatches, syncCompetetionStandings, cronjobForCompletedCompetetions, cronjobForLiveCompetitions, cronjobForCompletedCompetitions, syncRankings, syncArticles, cronjobForUpcomingCompetitions, syncTeamPlayerByTeamId, syncTeamDetailsTeamId, syncAninscore, syncMatchCommentary, syncMatchStatistics, updateCompetetionStatus} = require('../controllers/sync.controller');
 
 
 const router = express.Router();
@@ -14,6 +14,7 @@ router.get('/seasons', syncSeason);
 router.get('/competetions', syncCompetetionList);
 router.get('/competetionMatch', syncCompetetionMatches);
 router.get('/competetion_standings', syncCompetetionStandings);
+router.get('/update_competetion_status', updateCompetetionStatus);
 
 // router.get('/competetionDetail', syncCompetetion);
 router.get('/matchScorecard', syncMatchScoreCard);
@@ -21,6 +22,7 @@ router.get('/matchSquads', syncMatchSquads);
 router.get('/matchLive', syncMatchLive);
 router.get('/matchFantasy', syncMatchFantasy);
 router.get('/matchCommentary', syncMatchCommentary);
+// router.get('/matchStatistics', syncMatchStatistics);
 
 
 // router.get('/players', syncPlayersProfile);
