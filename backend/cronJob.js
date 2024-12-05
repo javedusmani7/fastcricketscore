@@ -143,15 +143,17 @@ const syncRankings = async () => {
 
 // A function to check current time and decide which cron job to run
 function executeJobBasedOnTime() {    
-    const currentHour = new Date().getHours(); // Get current hour (0-23)
-    if (currentHour >= 0 && currentHour < 6) {
-        // console.log('Running Cron Job 1 (0:00 - 6:00)');
-        // syncCompletedCompetitionData();
-        syncUpcomingCompetitionData();
-    } else {
-        // console.log('Running Cron Job 2 (6:00 - 23:59)');
-        syncLiveCompetitionData();
-    }
+    // const currentHour = new Date().getHours(); // Get current hour (0-23)
+    // if (currentHour >= 0 && currentHour < 6) {
+    //     // console.log('Running Cron Job 1 (0:00 - 6:00)');
+    //     // syncCompletedCompetitionData();
+    //     syncUpcomingCompetitionData();
+    // } else {
+    //     // console.log('Running Cron Job 2 (6:00 - 23:59)');
+    //     syncLiveCompetitionData();
+    // }
+
+    syncLiveCompetitionData();
 }
 
 const syncAninscoreData = async () => {
@@ -166,14 +168,19 @@ const syncAninscoreData = async () => {
 
 console.log('Cron job scheduled: Syncing data.');
 
-// // Schedule the task to run every 3 months once a time
+// cron job will run at midnight (00:00) on the 1st day of January and July
 cron.schedule('0 0 1 1,7 *', syncSeasonsData);
 
-// // Schedule the task to run every 3 months once a time
-cron.schedule('0 0 1 1,4,7,10 *', syncCompetetionsData);
+// cron job will run at 1 AM (01:00) on the 1st day of January, April, July, and October
+cron.schedule('0 1 1 1,4,7,10 *', syncCompetetionsData);
 
 // Schedule the task to run every 12 hours
 cron.schedule('0 0 */12 * * *', updateCompetetionStatus);
+
+// Schedule task to run every hour at minute 25 - 3:25 PM, 4:25 PM, 5:25 PM, and so on.
+cron.schedule('25 * * * *', () => {
+    syncUpcomingCompetitionData();
+});
 
 // // Schedule the task to run every 50 second and sync all completed matches data
 setInterval(executeJobBasedOnTime, 50000);
@@ -185,9 +192,9 @@ cron.schedule('* * * * * *', syncScorecardDataForLiveMatches);
 cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
 
 
-// Once a day (midnight, 00:00:00) - Cron job running once a day at midnight!
-cron.schedule('0 0 0 * * *', () => { syncRankings(); });
+// This cron job will run every 6 hours for sync rankings
+cron.schedule('0 */6 * * *', () => { syncRankings(); });
 
 
-// Cron for the AninScore actions for each every hour
-cron.schedule('0 0 * * * *', syncAninscoreData);
+// Schedule task to run every hour at minute 15 - 3:15 PM, 4:15 PM, 5:15 PM, and so on.
+cron.schedule('15 * * * *', syncAninscoreData);

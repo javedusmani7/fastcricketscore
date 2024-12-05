@@ -208,71 +208,71 @@ exports.syncCompetetionMatchesMapping = async (req, res) => {
     let source_primary_key = false;
     let competetion_primary_key = false;
 
-    // first; we will get the primaryID details for the sport, source and competetion table 
-    // so that we can pass these references to the match tables
-    try {
+    // // first; we will get the primaryID details for the sport, source and competetion table 
+    // // so that we can pass these references to the match tables
+    // try {
 
-        console.log("step2");
-        // check if the sports exists or not
-        const sportRow = await Sport.findOne({sport_id: sport_id});
-        if (!sportRow) {
-            return res.status(404).json({status: 404, message: 'Sport not found' });
-        }
-        sport_primary_key = sportRow._id;
+    //     console.log("step2");
+    //     // check if the sports exists or not
+    //     const sportRow = await Sport.findOne({sport_id: sport_id});
+    //     if (!sportRow) {
+    //         return res.status(404).json({status: 404, message: 'Sport not found' });
+    //     }
+    //     sport_primary_key = sportRow._id;
 
-        // check if the source exists or not
-        const sourceRow = await Source.findOne({source_id: source_id});
-        if (!sourceRow) {
-            return res.status(404).json({status: 404, message: 'Source not found' });
-        }
-        source_primary_key = sourceRow._id;
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
-    }
+    //     // check if the source exists or not
+    //     const sourceRow = await Source.findOne({source_id: source_id});
+    //     if (!sourceRow) {
+    //         return res.status(404).json({status: 404, message: 'Source not found' });
+    //     }
+    //     source_primary_key = sourceRow._id;
+    // }
+    // catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
+    // }
 
-    // Second; we are synching the competetions and their matches one by one
-    try {
-        console.log("step3");
-        let Competetion_Matches_Mapping_Row = await Competetion_Matches_Mapping.findOne();
-        if (Competetion_Matches_Mapping_Row) {
-            console.log("step4");
+    // // Second; we are synching the competetions and their matches one by one
+    // try {
+    //     console.log("step3");
+    //     let Competetion_Matches_Mapping_Row = await Competetion_Matches_Mapping.findOne();
+    //     if (Competetion_Matches_Mapping_Row) {
+    //         console.log("step4");
             
-            // Step 1: we will get the competetion those status=result(Means it has completed and only sync single time)
-            let Competetion_Matches_Mapping_Completed_Row = await Competetion_Matches_Mapping.findOne({active: 1, status: "result"});
-            if (Competetion_Matches_Mapping_Completed_Row) {
-                const cid = Competetion_Matches_Mapping_Completed_Row.cid;
-                // once match os sync now we are updating mapping table so that it would not sync again
-                const url = api_url + 'sync/competetionMatch?token=' + ENTITYSPORT_API_KEY + "&cid=" + cid;
-                const response = await axios.get(url);
-                if(response?.data?.length > 0){
-                    console.log("step4-resp-if", cid);
-                    const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: 0 } });
-                }
-            }
+    //         // Step 1: we will get the competetion those status=result(Means it has completed and only sync single time)
+    //         let Competetion_Matches_Mapping_Completed_Row = await Competetion_Matches_Mapping.findOne({active: 1, status: "result"});
+    //         if (Competetion_Matches_Mapping_Completed_Row) {
+    //             const cid = Competetion_Matches_Mapping_Completed_Row.cid;
+    //             // once match os sync now we are updating mapping table so that it would not sync again
+    //             const url = api_url + 'sync/competetionMatch?token=' + ENTITYSPORT_API_KEY + "&cid=" + cid;
+    //             const response = await axios.get(url);
+    //             if(response?.data?.length > 0){
+    //                 console.log("step4-resp-if", cid);
+    //                 const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: 0 } });
+    //             }
+    //         }
 
 
-            console.log("step5");
+    //         console.log("step5");
             
-            // Step 2: we will get the competetion those status!=result(Means it has not completed yet and need multiple sync)
-            const competetionRecordsRows = await Competetion_Matches_Mapping.find({ active: 1, status: { $ne: "result" } });
-            const finalResponse = await Promise.all(competetionRecordsRows.map(async (row) => {
-                const url = api_url + 'sync/competetionMatch?token=' + ENTITYSPORT_API_KEY + "&cid=" + row.cid;
-                const response = await axios.get(url);
-            }));
-        }
-        else{
-            console.log("step6");
-        }
+    //         // Step 2: we will get the competetion those status!=result(Means it has not completed yet and need multiple sync)
+    //         const competetionRecordsRows = await Competetion_Matches_Mapping.find({ active: 1, status: { $ne: "result" } });
+    //         const finalResponse = await Promise.all(competetionRecordsRows.map(async (row) => {
+    //             const url = api_url + 'sync/competetionMatch?token=' + ENTITYSPORT_API_KEY + "&cid=" + row.cid;
+    //             const response = await axios.get(url);
+    //         }));
+    //     }
+    //     else{
+    //         console.log("step6");
+    //     }
         
-        console.log("step12");
-        return res.status(200).json({status: 200, message: 'Sync Successfully.' });
-    } 
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
-    }
+    //     console.log("step12");
+    //     return res.status(200).json({status: 200, message: 'Sync Successfully.' });
+    // } 
+    // catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    // }
 }
 
 // this function will make an API call to the ENTITYSPORT and get all available matches based on competetionId
@@ -1332,7 +1332,7 @@ exports.cronjobForUpcomingCompetitions = async (req, res) => {
     console.log("cronjobForUpcomingCompetitions: Inside Step1::");
     try {
         // Step 1: we will get the competetion those status=result(Means, competeion is about to schedule)
-        let Competetion_Matches_Mapping_Completed_Row = await Competetion_Matches_Mapping.findOne({active: true, status: "upcoming"});
+        let Competetion_Matches_Mapping_Completed_Row = await Competetion_Matches_Mapping.findOne({active: false, status: "upcoming"});
         if (Competetion_Matches_Mapping_Completed_Row) {
 
             // check if the Competetion exists or not
@@ -1340,7 +1340,7 @@ exports.cronjobForUpcomingCompetitions = async (req, res) => {
             if(cid){
                 await saveCompetitionMatches(req, res, cid);
                 // update the Competetion_Matches_Mapping table because this competation match has been sync
-                const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: false } });
+                const result = await Competetion_Matches_Mapping.updateOne({ cid: cid }, { $set: {active: true } });
             }
         }
 
