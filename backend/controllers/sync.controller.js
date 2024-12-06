@@ -1975,7 +1975,6 @@ const saveScorecardDataForLiveMatch = async (req, res, match_id = false) => {
         // Step 2: Check if the record already exists and insert or update the record accordingly
         const result = await Matchscorecard.updateOne({match_id: match_id}, { $set: dataToSave}, { upsert: true });
 
-
         // Step 3: Putting Data into the redis
         const key = process.env.matches_scorecard_redis_key;
         const key_expiration_time = process.env.matches_scorecard_redis_key_expiration_time;
@@ -1985,6 +1984,8 @@ const saveScorecardDataForLiveMatch = async (req, res, match_id = false) => {
         // Retrieve the JSON from Redis (parse the string back into an object)
         const redisResult = await redis.get(key);
         if (redisResult) {
+            console.log('Inside Redis on the scoreCardUpdate API:');
+
             // Step 2: Parse the existing JSON object
             const existingData = JSON.parse(redisResult);
     
@@ -1994,14 +1995,8 @@ const saveScorecardDataForLiveMatch = async (req, res, match_id = false) => {
             });
     
             // Step 4: Store the updated JSON object back in Redis
-            await redis.set(key, JSON.stringify(existingData), 'EX', key_expiration_time);
-            console.log('Updated data stored in Redis:', key_expiration_time);
-    
-          } else {
-            console.log('No data found for key:', key);
-            // redis.del(key);
-            // // Store JSON in Redis (serialize the object to a string)
-            await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
+            const ttl = await redis.ttl(key);
+            await redis.set(key, JSON.stringify(existingData), 'EX', ttl);
         }
     }
 };

@@ -680,69 +680,33 @@ exports.getCompetetionDays = async (req, res) => {
         const result = await redis.get(key);
         if (result) {
             console.log('getCompetetionDays API: Retrieving data from redis cache');
+
             // Step 2: Parse the existing JSON object
             const existingData = JSON.parse(result);
-
-            // Step 3: before sending response, we are also deleting older data from the cache(we will kept 30 records in cache)
-            const existingDataKeys = Object.keys(existingData);
-            if(existingDataKeys.length > 20){
-                
-                // here we are finding those matches which are either "Live or complted recently"
-                const currentTimestampMillis = Math.floor(Date.now() / 1000);
-                const MatchscorecardRows = await Matchscorecard.find(
-                    {$or: [{ status_str: "Live" }, { timestamp_end: { $gt: currentTimestampMillis } }]},
-                    {match_id: 1, timestamp_end: 1, timestamp_start: 1, status_str: 1}
-                );
-                const matchIdsArray = MatchscorecardRows.map(match => match.match_id);
-
-                // Iterate over the keys of existingData and delete those not in matchIdsArray
-                // by this older data will be deleted from the chache
-                for (const existingDataItem in existingData) {
-                    if (!matchIdsArray.includes(Number(existingDataItem))) {
-                        delete existingData[existingDataItem]; // Delete key-value pair if the key is not in matchIdsArray
-                    }
-                }
-
-                // Step 4: Store the updated JSON object in Redis cache
-                await redis.set(key, JSON.stringify(existingData), 'EX', key_expiration_time);
-            }
             
-            // Step 5: returning response
+            // Step 3: returning response
             return res.status(200).json({
                 status: 200,
                 message: "Competetions retrieved successfully.",
                 data: existingData
             });
-
         }
-        // else {
-        //     console.log('getCompetetionDays API: Putting data in redis cache from Database:');
-        //     // If this code run means there is no redis cache for this key; we have to handle it and add some rows in redis cache
-        //     // Step 1: we are getting those scorecard matches which is either "Live OR Completed" and filter it with last 5 matches
-        //     const MatchscorecardRows = await Matchscorecard.aggregate([
-        //         { $match: { status_str: "Completed" } }, // Filter by status
-        //         { $sort: { timestamp_end: -1 } },   // Sort by timestamp_end (descending)
-        //         { $limit: 5 }                   // Limit to 5 results
-        //     ]);
-
-        //     // Step 2: we are getting creating an object which we will push to the redis cache
-        //     let myObject = {};
-        //     if(MatchscorecardRows.length > 0){
-        //         const matchIdsArray = MatchscorecardRows.map((match) =>{
-        //             myObject[match.match_id] = match
-        //         });
-        //     }
-    
-        //     // Step 3: Store the updated JSON object in Redis cache
-        //     await redis.set(key, JSON.stringify(myObject), 'EX', key_expiration_time);
-
-        //     // returning response
-        //     return res.status(200).json({
-        //         status: 200,
-        //         message: "Competetions retrieved successfully.",
-        //         data: myObject
-        //     });
-        // }
+        else {
+            console.log('getCompetetionDays API: Putting data in redis cache from Database:');
+            
+            // Step 2: Call the private function to generate redis data
+            const matchResults = await matchesDataForCompetetionDaysAPI(req, res);
+            
+            // Step 3: Store the updated JSON object in Redis cache
+            await redis.set(key, JSON.stringify(matchResults), 'EX', key_expiration_time);
+            
+            // Step 4: returning response
+            return res.status(200).json({
+                status: 200,
+                message: "Competetions retrieved successfully.",
+                data: matchResults
+            });
+        }
     }
     catch (error) {
         // console.error(error);
@@ -1441,5 +1405,63 @@ exports.getTeamMatchesByTeamId = async (req, res) => {
     catch (error) {
         // console.error(error);
         res.status(500).json({ message: error.message });
+    }
+}
+
+
+
+/**
+ * Private Functions Start From Here
+ */
+
+const matchesDataForCompetetionDaysAPI = async (req, res) => {
+
+    // Combine results into a single object
+    const combinedResults = {};
+    
+    // Get the current date timestamp in seconds
+    let currentDate = new Date();
+    let currentTimestamp = Math.floor(currentDate.getTime() / 1000);  // Convert to seconds
+
+    // Add 2 days to the current date + Convert milliseconds to seconds
+    let twoDaysLaterDate = new Date();
+    twoDaysLaterDate.setDate(currentDate.getDate() + 2);
+    let twoDaysLaterTimestampSeconds = Math.floor(twoDaysLaterDate.getTime() / 1000);  // Convert to seconds
+
+    // Subtract 1 day to the current date + Convert milliseconds to seconds
+    let oneDayBeforeDate = new Date();
+    oneDayBeforeDate.setDate(currentDate.getDate() - 1);
+    const oneDaysBeforeTimestampSeconds = Math.floor(oneDayBeforeDate.getTime() / 1000);  // Convert to seconds
+
+    try{
+        // Step 1: MongoDB query to fetch the upcoming matches results
+        const scheduledMatchesRows = await Match.find({ status_str: "Scheduled", timestamp_end: { $gte: currentTimestamp, $lte: twoDaysLaterTimestampSeconds} });
+        if (scheduledMatchesRows.length > 0) {
+            scheduledMatchesRows.forEach(match => {
+                combinedResults[match.match_id] = match;
+            });
+        }
+        
+        // Step 2: MongoDB query to fetch the completed matches results
+        const compltedMatchesRows = await Match.find({ status_str: "Completed", timestamp_end: { $gte: oneDaysBeforeTimestampSeconds, $lte: currentTimestamp} });
+        if (compltedMatchesRows.length > 0) {
+            compltedMatchesRows.forEach(match => {
+                combinedResults[match.match_id] = match;
+            });
+        }
+        
+        // Step 3: MongoDB query to fetch the Live(Means it has running now) matches results 
+        const liveMatchesRows = await Match.find({ status_str: "Live" });
+        if (liveMatchesRows.length > 0) {
+            liveMatchesRows.forEach(match => {
+                combinedResults[match.match_id] = match;
+            });
+        }
+        
+        // Step 4: return response
+        return combinedResults;
+    }
+    catch (error) {
+        return res.status(500).json({status: 500, message: 'Error in generating redis data on matchesDataForCompetetionDaysAPI API.'});
     }
 }
