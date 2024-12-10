@@ -359,6 +359,33 @@ exports.syncCompetetionMatches = async (req, res) => {
 }
 
 
+
+exports.syncMatchInfo = async (req, res) => {
+
+    // get parameters and check for the required validation
+    const sport_primary_key = req.query.sport_primary_key;
+    const source_primary_key = req.query.source_primary_key;
+    const token = req.query.token;
+    const match_id = req.query.match_id;
+    if (!match_id) {
+        return res.status(404).json({status: 404, message: 'match_id paramater is missing, it is required.' });
+    }
+    
+    try {
+
+        // Send response
+        return res.status(200).json({
+            status: 200,
+            data: "dataToSave" 
+        });
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+    }
+}
+
+
 // this function will make an API call to the ENTITYSPORT and get matches scorecard based on competetionId
 // token: for authenticate token
 // match_id: match_id so that we can fetch the scorecard bases of match_id
@@ -792,6 +819,115 @@ exports.updateCompetetionStatus = async (req, res) => {
     } 
     catch (error) {
         res.status(500).json({ message: 'Error on updateCompetetionStatus API', data: error.message });
+    }
+}
+
+/**
+ * This API check match data and time and on the basis of dates it will mark any match status (schedule, live or completed)
+ * On this Match status - remaining data will be sync - fro ex - fantasy, playing 11 etc
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.updateMatchesStatus = async (req, res) => {
+    console.log(":::::updateMatchesStatus::::Step1::::");
+    
+
+    try {
+        // Get the current date timestamp in seconds
+        let currentDate = new Date();
+        let currentTimestamp = Math.floor(currentDate.getTime() / 1000);  // Convert to seconds
+
+        try {
+            // Case 1: currentTimestamp < timestamp_start(in database) and status != "Scheduled" then status = "Scheduled"
+            const filter = {timestamp_start: { $gt: currentTimestamp }, status_str: { $ne: 'Scheduled' }}
+            const mapping_row = await Match.find(filter);
+            if(mapping_row.length > 0){                
+                // Update the Match Table
+                const results = await Match.updateMany(filter, { $set: { status_str: 'Scheduled'} }, { upsert: true });
+            }
+        }
+        catch (error) {
+            // code here
+        }
+
+
+        try {
+            // Case 2: currentTimestamp > timestamp_end(in database) and status_str != "Completed" then status_str = "Completed"
+            const filter = {timestamp_end: { $lt: currentTimestamp }, status_str: { $nin: ['Completed', 'Cancelled'] }}
+            const mapping_row = await Match.find(filter);
+            if(mapping_row.length > 0){
+                // Update the Match Table with "Completed" status_str
+                const results = await Match.updateMany(filter, { $set: { status_str: 'Completed'} }, { upsert: true });
+            }
+        }
+        catch (error) {
+            // code here
+        }
+
+
+        try {
+            // Case 3: currentTimestamp > timestamp_start(in database) && currentTimestamp < timestamp_end(in database) and status_str != "Live" then status = "Live"
+            const filter = { timestamp_start: { $lt: currentTimestamp }, timestamp_end: { $gt: currentTimestamp }, status_str: { $ne: 'Live' }}
+            const mapping_row = await Match.find(filter);
+            console.log(mapping_row[0].match_id);
+            if(mapping_row.length > 0){
+                // Step 1: First, Update the Match Table with "Live" status_str
+                const results = await Match.updateMany(filter, { $set: { status_str: 'Live'} }, { upsert: true });
+            }
+        }
+        catch (error) {
+            // code here
+        }
+
+        try {
+            // Case 4: When match is about to live(before 2 hours) - will update the match info details
+            const filter = { timestamp_start: { $lt: currentTimestamp }, timestamp_end: { $gt: currentTimestamp }, status_str: { $ne: 'Live' }}
+            const mapping_row = await Match.find(filter);
+            console.log(mapping_row[0].match_id);
+            if(mapping_row.length > 0){
+                // Step 1: First, Update the Match Table with "Live" status_str
+                const results = await Match.updateMany(filter, { $set: { status_str: 'Live'} }, { upsert: true });
+            }
+        }
+        catch (error) {
+            // code here
+        }
+        
+        // retrun response
+        return res.status(200).json({status: currentTimestamp, message: 'Matches status has been updated successfully.'});
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'Error on updateCompetetionStatus API', data: error.message });
+    }
+}
+
+
+exports.getNextTwoHoursUpcomingMatches = async (req, res) => {
+    console.log(":::::getNextTwoHoursUpcomingMatches::::Step1::::");
+    
+
+    try {
+        // Get current timestamp in seconds
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+
+        // Get timestamp for two hours later in seconds
+        const twoHoursLaterTimestamp = Math.floor((Date.now() + 2 * 60 * 60 * 1000) / 1000);
+
+        // Query to find matches starting after current time and within the next 2 hours
+        const filter = { timestamp_start: { $gte: currentTimestamp, $lte: twoHoursLaterTimestamp }}
+        const mapping_row = await Match.find(filter);
+        console.log(mapping_row[0].match_id);
+        if(mapping_row.length > 0){
+            // Step 1: First, Update the Match Table with "Live" status_str
+            // const results = await Match.updateMany(filter, { $set: { status_str: 'Live'} }, { upsert: true });
+        }
+        
+        // retrun response
+        return res.status(200).json({status: currentTimestamp, message: twoHoursLaterTimestamp});
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'Error on getNextTwoHoursUpcomingMatches API', data: error.message });
     }
 }
 

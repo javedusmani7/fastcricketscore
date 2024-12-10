@@ -1,5 +1,6 @@
 ENTITYSPORT_API_KEY=ad3749cfdb0cceb518412cf46ef9e44a
 MONGODB_URI=mongodb://localhost:27017/mydatabase
+OLDER_MONGODB_URI=mongodb://localhost:27017/older_database
 ENTITYSPORT_API_URL=https://rest.entitysport.com/v2/
 ENTITYSPORT_API_SOURCE_ID=1
 CRICKET_SPORT_ID=4
@@ -16,7 +17,7 @@ commentry_data_for_live_matches_redis_key_expiration_time=60
 
 ## Redis Keys and their expiration time for the competetions_upcoming_matches API
 competetions_upcoming_matches_redis_key=competetions_upcoming_matches
-competetions_upcoming_matches_redis_key_expiration_time=86400
+competetions_upcoming_matches_redis_key_expiration_time=3600
 
 ## Redis Keys and their expiration time for the competetions_completed_matches API
 competetions_completed_matches_redis_key=competetions_completed_matches

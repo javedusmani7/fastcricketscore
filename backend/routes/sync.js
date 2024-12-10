@@ -1,5 +1,5 @@
 const express = require('express');
-const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy, syncCompetetionMatchesMapping, cronjobForCompetetion, cronjobForcompletedMatched, cronjobForCompletedMatched, cronjobForCompletedMatches, cronjobForLiveMatches, cronjobForUpcomingMatches, cronjobFantasyDataForLiveMatches, cronjobLiveDataForLiveMatches, cronjobScorecardDataForLiveMatches, cronjobSquadsDataForLiveMatches, syncCompetetionStandings, cronjobForCompletedCompetetions, cronjobForLiveCompetitions, cronjobForCompletedCompetitions, syncRankings, syncArticles, cronjobForUpcomingCompetitions, syncTeamPlayerByTeamId, syncTeamDetailsTeamId, syncAninscore, syncMatchCommentary, syncMatchStatistics, updateCompetetionStatus} = require('../controllers/sync.controller');
+const {syncSeason, syncCompetetionList , syncCompetetion, syncCompetetionMatches, syncMatchScoreCard, syncSources, syncSports, syncMatchSquads, syncMatchLive, syncPlayersProfile, syncPlayerStatstic, syncMatchFantasy, syncCompetetionMatchesMapping, cronjobForCompetetion, cronjobForcompletedMatched, cronjobForCompletedMatched, cronjobForCompletedMatches, cronjobForLiveMatches, cronjobForUpcomingMatches, cronjobFantasyDataForLiveMatches, cronjobLiveDataForLiveMatches, cronjobScorecardDataForLiveMatches, cronjobSquadsDataForLiveMatches, syncCompetetionStandings, cronjobForCompletedCompetetions, cronjobForLiveCompetitions, cronjobForCompletedCompetitions, syncRankings, syncArticles, cronjobForUpcomingCompetitions, syncTeamPlayerByTeamId, syncTeamDetailsTeamId, syncAninscore, syncMatchCommentary, syncMatchStatistics, updateCompetetionStatus, updateMatchesStatus, getNextTwoHoursUpcomingMatches, syncMatchInfo} = require('../controllers/sync.controller');
 
 
 const router = express.Router();
@@ -14,9 +14,9 @@ router.get('/seasons', syncSeason);
 router.get('/competetions', syncCompetetionList);
 router.get('/competetionMatch', syncCompetetionMatches);
 router.get('/competetion_standings', syncCompetetionStandings);
-router.get('/update_competetion_status', updateCompetetionStatus);
 
 // router.get('/competetionDetail', syncCompetetion);
+router.get('/matchInfo', syncMatchInfo);
 router.get('/matchScorecard', syncMatchScoreCard);
 router.get('/matchSquads', syncMatchSquads);
 router.get('/matchLive', syncMatchLive);
@@ -45,6 +45,13 @@ router.get('/cronjob_fantasy_data_for_live_matches', cronjobFantasyDataForLiveMa
 router.get('/cronjob_live_data_for_live_matches', cronjobLiveDataForLiveMatches);
 router.get('/cronjob_scorecard_data_for_live_matches', cronjobScorecardDataForLiveMatches);
 router.get('/cronjob_squads_data_for_live_matches', cronjobSquadsDataForLiveMatches);
+
+
+
+// routes for the database crons
+router.get('/update_competetion_status', updateCompetetionStatus);
+router.get('/update_matches_status', updateMatchesStatus);
+router.get('/next_two_hours_upcoming_matches', getNextTwoHoursUpcomingMatches);
 
 
 // routes for the articles

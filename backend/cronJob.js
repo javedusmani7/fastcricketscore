@@ -166,6 +166,18 @@ const syncAninscoreData = async () => {
     }
 };
 
+
+
+const updateMatchesStatus = async () => {
+    try {
+        const url = api_url + 'sync/update_matches_status?token=' + ENTITYSPORT_API_KEY;
+        const response = await axios.get(url);
+        console.log("Matches status has been successfully updated");
+    } catch (error) {
+        console.error('Error updated Matches status:', error);
+    }
+}
+
 console.log('Cron job scheduled: Syncing data.');
 
 // cron job will run at midnight (00:00) on the 1st day of January and July
@@ -178,18 +190,19 @@ cron.schedule('0 1 1 1,4,7,10 *', syncCompetetionsData);
 cron.schedule('0 0 */12 * * *', updateCompetetionStatus);
 
 // Schedule task to run every hour at minute 25 - 3:25 PM, 4:25 PM, 5:25 PM, and so on.
-cron.schedule('25 * * * *', () => {
-    syncUpcomingCompetitionData();
-});
+cron.schedule('25 * * * *', () => { syncUpcomingCompetitionData(); });
 
-// // Schedule the task to run every 50 second and sync all completed matches data
-setInterval(executeJobBasedOnTime, 50000);
+// cron job will run every 5 minutes - 3:05 PM, 3:10 PM, 3:15 PM, 3:20 PM and so on
+// setInterval(executeJobBasedOnTime, 50000);
+cron.schedule('*/5 * * * *', () => { syncLiveCompetitionData(); });
 
 // Schedule the task to run every 5 second and sync data for the live match
-cron.schedule('0 0 * * * *', syncFantasyDataForLiveMatches);
-cron.schedule('* * * * * *', syncLiveDataForLiveMatches);
-cron.schedule('* * * * * *', syncScorecardDataForLiveMatches);
-cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
+// cron.schedule('0 0 * * * *', syncFantasyDataForLiveMatches);
+// cron.schedule('* * * * * *', syncLiveDataForLiveMatches);
+// cron.schedule('* * * * * *', syncScorecardDataForLiveMatches);
+// cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
+
+cron.schedule('*/15 * * * *', syncScorecardDataForLiveMatches);
 
 
 // This cron job will run every 6 hours for sync rankings
@@ -197,4 +210,16 @@ cron.schedule('0 */6 * * *', () => { syncRankings(); });
 
 
 // Schedule task to run every hour at minute 15 - 3:15 PM, 4:15 PM, 5:15 PM, and so on.
-cron.schedule('15 * * * *', syncAninscoreData);
+// cron.schedule('15 * * * *', syncAninscoreData);
+
+
+
+
+
+/**
+ *  NEW CHANGES AFTER 8 December MEETING 
+ */
+
+
+// Schedule task to run every hour at minute 25 - 3:25 PM, 4:25 PM, 5:25 PM, and so on.
+// cron.schedule('25 * * * *', updateMatchesStatus);
