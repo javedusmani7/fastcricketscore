@@ -34,6 +34,7 @@ const ENTITYSPORT_API_URL = process.env.ENTITYSPORT_API_URL;
 const sport_id = process.env.CRICKET_SPORT_ID;
 const source_id = process.env.ENTITYSPORT_API_SOURCE_ID;
 const api_url = process.env.BACKEND_API_URL;
+const TOKEN_API_KEY = process.env.TOKEN_API_KEY;
 
 
 // Dammy API for inserting records in Sports table
@@ -281,80 +282,22 @@ exports.syncCompetetionMatchesMapping = async (req, res) => {
 exports.syncCompetetionMatches = async (req, res) => {
     
     // get parameters and check for the required validation
-    const token = req.query.token;
     const cid = req.query.cid;
-    let sport_primary_key = false;
-    let source_primary_key = false;
-    let competetion_primary_key = false;
     if (!cid) { res.json({ status: 401, message: 'cid paramater is missing, it is required.' });}
 
-    // first; we will get the primaryID details for the sport, source and competetion table 
-    // so that we can pass these references to the match tables
     try {
-
-        // check if the sports exists or not
-        const sportRow = await Sport.findOne({sport_id: sport_id});
-        if (!sportRow) {
-            return res.status(404).json({status: 404, message: 'Sport not found' });
+        // save Competetion Matches Data
+        const results = await saveCompetitionMatches(req, res, cid);
+        if(!results){
+            return res.status(200).json({
+                status: 200,
+                data: results ? results : "Competetion Matches data has been synced successfully." 
+            });
         }
-        sport_primary_key = sportRow._id;
-
-        // check if the source exists or not
-        const sourceRow = await Source.findOne({source_id: source_id});
-        if (!sourceRow) {
-            return res.status(404).json({status: 404, message: 'Source not found' });
-        }
-        source_primary_key = sourceRow._id;
-
-        // check if the source exists or not
-        const competetionRow = await Competetion.findOne({cid: cid});
-        if (!competetionRow) {
-            return res.status(404).json({status: 404, message: 'Competetion not found' });
-        }
-        competetion_primary_key = competetionRow._id;
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
-    }
-
-
-    // Making an api call from Entity sports and then saving into our database
-    try {
-        const url = ENTITYSPORT_API_URL + 'competitions/' + cid + '/matches/';
-        const response = await fetchEntitySportData(token, url);
-
-        // updating new items on the response so that we may have sport & sourceId on each items
-        const items = response.response.items;
-        const updatedItems = items.map(item => {
-            return {
-                ...item,         // Spread existing properties
-                cid: competetion_primary_key,  // Add a new property
-                sport_id: sport_primary_key,  // Add a new property
-                source_id: source_primary_key //"6711f69024bc088184fe6911"  // Add a new property
-            };
-        });
-        
-
-         // Prepare bulk operations
-
-        const bulkOps = updatedItems.map(item => ({
-            updateOne: {
-                filter: { match_id: item.match_id }, 
-                update: { $set: item }, 
-                upsert: true // Insert if not found
-            }
-        }));
-
-        // Execute bulk operations
-        const result = await Match.bulkWrite(bulkOps);
-
-        // Send response
-        res.json(updatedItems);
-    } 
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+        res.status(500).json({ message: 'Error fetching data from syncCompetetionMatches API. ' });
     }
 }
 
@@ -469,76 +412,24 @@ exports.syncMatchScoreCard = async (req, res) => {
 exports.syncMatchSquads = async (req, res) => {
 
     // get parameters and check for the required validation
-    let sport_primary_key = false;
-    let source_primary_key = false;
-    const token = req.query.token;
     const match_id = req.query.match_id;
     if (!match_id) {
         return res.status(404).json({status: 404, message: 'match_id paramater is missing, it is required.' });
     }
     
-    // STEP first; we will get the primaryID details for the sport, source and competetion table 
-    // so that we can pass these references to the matchsSquad tables
+    // Making an api call from Entity sports and then saving into our database
     try {
-
-        // check if the sports exists or not
-        const sportRow = await Sport.findOne({sport_id: sport_id});
-        if (!sportRow) {
-            return res.status(404).json({status: 404, message: 'Sport not found' });
+        const results = await saveSquadsDataForLiveMatch(req, res, match_id);  // Call the private function to save squads
+        if(!results){
+            return res.status(200).json({
+                status: 200,
+                data: results ? results : "Match Squad data has been synced successfully." 
+            });
         }
-        sport_primary_key = sportRow._id;
-
-        // check if the source exists or not
-        const sourceRow = await Source.findOne({source_id: source_id});
-        if (!sourceRow) {
-            return res.status(404).json({status: 404, message: 'Source not found' });
-        }
-        source_primary_key = sourceRow._id;
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
-    }
-
-    
-    
-    // STEP Second; Making an api call from Entity sports and then saving into our database
-    try {
-        const url = ENTITYSPORT_API_URL + 'matches/' + match_id + '/squads/';
-        const response = await fetchEntitySportData(token, url);
-        const apiData = response.response;
-
-        // STEP 1: Additional source_id and sport_id fields, we want to include on the database
-        const additionalFields = {
-            sport_id: sport_primary_key,
-            source_id: source_primary_key,
-            match_id: match_id
-        };
-        const dataToSave = { ...apiData, ...additionalFields };
-
-        // Step 2: Check if the record already exists
-        // insert and update the records accordingly
-        let MatchsquadRow = await Matchsquad.findOne({match_id: match_id});
-        if (MatchsquadRow) {
-            // Step 3A: Update the existing record
-            Object.assign(MatchsquadRow, dataToSave); // Merge the new data into the existing user object
-            await MatchsquadRow.save();
-        }
-        else{
-            // Step 3B: Create a new record
-            MatchsquadRow = new Matchsquad(dataToSave);
-            await MatchsquadRow.save();
-        }
-
-        // Send response
-        return res.status(200).json({
-            status: 200,
-            data: dataToSave 
-        });
     } 
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+        res.status(500).json({ message: 'Error fetching data on syncMatchSquads API' });
     }
 }
 
@@ -909,18 +800,38 @@ exports.getNextTwoHoursUpcomingMatches = async (req, res) => {
 
     try {
         // Get current timestamp in seconds
-        const currentTimestamp = Math.floor(Date.now() / 1000);
+        const currentTimestamp = 1733814658;  //Math.floor(Date.now() / 1000);
 
         // Get timestamp for two hours later in seconds
-        const twoHoursLaterTimestamp = Math.floor((Date.now() + 2 * 60 * 60 * 1000) / 1000);
+        const twoHoursLaterTimestamp = 1733822236; // Math.floor((Date.now() + 2 * 60 * 60 * 1000) / 1000);
 
         // Query to find matches starting after current time and within the next 2 hours
         const filter = { timestamp_start: { $gte: currentTimestamp, $lte: twoHoursLaterTimestamp }}
-        const mapping_row = await Match.find(filter);
-        console.log(mapping_row[0].match_id);
-        if(mapping_row.length > 0){
-            // Step 1: First, Update the Match Table with "Live" status_str
-            // const results = await Match.updateMany(filter, { $set: { status_str: 'Live'} }, { upsert: true });
+        const matchRecords = await Match.find(filter);
+        console.log(":::::getNextTwoHoursUpcomingMatches::::Step2::::", matchRecords.length);
+        if(matchRecords.length > 0){
+            
+            // Update 1: Fetched Match Fantasy details from EntitySports using our API
+            try {
+                // itearting aon all results
+                const updatedItems = matchRecords.map(async (item) => {
+                    const response = await axios.get(api_url + 'sync/matchFantasy?token=' + TOKEN_API_KEY + "&match_id=" + item.match_id);
+                });
+            }
+            catch (error) {
+                // code here
+            }
+            
+            // Update 2: Fetched Match Squad details from EntitySports using our API
+            try {
+                // itearting aon all results
+                const updatedItems = matchRecords.map(async (item) => {
+                    const response = await axios.get(api_url + 'sync/matchSquads?token=' + TOKEN_API_KEY + "&match_id=" + item.match_id);
+                });
+            }
+            catch (error) {
+                // code here
+            }
         }
         
         // retrun response
@@ -987,11 +898,13 @@ exports.syncMatchFantasy = async (req, res) => {
         if(apiData !== undefined && response.status === "ok" ) {
             
             // STEP 1: Additional source_id and sport_id fields, we want to include on the database
+            const tez_id = matchRow.cid + "-" + matchRow.match_id;
             const additionalFields = {
                 sport_id: sport_primary_key,
                 source_id: source_primary_key,
                 match: matchRow._id,
                 match_id: match_id,
+                tej_match_id : tez_id,  // Add a new tej_match_id property
             };
             dataToSave = { ...apiData, ...additionalFields };
             
@@ -1002,13 +915,13 @@ exports.syncMatchFantasy = async (req, res) => {
         // Send response
         return res.status(200).json({
             status: 200,
-            message: "Player Profile Statistic Sync Successfully.",
+            message: "Match Fantasy data has been sync successfully.",
             data: dataToSave 
         });  
     } 
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error fetching data from Entitysport API' });
+        res.status(500).json({ message: 'Error fetching data from syncMatchFantasy API' });
     }
 }
 

@@ -22,7 +22,20 @@ const CompetetionSchema = new mongoose.Schema({
     teams_url: { type: String },
     standings_url: { type: String },
     rounds: { type : Array , "default" : [] },
-    isActive: { type: Boolean, default: true },
+    tej_competition_id : { type: String},
+    tej_active : { type: Boolean, default: true},
+    sports_competition_id: { type: String, default: null },
+    bt_competition_id: { type: String, default: null },
+    fast_score1_competition_id: { type: String, default: null },
+    fast_score2_competition_id: { type: String, default: null },
+    fast_score3_competition_id: { type: String, default: null },
+    tej_fast_score_competition_id: { type: String, default: null },
+    espn_competition_id: { type: String, default: null },
+    sports_radar_competition_id: { type: String, default: null },
+    unknown_source1_competition_id: { type: String, default: null },
+    unknown_source2_competition_id: { type: String, default: null },
+    unknown_source3_competition_id: { type: String, default: null },
+    // isActive: { type: Boolean, default: true },
     } , {
     timestamps: true
   });
