@@ -8,6 +8,7 @@ require('dotenv').config();
 const Season = require('../models/Season');
 const Competetion = require('../models/Competetion');
 const Match = require('../models/Match');
+const Interval = require('../models/Interval');
 
 
 // this function will make an API call on our seasons table and get all available seasons
@@ -70,7 +71,6 @@ exports.getCompetetions = async (req, res) => {
         });
     } 
     catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'adminController:: Error in getCompetetions API' });
     }
 }
@@ -116,7 +116,78 @@ exports.getMatches = async (req, res) => {
         });
     } 
     catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'adminController:: Error in getMatches API' });
+    }
+}
+
+exports.getIntervals = async (req, res) => {
+    const { name, page = 1, limit = 10 } = req.query; // Get intervals from query parameters
+
+    // Parse page and limit as numbers (default to 1 and 10 respectively)
+    const pageNumber = parseInt(page, 10);
+    const pageLimit = parseInt(limit, 10);
+
+    try {
+         // Construct the filter object for the query
+        let filter = {};
+        if (name) { filter.name = { $regex: name, $options: 'i' }; } // 'i' for case-insensitive matching
+
+        // Calculate the number of records to skip based on the page and limit
+        const skip = (pageNumber - 1) * pageLimit;
+      
+        // return all intervals
+        const intervalsRows = await Interval.find(filter).skip(skip).limit(pageLimit);
+
+        // Get total count of competitions for pagination info
+        const totalMatches = await Interval.countDocuments(filter);
+
+        // json data for returning response
+        return res.status(200).json({
+            status: 200,
+            message: "Interval retrieved successfully.",
+            page: pageNumber,
+            limit: pageLimit,
+            total: totalMatches,
+            totalPages: Math.ceil(totalMatches / pageLimit),
+            data: intervalsRows
+        });
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'adminController:: Error in getIntervals API' });
+    }
+}
+
+
+
+exports.postInterval = async (req, res) => {
+    const key = req.params.key;
+    const { time } = req.body;
+    const { name, page = 1, limit = 10 } = req.query; // Get intervals from query parameters
+
+    // Simple time validation
+    if (!time) {
+        return res.status(400).json({ error: 'Time are required.' });
+    }
+
+    try {
+        // find all interval is exist or not
+        const intervalRow = await Interval.findOne({key: key});
+        if (!intervalRow) {
+            return res.status(400).json({ status: 400, message: "Interval does not exist for this key", data: []  });
+        }
+
+        const newData = { key, time };
+
+         // Step 2: update the record
+        const isIntervalRowUpdated = await Interval.updateOne({key: key}, { $set: {time: time } });
+        
+        return res.status(200).json({
+            status: 200,
+            message: "tets datat.",
+            data: intervalRow
+        });
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'adminController:: Error in getIntervals API' });
     }
 }
