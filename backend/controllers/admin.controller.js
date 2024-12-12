@@ -35,7 +35,7 @@ exports.getSeasons = async (req, res) => {
  * @returns 
  */
 exports.getCompetetions = async (req, res) => {
-    const { cid, title, status, page = 1, limit = 10 } = req.query; // Get competition_id from query parameters
+    const { sid, cid, title, status, page = 1, limit = 10 } = req.query; // Get competition_id from query parameters
 
     // Parse page and limit as numbers (default to 1 and 10 respectively)
     const pageNumber = parseInt(page, 10);
@@ -44,6 +44,7 @@ exports.getCompetetions = async (req, res) => {
     try {
          // Construct the filter object for the query
         let filter = {};
+        if (sid) { filter.season = sid;  } // Filter by cid if provided
         if (cid) { filter.cid = cid;  } // Filter by cid if provided
         if (title) { filter.title = { $regex: title, $options: 'i' }; } // 'i' for case-insensitive matching
         if (status) { filter.status = status; }  // Filter by status if provided
