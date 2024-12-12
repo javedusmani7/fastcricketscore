@@ -1,8 +1,10 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
 const cron = require('node-cron');
-const Sport = require('./models/Sport');
-const Source = require('./models/Source');
+// const Sport = require('../models/Sport');
+// const Source = require('../models/Source');
+const Interval = require('../models/Interval');
+
 
 // predefine constant values
 require('dotenv').config();
@@ -11,6 +13,9 @@ const sport_id = process.env.CRICKET_SPORT_ID;
 const source_id = process.env.ENTITYSPORT_API_SOURCE_ID;
 const api_url = process.env.BACKEND_API_URL;
 let lastRunTime = Date.now();
+let intervalResults = false;
+
+let intervals = {}; // Store multiple intervals with their IDs
 
 // this is automatic run function which is used to call itself automatically
 // this function will make an API call to the ENTITYSPORT and get all available matches
@@ -178,53 +183,133 @@ const updateMatchesStatus = async () => {
     }
 }
 
+// console.log('Cron job scheduled: Syncing data.');
 
-const getNextTwoHoursUpcomingMatches = async () => {
-    try {
-        const url = api_url + 'sync/next_two_hours_upcoming_matches?token=' + ENTITYSPORT_API_KEY;
-        const response = await axios.get(url);
-        console.log("Next Two Hours Upcoming Matches has been successfully updated");
-    } catch (error) {
-        console.error('Error in Next Two Hours Upcoming Matches:', error);
+// // cron job will run at midnight (00:00) on the 1st day of January and July
+// cron.schedule('0 0 1 1,7 *', syncSeasonsData);
+
+// // cron job will run at 1 AM (01:00) on the 1st day of January, April, July, and October
+// cron.schedule('0 1 1 1,4,7,10 *', syncCompetetionsData);
+
+// // Schedule the task to run every 12 hours
+// cron.schedule('0 0 */12 * * *', updateCompetetionStatus);
+
+// // Schedule task to run every hour at minute 25 - 3:25 PM, 4:25 PM, 5:25 PM, and so on.
+// cron.schedule('25 * * * *', () => { syncUpcomingCompetitionData(); });
+
+// // cron job will run every 5 minutes - 3:05 PM, 3:10 PM, 3:15 PM, 3:20 PM and so on
+// // setInterval(executeJobBasedOnTime, 50000);
+// cron.schedule('*/5 * * * *', () => { syncLiveCompetitionData(); });
+
+// // Schedule the task to run every 5 second and sync data for the live match
+// // cron.schedule('0 0 * * * *', syncFantasyDataForLiveMatches);
+// // cron.schedule('* * * * * *', syncLiveDataForLiveMatches);
+// // cron.schedule('* * * * * *', syncScorecardDataForLiveMatches);
+// // cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
+
+// cron.schedule('*/15 * * * *', syncScorecardDataForLiveMatches);
+
+
+// // This cron job will run every 6 hours for sync rankings
+// cron.schedule('0 */6 * * *', () => { syncRankings(); });
+
+
+// // Schedule task to run every hour at minute 15 - 3:15 PM, 4:15 PM, 5:15 PM, and so on.
+// // cron.schedule('15 * * * *', syncAninscoreData);
+
+
+
+
+
+/**
+*  NEW CHANGES AFTER 8 December MEETING 
+*/
+
+// this function will return all the available records from the interval collection
+const getAllIntervals = async () => {
+    let newObject = {};
+    const results =  await Interval.find({ status: true });
+    if (results.length > 0) {
+        results.forEach(result => {
+            newObject[result.key] = result;
+        });
     }
+    
+    // return response
+    return newObject;
 }
 
-console.log('Cron job scheduled: Syncing data.');
+// Function to make API calls
+async function callApi(apiUrl) {
+  try {
+    const response = await axios.get(apiUrl); // API URL as parameter
+    if (response.status >= 200 && response.status < 300) {
+        console.log("callApi:::: API executed successfully.");
+    }
+  } catch (error) {
+    console.log("callApi:: Error in executing API.", error.message);
+  }
+}
 
-// cron job will run at midnight (00:00) on the 1st day of January and July
-cron.schedule('0 0 1 1,7 *', syncSeasonsData);
+// Function to start dynamic intervals
+exports.startInterval = async (name, intervalTime, apiUrl) => {
+// function startInterval(name, intervalTime, apiUrl) {
+  if (intervals[name]) {
+    clearInterval(intervals[name].id); // Clear existing interval
+  }
 
-// cron job will run at 1 AM (01:00) on the 1st day of January, April, July, and October
-cron.schedule('0 1 1 1,4,7,10 *', syncCompetetionsData);
+  intervals[name] = {
+    time: intervalTime,
+    apiUrl: apiUrl,
+    id: setInterval(async () => {
+      console.log(`${name} Triggered at ${new Date()}`);
+      await callApi(apiUrl); // Make API call for this interval
+    }, intervalTime)
+  };
+}
 
-// Schedule task to run every hour at minute 25 - 3:25 PM, 4:25 PM, 5:25 PM, and so on.
-cron.schedule('25 * * * *', () => { syncUpcomingCompetitionData(); });
+// Function to change the interval time dynamically for a specific interval
+exports.changeIntervalTime = async (name, newIntervalTime) => {
+// function changeIntervalTime(name, newIntervalTime) {
+  if (intervals[name]) {
 
-// Schedule the task to run every 12 hours
-cron.schedule('0 0 */12 * * *', updateCompetetionStatus);
+    // Clear the interval with the new time
+    clearInterval(intervals[name].id); // Clear the existing interval
+    intervals[name].time = newIntervalTime; // Update the time
 
-// Schedule task to run the job every minute
-cron.schedule('* * * * *', updateMatchesStatus);
+    // Restart the interval with the new time
+    this.startInterval(name, newIntervalTime, intervals[name].apiUrl);
+  }
+}
 
-// Schedule task to run the job every 2 hours
-cron.schedule('0 */2 * * *', getNextTwoHoursUpcomingMatches);
 
-// cron job will run every 5 minutes - 3:05 PM, 3:10 PM, 3:15 PM, 3:20 PM and so on
+// this function will execute all the available crons/interval which is stored in the database
+const runAllInterval = async () => {
+    try {
+        const intervalsRows = await getAllIntervals();
+        if(Object.entries(intervalsRows).length > 0){
+            Object.entries(intervalsRows).forEach(([key, interval]) => {
+                this.startInterval(key, interval['time'], interval['api_url']);
+            });
+        }
+    }
+    catch (error) {
+        console.error('Error runAllInterval Cronjob:', error);
+    }
+};
+runAllInterval();
+
+// Start dynamic intervals for multiple APIs
 // setInterval(executeJobBasedOnTime, 50000);
-cron.schedule('*/5 * * * *', () => { syncLiveCompetitionData(); });
+// this.startInterval('apiInterval1', 5000, 'javed');
+// startInterval('apiInterval1', 5000, 'javed');
+// startInterval('apiInterval2', 10000, 'https://api.example2.com/2');
+// startInterval('apiInterval3', 15000, 'https://api.example3.com/3');
 
-// Schedule the task to run every 5 second and sync data for the live match
-// cron.schedule('0 0 * * * *', syncFantasyDataForLiveMatches);
-// cron.schedule('* * * * * *', syncLiveDataForLiveMatches);
-// cron.schedule('* * * * * *', syncScorecardDataForLiveMatches);
-// cron.schedule('0 0 * * * *', syncSquadsDataForLiveMatches);
-
-cron.schedule('*/15 * * * *', syncScorecardDataForLiveMatches);
-
-
-// This cron job will run every 6 hours for sync rankings
-cron.schedule('0 */6 * * *', () => { syncRankings(); });
+// Example: Dynamically change the interval time for the first API after 5 seconds
+// setTimeout(() => {
+//     this.changeIntervalTime('apiInterval1', 2000);
+// //   changeIntervalTime('apiInterval1', 2000); // Change to 5 seconds
+// }, 5000);
 
 
-// Schedule task to run every hour at minute 15 - 3:15 PM, 4:15 PM, 5:15 PM, and so on.
-// cron.schedule('15 * * * *', syncAninscoreData);

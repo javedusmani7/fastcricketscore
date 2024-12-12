@@ -770,20 +770,6 @@ exports.updateMatchesStatus = async (req, res) => {
         catch (error) {
             // code here
         }
-
-        try {
-            // Case 4: When match is about to live(before 2 hours) - will update the match info details
-            const filter = { timestamp_start: { $lt: currentTimestamp }, timestamp_end: { $gt: currentTimestamp }, status_str: { $ne: 'Live' }}
-            const mapping_row = await Match.find(filter);
-            console.log(mapping_row[0].match_id);
-            if(mapping_row.length > 0){
-                // Step 1: First, Update the Match Table with "Live" status_str
-                const results = await Match.updateMany(filter, { $set: { status_str: 'Live'} }, { upsert: true });
-            }
-        }
-        catch (error) {
-            // code here
-        }
         
         // retrun response
         return res.status(200).json({status: currentTimestamp, message: 'Matches status has been updated successfully.'});
