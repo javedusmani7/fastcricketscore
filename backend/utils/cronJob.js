@@ -1,6 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-const cron = require('node-cron');
+// const cron = require('node-cron');
 // const Sport = require('../models/Sport');
 // const Source = require('../models/Source');
 const Interval = require('../models/Interval');
