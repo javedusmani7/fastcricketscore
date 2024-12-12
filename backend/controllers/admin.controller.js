@@ -28,41 +28,34 @@ exports.getSeasons = async (req, res) => {
     }
 }
 
-
+/**
+ * This API will return all the avaialable competetion records
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.getCompetetions = async (req, res) => {
-    const { cid, page = 1, limit = 10 } = req.query; // Get competition_id from query parameters
+    const { cid, title, status, page = 1, limit = 10 } = req.query; // Get competition_id from query parameters
 
     // Parse page and limit as numbers (default to 1 and 10 respectively)
     const pageNumber = parseInt(page, 10);
     const pageLimit = parseInt(limit, 10);
 
-    console.log(pageNumber);
-    console.log(pageLimit);
-
     try {
-        if (cid) {
-            const competitionRow = await Competetion.find({ cid });
-      
-            if (competitionRow.length < 1) {
-              return res.status(404).json({ status: 400, message: 'Competition not found' });
-            }
-      
-                
-            return res.status(200).json({
-                status: 200,
-                message: "Competition retrieved successfully.",
-                data: competitionRow
-            });
-        }
+         // Construct the filter object for the query
+        let filter = {};
+        if (cid) { filter.cid = cid;  } // Filter by cid if provided
+        if (title) { filter.title = { $regex: title, $options: 'i' }; } // 'i' for case-insensitive matching
+        if (status) { filter.status = status; }  // Filter by status if provided
 
         // Calculate the number of records to skip based on the page and limit
         const skip = (pageNumber - 1) * pageLimit;
       
         // If no competition_id, return all competitions
-        const competitionsrows = await Competetion.find().skip(skip).limit(pageLimit);
+        const competitionsrows = await Competetion.find(filter).skip(skip).limit(pageLimit);
 
         // Get total count of competitions for pagination info
-        const totalCompetitions = await Competetion.countDocuments();
+        const totalCompetitions = await Competetion.countDocuments(filter);
 
         // json data for returning response
         return res.status(200).json({
@@ -78,5 +71,51 @@ exports.getCompetetions = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ message: 'adminController:: Error in getCompetetions API' });
+    }
+}
+
+/**
+ * This API will return all the avaialable matches records
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.getMatches = async (req, res) => {
+    const { cid, title, status_str, page = 1, limit = 10 } = req.query; // Get competition_id from query parameters
+
+    // Parse page and limit as numbers (default to 1 and 10 respectively)
+    const pageNumber = parseInt(page, 10);
+    const pageLimit = parseInt(limit, 10);
+
+    try {
+         // Construct the filter object for the query
+        let filter = {};
+        if (cid) { filter.cid = cid;  } // Filter by cid if provided
+        if (title) { filter.title = { $regex: title, $options: 'i' }; } // 'i' for case-insensitive matching
+        if (status_str) { filter.status_str = status_str; }  // Filter by status_str if provided
+
+        // Calculate the number of records to skip based on the page and limit
+        const skip = (pageNumber - 1) * pageLimit;
+      
+        // If no competition_id, return all competitions
+        const matchesRows = await Match.find(filter).skip(skip).limit(pageLimit);
+
+        // Get total count of competitions for pagination info
+        const totalMatches = await Match.countDocuments(filter);
+
+        // json data for returning response
+        return res.status(200).json({
+            status: 200,
+            message: "Matches retrieved successfully.",
+            page: pageNumber,
+            limit: pageLimit,
+            total: totalMatches,
+            totalPages: Math.ceil(totalMatches / pageLimit),
+            data: matchesRows
+        });
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'adminController:: Error in getMatches API' });
     }
 }

@@ -5,6 +5,7 @@ const cors = require('cors');
 const apiRoutes = require('./routes/api');
 const syncRoutes = require('./routes/sync');
 const adminRoutes = require('./routes/admin');
+// const cronJobs = require('./cronJob');
 // const cronJobs = require('./utils/cronJob'); // Import your cron jobs
 
 const app = express();
