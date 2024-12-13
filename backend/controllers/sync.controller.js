@@ -1439,34 +1439,63 @@ exports.cronjobForCompetetion = async (req, res) => {
                 if(response.status === "ok"){
                     const bulkOps = [];
                     const items = response.response.items; 
-                    let incrementValue = await getNextIncrementedValue();
                     
                     // iterarte each items to validate weather insert or update
+                    let incrementValue = 100000; //await getNextIncrementedValue();
                     const promises = items.map(async (item) => {
-                        const competetionRow = await Competetion.findOne({ cid: item.cid });
-                        if (competetionRow) {
-                            // If the record does exist, update it
-                            bulkOps.push({
-                                updateOne: {
-                                    filter: { cid: item.cid }, 
-                                    update: { $set: item },
-                                    upsert: false
-                                },
-                            });
+                        try{
+
+                            const competetionRow = await Competetion.findOne({ cid: item.cid });
+                            if (competetionRow) {
+    
+                                Object.assign(competetionRow, item); // Merge the new data into the existing user object
+                                await competetionRow.save();
+    
+                                // // If the record does exist, update it
+                                // bulkOps.push({
+                                //     updateOne: {
+                                //         filter: { cid: item.cid }, 
+                                //         update: { $set: item },
+                                //         upsert: false
+                                //     },
+                                // });
+                            }
+                            else{
+                                
+                                // Step 3B: Create a new record
+                                
+                                // If the record does not exist, insert it
+                                incrementValue = incrementValue + 1;
+                                const additionalFields = {
+                                    tej_cid: item.cid, // Use the current increment value and increment it
+                                    sport_id: sport_primary_key,  // Add a new property
+                                    source_id: source_primary_key, // Add a new property
+                                };
+                                dataToSave = { ...item, ...additionalFields };
+    
+                                const newUser = new Competetion(dataToSave);
+                                await newUser.save()
+    
+                                // inserting new field
+                                // const newCompetetionRow = new Competetion(dataToSave);
+                                // await newCompetetionRow.save();
+    
+                                // // If the record does not exist, insert it
+                                // const additionalFields = {
+                                //     tej_cid: incrementValue++, // Use the current increment value and increment it
+                                //     sport_id: sport_primary_key,  // Add a new property
+                                //     source_id: source_primary_key, // Add a new property
+                                // };
+                                // dataToSave = { ...item, ...additionalFields };
+                                // bulkOps.push({
+                                //     insertOne: {
+                                //         document: dataToSave
+                                //     }
+                                // });
+                            }
                         }
-                        else{
-                            // If the record does not exist, insert it
-                            const additionalFields = {
-                                tej_cid: incrementValue++, // Use the current increment value and increment it
-                                sport_id: sport_primary_key,  // Add a new property
-                                source_id: source_primary_key, // Add a new property
-                            };
-                            dataToSave = { ...item, ...additionalFields };
-                            bulkOps.push({
-                                insertOne: {
-                                    document: dataToSave
-                                }
-                            });
+                        catch(error){
+
                         }
                     });
 
@@ -2134,5 +2163,7 @@ const saveCompetetionStandingsDataForLiveMatch = async (req, res, cid = false) =
 async function getNextIncrementedValue() {
     // Find the highest current value of `newField`
     const latestRecord = await Competetion.find().sort({ tej_cid: -1 }).limit(1);
-    return latestRecord.length > 0 ? latestRecord[0].tej_cid + 1 : 100000; // Start at 1 if no records exist
+    const temp = latestRecord.length > 0 ? latestRecord[0].tej_cid + 1 : 100000;
+    console.log("latestRecord", temp);
+    return temp; // Start at 1 if no records exist
 }

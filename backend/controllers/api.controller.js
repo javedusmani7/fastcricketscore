@@ -25,7 +25,6 @@ const Article = require('../models/Article');
 const TeamPlayer = require('../models/TeamPlayer');
 const Team = require('../models/Team');
 const Aninscore = require('../models/Aninscore');
-const javed = require('../utils/cronJob'); 
 
 
 
@@ -50,7 +49,7 @@ exports.getSources = async (req, res) => {
     //     console.log('No data found for key:', key);
     // }
 
-    javed.changeIntervalTime('seasons', 10000);
+    // javed.changeIntervalTime('seasons', 10000);
 
     // const cacheKey = `api:sources`;
     const key = 'user:12345';  // Redis key

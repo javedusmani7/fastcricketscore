@@ -2,13 +2,23 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 // mongoose.set('debug', true);
 require('dotenv').config();
+const Schedular = require('../utils/cronJob'); 
 
 
 // load models 
+const Sport = require('../models/Sport');
+const Source = require('../models/Source');
 const Season = require('../models/Season');
 const Competetion = require('../models/Competetion');
 const Match = require('../models/Match');
 const Interval = require('../models/Interval');
+const { fetchEntitySportData } = require('../utils/EntitySports.util');
+
+// predefine constant values
+const ENTITYSPORT_API_KEY = process.env.ENTITYSPORT_API_KEY;
+const ENTITYSPORT_API_URL = process.env.ENTITYSPORT_API_URL;
+const ENTITYSPORT_API_SOURCE_ID = process.env.ENTITYSPORT_API_SOURCE_ID;
+const CRICKET_SPORT_ID = process.env.CRICKET_SPORT_ID;
 
 
 // this function will make an API call on our seasons table and get all available seasons
@@ -73,7 +83,7 @@ exports.updateSeasonStatus = async (req, res) => {
  * @param {*} res 
  * @returns 
  */
-exports.getCompetetions = async (req, res) => {
+exports.getCompetitions = async (req, res) => {
     const { sid, cid, title, status, page = 1, limit = 10 } = req.query; // Get competition_id from query parameters
 
     // Parse page and limit as numbers (default to 1 and 10 respectively)
@@ -107,6 +117,27 @@ exports.getCompetetions = async (req, res) => {
             totalPages: Math.ceil(totalCompetitions / pageLimit),
             data: competitionsrows
         });
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'adminController:: Error in getCompetetions API' });
+    }
+}
+
+
+
+exports.synccompetitionMatchesByCid = async (req, res) => {
+    const { cid} = req.query; // Get cid from query parameters
+    if (!cid) { return res.status(400).json({ status: 400, message: "cid is required.", data: [] }); }
+
+    try {
+        // save Competetion Matches Data
+        const results = await saveAdminCompetitionMatches(req, res, cid);
+        if(!results){
+            return res.status(200).json({
+                status: 200,
+                data: results ? results : "Competetion Matches data has been synced successfully." 
+            });
+        }
     } 
     catch (error) {
         res.status(500).json({ message: 'adminController:: Error in getCompetetions API' });
@@ -236,3 +267,95 @@ exports.updateInterval = async (req, res) => {
         res.status(500).json({ message: 'adminController:: Error in updateInterval API' });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// Private function
+
+const saveAdminCompetitionMatches = async (req, res, cid = false) => {
+    let sport_primary_key = false;
+    let source_primary_key = false;
+    
+    // first; we will get the primaryID details for the sport, source and competetion table 
+    // so that we can pass these references to the match tables
+    try {
+
+        // check if the sports exists or not
+        const sportRow = await Sport.findOne({sport_id: CRICKET_SPORT_ID});
+        if (!sportRow) {
+            return res.status(404).json({status: 404, message: 'Sport not found' });
+        }
+        sport_primary_key = sportRow._id;
+
+        // check if the source exists or not
+        const sourceRow = await Source.findOne({source_id: ENTITYSPORT_API_SOURCE_ID});
+        if (!sourceRow) {
+            return res.status(404).json({status: 404, message: 'Source not found' });
+        }
+        source_primary_key = sourceRow._id;
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+
+
+    try{
+        // check for the required validation
+        if (!cid || !sport_primary_key || !source_primary_key ) {
+            return res.status(404).json({status: 404, message: 'cid or sport_primary_key or source_primary_key not found', data: [] });
+        }
+
+        //  we are checking competition exist on the Table or not
+        const competetionRow = await Competetion.findOne({cid: cid});
+        if (!competetionRow) {
+            return res.status(404).json({status: 404, message: 'Competetion not found', data: []  });
+        }
+        
+        // calling api
+        const competetion_primary_key = competetionRow._id;
+        const competetion_cid = competetionRow.cid;
+        const url = ENTITYSPORT_API_URL + 'competitions/' + competetion_cid + '/matches/';
+        const response = await fetchEntitySportData(ENTITYSPORT_API_KEY, url, 1000);
+        const apiData = response.response;
+        if(apiData !== undefined && response.status === "ok" ) {
+        
+            // updating new items on the response so that we may have sport & sourceId on each items
+            const items = response.response.items;
+            const updatedItems = items.map(item => {
+                const tez_id = competetion_cid + "-" + item.match_id;
+                return {
+                    ...item,         // Spread existing properties
+                    tej_match_id : tez_id,  // Add a new tej_match_id property
+                    cid: competetion_cid,  // Add a new cid property
+                    competetion: competetion_primary_key,  // Add a new competetion property
+                    sport_id: sport_primary_key,  // Add a new sport_id property
+                    source_id: source_primary_key // Add a new source_id property
+                };
+            });
+
+            // Prepare bulk operations
+            const bulkOps = updatedItems.map(item => ({
+                updateOne: {
+                    filter: { match_id: item.match_id }, 
+                    update: { $set: item }, 
+                    upsert: true // Insert if not found
+                }
+            }));
+
+            // Execute bulk operations
+            const result = await Match.bulkWrite(bulkOps);
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Error fetching data from Source and Sport Table. ' });
+    }
+};
