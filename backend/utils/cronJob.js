@@ -297,7 +297,7 @@ const runAllInterval = async () => {
         console.error('Error runAllInterval Cronjob:', error);
     }
 };
-runAllInterval();
+// runAllInterval();
 
 // Start dynamic intervals for multiple APIs
 // setInterval(executeJobBasedOnTime, 50000);
