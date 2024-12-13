@@ -1467,7 +1467,7 @@ exports.cronjobForCompetetion = async (req, res) => {
                                 // If the record does not exist, insert it
                                 incrementValue = incrementValue + 1;
                                 const additionalFields = {
-                                    tej_cid: item.cid, // Use the current increment value and increment it
+                                    tej_cid: Math.floor(100000 + Math.random() * 900000), // Use the current increment value and increment it
                                     sport_id: sport_primary_key,  // Add a new property
                                     source_id: source_primary_key, // Add a new property
                                 };
