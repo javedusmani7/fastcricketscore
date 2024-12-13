@@ -1,0 +1,48 @@
+
+exports.INVALID_JSON_ERR =  {status: 400, message: "Invalid JSON error"},
+exports.INVALID_RESOURCE_URL =  {message: "INVALID_RESOURCE_URL"},
+exports.RESOURCE_NOT_FOUND = {status: 404, message: "Resource not found"},
+exports.METHOD_NOT_ALLOWED = {status: 405, message: "The method specified in the request is not allowed."},
+exports.INVALID_USER_ACCESS = {message: "Please Provide Correct Information"},
+exports.INVALID_TOKEN = { status: 401, message: "Invalid Token"},
+exports.SESSION_EXPIRED = {status: 401, message: "Your session is expired. Please login again"},
+exports.USER_ALREADY_EXIST = {status: 403, message: "User Already Exists!"},    
+exports.USER_NOT_EXIST = {status: 403, message: "User Does not Exist!"},
+exports.NO_RECORD = {status: 403, message: "No record found"},
+exports.IN_VALID_CREDENTIALS = {status: 404, message: "Invalid combination of email and password"},
+exports.WRONG_PASS =  {status: 401, message: "Your password does not match"},
+exports.PASS_REQUIRED = {message: "Field password is required"},
+exports.UNAUTHORIZED = {status: 401, message: "You are not authorized"},
+exports.NOT_ADMIN = {status: 401, message: "Sorry! Only  Admin Can Access it"} ,
+exports.EMAIL_NOT_FOUND = {status: 403, message: "No user was found for the given email address"},
+exports.USER_NOT_FOUND = {status: 403, message: "No user was found for the given user ID"},
+exports.USER_NOT_VERIFIED = {status: 401, message: "It seems you did not verify your email yet. Please visit your inbox and verify the email first!"},
+exports.USER_ALREADY_VERIFIED = {status: 204, message: "User Already Verified"},
+exports.ACCOUNT_NOT_ACTIVE = {status: 403, message: "It seems your account is not acive. Please visit help & support section to get details"},
+exports.NO_OTP = { status: 404, message: "You must validate the email which was sent at your email address"},
+exports.NO_USER_ROLE = {message: "No role defined for this user"},
+exports.NOT_SUPER_ADMIN = {status: 401, message: "Sorry! Only Super Admin Can Access it"},
+exports.ADMIN_NOT_FOUND = {status: 403, message: "No admin record found with this ID"},
+exports.UPDATE_FAILED = {Update: "Failed", status: 400, message: "Something went wrong"},
+exports.SAVE_FAILED = {Save: "Failed", status: 400, message: "Something went wrong while adding a new record"},
+exports.INCORRECT_PASSWORD = {status: 401, message: "Incorrect old password"},
+exports.STORY_ALREADY_LIKED = {status:204, message: "Story already liked by this user"}
+exports.STORY_NOT_EXIST = {status:404, message: "No such story Exist"},
+exports.NO_STORY_FOUND = {status:404, message: "No stories found"},
+exports.ACC_DEACTIVATED = {status:403, message: "Your account is deactivated by the admin"}
+exports.ACC_DELETED = {status:403, message: "Your account is deleted"},
+exports.NO_COMMENT_FOUND = {status:404, message:"No comment found"},
+exports.NO_DEVICE_FOUND = {status:404, message:"No Device Found"},
+exports.NO_TOKEN_FOUND = {status:404, message:"No Token Found"},
+exports.NO_FCM_TOKEN_FOUND = {status:404, message:"No FCM Token Found for the user"},
+exports.FAILED_TO_SEND_NOTIFICATION = {status:404, message:"Something went wrong while sending the notification"},
+exports.FAILED_TO_UPDATE_TOKEN = {status:404, message:"Something went wrong while updating FCM Token"},
+exports.FAILED_TO_UPDATE_PASSWORD = {status:404, message:"Something went wrong while updating password"},
+exports.NO_JOINUS_DETAILS = { status: 404, message: "You must fill the joinus form first"},
+exports.USER_NOT_UPDATE = {status: 403, message: "User Not Update!"},  
+exports.SAVE_FILE = {Save: "Failed", status: 400, message: "Something went wrong while adding Excel Data"},
+exports.EXCEL_NOT_UPDATE = {status: 403, message: "Excel Not Update!"}
+
+
+    
+
