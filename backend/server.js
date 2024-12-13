@@ -29,7 +29,7 @@ connectDB();
 // Routes
 app.use('/sync',verifyTokenMiddleware, syncRoutes);
 app.use('/api',verifyTokenMiddleware, apiRoutes);
-app.use('/admin',verifyTokenMiddleware, adminRoutes);
+app.use('/admin', adminRoutes);
 app.use('/user', userRoutes);
 
 // Start the server

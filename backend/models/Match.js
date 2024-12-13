@@ -6,19 +6,20 @@ const MatchSchema = new mongoose.Schema({
     competetion: { type: mongoose.Schema.Types.ObjectId, ref: 'Competetion', required: true},
     cid: { type: String},
     match_id: { type: Number,  unique: true },
-    tej_match_id : { type: String},
-    tej_active : { type: Boolean, default: true},
+    tej_match_id : { type: String},                                      // our custom unique ID
+    tej_active : { type: Boolean, default: true},                        // our custom active/inactive status
     sports_match_id: { type: String, default: null },
-    bt_match_id: { type: String, default: null },
-    fast_score1_match_id: { type: String, default: null },
-    fast_score2_match_id: { type: String, default: null },
-    fast_score3_match_id: { type: String, default: null },
-    tej_fast_score_match_id: { type: String, default: null },
-    espn_match_id: { type: String, default: null },
-    sports_radar_match_id: { type: String, default: null },
-    unknown_source1_match_id: { type: String, default: null },
-    unknown_source2_match_id: { type: String, default: null },
-    unknown_source3_match_id: { type: String, default: null },
+    bt_match_id: { type: String, default: null },                        // betfair id
+    fs1_match_id: { type: String, default: null },                       // fast_score1 id
+    fs2_match_id: { type: String, default: null },                       // fast_score2 id
+    fs3_match_id: { type: String, default: null },                       // fast_score3 id
+    espn_match_id: { type: String, default: null },                      // espn id
+    et_match_id: { type: String, default: null }, 
+    tt_match_id: { type: String, default: null }, 
+    sr_match_id: { type: String, default: null },                        // sports_radar_competition_id
+    us1_match_id: { type: String, default: null },                       // unknown_source1_competition_id
+    us2_match_id: { type: String, default: null },                       // unknown_source2_competition_id
+    us3_match_id: { type: String, default: null },                       // unknown_source3_competition_id
     title: { type: String },
     short_title: { type: String },
     subtitle: { type: String },

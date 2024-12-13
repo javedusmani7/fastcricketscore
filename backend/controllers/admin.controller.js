@@ -30,6 +30,44 @@ exports.getSeasons = async (req, res) => {
 }
 
 /**
+ * this API will update the Seasons table "status" field data 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.updateSeasonStatus = async (req, res) => {
+    const sid = req.params.sid;
+    const { status } = req.body;
+
+    // check status validation
+    if (typeof status !== 'boolean') {
+        return res.status(400).json({ status: 400, message: "Status must be a boolean", data: [] });
+    }
+
+    try {
+        // find all interval is exist or not
+        const seasonRow = await Season.findOne({sid: sid});
+        if (!seasonRow) {
+            return res.status(400).json({ status: 400, message: "Season does not exist for this sid", data: [] });
+        }
+
+        // Update the status field
+        seasonRow.status = status;
+        await seasonRow.save();
+        
+        return res.status(200).json({
+            status: 200,
+            message: "Season status updated successfully.",
+            data: seasonRow
+        });
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'adminController:: Error in updateSeasonStatus API' });
+    }
+}
+
+
+/**
  * This API will return all the avaialable competetion records
  * @param {*} req 
  * @param {*} res 
@@ -159,35 +197,42 @@ exports.getIntervals = async (req, res) => {
 
 
 
-exports.postInterval = async (req, res) => {
+exports.updateInterval = async (req, res) => {
     const key = req.params.key;
-    const { time } = req.body;
-    const { name, page = 1, limit = 10 } = req.query; // Get intervals from query parameters
+    const { time, status } = req.body;
 
-    // Simple time validation
-    if (!time) {
-        return res.status(400).json({ error: 'Time are required.' });
+    // Validate status validation
+    if (status && typeof status !== 'boolean') {
+        return res.status(400).json({ status: 400, message: "Status must be a boolean", data: [] });
+    }
+
+    // Validate time
+    if (time && typeof time !== 'number') {
+        return res.status(400).json({ error: 'Time must be a number' });
     }
 
     try {
-        // find all interval is exist or not
+        // Step 1: find interval exist or not for this key
         const intervalRow = await Interval.findOne({key: key});
         if (!intervalRow) {
             return res.status(400).json({ status: 400, message: "Interval does not exist for this key", data: []  });
         }
 
-        const newData = { key, time };
+         // Step 2: update the status field and the time field (if provided)
+        if (status) { intervalRow.status = status; } // Only update if status is provided
+        if (time) { intervalRow.time = time; }       // Only update if time is provided
 
-         // Step 2: update the record
-        const isIntervalRowUpdated = await Interval.updateOne({key: key}, { $set: {time: time } });
+        // Step 3: Save the updated document
+        await intervalRow.save();
         
+        // Step 4: return response
         return res.status(200).json({
             status: 200,
-            message: "tets datat.",
+            message: "Interval updated successfully.",
             data: intervalRow
         });
     } 
     catch (error) {
-        res.status(500).json({ message: 'adminController:: Error in getIntervals API' });
+        res.status(500).json({ message: 'adminController:: Error in updateInterval API' });
     }
 }
