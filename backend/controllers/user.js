@@ -40,9 +40,20 @@ const getUsersData = async (req, res) =>{
 	}
 }
 
+
+const updateUser = async (req, res) =>{
+	try{
+		let updateMsg = await userService.updateUser(req.params.id,req.body);
+		res.json(updateMsg);
+	} catch(e){
+		res.json(e);
+	}
+}
+
 module.exports={
     signup:signup,
     login:login,
 	getUserDetails:getUserDetails,
-	getUsersData:getUsersData
+	getUsersData:getUsersData,
+	updateUser:updateUser
 }

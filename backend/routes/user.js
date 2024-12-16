@@ -9,5 +9,6 @@ router.post('/login', rateLimitter.loginRateLimitter, userController.login);
 router.post('/signup',rateLimitter.registerLimitter,  userController.signup);
 router.get('/getUserDetails',userController.getUserDetails);
 router.get('/getUsersData',userController.getUsersData);
+router.put('/updateUser/:id',userController.updateUser);
 
 module.exports = router;

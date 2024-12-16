@@ -47,8 +47,6 @@ const signup = async function (reqBody) {
 				newUser.location = reqBody.location || '';
 				let newRecord = await newUser.save();
 
-              console.log("newUser",newUser)
-
 				if (newRecord && Object.keys(newRecord).length) {
 					let response = {
 						status: 200,
@@ -148,6 +146,40 @@ const getUserDetails = async (id) => {
 }
 
 
+const updateUser = async (id, data) => {
+	try {
+		return new Promise(async (resolve, reject) => {
+			let userData = await user.filterRecord({ unique_id: id });
+			if (userData && userData.length) {
+				var updatedRecord = await user.updateRecord({ unique_id: id }, { 'name': data.name, 'permissions': data.permissions, 'active': data.active });
+				if(!data.active  && (userData[0].role =='admin' || userData[0].role =='subAdmin')){
+				 await user.updateManyRecord( { $or: [{ under_role: id }, { unique_id: id } ] }, {'active': data.active  });
+				}
+				// console.log("updatedRecord", updatedRecord)
+				if (updatedRecord && Object.keys(updatedRecord).length) {
+					let response = {
+						status: 200,
+						message: "User updated successfully"
+					};
+					resolve(response);
+				} else {
+					reject(errorMessage.USER_NOT_UPDATE)
+				}
+
+			} else {
+				reject(errorMessage.EMAIL_NOT_FOUND);
+			}
+		})
+	} catch (e) {
+		throw e;
+	}
+}
+
+
+
+
+
+
 //  const generateOTP = () => {
 // 	return Math.floor(1000 + Math.random() * 9000).toString();
 //   };
@@ -175,5 +207,6 @@ module.exports ={
     signup:signup,
     login:login,
 	getUsersData:getUsersData,
-	getUserDetails:getUserDetails
+	getUserDetails:getUserDetails,
+	updateUser: updateUser,
 }
