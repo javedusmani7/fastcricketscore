@@ -125,6 +125,40 @@ exports.getCompetitions = async (req, res) => {
 
 
 
+exports.updateCompetition = async (req, res) => {
+    const cid = req.params.cid;
+    const updatedFields = req.body;
+    // Check if updatedFields is empty
+    if (Object.keys(updatedFields).length === 0) {
+        return res.status(400).json({ status: 400, message: "No fields provided to update - Please provide fields.", data: []  });
+    }
+
+    try {
+        // Step 1: find Competetion exist or not for this cid
+        const competitionRow = await Competetion.findOne({cid: cid});
+        if (!competitionRow) {
+            return res.status(400).json({ status: 400, message: "Competetion does not exist for this cide.", data: []  });
+        }
+
+        // Step 2: Save the updated document
+        const updatedCompetitionRow = await Competetion.findByIdAndUpdate(competitionRow._id, updatedFields, {
+            new: true,  // Return the updated document
+            runValidators: true  // Ensure validation rules are followed
+        });
+        
+        // Step 3: return response
+        return res.status(200).json({
+            status: competitionRow._id,
+            message: "Competetion has been updated successfully.",
+            data: updatedCompetitionRow
+        });
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'adminController:: Error in updateCompetition API', data: error.message });
+    }
+}
+
+
 exports.synccompetitionMatchesByCid = async (req, res) => {
     const { cid} = req.query; // Get cid from query parameters
     if (!cid) { return res.status(400).json({ status: 400, message: "cid is required.", data: [] }); }
@@ -186,6 +220,41 @@ exports.getMatches = async (req, res) => {
     } 
     catch (error) {
         res.status(500).json({ message: 'adminController:: Error in getMatches API' });
+    }
+}
+
+
+
+exports.updateMatch = async (req, res) => {
+    const match_id = req.params.match_id;
+    const updatedFields = req.body;
+    // Check if updatedFields is empty
+    if (Object.keys(updatedFields).length === 0) {
+        return res.status(400).json({ status: 400, message: "No fields provided to update - Please provide fields.", data: []  });
+    }
+
+    try {
+        // Step 1: find match exist or not for this match_id
+        const matchRow = await Match.findOne({match_id: match_id});
+        if (!matchRow) {
+            return res.status(400).json({ status: 400, message: "Match does not exist for this match_id.", data: []  });
+        }
+
+        // Step 2: Save the updated document
+        const updatedMatchRow = await Match.findByIdAndUpdate(matchRow._id, updatedFields, {
+            new: true,  // Return the updated document
+            runValidators: true  // Ensure validation rules are followed
+        });
+        
+        // Step 3: return response
+        return res.status(200).json({
+            status: 200,
+            message: "Match has been updated successfully.",
+            data: updatedMatchRow
+        });
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'adminController:: Error in updateMatch API', data: error.message });
     }
 }
 
