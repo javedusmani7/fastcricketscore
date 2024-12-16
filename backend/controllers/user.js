@@ -21,7 +21,7 @@ const login = async (req, res) =>{
 
 const getUserDetails = async (req, res) =>{
 	try {
-		const unique_id = req.header('unique_id');
+		const unique_id = req.query.unique_id;
 		let userRecord = await userService.getUserDetails(unique_id);
 		res.json(userRecord)
 	} catch(e){
@@ -31,7 +31,7 @@ const getUserDetails = async (req, res) =>{
 
 const getUsersData = async (req, res) =>{
 	try {
-		const unique_id = req.header('unique_id');
+		const unique_id = req.query.unique_id;
 		// console.log("unique_id",unique_id)
 		let userRecord = await userService.getUsersData(unique_id);
 		res.json(userRecord)
