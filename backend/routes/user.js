@@ -6,9 +6,9 @@ const userController = require('../controllers/user');
 
 
 router.post('/login', rateLimitter.loginRateLimitter, userController.login);
-router.post('/signup',rateLimitter.registerLimitter,  userController.signup);
-router.get('/getUserDetails',userController.getUserDetails);
-router.get('/getUsersData',userController.getUsersData);
-router.put('/updateUser/:id',userController.updateUser);
+router.post('/signup',rateLimitter.registerLimitter,verifyToken.verifyToken, userController.signup);
+router.get('/getUserDetails',verifyToken.verifyToken,userController.getUserDetails);
+router.get('/getUsersData',verifyToken.verifyToken,userController.getUsersData);
+router.put('/updateUser/:id',verifyToken.verifyToken,userController.updateUser);
 
 module.exports = router;
